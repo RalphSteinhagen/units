@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>basic_fixed_string &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../../../../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>basic_fixed_string &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
         <script src="../../../../_static/jquery.js"></script>
         <script src="../../../../_static/underscore.js"></script>
         <script src="../../../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
-
-    
+    <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
     <link rel="next" title="Metafunctions" href="../../metafunctions.html" />
     <link rel="prev" title="basic_symbol_text" href="basic_symbol_text.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../../../../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../../../../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../quick_start.html">Quick Start</a></li>
@@ -99,7 +53,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../../../core.html">Core Library</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../concepts.html">Concepts</a></li>
@@ -129,7 +83,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
@@ -137,193 +91,152 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../../../core.html">Core Library</a> &raquo;</li>
-        
           <li><a href="../../types.html">Types</a> &raquo;</li>
-        
           <li><a href="../utilities.html">Utilities</a> &raquo;</li>
-        
       <li>basic_fixed_string</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../../../../_sources/reference/core/types/utilities/basic_fixed_string.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="basic-fixed-string">
-<h1>basic_fixed_string<a class="headerlink" href="#basic-fixed-string" title="Permalink to this headline">¶</a></h1>
+<h1>basic_fixed_string<a class="headerlink" href="#basic-fixed-string" title="Permalink to this headline"></a></h1>
 <dl class="cpp struct">
-<dt id="_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE">
-<span id="_CPPv3I0_NSt6size_tEEN5units18basic_fixed_stringE"></span><span id="_CPPv2I0_NSt6size_tEEN5units18basic_fixed_stringE"></span><span class="pre">template&lt;</span><span class="pre">typename</span> <code class="sig-name descname"><span class="pre">CharT</span></code><span class="pre">,</span> <span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <code class="sig-name descname"><span class="pre">N</span></code><span class="pre">&gt;</span><br /><span class="target" id="structunits_1_1basic__fixed__string"></span><em class="property"><span class="pre">struct</span> </em><code class="sig-prename descclassname"><a class="reference internal" href="../../../systems/isq/si/surface_tension.html#_CPPv45units" title="units"><span class="pre">units</span></a><code class="sig-prename descclassname"><span class="pre">::</span></code></code><code class="sig-name descname"><span class="pre">basic_fixed_string</span></code><a class="headerlink" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE">
+<span id="_CPPv3I0_NSt6size_tEEN5units18basic_fixed_stringE"></span><span id="_CPPv2I0_NSt6size_tEEN5units18basic_fixed_stringE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CharT</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">N</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structunits_1_1basic__fixed__string"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><a class="reference internal" href="../../../systems/isq/si/length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">basic_fixed_string</span></span></span><a class="headerlink" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="Permalink to this definition"></a><br /></dt>
 <dd><p>A compile-time fixed string. </p>
-<p><dl class="simple">
-<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">CharT</span></code>: Character type to be used by the string </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">N</span></code>: The size of the string </p></li>
-</ul>
+<p><dl class="field-list simple">
+<dt class="field-odd">tparam CharT</dt>
+<dd class="field-odd"><p>Character type to be used by the string </p>
+</dd>
+<dt class="field-even">tparam N</dt>
+<dd class="field-even"><p>The size of the string </p>
 </dd>
 </dl>
 </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
-<dt id="_CPPv4N5units18basic_fixed_string8iteratorE">
-<span id="_CPPv3N5units18basic_fixed_string8iteratorE"></span><span id="_CPPv2N5units18basic_fixed_string8iteratorE"></span><span class="target" id="structunits_1_1basic__fixed__string_1af65d78ead535c33c9c09e8536de7e58a"></span><em class="property"><span class="pre">using</span> </em><code class="sig-name descname"><span class="pre">iterator</span></code> <span class="pre">=</span> <a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="pre">CharT</span></a><span class="pre">*</span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string8iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_string8iteratorE">
+<span id="_CPPv3N5units18basic_fixed_string8iteratorE"></span><span id="_CPPv2N5units18basic_fixed_string8iteratorE"></span><span class="target" id="structunits_1_1basic__fixed__string_1af65d78ead535c33c9c09e8536de7e58a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iterator</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="p"><span class="pre">*</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string8iteratorE" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp type">
-<dt id="_CPPv4N5units18basic_fixed_string14const_iteratorE">
-<span id="_CPPv3N5units18basic_fixed_string14const_iteratorE"></span><span id="_CPPv2N5units18basic_fixed_string14const_iteratorE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a0166a3068a0f0a48c52aee761532af18"></span><em class="property"><span class="pre">using</span> </em><code class="sig-name descname"><span class="pre">const_iterator</span></code> <span class="pre">=</span> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="pre">CharT</span></a><span class="pre">*</span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string14const_iteratorE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_string14const_iteratorE">
+<span id="_CPPv3N5units18basic_fixed_string14const_iteratorE"></span><span id="_CPPv2N5units18basic_fixed_string14const_iteratorE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a0166a3068a0f0a48c52aee761532af18"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">const_iterator</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="p"><span class="pre">*</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string14const_iteratorE" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt>
-<span class="target" id="structunits_1_1basic__fixed__string_1a2b4d15993e2fd0b777e7869ade7338b9"></span><code class="sig-name descname"><span class="pre">inline</span> <span class="pre">constexpr</span> <span class="pre">explicit</span> <span class="pre">(false)</span> <span class="pre">basic_fixed_string(CharT</span> <span class="pre">ch)</span> <span class="pre">noexcept</span></code></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_string18basic_fixed_stringE5CharT">
+<span id="_CPPv3N5units18basic_fixed_string18basic_fixed_stringE5CharT"></span><span id="_CPPv2N5units18basic_fixed_string18basic_fixed_stringE5CharT"></span><span id="units::basic_fixed_string::basic_fixed_string__CharTCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a2b4d15993e2fd0b777e7869ade7338b9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">false</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">basic_fixed_string</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">ch</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string18basic_fixed_stringE5CharT" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt>
-<span class="target" id="structunits_1_1basic__fixed__string_1ab4f639cad2b512cc7ccfb37c2ccb1cf2"></span><code class="sig-name descname"><span class="pre">inline</span> <span class="pre">constexpr</span> <span class="pre">explicit</span> <span class="pre">(false)</span> <span class="pre">basic_fixed_string(const</span> <span class="pre">CharT(&amp;txt)[N+1])</span> <span class="pre">noexcept</span></code></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_string18basic_fixed_stringERApl1NL1E_K5CharT">
+<span id="_CPPv3N5units18basic_fixed_string18basic_fixed_stringERApl1NL1E_K5CharT"></span><span id="_CPPv2N5units18basic_fixed_string18basic_fixed_stringERAN + 1_K5CharT"></span><span class="target" id="structunits_1_1basic__fixed__string_1ab4f639cad2b512cc7ccfb37c2ccb1cf2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="p"><span class="pre">(</span></span><span class="k"><span class="pre">false</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">basic_fixed_string</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">txt</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::N"><span class="n"><span class="pre">N</span></span></a><span class="w"> </span><span class="o"><span class="pre">+</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">]</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string18basic_fixed_stringERApl1NL1E_K5CharT" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_string5emptyEv">
-<span id="_CPPv3NK5units18basic_fixed_string5emptyEv"></span><span id="_CPPv2NK5units18basic_fixed_string5emptyEv"></span><span id="units::basic_fixed_string::emptyCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a3517bbcaaae8c4f1fa6e3a52509bb86e"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <span class="pre">bool</span> <code class="sig-name descname"><span class="pre">empty</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string5emptyEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_string5emptyEv">
+<span id="_CPPv3NK5units18basic_fixed_string5emptyEv"></span><span id="_CPPv2NK5units18basic_fixed_string5emptyEv"></span><span id="units::basic_fixed_string::emptyCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a3517bbcaaae8c4f1fa6e3a52509bb86e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">empty</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string5emptyEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_string4sizeEv">
-<span id="_CPPv3NK5units18basic_fixed_string4sizeEv"></span><span id="_CPPv2NK5units18basic_fixed_string4sizeEv"></span><span id="units::basic_fixed_string::sizeCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a1fd343d5609410601aca6f2d3495f92e"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <code class="sig-name descname"><span class="pre">size</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string4sizeEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_string4sizeEv">
+<span id="_CPPv3NK5units18basic_fixed_string4sizeEv"></span><span id="_CPPv2NK5units18basic_fixed_string4sizeEv"></span><span id="units::basic_fixed_string::sizeCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a1fd343d5609410601aca6f2d3495f92e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string4sizeEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_string4dataEv">
-<span id="_CPPv3NK5units18basic_fixed_string4dataEv"></span><span id="_CPPv2NK5units18basic_fixed_string4dataEv"></span><span id="units::basic_fixed_string::dataCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a5d6bcd6285b133bd77d9e79f49642d3e"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="pre">CharT</span></a> <span class="pre">*</span><code class="sig-name descname"><span class="pre">data</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string4dataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_string4dataEv">
+<span id="_CPPv3NK5units18basic_fixed_string4dataEv"></span><span id="_CPPv2NK5units18basic_fixed_string4dataEv"></span><span id="units::basic_fixed_string::dataCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a8fa7b4afc8e3d83fa4ee1cee51c4b997"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">data</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string4dataEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_string5c_strEv">
-<span id="_CPPv3NK5units18basic_fixed_string5c_strEv"></span><span id="_CPPv2NK5units18basic_fixed_string5c_strEv"></span><span id="units::basic_fixed_string::c_strCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a7f11e21d0d7e6e39fdbe7f85cafd3b24"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="pre">CharT</span></a> <span class="pre">*</span><code class="sig-name descname"><span class="pre">c_str</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string5c_strEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_string5c_strEv">
+<span id="_CPPv3NK5units18basic_fixed_string5c_strEv"></span><span id="_CPPv2NK5units18basic_fixed_string5c_strEv"></span><span id="units::basic_fixed_string::c_strCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1ad50cb460a457d15596848ed31161827e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">c_str</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string5c_strEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_stringixENSt6size_tE">
-<span id="_CPPv3NK5units18basic_fixed_stringixENSt6size_tE"></span><span id="_CPPv2NK5units18basic_fixed_stringixENSt6size_tE"></span><span id="units::basic_fixed_string::subscript-operator__std::sCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a9643f191d9d37d7b5ad15a2f463e7004"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="pre">CharT</span></a> <span class="pre">&amp;</span><code class="sig-name descname"><span class="pre">operator[]</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">index</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_stringixENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_stringixENSt6size_tE">
+<span id="_CPPv3NK5units18basic_fixed_stringixENSt6size_tE"></span><span id="_CPPv2NK5units18basic_fixed_stringixENSt6size_tE"></span><span id="units::basic_fixed_string::subscript-operator__std::sCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a4db2331852a64871ff4558ab95d106a2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_stringixENSt6size_tE" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5units18basic_fixed_stringixENSt6size_tE">
-<span id="_CPPv3N5units18basic_fixed_stringixENSt6size_tE"></span><span id="_CPPv2N5units18basic_fixed_stringixENSt6size_tE"></span><span id="units::basic_fixed_string::subscript-operator__std::sCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1aa144b410d77dfc93e6c039a5af68fc5a"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="pre">CharT</span></a> <code class="sig-name descname"><span class="pre">operator[]</span></code><span class="sig-paren">(</span><span class="pre">std</span><span class="pre">::</span><span class="pre">size_t</span> <em><span class="pre">index</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5units18basic_fixed_stringixENSt6size_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_stringixENSt6size_tE">
+<span id="_CPPv3N5units18basic_fixed_stringixENSt6size_tE"></span><span id="_CPPv2N5units18basic_fixed_stringixENSt6size_tE"></span><span id="units::basic_fixed_string::subscript-operator__std::sCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1aa144b410d77dfc93e6c039a5af68fc5a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_stringixENSt6size_tE" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5units18basic_fixed_string5beginEv">
-<span id="_CPPv3N5units18basic_fixed_string5beginEv"></span><span id="_CPPv2N5units18basic_fixed_string5beginEv"></span><span id="units::basic_fixed_string::beginCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a4979fa525cb3c74320ec684221ac7ce9"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <a class="reference internal" href="#_CPPv4N5units18basic_fixed_string8iteratorE" title="units::basic_fixed_string::iterator"><span class="pre">iterator</span></a> <code class="sig-name descname"><span class="pre">begin</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_string5beginEv">
+<span id="_CPPv3N5units18basic_fixed_string5beginEv"></span><span id="_CPPv2N5units18basic_fixed_string5beginEv"></span><span id="units::basic_fixed_string::beginCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a4979fa525cb3c74320ec684221ac7ce9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units18basic_fixed_string8iteratorE" title="units::basic_fixed_string::iterator"><span class="n"><span class="pre">iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">begin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string5beginEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_string5beginEv">
-<span id="_CPPv3NK5units18basic_fixed_string5beginEv"></span><span id="_CPPv2NK5units18basic_fixed_string5beginEv"></span><span id="units::basic_fixed_string::beginCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1ac5254e359b3e172c22698b72d92fcfc5"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <a class="reference internal" href="#_CPPv4N5units18basic_fixed_string14const_iteratorE" title="units::basic_fixed_string::const_iterator"><span class="pre">const_iterator</span></a> <code class="sig-name descname"><span class="pre">begin</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string5beginEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_string5beginEv">
+<span id="_CPPv3NK5units18basic_fixed_string5beginEv"></span><span id="_CPPv2NK5units18basic_fixed_string5beginEv"></span><span id="units::basic_fixed_string::beginCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1ac5254e359b3e172c22698b72d92fcfc5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units18basic_fixed_string14const_iteratorE" title="units::basic_fixed_string::const_iterator"><span class="n"><span class="pre">const_iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">begin</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string5beginEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4N5units18basic_fixed_string3endEv">
-<span id="_CPPv3N5units18basic_fixed_string3endEv"></span><span id="_CPPv2N5units18basic_fixed_string3endEv"></span><span id="units::basic_fixed_string::endCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1ab49019cb2fe16dc404724e45e60b6842"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <a class="reference internal" href="#_CPPv4N5units18basic_fixed_string8iteratorE" title="units::basic_fixed_string::iterator"><span class="pre">iterator</span></a> <code class="sig-name descname"><span class="pre">end</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_string3endEv">
+<span id="_CPPv3N5units18basic_fixed_string3endEv"></span><span id="_CPPv2N5units18basic_fixed_string3endEv"></span><span id="units::basic_fixed_string::endCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1ab49019cb2fe16dc404724e45e60b6842"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units18basic_fixed_string8iteratorE" title="units::basic_fixed_string::iterator"><span class="n"><span class="pre">iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string3endEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_string3endEv">
-<span id="_CPPv3NK5units18basic_fixed_string3endEv"></span><span id="_CPPv2NK5units18basic_fixed_string3endEv"></span><span id="units::basic_fixed_string::endCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a05053b483d44e548d6ae4ab5d273d6ee"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <a class="reference internal" href="#_CPPv4N5units18basic_fixed_string14const_iteratorE" title="units::basic_fixed_string::const_iterator"><span class="pre">const_iterator</span></a> <code class="sig-name descname"><span class="pre">end</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em> <em class="property"><span class="pre">noexcept</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string3endEv" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_string3endEv">
+<span id="_CPPv3NK5units18basic_fixed_string3endEv"></span><span id="_CPPv2NK5units18basic_fixed_string3endEv"></span><span id="units::basic_fixed_string::endCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1a05053b483d44e548d6ae4ab5d273d6ee"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units18basic_fixed_string14const_iteratorE" title="units::basic_fixed_string::const_iterator"><span class="n"><span class="pre">const_iterator</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_string3endEv" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt id="_CPPv4NK5units18basic_fixed_stringeqERK18basic_fixed_string">
-<span id="_CPPv3NK5units18basic_fixed_stringeqERK18basic_fixed_string"></span><span id="_CPPv2NK5units18basic_fixed_stringeqERK18basic_fixed_string"></span><span id="units::basic_fixed_string::eq-operator__basic_fixed_stringCRCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1af0e7c1bc86c30b0ee5c238b3b57d083a"></span><em class="property"><span class="pre">inline</span></em> <em class="property"><span class="pre">constexpr</span></em> <span class="pre">bool</span> <code class="sig-name descname"><span class="pre">operator==</span></code><span class="sig-paren">(</span><em class="property"><span class="pre">const</span></em> <a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string"><span class="pre">basic_fixed_string</span></a> <span class="pre">&amp;</span><em><span class="pre">other</span></em><span class="sig-paren">)</span> <em class="property"><span class="pre">const</span></em><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_stringeqERK18basic_fixed_string" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK5units18basic_fixed_stringeqERK18basic_fixed_string">
+<span id="_CPPv3NK5units18basic_fixed_stringeqERK18basic_fixed_string"></span><span id="_CPPv2NK5units18basic_fixed_stringeqERK18basic_fixed_string"></span><span id="units::basic_fixed_string::eq-operator__basic_fixed_stringCRCCE"></span><span class="target" id="structunits_1_1basic__fixed__string_1af0e7c1bc86c30b0ee5c238b3b57d083a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string"><span class="n"><span class="pre">basic_fixed_string</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">other</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK5units18basic_fixed_stringeqERK18basic_fixed_string" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
 <dl class="cpp var">
-<dt id="_CPPv4N5units18basic_fixed_string5data_E">
-<span id="_CPPv3N5units18basic_fixed_string5data_E"></span><span id="_CPPv2N5units18basic_fixed_string5data_E"></span><span id="units::basic_fixed_string::data___CharTA"></span><span class="target" id="structunits_1_1basic__fixed__string_1aa877264739424656f01041862d7db090"></span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="pre">CharT</span></a> <code class="sig-name descname"><span class="pre">data_</span></code><span class="pre">[</span><code class="sig-name descname"><span class="pre">N</span></code> <span class="pre">+</span> <span class="pre">1</span><span class="pre">]</span> <span class="pre">=</span> <span class="pre">{</span><span class="pre">}</span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string5data_E" title="Permalink to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N5units18basic_fixed_string5data_E">
+<span id="_CPPv3N5units18basic_fixed_string5data_E"></span><span id="_CPPv2N5units18basic_fixed_string5data_E"></span><span id="units::basic_fixed_string::data___CharTA"></span><span class="target" id="structunits_1_1basic__fixed__string_1aa877264739424656f01041862d7db090"></span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::CharT"><span class="n"><span class="pre">CharT</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">data_</span></span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#_CPPv4I0_NSt6size_tEEN5units18basic_fixed_stringE" title="units::basic_fixed_string::N"><span class="n"><span class="pre">N</span></span></a><span class="w"> </span><span class="o"><span class="pre">+</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5units18basic_fixed_string5data_E" title="Permalink to this definition"></a><br /></dt>
 <dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
 <dl class="cpp function">
-<dt>
-<span class="target" id="structunits_1_1basic__fixed__string_1aea32917289dfa1614c0068f1cba00262"></span><code class="sig-name descname"><span class="pre">template&lt;std::size_t</span> <span class="pre">N2&gt;</span> <span class="pre">inline</span> <span class="pre">friend</span> <span class="pre">constexpr</span> <span class="pre">friend</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N+N2</span> <span class="pre">&gt;</span> <span class="pre">operator+</span> <span class="pre">(const</span> <span class="pre">basic_fixed_string</span> <span class="pre">&amp;lhs,</span> <span class="pre">const</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N2</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span></code></dt>
+<dt class="sig sig-object cpp">
+<span class="target" id="structunits_1_1basic__fixed__string_1aa32d27d2a12ca55852d032b0d4af652c"></span><span class="sig-name descname"><span class="pre">template&lt;std::size_t</span> <span class="pre">N2&gt;</span> <span class="pre">inline</span> <span class="pre">friend</span> <span class="pre">constexpr</span> <span class="pre">friend</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N+N2</span> <span class="pre">&gt;</span> <span class="pre">operator+</span> <span class="pre">(const</span> <span class="pre">basic_fixed_string</span> <span class="pre">&amp;lhs,</span> <span class="pre">const</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N2</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span> <span class="pre">noexcept</span></span></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt>
-<span class="target" id="structunits_1_1basic__fixed__string_1ab530c6e7708cb96e5b83a41ca1846b2d"></span><code class="sig-name descname"><span class="pre">template&lt;std::size_t</span> <span class="pre">N2&gt;</span> <span class="pre">inline</span> <span class="pre">friend</span> <span class="pre">constexpr</span> <span class="pre">friend</span> <span class="pre">bool</span> <span class="pre">operator==</span> <span class="pre">(const</span> <span class="pre">basic_fixed_string</span> <span class="pre">&amp;,</span> <span class="pre">const</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N2</span> <span class="pre">&gt;</span> <span class="pre">&amp;)</span></code></dt>
+<dt class="sig sig-object cpp">
+<span class="target" id="structunits_1_1basic__fixed__string_1ab530c6e7708cb96e5b83a41ca1846b2d"></span><span class="sig-name descname"><span class="pre">template&lt;std::size_t</span> <span class="pre">N2&gt;</span> <span class="pre">inline</span> <span class="pre">friend</span> <span class="pre">constexpr</span> <span class="pre">friend</span> <span class="pre">bool</span> <span class="pre">operator==</span> <span class="pre">(const</span> <span class="pre">basic_fixed_string</span> <span class="pre">&amp;,</span> <span class="pre">const</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N2</span> <span class="pre">&gt;</span> <span class="pre">&amp;)</span></span></dt>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt>
-<span class="target" id="structunits_1_1basic__fixed__string_1a29f58af9122c148ff5ad3cb052ce2d2c"></span><code class="sig-name descname"><span class="pre">template&lt;std::size_t</span> <span class="pre">N2&gt;</span> <span class="pre">inline</span> <span class="pre">friend</span> <span class="pre">constexpr</span> <span class="pre">friend</span> <span class="pre">auto</span> <span class="pre">operator&lt;=&gt;</span> <span class="pre">(const</span> <span class="pre">basic_fixed_string</span> <span class="pre">&amp;lhs,</span> <span class="pre">const</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N2</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span></code></dt>
+<dt class="sig sig-object cpp">
+<span class="target" id="structunits_1_1basic__fixed__string_1a29f58af9122c148ff5ad3cb052ce2d2c"></span><span class="sig-name descname"><span class="pre">template&lt;std::size_t</span> <span class="pre">N2&gt;</span> <span class="pre">inline</span> <span class="pre">friend</span> <span class="pre">constexpr</span> <span class="pre">friend</span> <span class="pre">auto</span> <span class="pre">operator&lt;=&gt;</span> <span class="pre">(const</span> <span class="pre">basic_fixed_string</span> <span class="pre">&amp;lhs,</span> <span class="pre">const</span> <span class="pre">basic_fixed_string&lt;</span> <span class="pre">CharT,</span> <span class="pre">N2</span> <span class="pre">&gt;</span> <span class="pre">&amp;rhs)</span></span></dt>
 <dd></dd></dl>
 
 </div>
@@ -333,53 +246,33 @@
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../../metafunctions.html" class="btn btn-neutral float-right" title="Metafunctions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="basic_symbol_text.html" class="btn btn-neutral float-left" title="basic_symbol_text" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic_symbol_text.html" class="btn btn-neutral float-left" title="basic_symbol_text" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../metafunctions.html" class="btn btn-neutral float-right" title="Metafunctions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

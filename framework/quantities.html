@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Quantities &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantities &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Quantity Points" href="quantity_points.html" />
     <link rel="prev" title="Basic Concepts" href="basic_concepts.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,30 +41,24 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../framework.html">Framework Basics</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Quantities</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#construction">Construction</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#dimension-specific-aliases">Dimension-Specific Aliases</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#quantity-references">Quantity References</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#user-defined-literals">User Defined Literals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#construction">Construction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quantity-construction-helpers">Quantity Construction Helpers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dimension-specific-aliases-experimental">Dimension-Specific Aliases (Experimental)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#unit-specific-aliases-experimental">Unit-Specific Aliases (Experimental)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quantity-references-experimental">Quantity References (Experimental)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#user-defined-literals-experimental">User Defined Literals (Experimental)</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#udls-vs-quantity-references">UDLs vs Quantity References</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quantity-references-vs-unit-specific-aliases">Quantity References vs Unit-specific Aliases</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#summary">Summary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#don-t-pay-for-what-you-don-t-use-compile-time-performance">Don’t pay for what you don’t use (compile-time performance)</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#dimension-specific-concepts">Dimension-specific Concepts</a></li>
@@ -111,6 +70,7 @@
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
@@ -122,13 +82,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
@@ -136,78 +96,38 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
-        
       <li>Quantities</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/framework/quantities.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="quantities">
-<h1>Quantities<a class="headerlink" href="#quantities" title="Permalink to this headline">¶</a></h1>
+<h1>Quantities<a class="headerlink" href="#quantities" title="Permalink to this headline"></a></h1>
 <p>A <a class="reference internal" href="../glossary.html#term-quantity"><span class="xref std std-term">quantity</span></a> is a concrete amount of a unit for a specified dimension
 with a specific representation and is represented in the library with a
 <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> class template.</p>
 <section id="construction">
-<h2>Construction<a class="headerlink" href="#construction" title="Permalink to this headline">¶</a></h2>
+<h2>Construction<a class="headerlink" href="#construction" title="Permalink to this headline"></a></h2>
 <p>To create the quantity object from a <a class="reference internal" href="../glossary.html#term-scalable-number"><span class="xref std std-term">scalable number</span></a> we just have to pass
 the value to the <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> class template explicit constructor:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
@@ -226,48 +146,111 @@ This is why the code below using
 </pre></div>
 </div>
 </div>
-<section id="dimension-specific-aliases">
-<h3>Dimension-Specific Aliases<a class="headerlink" href="#dimension-specific-aliases" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="quantity-construction-helpers">
+<h2>Quantity Construction Helpers<a class="headerlink" href="#quantity-construction-helpers" title="Permalink to this headline"></a></h2>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Currently the library provides multiple experimental helpers to instantiate
+quantities of different dimensions and units. Users are encourages to try them
+out, vote, and share feedback in this
+<a class="reference external" href="https://github.com/mpusz/units/discussions/274">discussion on GitHub</a>.</p>
+<p>Most probably only one of the options will be included in the final product so
+please do not hesitate to vote on the one that suits you the best.</p>
+</div>
+<section id="dimension-specific-aliases-experimental">
+<h3>Dimension-Specific Aliases (Experimental)<a class="headerlink" href="#dimension-specific-aliases-experimental" title="Permalink to this headline"></a></h3>
 <p>To simplify <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> objects creation the library provides helper aliases for
 quantities of each <a class="reference internal" href="../glossary.html#term-dimension"><span class="xref std std-term">dimension</span></a> which additionally set the representation
 type to <code class="docutils literal notranslate"><span class="pre">double</span></code> by default:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span>
-<span class="k">using</span> <span class="n">q_length</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">length</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span>
-<span class="k">using</span> <span class="n">q_speed</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">speed</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>Thanks to that, the above example can be rewritten as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">q_length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
-<span class="n">si</span><span class="o">::</span><span class="n">q_speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
-<section id="quantity-references">
-<h3>Quantity References<a class="headerlink" href="#quantity-references" title="Permalink to this headline">¶</a></h3>
+<section id="unit-specific-aliases-experimental">
+<h3>Unit-Specific Aliases (Experimental)<a class="headerlink" href="#unit-specific-aliases-experimental" title="Permalink to this headline"></a></h3>
+<p>Additionally to the dimension-specific aliases there are also ones provided for
+each and every <a class="reference internal" href="../glossary.html#term-unit"><span class="xref std std-term">unit</span></a> in the library:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef UNITS_NO_ALIASES</span>
+
+<span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="kr">inline</span> <span class="n">length</span> <span class="p">{</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">m</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">km</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="kr">inline</span> <span class="n">speed</span> <span class="p">{</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">m_per_s</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">km_per_h</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+<span class="cp">#endif </span><span class="c1">// UNITS_NO_ALIASES</span>
+</pre></div>
+</div>
+<p>Using the above our code can look as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="p">;</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">::</span><span class="n">km</span><span class="o">&lt;&gt;</span> <span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">::</span><span class="n">km_per_h</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Please note that with the C++20 <abbr title="Class Template Argument Deduction">CTAD</abbr> support
+for alias templates the above can be rewritten as:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="p">;</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">::</span><span class="n">km</span> <span class="n">d</span><span class="p">(</span><span class="mf">123.</span><span class="p">);</span>
+<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">::</span><span class="n">km_per_h</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>which will deduce the representation type automatically from the initializer provided
+by the user.</p>
+<p>Also, this feature allows to be more terse if desired:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="n">km</span><span class="p">(</span><span class="mf">123.</span><span class="p">);</span>
+<span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">km_per_h</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="quantity-references-experimental">
+<h3>Quantity References (Experimental)<a class="headerlink" href="#quantity-references-experimental" title="Permalink to this headline"></a></h3>
 <p>Quantity References provide an alternative and simplified way to create quantities.
 They are defined using the <a class="reference internal" href="../reference/core/types/reference.html#_CPPv4I_9Dimension_6UnitOfI1DEEN5units9referenceE" title="units::reference"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">reference</span></code></a> class template:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifdef UNITS_REFERENCES</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef UNITS_NO_REFERENCES</span>
 
 <span class="k">namespace</span> <span class="n">length_references</span> <span class="p">{</span>
 
 <span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">km</span> <span class="o">=</span> <span class="n">reference</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">kilometre</span><span class="o">&gt;</span><span class="p">{};</span>
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">h</span> <span class="o">=</span> <span class="n">reference</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span> <span class="n">hour</span><span class="o">&gt;</span><span class="p">{};</span>
 
 <span class="p">}</span>  <span class="c1">// namespace length_references</span>
+
+<span class="k">namespace</span> <span class="n">time_references</span> <span class="p">{</span>
+
+<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">h</span> <span class="o">=</span> <span class="n">reference</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span> <span class="n">hour</span><span class="o">&gt;</span><span class="p">{};</span>
+
+<span class="p">}</span>  <span class="c1">// namespace time_references</span>
 
 <span class="k">namespace</span> <span class="n">references</span> <span class="p">{</span>
 
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">length_references</span><span class="p">;</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">time_references</span><span class="p">;</span>
 
 <span class="p">}</span>  <span class="c1">// namespace references</span>
 
-<span class="cp">#endif </span><span class="c1">// UNITS_REFERENCES</span>
+<span class="cp">#endif </span><span class="c1">// UNITS_NO_REFERENCES</span>
 </pre></div>
 </div>
 <p>With the above our code can look as follows:</p>
@@ -288,11 +271,11 @@ They are defined using the <a class="reference internal" href="../reference/core
 </pre></div>
 </div>
 </section>
-<section id="user-defined-literals">
-<h3>User Defined Literals<a class="headerlink" href="#user-defined-literals" title="Permalink to this headline">¶</a></h3>
+<section id="user-defined-literals-experimental">
+<h3>User Defined Literals (Experimental)<a class="headerlink" href="#user-defined-literals-experimental" title="Permalink to this headline"></a></h3>
 <p>Alternatively, to construct quantities with compile-time known values the library provides
 <abbr title="User Defined Literal">UDL</abbr> s for each <a class="reference internal" href="../glossary.html#term-unit"><span class="xref std std-term">unit</span></a> of every <a class="reference internal" href="../glossary.html#term-dimension"><span class="xref std std-term">dimension</span></a>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifdef UNITS_LITERALS</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef UNITS_NO_LITERALS</span>
 
 <span class="kr">inline</span> <span class="k">namespace</span> <span class="n">literals</span> <span class="p">{</span>
 
@@ -304,7 +287,7 @@ They are defined using the <a class="reference internal" href="../reference/core
 
 <span class="p">}</span>
 
-<span class="cp">#endif </span><span class="c1">// UNITS_LITERALS</span>
+<span class="cp">#endif </span><span class="c1">// UNITS_NO_LITERALS</span>
 </pre></div>
 </div>
 <p>Thanks to them the same code can be as simple as:</p>
@@ -322,15 +305,9 @@ language (i.e. <code class="docutils literal notranslate"><span class="pre">F</s
 <code class="docutils literal notranslate"><span class="pre">d</span></code> (day), <code class="docutils literal notranslate"><span class="pre">l</span></code> or <code class="docutils literal notranslate"><span class="pre">L</span></code> (litre), <code class="docutils literal notranslate"><span class="pre">erg</span></code>, <code class="docutils literal notranslate"><span class="pre">ergps</span></code>). This is why the
 <code class="docutils literal notranslate"><span class="pre">_q_</span></code> prefix was consistently applied to all the UDLs.</p>
 </div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>As one can read in the next section UDLs, are considered to be inferior to <a class="reference internal" href="#quantity-references">Quantity References</a>
-and their definition affects compile-time performance a lot. This is why they are an opt-in feature
-of the library and in order to use them one has to provide a <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">UNITS_LITERALS</span></code> preprocessor definition.</p>
-</div>
 </section>
 <section id="udls-vs-quantity-references">
-<h3>UDLs vs Quantity References<a class="headerlink" href="#udls-vs-quantity-references" title="Permalink to this headline">¶</a></h3>
+<h3>UDLs vs Quantity References<a class="headerlink" href="#udls-vs-quantity-references" title="Permalink to this headline"></a></h3>
 <p>UDLs are helpful but they also have some disadvantages compared to Quantity References:</p>
 <ol class="arabic">
 <li><p>UDLs are only for compile-time known values and do not work for runtime variables</p>
@@ -444,9 +421,251 @@ template instantiations in the application.</p>
 </li>
 </ol>
 </section>
+<section id="quantity-references-vs-unit-specific-aliases">
+<h3>Quantity References vs Unit-specific Aliases<a class="headerlink" href="#quantity-references-vs-unit-specific-aliases" title="Permalink to this headline"></a></h3>
+<ol class="arabic">
+<li><p>Shadowing issues</p>
+<ul>
+<li><p>Quantity References</p>
+<p>References occupy a pool of many short identifiers which sometimes shadow the variables,
+function arguments, or even template parameters provided by the user or other libraries. This
+results in warnings being generated by some compilers. The most restrictive here is MSVC which
+for example emits a warning of shadowing <code class="docutils literal notranslate"><span class="pre">N</span></code> template parameter for an array size provided
+in a header file with Newton unit included via namespace declaration in the <code class="docutils literal notranslate"><span class="pre">main()</span></code> program
+function (see <a class="reference external" href="https://github.com/mpusz/units/blob/master/example/references/experimental_angle.cpp">experimental_angle</a>).
+In other cases user is forced to rename its local identifiers to not collide with predefined
+references (see <a class="reference external" href="https://github.com/mpusz/units/blob/master/example/references/capacitor_time_curve.cpp">capacitor_time_curve</a>).</p>
+</li>
+<li><p>Unit-specific Aliases</p>
+<p>As aliases are defined in terms of types rather variables no major shadowing issues were found
+so far. In case of identifiers abiguity it was always possible to disambiguate with more
+namespaces prefixed in front of the alias.</p>
+</li>
+</ul>
+</li>
+<li><p>Adjustable verbosity</p>
+<ul>
+<li><p>Quantity References</p>
+<p>References allow creating custom helpers for complex units. Instead of typing:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>one can do the following:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">kmph</span> <span class="o">=</span> <span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">;</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">kmph</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Unit-specific Aliases</p>
+<p>There is no need to create custom helpers for complex units as most of them are predefined in
+a library already. However, this feature also allows controlling verbosity of the code. For
+example in the below example <code class="docutils literal notranslate"><span class="pre">d1</span></code>, <code class="docutils literal notranslate"><span class="pre">d2</span></code>, and <code class="docutils literal notranslate"><span class="pre">d3</span></code> will end up being of the same type
+and having the same value:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="mf">123.45</span><span class="p">);</span>
+<span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">123.45</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="k">auto</span> <span class="n">d3</span> <span class="o">=</span> <span class="n">length</span><span class="o">::</span><span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Readability</p>
+<ul>
+<li><p>Quantity References</p>
+<p>As long as references are easy to understand in the following code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>it is not that nice when a variable is used instead of a compile time number:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="nf">avg_speed</span><span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length_references</span><span class="p">;</span>
+  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">time_references</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">d</span> <span class="o">*</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Notice that if <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">namespace</span> <span class="pre">units::isq::si::references;</span></code> was used instead above it could
+cause a clash of <code class="docutils literal notranslate"><span class="pre">t</span></code> function parameter with <code class="docutils literal notranslate"><span class="pre">si::tonne</span></code> unit symbol if <code class="docutils literal notranslate"><span class="pre">si/mass.h</span></code> was
+included.</p>
+</li>
+<li><p>Unit-specific Aliases</p>
+<p>The same using aliases can look as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="nf">avg_speed</span><span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">m</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="nf">avg_speed</span><span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="p">;</span>
+  <span class="k">return</span> <span class="n">length</span><span class="o">::</span><span class="n">m</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="n">time</span><span class="o">::</span><span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Operators Precedence</p>
+<ul>
+<li><p>Quantity References</p>
+<p>The syntax for references uses <code class="docutils literal notranslate"><span class="pre">*</span></code> operator which has some predefined precedence. This operator
+always takes a magnitude or a reference as <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and a reference as <code class="docutils literal notranslate"><span class="pre">rhs</span></code>. All other comibnations
+are not allowed. It means that in order to satisfy the operators precedence sometimes quite a lot
+of parenthesis have to be sprinkled in the code in order for the code to compile:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+<li><p>Unit-specific Aliases</p>
+<p>Aliases do not use operator syntax thus they are not affected by the precedence issue.</p>
+</li>
+</ul>
+</li>
+<li><p>Composition for unnamed derived units</p>
+<ul>
+<li><p>Quantity References</p>
+<p>References have only to be defined for named units. Also for the user’s conveniance references are
+predefined for units raised to a specific power (e.g. <code class="docutils literal notranslate"><span class="pre">m2</span></code>, <code class="docutils literal notranslate"><span class="pre">km3</span></code>, etc). All other derived units
+can be constructed using the provided ones already even if they do not correspond to any predefined
+dimension:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">kmph</span> <span class="o">=</span> <span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">;</span>
+<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">kmph3</span> <span class="o">=</span> <span class="n">kmph</span> <span class="o">*</span> <span class="n">kmph</span> <span class="o">*</span> <span class="n">kmph</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Unit-specific Aliases</p>
+<p>Such a feature is not possible with aliases. In order to create a derived unit a full alias template
+has to be explicitly provided:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">km_per_h</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>Explicit control over the representation type</p>
+<p>Both options here allow to preserve user provide representation type but only aliases allow
+to override it if needed.</p>
+</li>
+<li><p>Simplified quantity casting</p>
+<p>Aliases can easily replace <code class="docutils literal notranslate"><span class="pre">quantity_cast&lt;Unit&gt;()</span></code> which is not possible with references:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="k">auto</span> <span class="n">meter</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">international</span><span class="o">::</span><span class="n">foot</span><span class="o">&gt;</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The above code for references may look as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="k">auto</span> <span class="n">meter</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">international</span><span class="o">::</span><span class="n">ft</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ft</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The above will preserve the representation type of the source type.</p>
+</li>
+<li><p>Compilation performance</p>
+<p>For our experiments it seems that aliases are 2-5x faster to compile than references (declaring an
+alias template is much faster than instantiating a class template).</p>
+</li>
+</ol>
+</section>
+<section id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline"></a></h3>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 54%" />
+<col style="width: 15%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Aliases</p></th>
+<th class="head"><p>References</p></th>
+<th class="head"><p>UDLs</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Literals and variables support</p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p>Literals only</p></td>
+</tr>
+<tr class="row-odd"><td><p>Preserves user provided representation type</p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Explicit control over the representation type</p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Possibility to resolve ambiguity</p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Readability</p></td>
+<td><p><strong>Good</strong></p></td>
+<td><p>Medium</p></td>
+<td><p><strong>Good</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Hard to resolve shadowing issues</p></td>
+<td><p><strong>No</strong></p></td>
+<td><p>Yes</p></td>
+<td><p><strong>No</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>Operators precedence issue</p></td>
+<td><p><strong>No</strong></p></td>
+<td><p>Yes</p></td>
+<td><p><strong>No</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>Controlled verbosity</p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Easy composition for derived units</p></td>
+<td><p>No</p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-odd"><td><p>Simplified quantity casting</p></td>
+<td><p><strong>Yes</strong></p></td>
+<td><p>No</p></td>
+<td><p>No</p></td>
+</tr>
+<tr class="row-even"><td><p>Implementation and standardization effort</p></td>
+<td><p>Medium</p></td>
+<td><p><strong>Lowest</strong></p></td>
+<td><p>Highest</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compile-time performance</p></td>
+<td><p><strong>Fastest</strong></p></td>
+<td><p>Medium</p></td>
+<td><p>Slowest</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="don-t-pay-for-what-you-don-t-use-compile-time-performance">
+<h3>Don’t pay for what you don’t use (compile-time performance)<a class="headerlink" href="#don-t-pay-for-what-you-don-t-use-compile-time-performance" title="Permalink to this headline"></a></h3>
+<p>As noted in the previous chapter, each quantity creation helper has a different impact on the compile-time
+performance. Aliases tend to be the fastest to compile but even their definition can be expensive for some
+if it is not used in the source code. This is why it is possible to opt-out from each or every quantity
+creation helper with the following preprocessor defines:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#define UNITS_NO_ALIASES</span>
+<span class="cp">#define UNITS_NO_REFERENCES</span>
+<span class="cp">#define UNITS_NO_LITERALS</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="dimension-specific-concepts">
-<h2>Dimension-specific Concepts<a class="headerlink" href="#dimension-specific-concepts" title="Permalink to this headline">¶</a></h2>
+<h2>Dimension-specific Concepts<a class="headerlink" href="#dimension-specific-concepts" title="Permalink to this headline"></a></h2>
 <p>In case the user does not care about the specific unit and representation but
 requires quantity of a concrete dimension than dimension-specific concepts can
 be used:</p>
@@ -511,12 +730,12 @@ that works efficiently not only with SI units but also with other systems of
 units like CGS.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>Please refer to <a class="reference internal" href="../examples/avg_speed.html#avg-speed"><span class="std std-ref">avg_speed</span></a> example for more
+<p>Please refer to <a class="reference internal" href="../examples/basics/avg_speed.html#avg-speed"><span class="std std-ref">avg_speed</span></a> example for more
 information on different kinds of interfaces supported by the library.</p>
 </div>
 </section>
 <section id="working-with-constrained-deduced-quantity-types">
-<h2>Working With Constrained Deduced Quantity Types<a class="headerlink" href="#working-with-constrained-deduced-quantity-types" title="Permalink to this headline">¶</a></h2>
+<h2>Working With Constrained Deduced Quantity Types<a class="headerlink" href="#working-with-constrained-deduced-quantity-types" title="Permalink to this headline"></a></h2>
 <p>It is important to note that when we assign a result from the function to an
 automatically deduced type, even if it is constrained by a dimension-specific
 concept, we still do not know what is the exact unit and representation type
@@ -547,7 +766,7 @@ but often we would like to know a specific type too. We have two options here:</
 </div>
 </section>
 <section id="dimensionless-quantities">
-<h2>Dimensionless Quantities<a class="headerlink" href="#dimensionless-quantities" title="Permalink to this headline">¶</a></h2>
+<h2>Dimensionless Quantities<a class="headerlink" href="#dimensionless-quantities" title="Permalink to this headline"></a></h2>
 <p>Whenever we divide two quantities of the same dimension we end up with a
 <a class="reference internal" href="../glossary.html#term-dimensionless-quantity"><span class="xref std std-term">dimensionless quantity</span></a> otherwise known as <a class="reference internal" href="../glossary.html#term-quantity-of-dimension-one"><span class="xref std std-term">quantity of dimension one</span></a>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">km</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>
@@ -585,7 +804,7 @@ values of quantities of dimension one are numbers”),</p></li>
 <p>will print <code class="docutils literal notranslate"><span class="pre">50</span> <span class="pre">%</span></code> to the console output.</p>
 <p>Again, according to the ISO definition “such quantities convey more information than a
 number”. This is exactly what we observe in the above example. The value stored inside
-the quantity, the text output, and the value returned by the <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4NK5units8quantity6numberEv" title="units::quantity::number"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::number()</span></code></a> member
+the quantity, the text output, and the value returned by the <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4NR5units8quantity6numberEv" title="units::quantity::number"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::number()</span></code></a> member
 function is <code class="docutils literal notranslate"><span class="pre">50</span></code> rather than <code class="docutils literal notranslate"><span class="pre">0.5</span></code>. It means that dimensionless quantities behave
 like all other quantities and store the value in terms of a ratio of a coherent unit.
 This allows us to not loose precision when we divide quantities of the same dimensions
@@ -603,53 +822,33 @@ chapter.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="quantity_points.html" class="btn btn-neutral float-right" title="Quantity Points" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="basic_concepts.html" class="btn btn-neutral float-left" title="Basic Concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="basic_concepts.html" class="btn btn-neutral float-left" title="Basic Concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quantity_points.html" class="btn btn-neutral float-right" title="Quantity Points" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

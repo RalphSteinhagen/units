@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Dimensions &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dimensions &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Units" href="units.html" />
     <link rel="prev" title="Quantity Kinds" href="quantity_kinds.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
@@ -98,19 +52,13 @@
 <li class="toctree-l2"><a class="reference internal" href="quantity_points.html">Quantity Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Dimensions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#arithmetics">Arithmetics</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#quantities">Quantities</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#quantity-kinds">Quantity Kinds</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#quantity-points">Quantity Points</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#quantity-point-kinds">Quantity Point Kinds</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#base-dimensions">Base Dimensions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#derived-dimensions">Derived Dimensions</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#obtaining-a-unit-of-the-dimension">Obtaining a Unit of the Dimension</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
@@ -122,13 +70,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
@@ -136,197 +84,39 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
-        
       <li>Dimensions</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/framework/dimensions.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="dimensions">
-<h1>Dimensions<a class="headerlink" href="#dimensions" title="Permalink to this headline">¶</a></h1>
+<h1>Dimensions<a class="headerlink" href="#dimensions" title="Permalink to this headline"></a></h1>
 <p>In the previous chapter we briefly introduced the notion of a physical
 <a class="reference internal" href="../glossary.html#term-dimension"><span class="xref std std-term">dimension</span></a>. Now it is time to learn much more about this subject.
 Length, time, speed, area, energy are only a few examples of physical
 dimensions.</p>
-<section id="arithmetics">
-<h2>Arithmetics<a class="headerlink" href="#arithmetics" title="Permalink to this headline">¶</a></h2>
-<section id="quantities">
-<h3>Quantities<a class="headerlink" href="#quantities" title="Permalink to this headline">¶</a></h3>
-<p>Quantities of the same dimension can be easily added or subtracted with
-each other and the result will always be a quantity of the same dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">+</span> <span class="n">dist2</span><span class="p">;</span>
-</span><span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">-</span> <span class="n">dist2</span><span class="p">;</span>
-</span></pre></div>
-</div>
-<p>Additionally, we can always multiply or divide a quantity by a
-<a class="reference internal" href="../glossary.html#term-scalable-number"><span class="xref std std-term">scalable number</span></a> and in such a case the quantity’s dimension will also
-not change:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>   <span class="c1">// 4 m</span>
-</span><span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">res1</span><span class="p">;</span>   <span class="c1">// 12 m</span>
-</span><span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="n">res2</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>   <span class="c1">// 6 m</span>
-</span></pre></div>
-</div>
-<p>However, if we try to multiply or divide quantities of the same or
-different dimensions, or we will divide a scalable number by a quantity, we most
-probably will always end up in a quantity of a yet another dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Time</span> <span class="k">auto</span> <span class="n">dur1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
-<span class="hll"><span class="n">Area</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">*</span> <span class="n">dist2</span><span class="p">;</span>     <span class="c1">// 6 m²</span>
-</span><span class="hll"><span class="n">Speed</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">/</span> <span class="n">dur1</span><span class="p">;</span>     <span class="c1">// 1 m/s</span>
-</span><span class="hll"><span class="n">Frequency</span> <span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">/</span> <span class="n">dur1</span><span class="p">;</span>    <span class="c1">// 5 Hz</span>
-</span></pre></div>
-</div>
-<p>However, please note that there is an exception from the above rule.
-In case we divide the same dimensions, or multiply by the inverted
-dimension, than we will end up with just a dimensionless quantity:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Time</span> <span class="k">auto</span> <span class="n">dur1</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
-<span class="n">Time</span> <span class="k">auto</span> <span class="n">dur2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
-<span class="n">Frequency</span> <span class="k">auto</span> <span class="n">fr1</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">Hz</span><span class="p">;</span>
-<span class="hll"><span class="n">Dimensionless</span> <span class="k">auto</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">dur1</span> <span class="o">/</span> <span class="n">dur2</span><span class="p">;</span>    <span class="c1">// quantity(5)</span>
-</span><span class="hll"><span class="n">Dimensionless</span> <span class="k">auto</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">dur1</span> <span class="o">*</span> <span class="n">fr1</span><span class="p">;</span>     <span class="c1">// quantity(50)</span>
-</span></pre></div>
-</div>
-</section>
-<section id="quantity-kinds">
-<h3>Quantity Kinds<a class="headerlink" href="#quantity-kinds" title="Permalink to this headline">¶</a></h3>
-<p>Quantity kinds behave the same as quantities for all operations,
-except that the quantity types in the operators’ declarations
-are quantity kind types instead.
-Additionally, for the dimensional analysis operators,
-you can use a quantity argument instead of a quantity kind.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">height_kind</span> <span class="p">:</span> <span class="n">kind</span><span class="o">&lt;</span><span class="n">height_kind</span><span class="p">,</span> <span class="n">dim_length</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">rate_of_climb_kind</span> <span class="p">:</span> <span class="n">derived_kind</span><span class="o">&lt;</span><span class="n">rate_of_climb_kind</span><span class="p">,</span> <span class="n">height_kind</span><span class="p">,</span> <span class="n">dim_speed</span><span class="o">&gt;</span> <span class="p">{};</span>
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">height</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">height_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">rate_of_climb</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">rate_of_climb_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-
-<span class="n">height</span> <span class="n">h</span><span class="p">{</span><span class="mi">100</span> <span class="o">*</span> <span class="n">m</span><span class="p">};</span>
-<span class="hll"><span class="n">rate_of_climb</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">h</span> <span class="o">/</span> <span class="p">(</span><span class="mi">25</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-</span><span class="hll">  <span class="c1">// quantity_kind&lt;rate_of_climb_kind, si::metre_per_second, int&gt;(4 * m / s)</span>
-</span></pre></div>
-</div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">width_kind</span> <span class="p">:</span> <span class="n">kind</span><span class="o">&lt;</span><span class="n">width_kind</span><span class="p">,</span> <span class="n">dim_length</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">horizontal_area_kind</span> <span class="p">:</span> <span class="n">derived_kind</span><span class="o">&lt;</span><span class="n">horizontal_area_kind</span><span class="p">,</span> <span class="n">width_kind</span><span class="p">,</span> <span class="n">dim_area</span><span class="o">&gt;</span> <span class="p">{};</span>
-
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">width</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">width_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">horizontal_area</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">horizontal_area_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-
-<span class="n">width</span> <span class="n">w</span><span class="p">{</span><span class="mi">5</span> <span class="o">*</span> <span class="n">m</span><span class="p">};</span>
-<span class="hll"><span class="n">horizontal_area</span> <span class="n">area1</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">w</span><span class="p">;</span>
-</span><span class="hll">  <span class="c1">// quantity_kind&lt;horizontal_area_kind, si::metre_per_second, int&gt;(25 * m * m)</span>
-</span><span class="hll"><span class="n">width</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">area1</span> <span class="o">/</span> <span class="n">w</span><span class="p">;</span> <span class="c1">// quantity_kind&lt;width_kind, si::metre, int&gt;(5 * m)</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">q1</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="n">w</span><span class="p">;</span> <span class="c1">// Dimensionless quantity kinds related to width</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">q2</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span> <span class="c1">// with .common() equal to quantity{1}</span>
-</span></pre></div>
-</div>
-</section>
-<section id="quantity-points">
-<h3>Quantity Points<a class="headerlink" href="#quantity-points" title="Permalink to this headline">¶</a></h3>
-<p>Quantity points have a more restricted set of operations.
-Quantity can be added to or subtracted from a quantity point.
-The result will always be a quantity point of the same dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">QuantityPoint</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">+</span> <span class="n">dist2</span><span class="p">;</span>
-</span><span class="hll"><span class="n">QuantityPoint</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">+</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>
-</span><span class="hll"><span class="n">QuantityPoint</span> <span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">-</span> <span class="n">dist2</span><span class="p">;</span>
-</span></pre></div>
-</div>
-<p>We can also subtract two quantity points.
-The result is a relative quantity of the same dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">-</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>
-</span></pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>It is not allowed to:</p>
-<ul class="simple">
-<li><p>add quantity points</p></li>
-<li><p>subtract a quantity point from a quantity:</p></li>
-<li><p>multiply nor divide quantity points with anything else.</p></li>
-</ul>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">+</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>  <span class="c1">// ERROR</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">-</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>                  <span class="c1">// ERROR</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>                <span class="c1">// ERROR</span>
-</span></pre></div>
-</div>
-</div>
-</section>
-<section id="quantity-point-kinds">
-<h3>Quantity Point Kinds<a class="headerlink" href="#quantity-point-kinds" title="Permalink to this headline">¶</a></h3>
-<p>The same restrictions of a quantity point with respect to its quantity
-apply to a quantity point kind with respect to its quantity kind.</p>
-</section>
-</section>
-<section id="base-dimensions">
-<h2>Base Dimensions<a class="headerlink" href="#base-dimensions" title="Permalink to this headline">¶</a></h2>
+<object data="../_images/dimensions.svg" type="image/svg+xml" class="align-center" style="max-width: 100%;"></object><section id="base-dimensions">
+<h2>Base Dimensions<a class="headerlink" href="#base-dimensions" title="Permalink to this headline"></a></h2>
 <p>The quantities of base dimensions are called
 <a class="reference internal" href="../glossary.html#term-base-quantity"><span class="xref std std-term">base quantities</span></a> which are the atomic building blocks
 of a <a class="reference internal" href="../glossary.html#term-system-of-quantities"><span class="xref std std-term">system of quantities</span></a>. For example the The International System
@@ -350,7 +140,7 @@ obtain those back easily with:</p>
 </div>
 </section>
 <section id="derived-dimensions">
-<h2>Derived Dimensions<a class="headerlink" href="#derived-dimensions" title="Permalink to this headline">¶</a></h2>
+<h2>Derived Dimensions<a class="headerlink" href="#derived-dimensions" title="Permalink to this headline"></a></h2>
 <p>The quantities of derived dimensions are called
 <a class="reference internal" href="../glossary.html#term-derived-quantity"><span class="xref std std-term">derived quantities</span></a> and are derived from base
 quantities. This means that they are created by multiplying or dividing
@@ -419,7 +209,7 @@ template parameter will be removed from this definition.</p>
 </div>
 </section>
 <section id="obtaining-a-unit-of-the-dimension">
-<h2>Obtaining a Unit of the Dimension<a class="headerlink" href="#obtaining-a-unit-of-the-dimension" title="Permalink to this headline">¶</a></h2>
+<h2>Obtaining a Unit of the Dimension<a class="headerlink" href="#obtaining-a-unit-of-the-dimension" title="Permalink to this headline"></a></h2>
 <p>In order to obtain the base/coherent unit of any dimension type a
 <a class="reference internal" href="../reference/core/metafunctions.html#_CPPv4I_9DimensionEN5units14dimension_unitE" title="units::dimension_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">dimension_unit</span></code></a> helper was introduced:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">dimension_unit</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">);</span>
@@ -431,53 +221,33 @@ template parameter will be removed from this definition.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="units.html" class="btn btn-neutral float-right" title="Units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="quantity_kinds.html" class="btn btn-neutral float-left" title="Quantity Kinds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quantity_kinds.html" class="btn btn-neutral float-left" title="Quantity Kinds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="units.html" class="btn btn-neutral float-right" title="Units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

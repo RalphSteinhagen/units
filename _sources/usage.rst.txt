@@ -32,7 +32,7 @@ This repository contains three independent CMake-based projects:
   - additionally to the dependencies of *./src* project, it uses:
 
     - `Catch2 <https://github.com/catchorg/Catch2>`_ library as a unit tests framework.
-    - `linear algebra <https://github.com/BobSteagall/wg21/tree/master/linear_algebra/code>`_
+    - `linear algebra <https://github.com/BobSteagall/wg21/tree/master/include>`_
       library based on proposal `P1385 <https://wg21.link/P1385>`_ used in some examples
       and tests.
     - `Doxygen <http://www.doxygen.nl>`_ to extract C++ entities information from the source
@@ -89,10 +89,12 @@ in *~/.conan/profiles* directory. An example profile can look as follows:
     [options]
     [build_requires]
 
+    [conf]
+    tools.cmake.cmaketoolchain:generator=Ninja
+
     [env]
     CC=/usr/bin/gcc-10
     CXX=/usr/bin/g++-10
-    CONAN_CMAKE_GENERATOR=Ninja
 
 .. tip::
 
@@ -149,16 +151,6 @@ Additionally, enables project documentation generation when the project is being
 CMake Options
 ^^^^^^^^^^^^^
 
-UNITS_DOWNCAST_MODE
-+++++++++++++++++++
-
-**Values**: ``OFF``/``ON``/``AUTO``
-
-**Defaulted to**: ``ON``
-
-Equivalent to `downcast_mode`_.
-
-
 UNITS_AS_SYSTEM_HEADERS
 +++++++++++++++++++++++
 
@@ -167,6 +159,26 @@ UNITS_AS_SYSTEM_HEADERS
 **Defaulted to**: ``OFF``
 
 Exports library as system headers.
+
+
+UNITS_BUILD_DOCS
+++++++++++++++++
+
+**Values**: ``ON``/``OFF``
+
+**Defaulted to**: ``ON``
+
+Enables project documentation generation.
+
+
+UNITS_DOWNCAST_MODE
++++++++++++++++++++
+
+**Values**: ``OFF``/``ON``/``AUTO``
+
+**Defaulted to**: ``ON``
+
+Equivalent to `downcast_mode`_.
 
 
 UNITS_IWYU
@@ -180,14 +192,14 @@ Enables include-what-you-use when compiling with a clang compiler.
 Additionally turns on `UNITS_AS_SYSTEM_HEADERS`_.
 
 
-UNITS_BUILD_DOCS
+UNITS_USE_LIBFMT
 ++++++++++++++++
 
 **Values**: ``ON``/``OFF``
 
 **Defaulted to**: ``ON``
 
-Enables project documentation generation.
+Enables usage of `{fmt} <https://github.com/fmtlib/fmt>`_ library instead of the C++20 Standard Library feature.
 
 
 Installation and Reuse
@@ -248,7 +260,7 @@ library release the following steps may be performed:
       :caption: conanfile.txt
 
       [requires]
-      mp-units/0.6.0
+      mp-units/0.7.0
 
       [generators]
       CMakeToolchain
@@ -279,7 +291,7 @@ library release the following steps may be performed:
 
   .. code-block:: shell
 
-      mkdir build && cd build
+      mkdir my_project/build && cd my_project/build
       conan install .. -pr <your_conan_profile> -s compiler.cppstd=20 -b=missing
       cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
       cmake --build .
@@ -314,7 +326,7 @@ differences:
       :caption: conanfile.txt
 
       [requires]
-      mp-units/0.7.0@mpusz/testing
+      mp-units/0.8.0@mpusz/testing
 
       [generators]
       CMakeToolchain
@@ -330,10 +342,25 @@ differences:
 
   .. code-block:: shell
 
-      mkdir build && cd build
+      mkdir my_project/build && cd my_project/build
       conan install .. -pr <your_conan_profile> -s compiler.cppstd=20 -b=outdated -u
       cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
       cmake --build .
+
+
+Install
+^^^^^^^
+
+In case you don't want to use Conan in your project and just want to install the **mp-units**
+library on your file system and use it via ``find_package(mp-units)`` from another repository
+to find it, it is enough to perform the following steps:
+
+.. code-block:: shell
+
+    mkdir units/build && cd units/build
+    conan install .. -pr <your_conan_profile> -s compiler.cppstd=20 -b=missing
+    cmake ../src -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake
+    cmake --install . --prefix <install_dir>
 
 
 Contributing (or just building all the tests, examples, and documentation)
@@ -349,10 +376,9 @@ in **mp-units** repository, you should:
 
 .. code-block:: shell
 
-    conan remote add linear-algebra https://api.bintray.com/conan/twonington/public-conan
     git clone https://github.com/mpusz/units.git && cd units
     pip3 install -r docs/requirements.txt
-    mkdir build && cd build
+    mkdir units/build && cd units/build
     conan install .. -pr <your_conan_profile> -s compiler.cppstd=20 -e mp-units:CONAN_RUN_TESTS=True -b outdated -u
     conan build ..
 
@@ -387,4 +413,4 @@ Uploading **mp-units** Package to the Conan Server
 
 .. code-block:: shell
 
-    conan upload -r <remote-name> --all mp-units/0.7.0@<user>/<channel>
+    conan upload -r <remote-name> --all mp-units/0.8.0@<user>/<channel>

@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Basic Concepts &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Concepts &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Quantities" href="quantities.html" />
     <link rel="prev" title="Framework Basics" href="../framework.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
@@ -99,6 +53,7 @@
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
@@ -110,13 +65,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
@@ -124,77 +79,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
-        
       <li>Basic Concepts</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/framework/basic_concepts.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="basic-concepts">
-<h1>Basic Concepts<a class="headerlink" href="#basic-concepts" title="Permalink to this headline">¶</a></h1>
+<h1>Basic Concepts<a class="headerlink" href="#basic-concepts" title="Permalink to this headline"></a></h1>
 <p>The most important concepts in the library are <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units4UnitE" title="units::Unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Unit</span></code></a>, <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units9DimensionE" title="units::Dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Dimension</span></code></a>,
 <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units8QuantityE" title="units::Quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Quantity</span></code></a>, <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units13QuantityPointE" title="units::QuantityPoint"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityPoint</span></code></a>, <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units12QuantityKindE" title="units::QuantityKind"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityKind</span></code></a>, and <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units17QuantityPointKindE" title="units::QuantityPointKind"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityPointKind</span></code></a>:</p>
-<img alt="../_images/concepts.png" class="align-center" src="../_images/concepts.png" />
-<p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units4UnitE" title="units::Unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Unit</span></code></a> is a basic building block of the library. Every dimension works with
+<object data="../_images/concepts.svg" type="image/svg+xml" class="align-center" style="max-width: 100%;"></object><p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units4UnitE" title="units::Unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Unit</span></code></a> is a basic building block of the library. Every dimension works with
 a concrete hierarchy of units. Such hierarchy defines a reference unit and
 often a few scaled versions of it. Examples: <code class="docutils literal notranslate"><span class="pre">second</span></code>, <code class="docutils literal notranslate"><span class="pre">metre</span></code>, <code class="docutils literal notranslate"><span class="pre">kilometre_per_hour</span></code>.</p>
 <p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units9DimensionE" title="units::Dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Dimension</span></code></a> concept matches a dimension of either a base or derived quantity.
@@ -204,66 +118,46 @@ derived dimensions. Examples: <code class="docutils literal notranslate"><span c
 <p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units8QuantityE" title="units::Quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Quantity</span></code></a> is a concrete amount of a unit for a specified dimension with a
 specific representation. Examples: <code class="docutils literal notranslate"><span class="pre">quantity&lt;si::dim_time,</span> <span class="pre">si::second,</span> <span class="pre">int&gt;</span></code>,
 <code class="docutils literal notranslate"><span class="pre">si::length&lt;si::metre,</span> <span class="pre">int&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">si::speed&lt;si::kilometre_per_hour&gt;</span></code>.</p>
-<p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units13QuantityPointE" title="units::QuantityPoint"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityPoint</span></code></a> is an absolute <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units8QuantityE" title="units::Quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Quantity</span></code></a> with respect to some origin.
+<p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units13QuantityPointE" title="units::QuantityPoint"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityPoint</span></code></a> is an absolute <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units8QuantityE" title="units::Quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Quantity</span></code></a> with respect to an origin.
 Examples: timestamp (as opposed to duration), absolute temperature
 (as opposed to temperature difference).</p>
 <p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units12QuantityKindE" title="units::QuantityKind"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityKind</span></code></a> is a <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units8QuantityE" title="units::Quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Quantity</span></code></a> with more specific usage. Examples:
 distance (<code class="docutils literal notranslate"><span class="pre">horizonal_kind</span></code>) and height (<code class="docutils literal notranslate"><span class="pre">vertical_kind</span></code>) are different kinds
 of a length quantity.</p>
-<p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units17QuantityPointKindE" title="units::QuantityPointKind"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityPointKind</span></code></a> is an absolute <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units12QuantityKindE" title="units::QuantityKind"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityKind</span></code></a> with respect to some origin.
+<p><a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units17QuantityPointKindE" title="units::QuantityPointKind"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityPointKind</span></code></a> is an absolute <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units12QuantityKindE" title="units::QuantityKind"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">QuantityKind</span></code></a> with respect to an origin.
 Examples: altitude is a quantity point of <code class="docutils literal notranslate"><span class="pre">vertical_kind</span></code> (as opposed to
 height).</p>
 </section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="quantities.html" class="btn btn-neutral float-right" title="Quantities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../framework.html" class="btn btn-neutral float-left" title="Framework Basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../framework.html" class="btn btn-neutral float-left" title="Framework Basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="quantities.html" class="btn btn-neutral float-right" title="Quantities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

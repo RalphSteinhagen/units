@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Units &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Units &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Quantity Constants" href="constants.html" />
+    <link rel="next" title="Arithmetics" href="arithmetics.html" />
     <link rel="prev" title="Dimensions" href="dimensions.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
@@ -99,22 +53,23 @@
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Units</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#class-hierarchy">Class Hierarchy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#base-units">Base Units</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#derived-units">Derived Units</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#derived-named-units">Derived Named Units</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#derived-unnamed-units">Derived Unnamed Units</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#scaled-units">Scaled Units</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#named-scaled-units">Named Scaled Units</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#prefixed-unit">Prefixed Unit</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#deduced-units">Deduced Units</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#derived-units">Derived Units</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#derived-named-units">Derived Named Units</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#derived-unnamed-units">Derived Unnamed Units</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#derived-scaled-units">Derived Scaled Units</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#aliased-units">Aliased Units</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#class-hierarchy">Class Hierarchy</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
@@ -126,13 +81,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
@@ -140,84 +95,63 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
-        
       <li>Units</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/framework/units.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="units">
-<h1>Units<a class="headerlink" href="#units" title="Permalink to this headline">¶</a></h1>
+<h1>Units<a class="headerlink" href="#units" title="Permalink to this headline"></a></h1>
 <p>Each quantity has a magnitude (a numerical value). In order to be able to
 compare quantities of the same dimension a notion of a <a class="reference internal" href="../glossary.html#term-measurement-unit"><span class="xref std std-term">measurement unit</span></a>
 was introduced. Units are designated by conventionally assigned names and
 symbols. Thanks to them it is possible to compare two quantities of the
 same dimension and express the ratio of the second quantity to the first
-one as a number. For example <code class="docutils literal notranslate"><span class="pre">10s</span></code> is <code class="docutils literal notranslate"><span class="pre">10</span></code> times more than <code class="docutils literal notranslate"><span class="pre">1s</span></code>.</p>
+one as a number. For example <code class="docutils literal notranslate"><span class="pre">10</span> <span class="pre">s</span></code> is <code class="docutils literal notranslate"><span class="pre">10</span></code> times more than <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">s</span></code>.</p>
 <p>Base quantities are expressed in terms of <a class="reference internal" href="../glossary.html#term-base-unit"><span class="xref std std-term">base units</span></a>
 (i.e. <code class="docutils literal notranslate"><span class="pre">m</span></code> (meter), <code class="docutils literal notranslate"><span class="pre">s</span></code> (second)), while derived quantities are expressed
 in terms of <a class="reference internal" href="../glossary.html#term-derived-unit"><span class="xref std std-term">derived units</span></a>.</p>
+<section id="class-hierarchy">
+<h2>Class Hierarchy<a class="headerlink" href="#class-hierarchy" title="Permalink to this headline"></a></h2>
+<p>All of the described here class templates to produce unit types inherit from some instance
+of a <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I_5ratio0EN5units11scaled_unitE" title="units::scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">scaled_unit</span></code></a> class template:</p>
+<object data="../_images/units.svg" type="image/svg+xml" class="align-center" style="max-width: 100%;"></object><p><a class="reference internal" href="../reference/core/types/units.html#_CPPv4I_5ratio0EN5units11scaled_unitE" title="units::scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">scaled_unit</span></code></a> is a class template used exclusively by the library’s framework
+and user should not instantiate it by him/her-self. However the user can sometimes
+observe this type in case an unit/dimension conversion expression will end up with an
+unknown/undefined unit type like in the below example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
+
+<span class="n">Length</span> <span class="k">auto</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>The type of <code class="docutils literal notranslate"><span class="pre">l</span></code> above will be
+<code class="docutils literal notranslate"><span class="pre">si::length&lt;scaled_unit&lt;ratio(1,</span> <span class="pre">36,</span> <span class="pre">1),</span> <span class="pre">si::metre&gt;,</span> <span class="pre">long</span> <span class="pre">double&gt;</span></code>. This is caused
+by the fact that the library does not define a unit of a length quantity that has the
+ratio <code class="docutils literal notranslate"><span class="pre">10/36</span></code> of a <code class="docutils literal notranslate"><span class="pre">si::metre</span></code>. If such a unit was predefined we would see its concrete
+type here instead.</p>
+</section>
 <section id="base-units">
-<h2>Base Units<a class="headerlink" href="#base-units" title="Permalink to this headline">¶</a></h2>
+<h2>Base Units<a class="headerlink" href="#base-units" title="Permalink to this headline"></a></h2>
 <p><a class="reference internal" href="../glossary.html#term-base-unit"><span class="xref std std-term">Base units</span></a> are the units of
 <a class="reference internal" href="../glossary.html#term-base-quantity"><span class="xref std std-term">base quantities</span></a> defined for
 <a class="reference internal" href="../glossary.html#term-base-dimension"><span class="xref std std-term">base dimensions</span></a>. For example in <a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a>
@@ -291,11 +225,117 @@ units of the same physical dimension can be found in the
 <a class="reference internal" href="../use_cases/extensions.html#custom-systems"><span class="std std-ref">Custom Systems</span></a> chapter.</p>
 </div>
 </section>
+<section id="scaled-units">
+<h2>Scaled Units<a class="headerlink" href="#scaled-units" title="Permalink to this headline"></a></h2>
+<p>Described above base units (in case of base quantities) and
+<a class="reference internal" href="../glossary.html#term-coherent-derived-unit"><span class="xref std std-term">coherent units</span></a> (in case of derived quantities),
+in their system of units, have proportionality factor/ratio equal to one.
+However, quantities of such dimensions can also use units of measurement
+with other ratios to describe their magnitude (numerical value).</p>
+<section id="named-scaled-units">
+<h3>Named Scaled Units<a class="headerlink" href="#named-scaled-units" title="Permalink to this headline"></a></h3>
+<p>We are used to use minutes, hours, or days to measure quantities of time.
+Those units are the scaled versions of a time dimension’s base unit,
+namely second. Those can be defined easily in the library using
+<a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_17basic_symbol_text_12PrefixFamily_5ratio_4UnitEN5units17named_scaled_unitE" title="units::named_scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">named_scaled_unit</span></code></a> class template:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">minute</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">minute</span><span class="p">,</span> <span class="s">&quot;min&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span> <span class="n">second</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">hour</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">hour</span><span class="p">,</span> <span class="s">&quot;h&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span> <span class="n">minute</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">day</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">hour</span><span class="p">,</span> <span class="s">&quot;d&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">24</span><span class="p">),</span> <span class="n">hour</span><span class="o">&gt;</span> <span class="p">{};</span>
+</pre></div>
+</div>
+<p>where <a class="reference internal" href="../reference/core/types/prefixes.html#_CPPv4N5units9no_prefixE" title="units::no_prefix"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">no_prefix</span></code></a> is a special tag type describing that the library should
+not allow to define a new prefixed unit that would use this unit as a
+reference (“kilohours” does not have much sense, right?). The <a class="reference internal" href="../reference/core/types/utilities/ratio.html#_CPPv4N5units5ratioE" title="units::ratio"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">ratio</span></code></a> type
+used in the definition is really similar to <code class="docutils literal notranslate"><span class="pre">std::ratio</span></code> but it takes
+an additional <code class="docutils literal notranslate"><span class="pre">Exponent</span></code> template parameter that defines the exponent of the ratio.
+Another important difference is the fact that the objects of that class are used
+as class NTTPs rather then a type template parameter kind.</p>
+<p>Thanks to it we can address nearly infinite scaling factors between units
+and define units like:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">electronvolt</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">electronvolt</span><span class="p">,</span> <span class="s">&quot;eV&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span>
+                                        <span class="n">ratio</span><span class="p">(</span><span class="mi">1&#39;602&#39;176&#39;634</span><span class="p">,</span> <span class="mi">1&#39;000&#39;000&#39;000</span><span class="p">,</span> <span class="o">-</span><span class="mi">19</span><span class="p">),</span> <span class="n">joule</span><span class="o">&gt;</span> <span class="p">{};</span>
+</pre></div>
+</div>
+<p>Finally, the last of the <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_17basic_symbol_text_12PrefixFamily_5ratio_4UnitEN5units17named_scaled_unitE" title="units::named_scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">named_scaled_unit</span></code></a> class template parameters
+provide a reference unit for scaling. Please note that it can be a dimension’s
+base/coherent unit (like <code class="docutils literal notranslate"><span class="pre">si::second</span></code>) or any other unit (i.e. <code class="docutils literal notranslate"><span class="pre">si::minute</span></code>,
+<code class="docutils literal notranslate"><span class="pre">si::hour</span></code>) that is a scaled version of the dimension’s base/coherent unit.</p>
+</section>
+<section id="prefixed-unit">
+<h3>Prefixed Unit<a class="headerlink" href="#prefixed-unit" title="Permalink to this headline"></a></h3>
+<p>Prefixed units are just scaled units with a standardized ratio. For example
+<a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a> defines prefixes based on the exponent of <code class="docutils literal notranslate"><span class="pre">10</span></code>. Here is a
+complete list of all the <a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a> prefixes supported by the library:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
+
+<span class="k">struct</span> <span class="nl">prefix</span> <span class="p">:</span> <span class="n">prefix_family</span> <span class="p">{};</span>
+
+<span class="k">struct</span> <span class="nl">yocto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">yocto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;y&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">24</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">zepto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">zepto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;z&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">21</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">atto</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">atto</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">18</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">femto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">femto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;f&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">pico</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">pico</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;p&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">nano</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">nano</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;n&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">9</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">micro</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">micro</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;µ&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">6</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">milli</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">milli</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;m&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">3</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">centi</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">centi</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">deci</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">deci</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;d&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">deca</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">deca</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;da&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">hecto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">hecto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;h&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">kilo</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">kilo</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;k&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">3</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">mega</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">mega</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;M&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">6</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">giga</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">giga</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;G&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">9</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">tera</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">tera</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;T&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">12</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">peta</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">peta</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;P&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">15</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">exa</span>    <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">exa</span><span class="p">,</span>    <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;E&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">18</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">zetta</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">zetta</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Z&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">21</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">yotta</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">yotta</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Y&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">24</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Alternative hierarchy of prefixes is the one used in data information
+domain:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">iec80000</span> <span class="p">{</span>
+
+<span class="k">struct</span> <span class="nl">binary_prefix</span> <span class="p">:</span> <span class="n">prefix_family</span> <span class="p">{};</span>
+
+<span class="k">struct</span> <span class="nl">kibi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">kibi</span><span class="p">,</span> <span class="n">binary_prefix</span><span class="p">,</span> <span class="s">&quot;Ki&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>                    <span class="mi">1&#39;024</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">mebi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">mebi</span><span class="p">,</span> <span class="n">binary_prefix</span><span class="p">,</span> <span class="s">&quot;Mi&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>                <span class="mi">1&#39;048&#39;576</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">gibi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">gibi</span><span class="p">,</span> <span class="n">binary_prefix</span><span class="p">,</span> <span class="s">&quot;Gi&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>            <span class="mi">1&#39;073&#39;741&#39;824</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">tebi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">tebi</span><span class="p">,</span> <span class="n">binary_prefix</span><span class="p">,</span> <span class="s">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>        <span class="mi">1&#39;099&#39;511&#39;627&#39;776</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">pebi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">pebi</span><span class="p">,</span> <span class="n">binary_prefix</span><span class="p">,</span> <span class="s">&quot;Pi&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>    <span class="mi">1&#39;125&#39;899&#39;906&#39;842&#39;624</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">exbi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">exbi</span><span class="p">,</span> <span class="n">binary_prefix</span><span class="p">,</span> <span class="s">&quot;Ei&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">1&#39;152&#39;921&#39;504&#39;606&#39;846&#39;976</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>With the definitions like above we can easily define prefixed unit. For
+example we can define <code class="docutils literal notranslate"><span class="pre">si::kilometre</span></code> as:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
+
+<span class="k">struct</span> <span class="nl">kilometre</span> <span class="p">:</span> <span class="n">prefixed_unit</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="p">,</span> <span class="n">kilo</span><span class="p">,</span> <span class="n">metre</span><span class="o">&gt;</span> <span class="p">{};</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Prefixed units have to use named units as a reference. For unnamed
+units we could end up with some strange, misleading, and sometimes
+wrong definitions (“kilo square metre” seams strange and spelled
+as <code class="docutils literal notranslate"><span class="pre">km²</span></code> would be invalid).</p>
+</div>
+</section>
+</section>
 <section id="derived-units">
-<h2>Derived Units<a class="headerlink" href="#derived-units" title="Permalink to this headline">¶</a></h2>
-<p>Derived units can be either named or unnamed.</p>
+<h2>Derived Units<a class="headerlink" href="#derived-units" title="Permalink to this headline"></a></h2>
+<p><a class="reference internal" href="../glossary.html#term-derived-unit"><span class="xref std std-term">Derived units</span></a> are the units used to measure
+<a class="reference internal" href="../glossary.html#term-derived-quantity"><span class="xref std std-term">derived quantities</span></a>. They can either have their own unique
+names (i.e. <code class="docutils literal notranslate"><span class="pre">N</span></code> (newton)) or can be composed from the names of units of quantities
+used to define thier derived quantity (i.e. <code class="docutils literal notranslate"><span class="pre">km/h</span></code>).</p>
 <section id="derived-named-units">
-<h3>Derived Named Units<a class="headerlink" href="#derived-named-units" title="Permalink to this headline">¶</a></h3>
+<h3>Derived Named Units<a class="headerlink" href="#derived-named-units" title="Permalink to this headline"></a></h3>
 <p>Derived named units have a unique symbol (i.e. <code class="docutils literal notranslate"><span class="pre">N</span></code> (newton) or <code class="docutils literal notranslate"><span class="pre">Pa</span></code>
 (pascal)) and they are defined in the same way as base units (which
 always have to be a named unit):</p>
@@ -308,13 +348,13 @@ always have to be a named unit):</p>
 </div>
 </section>
 <section id="derived-unnamed-units">
-<h3>Derived Unnamed Units<a class="headerlink" href="#derived-unnamed-units" title="Permalink to this headline">¶</a></h3>
+<h3>Derived Unnamed Units<a class="headerlink" href="#derived-unnamed-units" title="Permalink to this headline"></a></h3>
 <p>Derived unnamed units are the units where the symbol is derived from the
 base quantities symbols and the expression of the dependence of the derived
 quantity on the base quantities (i.e. <code class="docutils literal notranslate"><span class="pre">m/s</span></code> (metre per second), <code class="docutils literal notranslate"><span class="pre">m²</span></code>
 (square metre)). To support such use cases a library introduced a notion of
 <a class="reference internal" href="../glossary.html#term-derived-dimension-recipe"><span class="xref std std-term">derived dimension recipe</span></a> which stores the information about the
-order, exponents, and types of dimensions used to defined this particular
+order, exponents, and types of dimensions used to define this particular
 derived dimension. For example each of the below <code class="docutils literal notranslate"><span class="pre">momentum</span></code> definitions
 will result in a different unnamed unit symbol:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">dim_momentum</span> <span class="p">:</span> <span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_momentum</span><span class="p">,</span> <span class="n">kilogram_metre_per_second</span><span class="p">,</span>
@@ -358,145 +398,39 @@ of <code class="docutils literal notranslate"><span class="pre">N/m</span></code
 <p>If we defined the above in terms of base units we would end up with
 a <code class="docutils literal notranslate"><span class="pre">kg/s²</span></code> derived unit symbol.</p>
 </section>
-</section>
-<section id="scaled-units">
-<h2>Scaled Units<a class="headerlink" href="#scaled-units" title="Permalink to this headline">¶</a></h2>
-<p>Until now we talked mostly about
-<a class="reference internal" href="../glossary.html#term-coherent-derived-unit"><span class="xref std std-term">coherent units</span></a> which are units used to
-define dimensions and thus, in their system of units, have proportionality
-factor/ratio equals one. However quantities of each dimension can also use
-other units of measurement to describe their magnitude (numerical value).</p>
-<section id="named-scaled-units">
-<h3>Named Scaled Units<a class="headerlink" href="#named-scaled-units" title="Permalink to this headline">¶</a></h3>
-<p>We are used to use minutes, hours, or days to measure quantities of time.
-Those units are the scaled versions of a time dimension’s base unit,
-namely second. Those can be defined easily in the library using
-<a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_17basic_symbol_text_12PrefixFamily_5ratio_4UnitEN5units17named_scaled_unitE" title="units::named_scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">named_scaled_unit</span></code></a> class template:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">minute</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">minute</span><span class="p">,</span> <span class="s">&quot;min&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span> <span class="n">second</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">hour</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">hour</span><span class="p">,</span> <span class="s">&quot;h&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">60</span><span class="p">),</span> <span class="n">minute</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">day</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">hour</span><span class="p">,</span> <span class="s">&quot;d&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">24</span><span class="p">),</span> <span class="n">hour</span><span class="o">&gt;</span> <span class="p">{};</span>
-</pre></div>
-</div>
-<p>where <a class="reference internal" href="../reference/core/types/prefixes.html#_CPPv4N5units9no_prefixE" title="units::no_prefix"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">no_prefix</span></code></a> is a special tag type describing that the library should
-not allow to define a new prefixed unit that would use this unit as a
-reference (“kilohours” does not have much sense, right?). The <a class="reference internal" href="../reference/core/types/utilities/ratio.html#_CPPv4N5units5ratioE" title="units::ratio"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">ratio</span></code></a> type
-used in the definition is really similar to <code class="docutils literal notranslate"><span class="pre">std::ratio</span></code> but it takes
-an additional <code class="docutils literal notranslate"><span class="pre">Exponent</span></code> template parameter that defines the exponent of the ratio.
-Another important difference is the fact that the objects of that class are used
-as class NTTPs rather then a type template parameter kind.</p>
-<p>Thanks to it we can address nearly infinite scaling factors between units
-and define units like:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">electronvolt</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">electronvolt</span><span class="p">,</span> <span class="s">&quot;eV&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span>
-                                        <span class="n">ratio</span><span class="p">(</span><span class="mi">1&#39;602&#39;176&#39;634</span><span class="p">,</span> <span class="mi">1&#39;000&#39;000&#39;000</span><span class="p">,</span> <span class="o">-</span><span class="mi">19</span><span class="p">),</span> <span class="n">joule</span><span class="o">&gt;</span> <span class="p">{};</span>
-</pre></div>
-</div>
-<p>Finally, the last of the <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_17basic_symbol_text_12PrefixFamily_5ratio_4UnitEN5units17named_scaled_unitE" title="units::named_scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">named_scaled_unit</span></code></a> class template parameters
-provide a reference unit for scaling. Please note that it can be a dimension’s
-base/coherent unit (like <code class="docutils literal notranslate"><span class="pre">si::second</span></code>) or any other unit (i.e. <code class="docutils literal notranslate"><span class="pre">si::minute</span></code>,
-<code class="docutils literal notranslate"><span class="pre">si::hour</span></code>) that is a scaled version of the dimension’s base/coherent unit.</p>
-</section>
-<section id="prefixed-unit">
-<h3>Prefixed Unit<a class="headerlink" href="#prefixed-unit" title="Permalink to this headline">¶</a></h3>
-<p>Prefixed units are just scaled units with a standardized ratio. For example
-<a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a> defines prefixes based on the exponent of <code class="docutils literal notranslate"><span class="pre">10</span></code>. Here is a
-complete list of all the <a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a> prefixes supported by the library:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
-
-<span class="k">struct</span> <span class="nl">prefix</span> <span class="p">:</span> <span class="n">prefix_family</span> <span class="p">{};</span>
-
-<span class="k">struct</span> <span class="nl">yocto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">yocto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;y&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">24</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">zepto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">zepto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;z&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">21</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">atto</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">atto</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;a&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">18</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">femto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">femto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;f&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">pico</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">pico</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;p&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">12</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">nano</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">nano</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;n&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">9</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">micro</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">micro</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;µ&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">6</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">milli</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">milli</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;m&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">3</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">centi</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">centi</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">deci</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">deci</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;d&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">deca</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">deca</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;da&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">1</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">hecto</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">hecto</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;h&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">kilo</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">kilo</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;k&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">3</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">mega</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">mega</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;M&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">6</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">giga</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">giga</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;G&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>   <span class="mi">9</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">tera</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">tera</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;T&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">12</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">peta</span>   <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">peta</span><span class="p">,</span>   <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;P&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">15</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">exa</span>    <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">exa</span><span class="p">,</span>    <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;E&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">18</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">zetta</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">zetta</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Z&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">21</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">yotta</span>  <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">yotta</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Y&quot;</span><span class="p">,</span>  <span class="n">ratio</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>  <span class="mi">24</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Alternative hierarchy of prefixes is the one used in data information
-domain:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">data</span> <span class="p">{</span>
-
-<span class="k">struct</span> <span class="nl">prefix</span> <span class="p">:</span> <span class="n">prefix_family</span> <span class="p">{};</span>
-
-<span class="k">struct</span> <span class="nl">kibi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">kibi</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Ki&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>                    <span class="mi">1&#39;024</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">mebi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">mebi</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Mi&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>                <span class="mi">1&#39;048&#39;576</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">gibi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">gibi</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Gi&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>            <span class="mi">1&#39;073&#39;741&#39;824</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">tebi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">tebi</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Ti&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>        <span class="mi">1&#39;099&#39;511&#39;627&#39;776</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">pebi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">pebi</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Pi&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span>    <span class="mi">1&#39;125&#39;899&#39;906&#39;842&#39;624</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">exbi</span> <span class="p">:</span> <span class="n">units</span><span class="o">::</span><span class="n">prefix</span><span class="o">&lt;</span><span class="n">exbi</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s">&quot;Ei&quot;</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">1&#39;152&#39;921&#39;504&#39;606&#39;846&#39;976</span><span class="p">)</span><span class="o">&gt;</span> <span class="p">{};</span>
-
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>With the definitions like above we can easily define prefixed unit. For
-example we can define <code class="docutils literal notranslate"><span class="pre">si::kilometre</span></code> as:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
-
-<span class="k">struct</span> <span class="nl">kilometre</span> <span class="p">:</span> <span class="n">prefixed_unit</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="p">,</span> <span class="n">kilo</span><span class="p">,</span> <span class="n">metre</span><span class="o">&gt;</span> <span class="p">{};</span>
-
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="admonition important">
-<p class="admonition-title">Important</p>
-<p>Prefixed units have to use named units as a reference. For unnamed
-units we could end up with some strange, misleading, and sometimes
-wrong definitions (“kilo square metre” seams strange and spelled
-as <code class="docutils literal notranslate"><span class="pre">km²</span></code> would be invalid).</p>
-</div>
-</section>
-<section id="deduced-units">
-<h3>Deduced Units<a class="headerlink" href="#deduced-units" title="Permalink to this headline">¶</a></h3>
+<section id="derived-scaled-units">
+<h3>Derived Scaled Units<a class="headerlink" href="#derived-scaled-units" title="Permalink to this headline"></a></h3>
 <p>For some units determining of a correct scaling ratio may not be trivial,
 and even if done correctly, may be a pain to maintain. For a simple example
 let’s take a “kilometre per hour” unit. What is the easiest to maintain
-ratio in reference to “metre per second”:</p>
+ratio in reference to the “metre per second”:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">1000/3600</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">10/36</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">5/18</span></code></p></li>
 </ul>
 <p>Whichever, we choose there will always be someone not happy with our choice.</p>
-<p>Thanks to a <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_16DerivedDimension_4Unit_Dp4UnitEN5units12deduced_unitE" title="units::deduced_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">deduced_unit</span></code></a> class template provided by the library this problem
+<p>Thanks to a <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_16DerivedDimension_4Unit_Dp4UnitEN5units12derived_unitE" title="units::derived_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">derived_unit</span></code></a> class template provided by the library this problem
 does not exist at all. With it <code class="docutils literal notranslate"><span class="pre">si::kilometre_per_hour</span></code> can be defined as:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
 
-<span class="k">struct</span> <span class="nl">kilometre_per_hour</span> <span class="p">:</span> <span class="n">deduced_unit</span><span class="o">&lt;</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="n">dim_speed</span><span class="p">,</span> <span class="n">kilometre</span><span class="p">,</span> <span class="n">hour</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">kilometre_per_hour</span> <span class="p">:</span> <span class="n">derived_unit</span><span class="o">&lt;</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="n">dim_speed</span><span class="p">,</span> <span class="n">kilometre</span><span class="p">,</span> <span class="n">hour</span><span class="o">&gt;</span> <span class="p">{};</span>
 
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>In case the deduced unit should served as a named one we can use ether a
-<a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_16DerivedDimension_17basic_symbol_text_12PrefixFamily_4Unit_Dp4UnitEN5units18named_deduced_unitE" title="units::named_deduced_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">named_deduced_unit</span></code></a> where the user is able to provide a symbol for the unit
-by him/her-self or <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_16DerivedDimension_4Unit_Dp4UnitEN5units18noble_deduced_unitE" title="units::noble_deduced_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">noble_deduced_unit</span></code></a> where the symbol is the deduced name
-based on the ingredients:</p>
+<p>In case the scaled derived unit should serve as a named one we can use
+a <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I0_16DerivedDimension_17basic_symbol_text_12PrefixFamily_4Unit_Dp4UnitEN5units18named_derived_unitE" title="units::named_derived_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">named_derived_unit</span></code></a> where the user is able to provide a symbol for the unit
+by him/her-self:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span><span class="o">::</span><span class="n">fps</span> <span class="p">{</span>
 
-<span class="k">struct</span> <span class="nl">nautical_mile_per_hour</span> <span class="p">:</span> <span class="n">named_deduced_unit</span><span class="o">&lt;</span><span class="n">nautical_mile_per_hour</span><span class="p">,</span> <span class="n">dim_speed</span><span class="p">,</span>
-                                                   <span class="s">&quot;knot&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">nautical_mile</span><span class="p">,</span> <span class="n">hour</span><span class="o">&gt;</span><span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">foot_pound_force</span> <span class="p">:</span> <span class="n">noble_deduced_unit</span><span class="o">&lt;</span><span class="n">foot_pound_force</span><span class="p">,</span> <span class="n">dim_energy</span><span class="p">,</span> <span class="n">pound_force</span><span class="p">,</span> <span class="n">foot</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">knot</span> <span class="p">:</span> <span class="n">named_derived_unit</span><span class="o">&lt;</span><span class="n">knot</span><span class="p">,</span> <span class="n">dim_speed</span><span class="p">,</span> <span class="s">&quot;knot&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">nautical_mile</span><span class="p">,</span> <span class="n">hour</span><span class="o">&gt;</span> <span class="p">{};</span>
 
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Please note that deduced units are the only unit-related class template that
-take a dimension as its parameter. This derived dimension provides a <a class="reference internal" href="../glossary.html#term-recipe"><span class="xref std std-term">recipe</span></a>
+<p>Please note that the dervided scaled units are the only unit-related class templates
+that take a dimension as its parameter. This derived dimension provides a <a class="reference internal" href="../glossary.html#term-recipe"><span class="xref std std-term">recipe</span></a>
 used for its definition. Based on the information stored in the recipe
 (order, type, and exponents of composite dimensions) and the ratios of units
 provided in the template parameter list after the derived dimension parameter,
@@ -504,7 +438,7 @@ the library calculates the final ratio for this unit.</p>
 </section>
 </section>
 <section id="aliased-units">
-<h2>Aliased Units<a class="headerlink" href="#aliased-units" title="Permalink to this headline">¶</a></h2>
+<h2>Aliased Units<a class="headerlink" href="#aliased-units" title="Permalink to this headline"></a></h2>
 <p>In order to make our life easier people tend to assign alternative/aliased names
 to some popular units. As an example we often use “tonne” instead of “megagram”,
 “litre” instead of “cubic decimetre”, or “hectare” instead of “square hectometre”.</p>
@@ -526,26 +460,6 @@ class template:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</section>
-<section id="class-hierarchy">
-<h2>Class Hierarchy<a class="headerlink" href="#class-hierarchy" title="Permalink to this headline">¶</a></h2>
-<p>All of the above class templates to produce unit types inherit from some instance
-of a <a class="reference internal" href="../reference/core/types/units.html#_CPPv4I_5ratio0EN5units11scaled_unitE" title="units::scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">scaled_unit</span></code></a> class template:</p>
-<img alt="../_images/units.png" class="align-center" src="../_images/units.png" />
-<p><a class="reference internal" href="../reference/core/types/units.html#_CPPv4I_5ratio0EN5units11scaled_unitE" title="units::scaled_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">scaled_unit</span></code></a> is a class template used exclusively by the library’s framework
-and user should not instantiate it by him/her-self. However the user can sometimes
-observe this type in case an unit/dimension conversion expression will end up with an
-unknown/undefined unit type like in the below example:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-</pre></div>
-</div>
-<p>The type of <code class="docutils literal notranslate"><span class="pre">l</span></code> above will be
-<code class="docutils literal notranslate"><span class="pre">si::length&lt;scaled_unit&lt;ratio(1,</span> <span class="pre">36,</span> <span class="pre">1),</span> <span class="pre">si::metre&gt;,</span> <span class="pre">long</span> <span class="pre">double&gt;</span></code>. This is caused
-by the fact that the library does not define a unit of a length quantity that has the
-ratio <code class="docutils literal notranslate"><span class="pre">10/36</span></code> of a <code class="docutils literal notranslate"><span class="pre">si::metre</span></code>. If such a unit was predefined we would see its concrete
-type here instead.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>To learn more about unknown units please refer to the
@@ -556,53 +470,33 @@ type here instead.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="constants.html" class="btn btn-neutral float-right" title="Quantity Constants" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="dimensions.html" class="btn btn-neutral float-left" title="Dimensions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dimensions.html" class="btn btn-neutral float-left" title="Dimensions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="arithmetics.html" class="btn btn-neutral float-right" title="Arithmetics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

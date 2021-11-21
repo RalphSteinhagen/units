@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Energy &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Force" href="force.html" />
+    <link rel="prev" title="Acceleration" href="acceleration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> mp-units
+          </a>
+              <div class="version">
+                0.8.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../framework.html">Framework Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../use_cases.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../design.html">Design Deep Dive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Installation And Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../faq.html">FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../core.html">Core Library</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../systems.html">Systems</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../generic.html">Generic</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../isq.html">International System of Quantities (ISQ)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../dimensions_and_concepts.html">Dimensions and Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../si.html">International System of Units (SI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../iec80000.html">IEC 80000</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../natural.html">Natural</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="units.html">Units</a></li>
+<li class="toctree-l4"><a class="reference internal" href="constants.html">Constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="acceleration.html">Acceleration</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Energy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="force.html">Force</a></li>
+<li class="toctree-l4"><a class="reference internal" href="length.html">Length</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mass.html">Mass</a></li>
+<li class="toctree-l4"><a class="reference internal" href="momentum.html">Momentum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="speed.html">Speed</a></li>
+<li class="toctree-l4"><a class="reference internal" href="time.html">Time</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../isq.html#systems-of-units-based-on-the-si">Systems of Units based on the SI</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../random.html">Random</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CHANGELOG.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">mp-units</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../systems.html">Systems</a> &raquo;</li>
+          <li><a href="../../isq.html">International System of Quantities (ISQ)</a> &raquo;</li>
+          <li><a href="../natural.html">Natural</a> &raquo;</li>
+      <li>Energy</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/reference/systems/isq/natural/energy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="energy">
+<h1>Energy<a class="headerlink" href="#energy" title="Permalink to this headline"></a></h1>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv45units">
+<span id="_CPPv35units"></span><span id="_CPPv25units"></span><span id="units"></span><span class="target" id="namespaceunits"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">units</span></span></span><br /></dt>
+<dd><dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isqE">
+<span id="_CPPv3N5units3isqE"></span><span id="_CPPv2N5units3isqE"></span><span id="units::isq"></span><span class="target" id="namespaceunits_1_1isq"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isq</span></span></span><br /></dt>
+<dd><dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq7naturalE">
+<span id="_CPPv3N5units3isq7naturalE"></span><span id="_CPPv2N5units3isq7naturalE"></span><span id="units::isq::natural"></span><span class="target" id="namespaceunits_1_1isq_1_1natural"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">natural</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I_6UnitOfI10dim_energyE_14RepresentationEN5units3isq7natural6energyE">
+<span id="_CPPv3I_6UnitOfI10dim_energyE_14RepresentationEN5units3isq7natural6energyE"></span><span id="_CPPv2I_6UnitOfI10dim_energyE_14RepresentationEN5units3isq7natural6energyE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../../../core/concepts.html#_CPPv4I00EN5units6UnitOfE" title="units::UnitOf"><span class="n"><span class="pre">UnitOf</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq7natural10dim_energyE" title="units::isq::natural::dim_energy"><span class="n"><span class="pre">dim_energy</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../../core/concepts.html#_CPPv4I0EN5units14RepresentationE" title="units::Representation"><span class="n"><span class="pre">Representation</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rep</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespaceunits_1_1isq_1_1natural_1adfad453e7d5018e696141344d2f1364b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">energy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../../core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><span class="n"><span class="pre">quantity</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq7natural10dim_energyE" title="units::isq::natural::dim_energy"><span class="n"><span class="pre">dim_energy</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6UnitOfI10dim_energyE_14RepresentationEN5units3isq7natural6energyE" title="units::isq::natural::energy::U"><span class="n"><span class="pre">U</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6UnitOfI10dim_energyE_14RepresentationEN5units3isq7natural6energyE" title="units::isq::natural::energy::Rep"><span class="n"><span class="pre">Rep</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I_6UnitOfI10dim_energyE_14RepresentationEN5units3isq7natural6energyE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq7natural10dim_energyE">
+<span id="_CPPv3N5units3isq7natural10dim_energyE"></span><span id="_CPPv2N5units3isq7natural10dim_energyE"></span><span id="units::isq::natural::dim_energy"></span><span class="target" id="structunits_1_1isq_1_1natural_1_1dim__energy"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dim_energy</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../si/length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../si/length.html#_CPPv4N5units3isqE" title="units::isq"><span class="n"><span class="pre">isq</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dim_energy</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq7natural10dim_energyE" title="units::isq::natural::dim_energy"><span class="n"><span class="pre">dim_energy</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="units.html#_CPPv4N5units3isq7natural16gigaelectronvoltE" title="units::isq::natural::gigaelectronvolt"><span class="n"><span class="pre">gigaelectronvolt</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="force.html#_CPPv4N5units3isq7natural9dim_forceE" title="units::isq::natural::dim_force"><span class="n"><span class="pre">dim_force</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="length.html#_CPPv4N5units3isq7natural10dim_lengthE" title="units::isq::natural::dim_length"><span class="n"><span class="pre">dim_length</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq7natural10dim_energyE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;energy.h&gt;</em></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq7natural17energy_referencesE">
+<span id="_CPPv3N5units3isq7natural17energy_referencesE"></span><span id="_CPPv2N5units3isq7natural17energy_referencesE"></span><span id="units::isq::natural::energy_references"></span><span class="target" id="namespaceunits_1_1isq_1_1natural_1_1energy__references"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">energy_references</span></span></span><a class="headerlink" href="#_CPPv4N5units3isq7natural17energy_referencesE" title="Permalink to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq7natural17energy_references3GeVE">
+<span id="_CPPv3N5units3isq7natural17energy_references3GeVE"></span><span id="_CPPv2N5units3isq7natural17energy_references3GeVE"></span><span id="units::isq::natural::energy_references::GeV__auto"></span><span class="target" id="namespaceunits_1_1isq_1_1natural_1_1energy__references_1aed2eee79725d65c3119f2edab51679de"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GeV</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../../core/types/reference.html#_CPPv4I_9Dimension_6UnitOfI1DEEN5units9referenceE" title="units::reference"><span class="n"><span class="pre">reference</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq7natural10dim_energyE" title="units::isq::natural::dim_energy"><span class="n"><span class="pre">dim_energy</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="units.html#_CPPv4N5units3isq7natural16gigaelectronvoltE" title="units::isq::natural::gigaelectronvolt"><span class="n"><span class="pre">gigaelectronvolt</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#_CPPv4N5units3isq7natural17energy_references3GeVE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq7natural10referencesE">
+<span id="_CPPv3N5units3isq7natural10referencesE"></span><span id="_CPPv2N5units3isq7natural10referencesE"></span><span id="units::isq::natural::references"></span><span class="target" id="namespaceunits_1_1isq_1_1natural_1_1references"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">references</span></span></span><br /></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv46energy">
+<span id="_CPPv36energy"></span><span id="_CPPv26energy"></span><span class="target" id="namespaceenergy"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">energy</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I_14RepresentationEN6energy3GeVE">
+<span id="_CPPv3I_14RepresentationEN6energy3GeVE"></span><span id="_CPPv2I_14RepresentationEN6energy3GeVE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Representation</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rep</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespaceenergy_1a03943f79ebcf43d82d5edc42d68c5c33"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GeV</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../si/length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../si/length.html#_CPPv4N5units3isqE" title="units::isq"><span class="n"><span class="pre">isq</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="length.html#_CPPv4N5units3isq7naturalE" title="units::isq::natural"><span class="n"><span class="pre">natural</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4I_6UnitOfI10dim_energyE_14RepresentationEN5units3isq7natural6energyE" title="units::isq::natural::energy"><span class="n"><span class="pre">energy</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../si/length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../si/length.html#_CPPv4N5units3isqE" title="units::isq"><span class="n"><span class="pre">isq</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="length.html#_CPPv4N5units3isq7naturalE" title="units::isq::natural"><span class="n"><span class="pre">natural</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="units.html#_CPPv4N5units3isq7natural16gigaelectronvoltE" title="units::isq::natural::gigaelectronvolt"><span class="n"><span class="pre">gigaelectronvolt</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_14RepresentationEN6energy3GeVE" title="energy::GeV::Rep"><span class="n"><span class="pre">Rep</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I_14RepresentationEN6energy3GeVE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="acceleration.html" class="btn btn-neutral float-left" title="Acceleration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="force.html" class="btn btn-neutral float-right" title="Force" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

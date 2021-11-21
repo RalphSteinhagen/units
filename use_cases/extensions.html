@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Extending the Library &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Extending the Library &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with Natural Units" href="natural_units.html" />
     <link rel="prev" title="Linear Algebra vs. Quantities" href="linear_algebra.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
@@ -121,13 +75,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
@@ -135,83 +89,43 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../use_cases.html">Use Cases</a> &raquo;</li>
-        
       <li>Extending the Library</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/use_cases/extensions.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="extending-the-library">
-<h1>Extending the Library<a class="headerlink" href="#extending-the-library" title="Permalink to this headline">¶</a></h1>
+<h1>Extending the Library<a class="headerlink" href="#extending-the-library" title="Permalink to this headline"></a></h1>
 <p>The library was designed with a simple extensibility in mind. It is easy to add new units,
 dimensions, and prefixes. The systems of units are not closed (classes) but open (namespaces)
 and can be easily extended, or its content can be partially/fully imported to other systems.</p>
 <section id="custom-units">
-<h2>Custom Units<a class="headerlink" href="#custom-units" title="Permalink to this headline">¶</a></h2>
+<h2>Custom Units<a class="headerlink" href="#custom-units" title="Permalink to this headline"></a></h2>
 <p>It might happen that the user would like to use a unit that is not predefined by the library
 or is predefined but the user would like to name it differently, assign a different symbol
 to existing unit, or make it a base unit for prefixes.</p>
 <section id="defining-a-new-unit">
-<h3>Defining a New Unit<a class="headerlink" href="#defining-a-new-unit" title="Permalink to this headline">¶</a></h3>
+<h3>Defining a New Unit<a class="headerlink" href="#defining-a-new-unit" title="Permalink to this headline"></a></h3>
 <p>My working desk is of <code class="docutils literal notranslate"><span class="pre">180</span> <span class="pre">cm</span> <span class="pre">x</span> <span class="pre">60</span> <span class="pre">cm</span></code> which gives an area of <code class="docutils literal notranslate"><span class="pre">0.3</span> <span class="pre">m²</span></code>. I would like to
 make it a unit of area for my project:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">desk</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">desk</span><span class="p">,</span> <span class="s">&quot;desk&quot;</span><span class="p">,</span> <span class="n">no_prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">si</span><span class="o">::</span><span class="n">square_metre</span><span class="o">&gt;</span> <span class="p">{};</span>
@@ -247,7 +161,7 @@ by my desks:</p>
 </div>
 </section>
 <section id="enabling-a-unit-for-prefixing">
-<h3>Enabling a Unit for Prefixing<a class="headerlink" href="#enabling-a-unit-for-prefixing" title="Permalink to this headline">¶</a></h3>
+<h3>Enabling a Unit for Prefixing<a class="headerlink" href="#enabling-a-unit-for-prefixing" title="Permalink to this headline"></a></h3>
 <p>In case I decide it is reasonable to express my desks with SI prefixes the only thing I have
 to change in the above code is to replace <a class="reference internal" href="../reference/core/types/prefixes.html#_CPPv4N5units9no_prefixE" title="units::no_prefix"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">no_prefix</span></code></a> with <a class="reference internal" href="../reference/systems/isq/si/prefixes.html#_CPPv4N5units3isq2si6prefixE" title="units::isq::si::prefix"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">isq::si::prefix</span></code></a>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">desk</span> <span class="p">:</span> <span class="n">named_scaled_unit</span><span class="o">&lt;</span><span class="n">desk</span><span class="p">,</span> <span class="s">&quot;desk&quot;</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">prefix</span><span class="p">,</span> <span class="n">ratio</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">si</span><span class="o">::</span><span class="n">square_metre</span><span class="o">&gt;</span> <span class="p">{};</span>
@@ -289,13 +203,13 @@ by <code class="docutils literal notranslate"><span class="pre">3</span> <span c
 </section>
 </section>
 <section id="custom-dimensions">
-<h2>Custom Dimensions<a class="headerlink" href="#custom-dimensions" title="Permalink to this headline">¶</a></h2>
+<h2>Custom Dimensions<a class="headerlink" href="#custom-dimensions" title="Permalink to this headline"></a></h2>
 <p>There are cases were a custom unit is not enough and the user would like to define custom
 dimensions. The most common case is to define a new derived dimension from other dimensions
 already predefined in various systems. But in <strong>mp-units</strong> library it is also really easy to
 define a new base dimension for a custom units system.</p>
 <section id="custom-derived-dimensions">
-<h3>Custom Derived Dimensions<a class="headerlink" href="#custom-derived-dimensions" title="Permalink to this headline">¶</a></h3>
+<h3>Custom Derived Dimensions<a class="headerlink" href="#custom-derived-dimensions" title="Permalink to this headline"></a></h3>
 <p>In case I want to track how many desks I can produce over time or what is the consumption
 rate of wood during production I need to define a new derived dimension together with its
 coherent unit:</p>
@@ -307,7 +221,7 @@ coherent unit:</p>
                                          <span class="n">exponent</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_area</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">exponent</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_time</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
 
 <span class="c1">// our unit of interest for a new derived dimension</span>
-<span class="k">struct</span> <span class="nl">desk_per_hour</span> <span class="p">:</span> <span class="n">deduced_unit</span><span class="o">&lt;</span><span class="n">desk_per_hour</span><span class="p">,</span> <span class="n">dim_desk_rate</span><span class="p">,</span> <span class="n">desk</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">hour</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">desk_per_hour</span> <span class="p">:</span> <span class="n">derived_unit</span><span class="o">&lt;</span><span class="n">desk_per_hour</span><span class="p">,</span> <span class="n">dim_desk_rate</span><span class="p">,</span> <span class="n">desk</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">hour</span><span class="o">&gt;</span> <span class="p">{};</span>
 
 <span class="c1">// a quantity of our dimension</span>
 <span class="k">template</span><span class="o">&lt;</span><span class="n">UnitOf</span><span class="o">&lt;</span><span class="n">dim_desk_rate</span><span class="o">&gt;</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span>
@@ -330,7 +244,7 @@ coherent unit:</p>
 </div>
 </section>
 <section id="custom-base-dimensions">
-<h3>Custom Base Dimensions<a class="headerlink" href="#custom-base-dimensions" title="Permalink to this headline">¶</a></h3>
+<h3>Custom Base Dimensions<a class="headerlink" href="#custom-base-dimensions" title="Permalink to this headline"></a></h3>
 <p>In case I want to monitor what is the average number of people sitting by one desk in
 a customer’s office I would need a unit called <code class="docutils literal notranslate"><span class="pre">person_per_desk</span></code> of a new derived
 dimension. However, our library does not know what a <code class="docutils literal notranslate"><span class="pre">person</span></code> is. For this I need to
@@ -354,7 +268,7 @@ define a new base dimension, its units, quantity helper, concept, and UDLs:</p>
                                               <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_people</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span>
                                               <span class="n">exponent</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_area</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
 
-<span class="k">struct</span> <span class="nl">person_per_desk</span> <span class="p">:</span> <span class="n">deduced_unit</span><span class="o">&lt;</span><span class="n">person_per_desk</span><span class="p">,</span> <span class="n">dim_occupancy_rate</span><span class="p">,</span> <span class="n">person</span><span class="p">,</span> <span class="n">desk</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span> <span class="nl">person_per_desk</span> <span class="p">:</span> <span class="n">derived_unit</span><span class="o">&lt;</span><span class="n">person_per_desk</span><span class="p">,</span> <span class="n">dim_occupancy_rate</span><span class="p">,</span> <span class="n">person</span><span class="p">,</span> <span class="n">desk</span><span class="o">&gt;</span> <span class="p">{};</span>
 
 <span class="k">template</span><span class="o">&lt;</span><span class="n">UnitOf</span><span class="o">&lt;</span><span class="n">dim_occupancy_rate</span><span class="o">&gt;</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span>
 <span class="k">using</span> <span class="n">occupancy_rate</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_occupancy_rate</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
@@ -374,7 +288,7 @@ define a new base dimension, its units, quantity helper, concept, and UDLs:</p>
 </section>
 </section>
 <section id="custom-systems">
-<h2>Custom Systems<a class="headerlink" href="#custom-systems" title="Permalink to this headline">¶</a></h2>
+<h2>Custom Systems<a class="headerlink" href="#custom-systems" title="Permalink to this headline"></a></h2>
 <p>Being able to extend predefined systems is a mandatory feature of any physical
 units library. Fortunately, for <strong>mp-units</strong> there is nothing special to do here.</p>
 <p>A system is defined in terms of its base dimensions. If you are using only SI
@@ -493,53 +407,33 @@ chapter.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="natural_units.html" class="btn btn-neutral float-right" title="Working with Natural Units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="linear_algebra.html" class="btn btn-neutral float-left" title="Linear Algebra vs. Quantities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="linear_algebra.html" class="btn btn-neutral float-left" title="Linear Algebra vs. Quantities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="natural_units.html" class="btn btn-neutral float-right" title="Working with Natural Units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

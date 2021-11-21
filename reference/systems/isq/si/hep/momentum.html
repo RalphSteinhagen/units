@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Momentum &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="next" title="Typographic (based on SI)" href="../../si_typographic.html" />
+    <link rel="prev" title="Mass" href="mass.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../../index.html" class="icon icon-home"> mp-units
+          </a>
+              <div class="version">
+                0.8.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../framework.html">Framework Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../use_cases.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../design.html">Design Deep Dive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usage.html">Installation And Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../faq.html">FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../core.html">Core Library</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../../systems.html">Systems</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../../generic.html">Generic</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../../isq.html">International System of Quantities (ISQ)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../../dimensions_and_concepts.html">Dimensions and Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../si.html">International System of Units (SI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../iec80000.html">IEC 80000</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../natural.html">Natural</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../../../isq.html#systems-of-units-based-on-the-si">Systems of Units based on the SI</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../si_cgs.html">CGS (based on SI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../si_international.html">International (based on SI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../si_uscs.html">U.S. Customary Units (based on SI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../si_imperial.html">Imperial (based on SI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../si_fps.html">FPS (based on SI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../si_iau.html">IAU (based on SI)</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../../si_hep.html">HEP (based on SI)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../si_typographic.html">Typographic (based on SI)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../random.html">Random</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../CHANGELOG.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">mp-units</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../../systems.html">Systems</a> &raquo;</li>
+          <li><a href="../../../isq.html">International System of Quantities (ISQ)</a> &raquo;</li>
+          <li><a href="../../si_hep.html">HEP (based on SI)</a> &raquo;</li>
+      <li>Momentum</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../../_sources/reference/systems/isq/si/hep/momentum.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="momentum">
+<h1>Momentum<a class="headerlink" href="#momentum" title="Permalink to this headline"></a></h1>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv45units">
+<span id="_CPPv35units"></span><span id="_CPPv25units"></span><span id="units"></span><span class="target" id="namespaceunits"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">units</span></span></span><br /></dt>
+<dd><dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isqE">
+<span id="_CPPv3N5units3isqE"></span><span id="_CPPv2N5units3isqE"></span><span id="units::isq"></span><span class="target" id="namespaceunits_1_1isq"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isq</span></span></span><br /></dt>
+<dd><dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2siE">
+<span id="_CPPv3N5units3isq2siE"></span><span id="_CPPv2N5units3isq2siE"></span><span id="units::isq::si"></span><span class="target" id="namespaceunits_1_1isq_1_1si"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">si</span></span></span><br /></dt>
+<dd><dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepE">
+<span id="_CPPv3N5units3isq2si3hepE"></span><span id="_CPPv2N5units3isq2si3hepE"></span><span id="units::isq::si::hep"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hep</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I_6UnitOfI12dim_momentumE_14RepresentationEN5units3isq2si3hep8momentumE">
+<span id="_CPPv3I_6UnitOfI12dim_momentumE_14RepresentationEN5units3isq2si3hep8momentumE"></span><span id="_CPPv2I_6UnitOfI12dim_momentumE_14RepresentationEN5units3isq2si3hep8momentumE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../../../../core/concepts.html#_CPPv4I00EN5units6UnitOfE" title="units::UnitOf"><span class="n"><span class="pre">UnitOf</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep12dim_momentumE" title="units::isq::si::hep::dim_momentum"><span class="n"><span class="pre">dim_momentum</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">U</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../../../core/concepts.html#_CPPv4I0EN5units14RepresentationE" title="units::Representation"><span class="n"><span class="pre">Representation</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rep</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1a883c15ecb53dd88e2af227a6b1401070"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">momentum</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../../../../core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><span class="n"><span class="pre">quantity</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep12dim_momentumE" title="units::isq::si::hep::dim_momentum"><span class="n"><span class="pre">dim_momentum</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6UnitOfI12dim_momentumE_14RepresentationEN5units3isq2si3hep8momentumE" title="units::isq::si::hep::momentum::U"><span class="n"><span class="pre">U</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_6UnitOfI12dim_momentumE_14RepresentationEN5units3isq2si3hep8momentumE" title="units::isq::si::hep::momentum::Rep"><span class="n"><span class="pre">Rep</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I_6UnitOfI12dim_momentumE_14RepresentationEN5units3isq2si3hep8momentumE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_feV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_feV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_feV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a66a0cdd9ca1879e3fdcc520eda0d9601"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_feV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_feV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_feV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_feV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_feV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1ad0fc45c17ad51094eaa05439f9697472"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_feV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_feV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_peV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_peV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_peV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a6b16d11b73b3da359f554ed32fd8dec9"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_peV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_peV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_peV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_peV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_peV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1abff4299f7d8e50ef20bad1f8577d56ee"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_peV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_peV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_neV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_neV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_neV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a6797c31f7ccbac6793883094cb4307d4"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_neV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_neV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_neV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_neV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_neV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a3d1b3458d870071dd57259972e3284b5"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_neV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_neV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_ueV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_ueV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_ueV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a2a53d5802c963cf842cfcbf965c624b0"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_ueV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_ueV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_ueV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_ueV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_ueV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a0596a61b194bccde3cf0677ac3ad569b"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_ueV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_ueV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_meV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_meV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_meV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a36dd73400bda54a119ddc7e31f16e49a"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_meV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_meV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_meV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_meV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_meV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a442887ab1b16612f31c3930b1cf2eb67"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_meV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_meV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli11_q_eV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli11_q_eV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli11_q_eV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a11d3df5340ed5af298bf9ccd35285653"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_eV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli11_q_eV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli11_q_eV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli11_q_eV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli11_q_eV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1aa1bd23e98c361debc649a7247800d3ed"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_eV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli11_q_eV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_keV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_keV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_keV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1ab18ea15cd42806faed98cadf97c57d61"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_keV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_keV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_keV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_keV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_keV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1af68a7f91fd09bfd89014508f0a6441fc"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_keV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_keV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_MeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_MeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_MeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1afac0bcb33a60192ea354b98cc904391f"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_MeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_MeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_MeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_MeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_MeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a0ee69fa81647a644456e9aa559d3ed5e"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_MeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_MeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_GeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_GeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_GeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a791bcb90859975e42feddfed8044ad05"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_GeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_GeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_GeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_GeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_GeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a6cae98ff533e4148772308bda396da7d"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_GeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_GeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_TeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_TeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_TeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a451fb9a000e986f4556a463226a323e9"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_TeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_TeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_TeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_TeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_TeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a50e63f2c1543ddb89d54e1c6d48d41c0"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_TeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_TeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_PeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_PeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_PeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a823ed3367eeb43265e75018099ed8c5f"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_PeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_PeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_PeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_PeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_PeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a7e9a45e8cac201a5ff6742674b721fd7"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_PeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_PeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_EeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_EeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_EeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1ac6550b16496b2e5501bb373a2b58f2e7"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_EeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_EeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_EeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_EeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_EeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a654e84e39b27d8694d6d4a2ef9fdc88a"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_EeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_EeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_YeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hepli12_q_YeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hepli12_q_YeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a2b7c86478a06b1571f26db7dfde6d566"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_YeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_YeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hepli12_q_YeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hepli12_q_YeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hepli12_q_YeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1af60a1da3c9efa647a3818843290bf8ee"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_YeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hepli12_q_YeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep12dim_momentumE">
+<span id="_CPPv3N5units3isq2si3hep12dim_momentumE"></span><span id="_CPPv2N5units3isq2si3hep12dim_momentumE"></span><span id="units::isq::si::hep::dim_momentum"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1dim__momentum"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dim_momentum</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../length.html#_CPPv4N5units3isqE" title="units::isq"><span class="n"><span class="pre">isq</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dim_momentum</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep12dim_momentumE" title="units::isq::si::hep::dim_momentum"><span class="n"><span class="pre">dim_momentum</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="mass.html#_CPPv4N5units3isq2si3hep8dim_massE" title="units::isq::si::hep::dim_mass"><span class="n"><span class="pre">dim_mass</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../speed.html#_CPPv4N5units3isq2si9dim_speedE" title="units::isq::si::dim_speed"><span class="n"><span class="pre">dim_speed</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep12dim_momentumE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9EeV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9EeV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9EeV_per_cE"></span><span id="units::isq::si::hep::EeV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1EeV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">EeV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9EeV_per_cE" title="units::isq::si::hep::EeV_per_c"><span class="n"><span class="pre">EeV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si3exaE" title="units::isq::si::exa"><span class="n"><span class="pre">exa</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9EeV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp">
+<span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1eV__per__c"></span><span class="sig-name descname"><span class="pre">eV_per_c</span> <span class="pre">:</span> <span class="pre">public</span> <span class="pre">units::named_scaled_unit&lt;</span> <span class="pre">eV_per_c,</span> <span class="pre">&quot;eV/c&quot;,</span> <span class="pre">prefix,</span> <span class="pre">ratio(5</span> <span class="pre">'344</span> <span class="pre">'285</span> <span class="pre">'992</span> <span class="pre">'678,</span> <span class="pre">1</span> <span class="pre">'000</span> <span class="pre">'000</span> <span class="pre">'000</span> <span class="pre">'000,</span> <span class="pre">-35),</span> <span class="pre">::units::isq::si::kilogram_metre_per_second</span> <span class="pre">&gt;</span></span></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9feV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9feV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9feV_per_cE"></span><span id="units::isq::si::hep::feV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1feV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">feV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9feV_per_cE" title="units::isq::si::hep::feV_per_c"><span class="n"><span class="pre">feV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si5femtoE" title="units::isq::si::femto"><span class="n"><span class="pre">femto</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9feV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9GeV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9GeV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9GeV_per_cE"></span><span id="units::isq::si::hep::GeV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1GeV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GeV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9GeV_per_cE" title="units::isq::si::hep::GeV_per_c"><span class="n"><span class="pre">GeV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si4gigaE" title="units::isq::si::giga"><span class="n"><span class="pre">giga</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9GeV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9keV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9keV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9keV_per_cE"></span><span id="units::isq::si::hep::keV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1keV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">keV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9keV_per_cE" title="units::isq::si::hep::keV_per_c"><span class="n"><span class="pre">keV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si4kiloE" title="units::isq::si::kilo"><span class="n"><span class="pre">kilo</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9keV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9meV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9meV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9meV_per_cE"></span><span id="units::isq::si::hep::meV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1meV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">meV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9meV_per_cE" title="units::isq::si::hep::meV_per_c"><span class="n"><span class="pre">meV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si5milliE" title="units::isq::si::milli"><span class="n"><span class="pre">milli</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9meV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9MeV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9MeV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9MeV_per_cE"></span><span id="units::isq::si::hep::MeV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1MeV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MeV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9MeV_per_cE" title="units::isq::si::hep::MeV_per_c"><span class="n"><span class="pre">MeV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si4megaE" title="units::isq::si::mega"><span class="n"><span class="pre">mega</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9MeV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9neV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9neV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9neV_per_cE"></span><span id="units::isq::si::hep::neV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1neV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">neV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9neV_per_cE" title="units::isq::si::hep::neV_per_c"><span class="n"><span class="pre">neV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si4nanoE" title="units::isq::si::nano"><span class="n"><span class="pre">nano</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9neV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9PeV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9PeV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9PeV_per_cE"></span><span id="units::isq::si::hep::PeV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1PeV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PeV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9PeV_per_cE" title="units::isq::si::hep::PeV_per_c"><span class="n"><span class="pre">PeV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si4petaE" title="units::isq::si::peta"><span class="n"><span class="pre">peta</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9PeV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9peV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9peV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9peV_per_cE"></span><span id="units::isq::si::hep::peV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1peV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">peV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9peV_per_cE" title="units::isq::si::hep::peV_per_c"><span class="n"><span class="pre">peV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si4picoE" title="units::isq::si::pico"><span class="n"><span class="pre">pico</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9peV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9TeV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9TeV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9TeV_per_cE"></span><span id="units::isq::si::hep::TeV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1TeV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TeV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9TeV_per_cE" title="units::isq::si::hep::TeV_per_c"><span class="n"><span class="pre">TeV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si4teraE" title="units::isq::si::tera"><span class="n"><span class="pre">tera</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9TeV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9ueV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9ueV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9ueV_per_cE"></span><span id="units::isq::si::hep::ueV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1ueV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ueV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9ueV_per_cE" title="units::isq::si::hep::ueV_per_c"><span class="n"><span class="pre">ueV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si5microE" title="units::isq::si::micro"><span class="n"><span class="pre">micro</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9ueV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep9YeV_per_cE">
+<span id="_CPPv3N5units3isq2si3hep9YeV_per_cE"></span><span id="_CPPv2N5units3isq2si3hep9YeV_per_cE"></span><span id="units::isq::si::hep::YeV_per_c"></span><span class="target" id="structunits_1_1isq_1_1si_1_1hep_1_1YeV__per__c"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">YeV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../../../../core/types/units.html#_CPPv4I0_6Prefix_4UnitEN5units13prefixed_unitE" title="units::prefixed_unit"><span class="n"><span class="pre">prefixed_unit</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N5units3isq2si3hep9YeV_per_cE" title="units::isq::si::hep::YeV_per_c"><span class="n"><span class="pre">YeV_per_c</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../prefixes.html#_CPPv4N5units3isq2si5yottaE" title="units::isq::si::yotta"><span class="n"><span class="pre">yotta</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep9YeV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd><em>#include &lt;momentum.h&gt;</em></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsE">
+<span id="_CPPv3N5units3isq2si3hep8literalsE"></span><span id="_CPPv2N5units3isq2si3hep8literalsE"></span><span id="units::isq::si::hep::literals"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">literals</span></span></span><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_feV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_feV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_feV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a66a0cdd9ca1879e3fdcc520eda0d9601"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_feV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_feV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_feV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_feV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_feV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1ad0fc45c17ad51094eaa05439f9697472"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_feV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_feV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_peV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_peV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_peV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a6b16d11b73b3da359f554ed32fd8dec9"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_peV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_peV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_peV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_peV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_peV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1abff4299f7d8e50ef20bad1f8577d56ee"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_peV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_peV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_neV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_neV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_neV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a6797c31f7ccbac6793883094cb4307d4"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_neV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_neV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_neV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_neV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_neV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a3d1b3458d870071dd57259972e3284b5"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_neV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_neV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_ueV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_ueV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_ueV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a2a53d5802c963cf842cfcbf965c624b0"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_ueV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_ueV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_ueV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_ueV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_ueV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a0596a61b194bccde3cf0677ac3ad569b"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_ueV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_ueV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_meV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_meV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_meV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a36dd73400bda54a119ddc7e31f16e49a"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_meV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_meV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_meV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_meV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_meV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a442887ab1b16612f31c3930b1cf2eb67"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_meV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_meV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli11_q_eV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli11_q_eV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli11_q_eV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a11d3df5340ed5af298bf9ccd35285653"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_eV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli11_q_eV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli11_q_eV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli11_q_eV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli11_q_eV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1aa1bd23e98c361debc649a7247800d3ed"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_eV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli11_q_eV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_keV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_keV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_keV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1ab18ea15cd42806faed98cadf97c57d61"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_keV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_keV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_keV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_keV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_keV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1af68a7f91fd09bfd89014508f0a6441fc"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_keV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_keV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_MeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_MeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_MeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1afac0bcb33a60192ea354b98cc904391f"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_MeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_MeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_MeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_MeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_MeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a0ee69fa81647a644456e9aa559d3ed5e"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_MeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_MeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_GeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_GeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_GeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a791bcb90859975e42feddfed8044ad05"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_GeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_GeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_GeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_GeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_GeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a6cae98ff533e4148772308bda396da7d"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_GeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_GeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_TeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_TeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_TeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a451fb9a000e986f4556a463226a323e9"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_TeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_TeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_TeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_TeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_TeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a50e63f2c1543ddb89d54e1c6d48d41c0"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_TeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_TeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_PeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_PeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_PeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a823ed3367eeb43265e75018099ed8c5f"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_PeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_PeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_PeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_PeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_PeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a7e9a45e8cac201a5ff6742674b721fd7"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_PeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_PeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_EeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_EeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_EeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1ac6550b16496b2e5501bb373a2b58f2e7"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_EeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_EeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_EeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_EeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_EeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a654e84e39b27d8694d6d4a2ef9fdc88a"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_EeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_EeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_YeV_per_cEy">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_YeV_per_cEy"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_YeV_per_cEy"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1a2b7c86478a06b1571f26db7dfde6d566"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_YeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_YeV_per_cEy" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units3isq2si3hep8literalsli12_q_YeV_per_cEe">
+<span id="_CPPv3N5units3isq2si3hep8literalsli12_q_YeV_per_cEe"></span><span id="_CPPv2N5units3isq2si3hep8literalsli12_q_YeV_per_cEe"></span><span class="target" id="namespaceunits_1_1isq_1_1si_1_1hep_1_1literals_1af60a1da3c9efa647a3818843290bf8ee"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><s><span class="pre">&quot;&quot;</span></s><span class="n"><span class="pre">_q_YeV_per_c</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">long</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units3isq2si3hep8literalsli12_q_YeV_per_cEe" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv48momentum">
+<span id="_CPPv38momentum"></span><span id="_CPPv28momentum"></span><span class="target" id="namespacemomentum"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">momentum</span></span></span><a class="headerlink" href="#_CPPv48momentum" title="Permalink to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4I_14RepresentationEN8momentum8eV_per_cE">
+<span id="_CPPv3I_14RepresentationEN8momentum8eV_per_cE"></span><span id="_CPPv2I_14RepresentationEN8momentum8eV_per_cE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Representation</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Rep</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="namespacemomentum_1a8ecc6ff766dd31fc277ba0df9ec36a10"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eV_per_c</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../length.html#_CPPv4N5units3isqE" title="units::isq"><span class="n"><span class="pre">isq</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../length.html#_CPPv4N5units3isq2siE" title="units::isq::si"><span class="n"><span class="pre">si</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="area.html#_CPPv4N5units3isq2si3hepE" title="units::isq::si::hep"><span class="n"><span class="pre">hep</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4I_6UnitOfI12dim_momentumE_14RepresentationEN5units3isq2si3hep8momentumE" title="units::isq::si::hep::momentum"><span class="n"><span class="pre">momentum</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../length.html#_CPPv45units" title="units"><span class="n"><span class="pre">units</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../length.html#_CPPv4N5units3isqE" title="units::isq"><span class="n"><span class="pre">isq</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../length.html#_CPPv4N5units3isq2siE" title="units::isq::si"><span class="n"><span class="pre">si</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="area.html#_CPPv4N5units3isq2si3hepE" title="units::isq::si::hep"><span class="n"><span class="pre">hep</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">eV_per_c</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_14RepresentationEN8momentum8eV_per_cE" title="momentum::eV_per_c::Rep"><span class="n"><span class="pre">Rep</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I_14RepresentationEN8momentum8eV_per_cE" title="Permalink to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mass.html" class="btn btn-neutral float-left" title="Mass" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../si_typographic.html" class="btn btn-neutral float-right" title="Typographic (based on SI)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Working with Unknown Dimensions and Their Units &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Working with Unknown Dimensions and Their Units &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with Legacy Interfaces" href="legacy_interfaces.html" />
     <link rel="prev" title="Use Cases" href="../use_cases.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
@@ -113,13 +67,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
@@ -127,78 +81,38 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../use_cases.html">Use Cases</a> &raquo;</li>
-        
       <li>Working with Unknown Dimensions and Their Units</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/use_cases/unknown_dimensions.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="working-with-unknown-dimensions-and-their-units">
-<h1>Working with Unknown Dimensions and Their Units<a class="headerlink" href="#working-with-unknown-dimensions-and-their-units" title="Permalink to this headline">¶</a></h1>
+<h1>Working with Unknown Dimensions and Their Units<a class="headerlink" href="#working-with-unknown-dimensions-and-their-units" title="Permalink to this headline"></a></h1>
 <p>From time to time the user of this library will face an <a class="reference internal" href="../reference/systems/generic/unknown.html#_CPPv4I_Dp8ExponentEN5units17unknown_dimensionE" title="units::unknown_dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">unknown_dimension</span></code></a> and
 <a class="reference internal" href="../reference/systems/generic/unknown.html#_CPPv4N5units21unknown_coherent_unitE" title="units::unknown_coherent_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">unknown_coherent_unit</span></code></a> types. This chapters describes their purpose and usage in
 detail.</p>
 <section id="what-is-an-unknown-dimension">
-<h2>What is an unknown dimension?<a class="headerlink" href="#what-is-an-unknown-dimension" title="Permalink to this headline">¶</a></h2>
+<h2>What is an unknown dimension?<a class="headerlink" href="#what-is-an-unknown-dimension" title="Permalink to this headline"></a></h2>
 <p>As we learned in the <a class="reference internal" href="../framework/dimensions.html#dimensions"><span class="std std-ref">Dimensions</span></a> chapter, in most cases the result
 of multiplying or dividing two quantities of specific dimensions is a quantity of yet another
 dimension.</p>
@@ -243,7 +157,7 @@ with all the definitions for the current system (e.g. <em>units/isq/si/si.h</em>
 </div>
 </section>
 <section id="operations-on-unknown-dimensions-and-their-units">
-<h2>Operations On Unknown Dimensions And Their Units<a class="headerlink" href="#operations-on-unknown-dimensions-and-their-units" title="Permalink to this headline">¶</a></h2>
+<h2>Operations On Unknown Dimensions And Their Units<a class="headerlink" href="#operations-on-unknown-dimensions-and-their-units" title="Permalink to this headline"></a></h2>
 <p>For some cases we can eliminate the need to predefine a specific dimension and just use
 the <a class="reference internal" href="../reference/systems/generic/unknown.html#_CPPv4I_Dp8ExponentEN5units17unknown_dimensionE" title="units::unknown_dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">unknown_dimension</span></code></a> instead. Let’s play with the previous example a bit:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">number</span><span class="p">()</span> <span class="o">==</span> <span class="mi">72</span><span class="p">);</span>
@@ -267,14 +181,14 @@ following:</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>Another good example of unknown dimension usage can be found in the
-<a class="reference internal" href="../examples/box_example.html#box-example"><span class="std std-ref">box_example</span></a>:</p>
+<a class="reference internal" href="../examples/basics/box_example.html#box-example"><span class="std std-ref">box_example</span></a>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;float rise rate = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">box</span><span class="p">.</span><span class="n">fill_level</span><span class="p">(</span><span class="n">measured_mass</span><span class="p">)</span> <span class="o">/</span> <span class="n">fill_time</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="temporary-results">
-<h2>Temporary Results<a class="headerlink" href="#temporary-results" title="Permalink to this headline">¶</a></h2>
+<h2>Temporary Results<a class="headerlink" href="#temporary-results" title="Permalink to this headline"></a></h2>
 <p>In many cases there is nothing inherently wrong with having unknown dimensions and units
 in your program. A typical example here are temporary results of a long calculation:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="nf">some_long_calculation</span><span class="p">(</span><span class="n">Length</span> <span class="k">auto</span> <span class="n">d</span><span class="p">,</span> <span class="n">Time</span> <span class="k">auto</span> <span class="n">t</span><span class="p">)</span>
@@ -298,53 +212,33 @@ science fiction :-) The final result will always be correct.</p>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="legacy_interfaces.html" class="btn btn-neutral float-right" title="Working with Legacy Interfaces" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="../use_cases.html" class="btn btn-neutral float-left" title="Use Cases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../use_cases.html" class="btn btn-neutral float-left" title="Use Cases" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="legacy_interfaces.html" class="btn btn-neutral float-right" title="Working with Legacy Interfaces" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

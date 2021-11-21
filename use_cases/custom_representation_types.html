@@ -1,74 +1,39 @@
-
-
 <!DOCTYPE html>
-<html lang="en" >
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Using Custom Representation Types &mdash; mp-units 0.7.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Custom Representation Types &mdash; mp-units 0.8.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Interoperability with Other Units Libraries" href="interoperability.html" />
     <link rel="prev" title="Working with Legacy Interfaces" href="legacy_interfaces.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
-
-          
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> mp-units
-          
-
-          
+            <a href="../index.html" class="icon icon-home"> mp-units
           </a>
-
-          
-            
-            
               <div class="version">
-                0.7.0
+                0.8.0
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -76,19 +41,8 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p><span class="caption-text">Getting Started:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
@@ -126,13 +80,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
 </ul>
-<p><span class="caption-text">Reference:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
 </ul>
-<p><span class="caption-text">Appendix:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
@@ -140,79 +94,39 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../use_cases.html">Use Cases</a> &raquo;</li>
-        
       <li>Using Custom Representation Types</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/use_cases/custom_representation_types.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <section id="using-custom-representation-types">
-<h1>Using Custom Representation Types<a class="headerlink" href="#using-custom-representation-types" title="Permalink to this headline">¶</a></h1>
+<h1>Using Custom Representation Types<a class="headerlink" href="#using-custom-representation-types" title="Permalink to this headline"></a></h1>
 <p>A custom representation type can be provided as the last <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> class template parameter.
 With this a user is able to change how a quantity’s value is being represented and provide
 its own custom logic for it (i.e. use a complex number or a measurement class that will handle
 not only a value but also a measurement error).</p>
 <section id="a-representation-concept">
-<h2>A <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units14RepresentationE" title="units::Representation"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Representation</span></code></a> concept<a class="headerlink" href="#a-representation-concept" title="Permalink to this headline">¶</a></h2>
+<h2>A <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units14RepresentationE" title="units::Representation"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Representation</span></code></a> concept<a class="headerlink" href="#a-representation-concept" title="Permalink to this headline"></a></h2>
 <p>To support a minimum set of <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> operations all custom representation types have to
 satisfy at least the <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units14RepresentationE" title="units::Representation"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Representation</span></code></a> concept. Which means that they:</p>
 <ul class="simple">
@@ -221,13 +135,13 @@ satisfy at least the <a class="reference internal" href="../reference/core/conce
 <li><p>have to be regular types (e.g. they have to provide equality operators)</p></li>
 <li><p>should either have common type with <code class="docutils literal notranslate"><span class="pre">std::intmax_t</span></code> which provides multiplication and
 division operators</p></li>
-<li><p>or <code class="xref cpp cpp-expr docutils literal notranslate"><span class="pre">T</span><span class="pre">::</span><span class="pre">value_type</span></code> must be valid, and common type of <code class="docutils literal notranslate"><span class="pre">T::value_type</span></code> and <code class="docutils literal notranslate"><span class="pre">std::intmax_t</span></code>
+<li><p>or <span class="cpp-expr sig sig-inline cpp"><span class="n">T</span><span class="p">::</span><span class="n">value_type</span></span> must be valid, and common type of <code class="docutils literal notranslate"><span class="pre">T::value_type</span></code> and <code class="docutils literal notranslate"><span class="pre">std::intmax_t</span></code>
 must at least provide multiplication and division operators with itself and <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
 </ul>
 <p>With the above we will be able to construct quantities, convert between the units of the same
 dimension, and compare them for equality.</p>
 <section id="the-simplest-custom-representation-type">
-<h3>The Simplest Custom Representation Type<a class="headerlink" href="#the-simplest-custom-representation-type" title="Permalink to this headline">¶</a></h3>
+<h3>The Simplest Custom Representation Type<a class="headerlink" href="#the-simplest-custom-representation-type" title="Permalink to this headline"></a></h3>
 <p>The simplest representation type that fulfills the above requirements can look as follows:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">my_rep</span> <span class="p">{</span>
   <span class="n">std</span><span class="o">::</span><span class="kt">intmax_t</span> <span class="n">value_</span><span class="p">;</span>
@@ -255,7 +169,7 @@ code will work just fine:</p>
 </div>
 </section>
 <section id="construction-of-quantities-with-custom-representation-types">
-<h3>Construction of Quantities with Custom Representation Types<a class="headerlink" href="#construction-of-quantities-with-custom-representation-types" title="Permalink to this headline">¶</a></h3>
+<h3>Construction of Quantities with Custom Representation Types<a class="headerlink" href="#construction-of-quantities-with-custom-representation-types" title="Permalink to this headline"></a></h3>
 <p>Assuming that our custom representation type is constructible from a fundamental integral type,
 let’s assume two types:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">impl</span> <span class="p">{</span>
@@ -296,7 +210,7 @@ from a regular quantity value:</p>
 </section>
 </section>
 <section id="additional-requirements">
-<h2>Additional Requirements<a class="headerlink" href="#additional-requirements" title="Permalink to this headline">¶</a></h2>
+<h2>Additional Requirements<a class="headerlink" href="#additional-requirements" title="Permalink to this headline"></a></h2>
 <p>As noted in the previous chapter, the <a class="reference internal" href="../reference/core/concepts.html#_CPPv4I0EN5units14RepresentationE" title="units::Representation"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">Representation</span></code></a> concept guarantees us the possibility
 to construct quantities, convert between the units of the same dimension, and compare them
 for equality. To provide additional <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> operations the custom representation type
@@ -308,7 +222,7 @@ not plan to use a specific quantity’s operation his/her custom representation 
 ignore (not implement/satisfy) the requirements for it.</p>
 </div>
 <section id="relational-quantity-operators">
-<h3>Relational Quantity Operators<a class="headerlink" href="#relational-quantity-operators" title="Permalink to this headline">¶</a></h3>
+<h3>Relational Quantity Operators<a class="headerlink" href="#relational-quantity-operators" title="Permalink to this headline"></a></h3>
 <p>In case we want to to compare the values of <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> type not only for equality but
 also for ordering, we have to provide a corresponding operators to our <code class="docutils literal notranslate"><span class="pre">my_rep</span></code> class.
 With C++20 it is really easy to do:</p>
@@ -326,7 +240,7 @@ With C++20 it is really easy to do:</p>
 </div>
 </section>
 <section id="arithmetic-quantity-operators">
-<h3>Arithmetic Quantity Operators<a class="headerlink" href="#arithmetic-quantity-operators" title="Permalink to this headline">¶</a></h3>
+<h3>Arithmetic Quantity Operators<a class="headerlink" href="#arithmetic-quantity-operators" title="Permalink to this headline"></a></h3>
 <p>In case we plan to perform arithmetic operations on our <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> type we have to provide
 at least the following:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">my_rep</span> <span class="p">{</span>
@@ -378,14 +292,14 @@ type.</p>
 </section>
 </section>
 <section id="customization-points">
-<h2>Customization Points<a class="headerlink" href="#customization-points" title="Permalink to this headline">¶</a></h2>
+<h2>Customization Points<a class="headerlink" href="#customization-points" title="Permalink to this headline"></a></h2>
 <p>Up to now we were enabling new functionalities by adding new operations to the custom representation
 type. However, we can also enable more operations and customize the engine behavior through a few
 customization points.</p>
 <section id="quantity-value">
-<h3><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_value</span></code><a class="headerlink" href="#quantity-value" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> class template has a few static member functions: <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::zero</span></code>, <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::one</span></code>,
-<code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::min</span></code>, and <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::max</span></code>. Those return the respective quantity values for a specific
+<h3><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_value</span></code><a class="headerlink" href="#quantity-value" title="Permalink to this headline"></a></h3>
+<p>The <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> class template has a few static member functions: <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4N5units8quantity4zeroEv" title="units::quantity::zero"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::zero()</span></code></a>, <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4N5units8quantity3oneEv" title="units::quantity::one"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::one()</span></code></a>,
+<a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4N5units8quantity3minEv" title="units::quantity::min"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::min()</span></code></a>, and <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4N5units8quantity3maxEv" title="units::quantity::max"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity::max()</span></code></a>. Those return the respective quantity values for a specific
 representation type. The default implementation is provided through the <a class="reference internal" href="../reference/core/customization_points.html#_CPPv4I0EN5units15quantity_valuesE" title="units::quantity_values"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_values</span></code></a> class
 template:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span><span class="o">&gt;</span>
@@ -402,7 +316,7 @@ representation type and provide values that should be returned by the respective
 operations.</p>
 </section>
 <section id="treat-as-floating-point">
-<h3><a class="reference internal" href="../reference/core/customization_points.html#_CPPv4I0EN5units23treat_as_floating_pointE" title="units::treat_as_floating_point"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">treat_as_floating_point</span></code></a><a class="headerlink" href="#treat-as-floating-point" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="../reference/core/customization_points.html#_CPPv4I0EN5units23treat_as_floating_pointE" title="units::treat_as_floating_point"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">treat_as_floating_point</span></code></a><a class="headerlink" href="#treat-as-floating-point" title="Permalink to this headline"></a></h3>
 <p>In the <a class="reference internal" href="../framework/conversions_and_casting.html#conversions-and-casting"><span class="std std-ref">Conversions and Casting</span></a> chapter we learned
 that the conversions provided by the library’s framework treat floating-point representation
 types differently than the integral ones. This behavior can also be extended to the custom
@@ -442,7 +356,7 @@ always in the same namespace as the primary template definition.</p>
 </section>
 </section>
 <section id="conversions-of-quantities-with-custom-representation-types">
-<h2>Conversions of Quantities with Custom Representation Types<a class="headerlink" href="#conversions-of-quantities-with-custom-representation-types" title="Permalink to this headline">¶</a></h2>
+<h2>Conversions of Quantities with Custom Representation Types<a class="headerlink" href="#conversions-of-quantities-with-custom-representation-types" title="Permalink to this headline"></a></h2>
 <p>In case we want to mix quantities of our Custom Representation Type with the quantities using
 fundamental arithmetic types as their representation we have to provide conversion operators
 in our representation type.</p>
@@ -486,60 +400,40 @@ representation types with:</p>
 <p class="admonition-title">See also</p>
 <p>For more examples of custom representation types usage please refer to the
 <a class="reference internal" href="linear_algebra.html#linear-algebra-vs-quantities"><span class="std std-ref">Linear Algebra vs. Quantities</span></a> chapter and the
-<a class="reference internal" href="../examples/measurement.html#measurement"><span class="std std-ref">measurement</span></a> example.</p>
+<a class="reference internal" href="../examples/custom_representation/measurement.html#measurement"><span class="std std-ref">measurement</span></a> example.</p>
 </div>
 </section>
 </section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="interoperability.html" class="btn btn-neutral float-right" title="Interoperability with Other Units Libraries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="legacy_interfaces.html" class="btn btn-neutral float-left" title="Working with Legacy Interfaces" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="legacy_interfaces.html" class="btn btn-neutral float-left" title="Working with Legacy Interfaces" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="interoperability.html" class="btn btn-neutral float-right" title="Interoperability with Other Units Libraries" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2018-present, Mateusz Pusz
-
-    </p>
+    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
   </div>
-    
-    
-      Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
