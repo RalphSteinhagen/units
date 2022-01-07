@@ -153,7 +153,7 @@ but until then it depends on:</p>
 <ul>
 <li><p><a class="reference external" href="https://github.com/fmtlib/fmt">{fmt}</a> to provide text formatting of quantities.</p></li>
 <li><p><a class="reference external" href="https://github.com/gsl-lite/gsl-lite">gsl-lite</a> to verify runtime contracts with the <code class="docutils literal notranslate"><span class="pre">gsl_Expects</span></code> macro.</p></li>
-<li><p>[only for clang-12 with libc++] <a class="reference external" href="https://github.com/ericniebler/range-v3">range-v3</a> to provide needed C++20 concepts and utilities.</p></li>
+<li><p>[only for clang &lt; 14 with libc++] <a class="reference external" href="https://github.com/ericniebler/range-v3">range-v3</a> to provide needed C++20 concepts and utilities.</p></li>
 </ul>
 </li>
 </ul>
@@ -204,26 +204,26 @@ The rest of the dependencies responsible for documentation generation are provid
 </div>
 <p>After that you might need to add a custom profile file for your development environment
 in <em>~/.conan/profiles</em> directory. An example profile can look as follows:</p>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[settings]</span>
-<span class="na">os</span><span class="o">=</span><span class="s">Linux</span>
-<span class="na">os_build</span><span class="o">=</span><span class="s">Linux</span>
-<span class="na">arch</span><span class="o">=</span><span class="s">x86_64</span>
-<span class="na">arch_build</span><span class="o">=</span><span class="s">x86_64</span>
-<span class="na">compiler</span><span class="o">=</span><span class="s">gcc</span>
-<span class="na">compiler.version</span><span class="o">=</span><span class="s">10</span>
-<span class="hll"><span class="na">compiler.cppstd</span><span class="o">=</span><span class="s">20</span>
-</span><span class="na">compiler.libcxx</span><span class="o">=</span><span class="s">libstdc++11</span>
-<span class="na">build_type</span><span class="o">=</span><span class="s">Release</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[settings]</span><span class="w"></span>
+<span class="na">os</span><span class="o">=</span><span class="s">Linux</span><span class="w"></span>
+<span class="na">os_build</span><span class="o">=</span><span class="s">Linux</span><span class="w"></span>
+<span class="na">arch</span><span class="o">=</span><span class="s">x86_64</span><span class="w"></span>
+<span class="na">arch_build</span><span class="o">=</span><span class="s">x86_64</span><span class="w"></span>
+<span class="na">compiler</span><span class="o">=</span><span class="s">gcc</span><span class="w"></span>
+<span class="na">compiler.version</span><span class="o">=</span><span class="s">10</span><span class="w"></span>
+<span class="hll"><span class="na">compiler.cppstd</span><span class="o">=</span><span class="s">20</span><span class="w"></span>
+</span><span class="na">compiler.libcxx</span><span class="o">=</span><span class="s">libstdc++11</span><span class="w"></span>
+<span class="na">build_type</span><span class="o">=</span><span class="s">Release</span><span class="w"></span>
 
-<span class="k">[options]</span>
-<span class="k">[build_requires]</span>
+<span class="k">[options]</span><span class="w"></span>
+<span class="k">[build_requires]</span><span class="w"></span>
 
-<span class="k">[conf]</span>
-<span class="na">tools.cmake.cmaketoolchain:generator</span><span class="o">=</span><span class="s">Ninja</span>
+<span class="k">[conf]</span><span class="w"></span>
+<span class="na">tools.cmake.cmaketoolchain:generator</span><span class="o">=</span><span class="s">Ninja</span><span class="w"></span>
 
-<span class="k">[env]</span>
-<span class="na">CC</span><span class="o">=</span><span class="s">/usr/bin/gcc-10</span>
-<span class="na">CXX</span><span class="o">=</span><span class="s">/usr/bin/g++-10</span>
+<span class="k">[env]</span><span class="w"></span>
+<span class="na">CC</span><span class="o">=</span><span class="s">/usr/bin/gcc-10</span><span class="w"></span>
+<span class="na">CXX</span><span class="o">=</span><span class="s">/usr/bin/g++-10</span><span class="w"></span>
 </pre></div>
 </div>
 <div class="admonition tip">
@@ -325,7 +325,7 @@ to make the code compile without issues.</p>
 defined by the library. To do so you should use <em>CMakeLists.txt</em> file from the <em>./src</em> directory:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">&lt;path_to_units_folder&gt;/src</span><span class="p">)</span>
 <span class="c"># ...</span>
-<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">&lt;your_target&gt;</span> <span class="s">&lt;PUBLIC|PRIVATE|INTERFACE&gt;</span> <span class="s">mp-units::mp-units</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">&lt;your_target&gt;</span><span class="w"> </span><span class="s">&lt;PUBLIC|PRIVATE|INTERFACE&gt;</span><span class="w"> </span><span class="s">mp-units::mp-units</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -353,12 +353,12 @@ For example the simplest file may look as follows:</p></li>
 <blockquote>
 <div><div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">conanfile.txt</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span>
-<span class="na">mp-units/0.7.0</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span><span class="w"></span>
+<span class="na">mp-units/0.7.0</span><span class="w"></span>
 
-<span class="k">[generators]</span>
-<span class="na">CMakeToolchain</span>
-<span class="na">CMakeDeps</span>
+<span class="k">[generators]</span><span class="w"></span>
+<span class="na">CMakeToolchain</span><span class="w"></span>
+<span class="na">CMakeDeps</span><span class="w"></span>
 </pre></div>
 </div>
 </div>
@@ -368,7 +368,7 @@ For example the simplest file may look as follows:</p></li>
 with <code class="docutils literal notranslate"><span class="pre">find_package</span></code>:</p></li>
 </ol>
 <blockquote>
-<div><div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">mp-units</span> <span class="s">CONFIG</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<div><div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">mp-units</span><span class="w"> </span><span class="s">CONFIG</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -376,8 +376,8 @@ with <code class="docutils literal notranslate"><span class="pre">find_package</
 <li><p>Link your CMake targets with <strong>mp-units</strong>:</p></li>
 </ol>
 <blockquote>
-<div><div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">&lt;your_target&gt;</span> <span class="s">&lt;PUBLIC|PRIVATE|INTERFACE&gt;</span> <span class="s">mp-units::mp-units</span><span class="p">)</span>
-<span class="nb">target_compile_features</span><span class="p">(</span><span class="s">&lt;your_target&gt;</span> <span class="s">&lt;PUBLIC|PRIVATE|INTERFACE&gt;</span> <span class="s">cxx_std_20</span><span class="p">)</span>
+<div><div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">&lt;your_target&gt;</span><span class="w"> </span><span class="s">&lt;PUBLIC|PRIVATE|INTERFACE&gt;</span><span class="w"> </span><span class="s">mp-units::mp-units</span><span class="p">)</span>
+<span class="nb">target_compile_features</span><span class="p">(</span><span class="s">&lt;your_target&gt;</span><span class="w"> </span><span class="s">&lt;PUBLIC|PRIVATE|INTERFACE&gt;</span><span class="w"> </span><span class="s">cxx_std_20</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -428,12 +428,12 @@ differences:</p>
 <blockquote>
 <div><div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">conanfile.txt</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span>
-<span class="na">mp-units/0.8.0@mpusz/testing</span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span><span class="w"></span>
+<span class="na">mp-units/0.8.0@mpusz/testing</span><span class="w"></span>
 
-<span class="k">[generators]</span>
-<span class="na">CMakeToolchain</span>
-<span class="na">CMakeDeps</span>
+<span class="k">[generators]</span><span class="w"></span>
+<span class="na">CMakeToolchain</span><span class="w"></span>
+<span class="na">CMakeDeps</span><span class="w"></span>
 </pre></div>
 </div>
 </div>

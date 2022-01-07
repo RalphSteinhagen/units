@@ -51,7 +51,10 @@
 <li class="toctree-l2"><a class="reference internal" href="unknown_dimensions.html">Working with Unknown Dimensions and Their Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="legacy_interfaces.html">Working with Legacy Interfaces</a></li>
 <li class="toctree-l2"><a class="reference internal" href="custom_representation_types.html">Using Custom Representation Types</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Interoperability with Other Units Libraries</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Interoperability with Other Units Libraries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#interoperability-with-the-c-standard-library">Interoperability with the C++ Standard Library</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="linear_algebra.html">Linear Algebra vs. Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="extensions.html">Extending the Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="natural_units.html">Working with Natural Units</a></li>
@@ -171,6 +174,68 @@ provide a deduction guide from <code class="xref cpp cpp-any docutils literal no
 <span class="k">static_assert</span><span class="p">((</span><span class="n">quantity_point</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">sys_seconds</span><span class="p">{</span><span class="mi">1</span><span class="n">s</span><span class="p">}}</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">s</span><span class="p">).</span><span class="n">relative</span><span class="p">()</span> <span class="o">==</span> <span class="mi">2</span><span class="n">s</span><span class="p">);</span>
 </pre></div>
 </div>
+<section id="interoperability-with-the-c-standard-library">
+<h2>Interoperability with the C++ Standard Library<a class="headerlink" href="#interoperability-with-the-c-standard-library" title="Permalink to this headline"></a></h2>
+<p>The above <code class="docutils literal notranslate"><span class="pre">std::chrono</span></code>-specific customization points are already predefined in the <code class="docutils literal notranslate"><span class="pre">mp-units</span></code>
+library for both <code class="docutils literal notranslate"><span class="pre">std::chrono::duration</span></code> as well as <code class="docutils literal notranslate"><span class="pre">std::chrono::time_point</span></code>.
+They are provided in a dedicated header file:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;units/chrono.h&gt;</span><span class="cp"></span>
+</pre></div>
+</div>
+<p>The same header file provides additional conversion helpers from <code class="docutils literal notranslate"><span class="pre">mp-units</span></code> to
+the C++ Standard Library types:</p>
+<ul>
+<li><p>an alias that provides a conversion from <a class="reference internal" href="../reference/core/types/utilities/ratio.html#_CPPv4N5units5ratioE" title="units::ratio"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">ratio</span></code></a> to <code class="docutils literal notranslate"><span class="pre">std::ratio</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">ratio</span> <span class="n">R</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">to_std_ratio</span> <span class="o">=</span> <span class="cm">/* ... */</span>
+</pre></div>
+</div>
+</li>
+<li><p>an explicit conversion of <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> of <a class="reference internal" href="../reference/systems/isq/si/time.html#_CPPv4N5units3isq2si8dim_timeE" title="units::isq::si::dim_time"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">isq::si::dim_time</span></code></a> to <code class="docutils literal notranslate"><span class="pre">std::chrono::duration</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">U</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Rep</span><span class="o">&gt;</span>
+<span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">to_std_duration</span><span class="p">(</span><span class="k">const</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">dim_time</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;&amp;</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>an explicit conversion of <a class="reference internal" href="../reference/core/types/quantity_point.html#_CPPv4I_11PointOrigin_6UnitOfIN1O9dimensionEE_14RepresentationEN5units14quantity_pointE" title="units::quantity_point"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point</span></code></a> that previously originated from <code class="docutils literal notranslate"><span class="pre">std::chrono</span></code>
+to <code class="docutils literal notranslate"><span class="pre">std::chrono::time_point</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">C</span><span class="p">,</span> <span class="k">typename</span> <span class="n">U</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Rep</span><span class="o">&gt;</span>
+<span class="p">[[</span><span class="n">nodiscard</span><span class="p">]]</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">to_std_time_point</span><span class="p">(</span><span class="k">const</span> <span class="n">quantity_point</span><span class="o">&lt;</span><span class="n">clock_origin</span><span class="o">&lt;</span><span class="n">C</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;&amp;</span> <span class="n">qp</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only <a class="reference internal" href="../reference/core/types/quantity_point.html#_CPPv4I_11PointOrigin_6UnitOfIN1O9dimensionEE_14RepresentationEN5units14quantity_pointE" title="units::quantity_point"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point</span></code></a> that was created from a <code class="docutils literal notranslate"><span class="pre">std::chrono::time_point</span></code> of a specific
+<code class="docutils literal notranslate"><span class="pre">std::chrono</span></code> clock can be converted back to <code class="docutils literal notranslate"><span class="pre">std::chrono</span></code> domain:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="k">auto</span> <span class="n">qp1</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">sys_seconds</span><span class="p">{</span><span class="mi">1</span><span class="n">s</span><span class="p">}};</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">tp1</span> <span class="o">=</span> <span class="n">to_std_time_point</span><span class="p">(</span><span class="n">qp1</span><span class="p">);</span>  <span class="c1">// OK</span>
+
+<span class="k">const</span> <span class="k">auto</span> <span class="n">qp2</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="mi">1</span> <span class="o">*</span> <span class="n">s</span><span class="p">};</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">tp2</span> <span class="o">=</span> <span class="n">to_std_time_point</span><span class="p">(</span><span class="n">qp2</span><span class="p">);</span>  <span class="c1">// Compile-time Error</span>
+</pre></div>
+</div>
+</div>
+<p>Here is an example of how interoperatibility described in this chapter can be used in practice:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">timestamp</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="o">&lt;</span><span class="n">clock_origin</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">system_clock</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">second</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="k">auto</span> <span class="n">start_time</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">system_clock</span><span class="o">::</span><span class="n">now</span><span class="p">());</span>  <span class="c1">// std::chrono -&gt; units</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">velocity</span> <span class="o">=</span> <span class="n">speed</span><span class="o">::</span><span class="n">km_per_h</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">825</span><span class="p">);</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">distance</span> <span class="o">=</span> <span class="n">length</span><span class="o">::</span><span class="n">km</span><span class="o">&lt;&gt;</span><span class="p">(</span><span class="mi">8111</span><span class="p">);</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">flight_time</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">velocity</span><span class="p">;</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">exp_end_time</span> <span class="o">=</span> <span class="n">start_time</span> <span class="o">+</span> <span class="n">flight_time</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="k">auto</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">to_std_time_point</span><span class="p">(</span><span class="n">exp_end_time</span><span class="p">);</span>                      <span class="c1">// units -&gt; std::chrono</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">tp_sec</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">floor</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tp</span><span class="p">);</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">tp_days</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">floor</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">days</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tp_sec</span><span class="p">);</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">ymd</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">year_month_day</span><span class="p">(</span><span class="n">tp_days</span><span class="p">);</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">tod</span> <span class="o">=</span> <span class="n">tp_sec</span> <span class="o">-</span> <span class="n">tp_days</span><span class="p">;</span>
+<span class="k">const</span> <span class="k">auto</span> <span class="n">hms</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">hh_mm_ss</span><span class="p">(</span><span class="n">tod</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
