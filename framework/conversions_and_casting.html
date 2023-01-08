@@ -1,39 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Conversions and Casting &mdash; mp-units 0.8.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Text Output" href="text_output.html" />
+    <link rel="next" title="Angular Units" href="angular_units.html" />
     <link rel="prev" title="Quantity Constants" href="constants.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mp-units
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.8.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,17 +84,30 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../framework.html">Framework Basics</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_like.html">Quantity-like Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantities.html">Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_points.html">Quantity Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="magnitudes.html">Magnitudes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
@@ -65,6 +121,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#implicit-conversions-of-dimensionless-quantities">Implicit conversions of dimensionless quantities</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="angular_units.html">Angular Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
 </ul>
 </li>
@@ -88,33 +145,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
+        
       <li>Conversions and Casting</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/framework/conversions_and_casting.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="conversions-and-casting">
-<h1>Conversions and Casting<a class="headerlink" href="#conversions-and-casting" title="Permalink to this headline"></a></h1>
+<h1>Conversions and Casting<a class="headerlink" href="#conversions-and-casting" title="Permalink to this heading">¶</a></h1>
 <blockquote>
 <div><p>Programmers who are not full-time programming language geeks <strong>hate lack of
 implicit conversions</strong> that they consider reasonable. Violate their expectations
@@ -126,52 +225,52 @@ information.”</strong> That can reasonably easily be explained to non-language
 <p>The library tries to follow the above principle and at the same time is also consistent
 with conversions of <code class="docutils literal notranslate"><span class="pre">std::chrono::duration</span></code>.</p>
 <section id="no-conversions">
-<h2>No Conversions<a class="headerlink" href="#no-conversions" title="Permalink to this headline"></a></h2>
+<h2>No Conversions<a class="headerlink" href="#no-conversions" title="Permalink to this heading">¶</a></h2>
 <p>No conversions (either implicit or explicit) are available across quantities of
 different dimensions:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span> <span class="n">d1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>            <span class="c1">// Compile-time error</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span> <span class="n">d2</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>             <span class="c1">// Compile-time error</span>
-<span class="k">auto</span> <span class="n">d3</span> <span class="o">=</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>   <span class="c1">// Compile-time error</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w">            </span><span class="c1">// Compile-time error</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d2</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w">             </span><span class="c1">// Compile-time error</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w">   </span><span class="c1">// Compile-time error</span>
 </pre></div>
 </div>
 </section>
 <section id="implicit">
-<h2>Implicit<a class="headerlink" href="#implicit" title="Permalink to this headline"></a></h2>
+<h2>Implicit<a class="headerlink" href="#implicit" title="Permalink to this heading">¶</a></h2>
 <p>Implicit conversions are allowed only across quantities of the same dimension:</p>
 <ul>
 <li><p>for integral types with ratios that guarantee no precision loss:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span>        <span class="n">d1</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">km</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>  <span class="c1">// OK</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">millimetre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span>   <span class="n">d2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">km</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>  <span class="c1">// OK</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span>    <span class="n">d3</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">km</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>  <span class="c1">// Compile-time error</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span>    <span class="n">d4</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">km</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// Compile-time error</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span>        <span class="n">d5</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">ft</span><span class="p">;</span>  <span class="c1">// Compile-time error</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span>        <span class="n">d6</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">ft</span><span class="p">);</span>   <span class="c1">// Compile-time error</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">        </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w">  </span><span class="c1">// OK</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">millimetre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">   </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w">  </span><span class="c1">// OK</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">    </span><span class="n">d3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w">  </span><span class="c1">// Compile-time error</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">    </span><span class="n">d4</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// Compile-time error</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">        </span><span class="n">d5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ft</span><span class="p">;</span><span class="w">  </span><span class="c1">// Compile-time error</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">        </span><span class="n">d6</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ft</span><span class="p">);</span><span class="w">   </span><span class="c1">// Compile-time error</span>
 </pre></div>
 </div>
 </li>
 <li><p>from an integral to a floating-point representation even in case of a truncating
 ratio:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">d7</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">km</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>  <span class="c1">// OK</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span>     <span class="n">d8</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">ft</span><span class="p">;</span>  <span class="c1">// OK</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w">  </span><span class="c1">// OK</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w">     </span><span class="n">d8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">ft</span><span class="p">;</span><span class="w">  </span><span class="c1">// OK</span>
 </pre></div>
 </div>
 </li>
 <li><p>when both sides use a floating-point representation:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span>        <span class="n">d9</span> <span class="o">=</span> <span class="mf">1.23</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>        <span class="c1">// Compile-time error</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span>    <span class="n">d10</span> <span class="o">=</span> <span class="mf">1.23</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>        <span class="c1">// OK</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">        </span><span class="n">d9</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.23</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w">        </span><span class="c1">// Compile-time error</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w">    </span><span class="n">d10</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.23</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w">        </span><span class="c1">// OK</span>
 </pre></div>
 </div>
 </li>
 </ul>
 </section>
 <section id="explicit">
-<h2>Explicit<a class="headerlink" href="#explicit" title="Permalink to this headline"></a></h2>
+<h2>Explicit<a class="headerlink" href="#explicit" title="Permalink to this heading">¶</a></h2>
 <p>Explicit conversions are available with the <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_cast</span></code>, <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point_cast</span></code>,
 <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_kind_cast</span></code>, and <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point_kind_cast</span></code> function templates.
 They are especially useful to force a truncating conversion across quantities of the same
 dimension for integral representation types and ratios that may cause precision loss:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">km</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span> <span class="c1">// OK</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>          <span class="c1">// Error</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w"> </span><span class="c1">// OK</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w">          </span><span class="c1">// Error</span>
 </pre></div>
 </div>
 <div class="admonition seealso">
@@ -181,13 +280,13 @@ More information on this subject can be found in the
 <a class="reference internal" href="../use_cases/legacy_interfaces.html#working-with-legacy-interfaces"><span class="std std-ref">Working with Legacy Interfaces</span></a> chapter.</p>
 </div>
 <section id="quantity-cast-overloads">
-<h3>Quantity Cast Overloads<a class="headerlink" href="#quantity-cast-overloads" title="Permalink to this headline"></a></h3>
+<h3>Quantity Cast Overloads<a class="headerlink" href="#quantity-cast-overloads" title="Permalink to this heading">¶</a></h3>
 <p><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_cast</span></code> comes with several overloads:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Distance: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-<span class="linenos">2</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Distance: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-<span class="linenos">3</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Distance: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-<span class="linenos">4</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Distance: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-<span class="linenos">5</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Distance: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Distance: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="linenos">2</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Distance: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="linenos">3</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Distance: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="linenos">4</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Distance: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="linenos">5</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Distance: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_cast</span></code> in line #1 takes a specific target <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> type to which an explicit
@@ -203,7 +302,7 @@ representation type.</p></li>
 </ul>
 <p><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point_cast</span></code> takes anything that works for <a class="reference internal" href="../reference/core/types/quantity_point.html#_CPPv4I_11PointOrigin_6UnitOfIN1O9dimensionEE_14RepresentationEN5units14quantity_pointE" title="units::quantity_point"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point</span></code></a>
 or a specific target <a class="reference internal" href="../reference/core/types/quantity_point.html#_CPPv4I_11PointOrigin_6UnitOfIN1O9dimensionEE_14RepresentationEN5units14quantity_pointE" title="units::quantity_point"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point</span></code></a>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Point: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_point_cast</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">quantity_point</span><span class="p">{</span><span class="mi">0</span> <span class="o">*</span> <span class="n">m</span><span class="p">})</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Point: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_point_cast</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">quantity_point</span><span class="p">{</span><span class="mi">0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">})</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>For a single explicit template argument, <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_point_kind_cast</span></code> is a superset of
@@ -220,74 +319,74 @@ instead of a <a class="reference internal" href="../reference/core/concepts.html
 </section>
 </section>
 <section id="implicit-conversions-of-dimensionless-quantities">
-<h2>Implicit conversions of dimensionless quantities<a class="headerlink" href="#implicit-conversions-of-dimensionless-quantities" title="Permalink to this headline"></a></h2>
+<h2>Implicit conversions of dimensionless quantities<a class="headerlink" href="#implicit-conversions-of-dimensionless-quantities" title="Permalink to this heading">¶</a></h2>
 <p>As noted in the <a class="reference internal" href="quantities.html#dimensionless-quantities"><span class="std std-ref">Dimensionless Quantities</span></a> chapter,
 <a class="reference internal" href="../glossary.html#term-quantity-of-dimension-one"><span class="xref std std-term">quantity of dimension one</span></a> is somehow special but still obey most of the rules defined
 for quantities. However, as they represent numbers it would be highly uncomfortable to every
 time type:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="k">auto</span> <span class="n">d1</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>
-<span class="k">const</span> <span class="k">auto</span> <span class="n">d2</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="n">d1</span> <span class="o">/</span> <span class="n">d2</span> <span class="o">&gt;</span> <span class="n">dimensionless</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="p">{</span>
-  <span class="c1">// ...</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="n">d1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">dimensionless</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>or:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="k">auto</span> <span class="n">fill_time_left</span> <span class="o">=</span> <span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">box</span><span class="p">.</span><span class="n">fill_level</span><span class="p">(</span><span class="n">measured_mass</span><span class="p">)</span> <span class="o">-</span>
-                             <span class="n">dimensionless</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">fill_time</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">fill_time_left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">box</span><span class="p">.</span><span class="n">fill_level</span><span class="p">(</span><span class="n">measured_mass</span><span class="p">)</span><span class="w"> </span><span class="o">-</span>
+<span class="w">                             </span><span class="n">dimensionless</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fill_time</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>This is why it was decided to allow the <code class="docutils literal notranslate"><span class="pre">dimensionless&lt;one&gt;</span></code> quantity of any
 representation type to be implicitly constructible from this representation type.
 With that the above examples can be rewritten as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="k">auto</span> <span class="n">d1</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>
-<span class="k">const</span> <span class="k">auto</span> <span class="n">d2</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="n">d1</span> <span class="o">/</span> <span class="n">d2</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// ...</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="n">d1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>and:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span> <span class="k">auto</span> <span class="n">fill_time_left</span> <span class="o">=</span> <span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">height</span> <span class="o">/</span> <span class="n">box</span><span class="p">.</span><span class="n">fill_level</span><span class="p">(</span><span class="n">measured_mass</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">fill_time</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">fill_time_left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">box</span><span class="p">.</span><span class="n">height</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">box</span><span class="p">.</span><span class="n">fill_level</span><span class="p">(</span><span class="n">measured_mass</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fill_time</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>The above is true only for dimensionless quantities of <a class="reference internal" href="../reference/systems/generic/dimensionless.html#_CPPv4N5units3oneE" title="units::one"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">one</span></code></a> unit. If our quantity have a unit with
 ratio different than <code class="docutils literal notranslate"><span class="pre">1</span></code> the implicit conversion will not happen. This is to prevent cases were the code
 could be ambiguous. For example:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Dimensionless</span> <span class="k">auto</span> <span class="nf">foo</span><span class="p">(</span><span class="n">Length</span> <span class="k">auto</span> <span class="n">d1</span><span class="p">,</span> <span class="n">Length</span> <span class="k">auto</span> <span class="n">d2</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Dimensionless</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="p">,</span><span class="w"> </span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">return</span> <span class="n">d1</span> <span class="o">/</span> <span class="n">d2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>As long as we can reason about what such code means for <code class="docutils literal notranslate"><span class="pre">foo(10</span> <span class="pre">*</span> <span class="pre">km,</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">km)</span></code> it is not that obvious
 at all in the case of <code class="docutils literal notranslate"><span class="pre">foo(10</span> <span class="pre">*</span> <span class="pre">cm,</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">ft)</span></code>. To make such code to compile for every case we have to
 either change the type of the resulting unit to the one having <code class="docutils literal notranslate"><span class="pre">ratio(1)</span></code> (<a class="reference internal" href="../glossary.html#term-coherent-derived-unit"><span class="xref std std-term">coherent derived unit</span></a>):</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Dimensionless</span> <span class="k">auto</span> <span class="nf">foo</span><span class="p">(</span><span class="n">Length</span> <span class="k">auto</span> <span class="n">d1</span><span class="p">,</span> <span class="n">Length</span> <span class="k">auto</span> <span class="n">d2</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Dimensionless</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="p">,</span><span class="w"> </span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">return</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d1</span> <span class="o">/</span> <span class="n">d2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="n">d1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">d2</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>or to explicitly state what is the unit of our dimensionless value, e.g. <a class="reference internal" href="../reference/systems/generic/dimensionless.html#_CPPv4N5units3oneE" title="units::one"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">one</span></code></a>, <a class="reference internal" href="../reference/systems/generic/dimensionless.html#_CPPv4N5units7percentE" title="units::percent"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">percent</span></code></a>, etc:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Dimensionless</span> <span class="k">auto</span> <span class="nf">foo</span><span class="p">(</span><span class="n">Length</span> <span class="k">auto</span> <span class="n">d1</span><span class="p">,</span> <span class="n">Length</span> <span class="k">auto</span> <span class="n">d2</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Dimensionless</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="p">,</span><span class="w"> </span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">return</span> <span class="n">d1</span> <span class="o">/</span> <span class="n">d2</span> <span class="o">+</span> <span class="n">dimensionless</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dimensionless</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>There is one more important point to note here. As the the dimensionless quantity is more than just
 a number, it is never implicitly converted back to the representation type. This means that the following
 code will not compile:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">m</span><span class="p">));</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">));</span>
 </pre></div>
 </div>
 <p>To make it compile fine we have to either explicitly get the value stored in the quantity:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">m</span><span class="p">)).</span><span class="n">number</span><span class="p">());</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">one</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">)).</span><span class="n">number</span><span class="p">());</span>
 </pre></div>
 </div>
-<p>or use a mathematical wrapper function from <a class="reference internal" href="../reference/systems/isq/si/length.html#_CPPv45units" title="units"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">units</span></code></a> namespace:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">m</span><span class="p">));</span>
+<p>or use a mathematical wrapper function from <a class="reference internal" href="../reference/systems/isq/si/luminance.html#_CPPv45units" title="units"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">units</span></code></a> namespace:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">));</span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -300,33 +399,50 @@ calling <a class="reference internal" href="../reference/core/types/quantity.htm
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="angular_units.html" class="btn btn-neutral float-right" title="Angular Units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="constants.html" class="btn btn-neutral float-left" title="Quantity Constants" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="text_output.html" class="btn btn-neutral float-right" title="Text Output" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

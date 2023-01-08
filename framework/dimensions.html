@@ -1,39 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Dimensions &mdash; mp-units 0.8.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Units" href="units.html" />
+    <link rel="next" title="Magnitudes" href="magnitudes.html" />
     <link rel="prev" title="Quantity Kinds" href="quantity_kinds.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mp-units
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.8.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,13 +84,25 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../framework.html">Framework Basics</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_like.html">Quantity-like Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantities.html">Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_points.html">Quantity Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
@@ -57,10 +112,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#obtaining-a-unit-of-the-dimension">Obtaining a Unit of the Dimension</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="magnitudes.html">Magnitudes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="angular_units.html">Angular Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
 </ul>
 </li>
@@ -84,49 +141,91 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
+        
       <li>Dimensions</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/framework/dimensions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="dimensions">
-<h1>Dimensions<a class="headerlink" href="#dimensions" title="Permalink to this headline"></a></h1>
+<h1>Dimensions<a class="headerlink" href="#dimensions" title="Permalink to this heading">¶</a></h1>
 <p>In the previous chapter we briefly introduced the notion of a physical
 <a class="reference internal" href="../glossary.html#term-dimension"><span class="xref std std-term">dimension</span></a>. Now it is time to learn much more about this subject.
 Length, time, speed, area, energy are only a few examples of physical
 dimensions.</p>
 <object data="../_images/dimensions.svg" type="image/svg+xml" class="align-center" style="max-width: 100%;"></object><section id="base-dimensions">
-<h2>Base Dimensions<a class="headerlink" href="#base-dimensions" title="Permalink to this headline"></a></h2>
+<h2>Base Dimensions<a class="headerlink" href="#base-dimensions" title="Permalink to this heading">¶</a></h2>
 <p>The quantities of base dimensions are called
 <a class="reference internal" href="../glossary.html#term-base-quantity"><span class="xref std std-term">base quantities</span></a> which are the atomic building blocks
 of a <a class="reference internal" href="../glossary.html#term-system-of-quantities"><span class="xref std std-term">system of quantities</span></a>. For example the The International System
 of Units (<a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a>) defines 7 of them: length, mass, time, electric
 current, thermodynamic temperature, substance, and luminous intensity.</p>
-<p>To define a new base dimension the <a class="reference internal" href="../reference/core/types/dimensions.html#_CPPv4I_18basic_fixed_string_4UnitEN5units14base_dimensionE" title="units::base_dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">base_dimension</span></code></a> class template is
+<p>To define a new base dimension the <a class="reference internal" href="../reference/core/types/dimensions.html#_CPPv4I_18basic_fixed_string_9NamedUnitEN5units14base_dimensionE" title="units::base_dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">base_dimension</span></code></a> class template is
 provided. For example the SI base dimension of length can be defined as:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">si</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">struct</span> <span class="nl">dim_length</span> <span class="p">:</span> <span class="n">base_dimension</span><span class="o">&lt;</span><span class="s">&quot;L&quot;</span><span class="p">,</span> <span class="n">metre</span><span class="o">&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">dim_length</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">base_dimension</span><span class="o">&lt;</span><span class="s">&quot;L&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">metre</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{};</span>
 
 <span class="p">}</span>
 </pre></div>
@@ -134,13 +233,13 @@ provided. For example the SI base dimension of length can be defined as:</p>
 <p>In the above code sample <code class="docutils literal notranslate"><span class="pre">&quot;L&quot;</span></code> is an base dimension’s unique identifier
 and <a class="reference internal" href="../reference/systems/isq/si/length.html#_CPPv4N5units3isq2si5metreE" title="units::isq::si::metre"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">isq::si::metre</span></code></a> is a <a class="reference internal" href="../glossary.html#term-base-unit"><span class="xref std std-term">base unit</span></a> of this base dimension. We can
 obtain those back easily with:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">::</span><span class="n">symbol</span> <span class="o">==</span> <span class="s">&quot;L&quot;</span><span class="p">);</span>
-<span class="k">static_assert</span><span class="p">(</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">::</span><span class="n">base_unit</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">::</span><span class="n">symbol</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;L&quot;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">::</span><span class="n">base_unit</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
 <section id="derived-dimensions">
-<h2>Derived Dimensions<a class="headerlink" href="#derived-dimensions" title="Permalink to this headline"></a></h2>
+<h2>Derived Dimensions<a class="headerlink" href="#derived-dimensions" title="Permalink to this heading">¶</a></h2>
 <p>The quantities of derived dimensions are called
 <a class="reference internal" href="../glossary.html#term-derived-quantity"><span class="xref std std-term">derived quantities</span></a> and are derived from base
 quantities. This means that they are created by multiplying or dividing
@@ -155,12 +254,12 @@ and time base quantity with exponent <code class="docutils literal notranslate">
 </ul>
 <p>The above dimensions can be defined in the library with the
 <a class="reference internal" href="../reference/core/types/dimensions.html#_CPPv4I0_4Unit_Dp8ExponentEN5units17derived_dimensionE" title="units::derived_dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">derived_dimension</span></code></a> class template as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">si</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">struct</span> <span class="nl">dim_area</span>  <span class="p">:</span> <span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_area</span><span class="p">,</span> <span class="n">square_metre</span><span class="p">,</span>
-                                     <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">dim_speed</span> <span class="p">:</span> <span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span> <span class="n">metre_per_second</span><span class="p">,</span>
-                                     <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">dim_area</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_area</span><span class="p">,</span><span class="w"> </span><span class="n">square_metre</span><span class="p">,</span>
+<span class="w">                                     </span><span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">dim_speed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span><span class="w"> </span><span class="n">metre_per_second</span><span class="p">,</span>
+<span class="w">                                     </span><span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{};</span>
 
 <span class="p">}</span>
 </pre></div>
@@ -183,12 +282,12 @@ chapter.</p>
 <p>It is important to mention here that beside text output the order and
 the number of elements in the <a class="reference internal" href="../reference/core/types/dimensions.html#_CPPv4I0_4Unit_Dp8ExponentEN5units17derived_dimensionE" title="units::derived_dimension"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">derived_dimension</span></code></a> definition does not
 matter. Even if we define the above as:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">si</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">struct</span> <span class="nl">dim_area</span>  <span class="p">:</span> <span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_area</span><span class="p">,</span> <span class="n">square_metre</span><span class="p">,</span>
-<span class="hll">                                     <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
-</span><span class="k">struct</span> <span class="nl">dim_speed</span> <span class="p">:</span> <span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span> <span class="n">metre_per_second</span><span class="p">,</span>
-<span class="hll">                                     <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">dim_area</span><span class="w">  </span><span class="o">:</span><span class="w"> </span><span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_area</span><span class="p">,</span><span class="w"> </span><span class="n">square_metre</span><span class="p">,</span>
+<span class="hll"><span class="w">                                     </span><span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{};</span>
+</span><span class="k">struct</span><span class="w"> </span><span class="nc">dim_speed</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">derived_dimension</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span><span class="w"> </span><span class="n">metre_per_second</span><span class="p">,</span>
+<span class="hll"><span class="w">                                     </span><span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">exponent</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="p">{};</span>
 </span>
 <span class="p">}</span>
 </pre></div>
@@ -203,17 +302,15 @@ child class inherited from the instantiation of this <a class="reference interna
 class template. This is called a
 <abbr title="Curiously Recurring Template Parameter">CRTP</abbr> Idiom and is used
 in many places in this library to provide
-<a class="reference internal" href="../design/downcasting.html#the-downcasting-facility"><span class="std std-ref">The Downcasting Facility</span></a>.
-Hopefully if <a class="reference internal" href="../references.html#p0847" id="id1"><span>[P0847]</span></a> will land in C++23 the additional CRTP-related
-template parameter will be removed from this definition.</p>
+<a class="reference internal" href="../design/downcasting.html#the-downcasting-facility"><span class="std std-ref">The Downcasting Facility</span></a>.</p>
 </div>
 </section>
 <section id="obtaining-a-unit-of-the-dimension">
-<h2>Obtaining a Unit of the Dimension<a class="headerlink" href="#obtaining-a-unit-of-the-dimension" title="Permalink to this headline"></a></h2>
+<h2>Obtaining a Unit of the Dimension<a class="headerlink" href="#obtaining-a-unit-of-the-dimension" title="Permalink to this heading">¶</a></h2>
 <p>In order to obtain the base/coherent unit of any dimension type a
 <a class="reference internal" href="../reference/core/metafunctions.html#_CPPv4I_9DimensionEN5units14dimension_unitE" title="units::dimension_unit"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">dimension_unit</span></code></a> helper was introduced:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">dimension_unit</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">);</span>
-<span class="k">static_assert</span><span class="p">(</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">dimension_unit</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_speed</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">dimension_unit</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">dimension_unit</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_speed</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
@@ -221,33 +318,50 @@ template parameter will be removed from this definition.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="magnitudes.html" class="btn btn-neutral float-right" title="Magnitudes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="quantity_kinds.html" class="btn btn-neutral float-left" title="Quantity Kinds" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="units.html" class="btn btn-neutral float-right" title="Units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

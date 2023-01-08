@@ -1,39 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Arithmetics &mdash; mp-units 0.8.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Quantity Constants" href="constants.html" />
     <link rel="prev" title="Units" href="units.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mp-units
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.8.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,17 +84,30 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../framework.html">Framework Basics</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_like.html">Quantity-like Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantities.html">Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_points.html">Quantity Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="magnitudes.html">Magnitudes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Arithmetics</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#quantities">Quantities</a></li>
@@ -62,6 +118,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="angular_units.html">Angular Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
 </ul>
 </li>
@@ -85,125 +142,167 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
+        
       <li>Arithmetics</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/framework/arithmetics.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="arithmetics">
-<h1>Arithmetics<a class="headerlink" href="#arithmetics" title="Permalink to this headline"></a></h1>
+<h1>Arithmetics<a class="headerlink" href="#arithmetics" title="Permalink to this heading">¶</a></h1>
 <section id="quantities">
-<h2>Quantities<a class="headerlink" href="#quantities" title="Permalink to this headline"></a></h2>
+<h2>Quantities<a class="headerlink" href="#quantities" title="Permalink to this heading">¶</a></h2>
 <p>Quantities of the same dimension can be easily added or subtracted with
 each other and the result will always be a quantity of the same dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">+</span> <span class="n">dist2</span><span class="p">;</span>
-</span><span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">-</span> <span class="n">dist2</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="hll"><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dist2</span><span class="p">;</span>
+</span><span class="hll"><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dist2</span><span class="p">;</span>
 </span></pre></div>
 </div>
 <p>Additionally, we can always multiply or divide a quantity by a
 <a class="reference internal" href="../glossary.html#term-scalable-number"><span class="xref std std-term">scalable number</span></a> and in such a case the quantity’s dimension will also
 not change:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>   <span class="c1">// 4 m</span>
-</span><span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">res1</span><span class="p">;</span>   <span class="c1">// 12 m</span>
-</span><span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="n">res2</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>   <span class="c1">// 6 m</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="hll"><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 4 m</span>
+</span><span class="hll"><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">res1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 12 m</span>
+</span><span class="hll"><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res2</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 6 m</span>
 </span></pre></div>
 </div>
 <p>However, if we try to multiply or divide quantities of the same or
 different dimensions, or we will divide a scalable number by a quantity, we most
 probably will always end up in a quantity of a yet another dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Time</span> <span class="k">auto</span> <span class="n">dur1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
-<span class="hll"><span class="n">Area</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">*</span> <span class="n">dist2</span><span class="p">;</span>     <span class="c1">// 6 m²</span>
-</span><span class="hll"><span class="n">Speed</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">/</span> <span class="n">dur1</span><span class="p">;</span>     <span class="c1">// 1 m/s</span>
-</span><span class="hll"><span class="n">Frequency</span> <span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">/</span> <span class="n">dur1</span><span class="p">;</span>    <span class="c1">// 5 Hz</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="n">Time</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dur1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="hll"><span class="n">Area</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">dist2</span><span class="p">;</span><span class="w">     </span><span class="c1">// 6 m²</span>
+</span><span class="hll"><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dur1</span><span class="p">;</span><span class="w">     </span><span class="c1">// 1 m/s</span>
+</span><span class="hll"><span class="n">Frequency</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dur1</span><span class="p">;</span><span class="w">    </span><span class="c1">// 5 Hz</span>
 </span></pre></div>
 </div>
 <p>However, please note that there is an exception from the above rule.
 In case we divide the same dimensions, or multiply by the inverted
 dimension, than we will end up with just a dimensionless quantity:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Time</span> <span class="k">auto</span> <span class="n">dur1</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
-<span class="n">Time</span> <span class="k">auto</span> <span class="n">dur2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
-<span class="n">Frequency</span> <span class="k">auto</span> <span class="n">fr1</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">Hz</span><span class="p">;</span>
-<span class="hll"><span class="n">Dimensionless</span> <span class="k">auto</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">dur1</span> <span class="o">/</span> <span class="n">dur2</span><span class="p">;</span>    <span class="c1">// quantity(5)</span>
-</span><span class="hll"><span class="n">Dimensionless</span> <span class="k">auto</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">dur1</span> <span class="o">*</span> <span class="n">fr1</span><span class="p">;</span>     <span class="c1">// quantity(50)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Time</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dur1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="n">Time</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dur2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="n">Frequency</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">fr1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Hz</span><span class="p">;</span>
+<span class="hll"><span class="n">Dimensionless</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dur1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dur2</span><span class="p">;</span><span class="w">    </span><span class="c1">// quantity(5)</span>
+</span><span class="hll"><span class="n">Dimensionless</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dur1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">fr1</span><span class="p">;</span><span class="w">     </span><span class="c1">// quantity(50)</span>
 </span></pre></div>
 </div>
 </section>
 <section id="quantity-kinds">
-<h2>Quantity Kinds<a class="headerlink" href="#quantity-kinds" title="Permalink to this headline"></a></h2>
+<h2>Quantity Kinds<a class="headerlink" href="#quantity-kinds" title="Permalink to this heading">¶</a></h2>
 <p>Quantity kinds behave the same as quantities for all operations,
 except that the quantity types in the operators’ declarations
 are quantity kind types instead.
 Additionally, for the dimensional analysis operators,
 you can use a quantity argument instead of a quantity kind.</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">height_kind</span> <span class="p">:</span> <span class="n">kind</span><span class="o">&lt;</span><span class="n">height_kind</span><span class="p">,</span> <span class="n">dim_length</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">rate_of_climb_kind</span> <span class="p">:</span> <span class="n">derived_kind</span><span class="o">&lt;</span><span class="n">rate_of_climb_kind</span><span class="p">,</span> <span class="n">dim_speed</span><span class="p">,</span> <span class="n">height_kind</span><span class="o">&gt;</span> <span class="p">{};</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">height_kind</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">kind</span><span class="o">&lt;</span><span class="n">height_kind</span><span class="p">,</span><span class="w"> </span><span class="n">dim_length</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">rate_of_climb_kind</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">derived_kind</span><span class="o">&lt;</span><span class="n">rate_of_climb_kind</span><span class="p">,</span><span class="w"> </span><span class="n">dim_speed</span><span class="p">,</span><span class="w"> </span><span class="n">height_kind</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">height</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">height_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">rate_of_climb</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">rate_of_climb_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Unit</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">height</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">height_kind</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Unit</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">rate_of_climb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">rate_of_climb_kind</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="n">height</span> <span class="n">h</span><span class="p">{</span><span class="mi">100</span> <span class="o">*</span> <span class="n">m</span><span class="p">};</span>
-<span class="hll"><span class="n">rate_of_climb</span> <span class="n">rate</span> <span class="o">=</span> <span class="n">h</span> <span class="o">/</span> <span class="p">(</span><span class="mi">25</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-</span><span class="hll">  <span class="c1">// quantity_kind&lt;rate_of_climb_kind, si::metre_per_second, int&gt;(4 * m / s)</span>
+<span class="n">height</span><span class="w"> </span><span class="n">h</span><span class="p">{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">};</span>
+<span class="hll"><span class="n">rate_of_climb</span><span class="w"> </span><span class="n">rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">25</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+</span><span class="hll"><span class="w">  </span><span class="c1">// quantity_kind&lt;rate_of_climb_kind, si::metre_per_second, int&gt;(4 * m / s)</span>
 </span></pre></div>
 </div>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span> <span class="nl">width_kind</span> <span class="p">:</span> <span class="n">kind</span><span class="o">&lt;</span><span class="n">width_kind</span><span class="p">,</span> <span class="n">dim_length</span><span class="o">&gt;</span> <span class="p">{};</span>
-<span class="k">struct</span> <span class="nl">horizontal_area_kind</span> <span class="p">:</span> <span class="n">derived_kind</span><span class="o">&lt;</span><span class="n">horizontal_area_kind</span><span class="p">,</span> <span class="n">dim_area</span><span class="p">,</span> <span class="n">width_kind</span><span class="o">&gt;</span> <span class="p">{};</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">width_kind</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">kind</span><span class="o">&lt;</span><span class="n">width_kind</span><span class="p">,</span><span class="w"> </span><span class="n">dim_length</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">horizontal_area_kind</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">derived_kind</span><span class="o">&lt;</span><span class="n">horizontal_area_kind</span><span class="p">,</span><span class="w"> </span><span class="n">dim_area</span><span class="p">,</span><span class="w"> </span><span class="n">width_kind</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{};</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">width</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">width_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">horizontal_area</span> <span class="o">=</span> <span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">horizontal_area_kind</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Unit</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">width</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">width_kind</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">Unit</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">horizontal_area</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_kind</span><span class="o">&lt;</span><span class="n">horizontal_area_kind</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="n">width</span> <span class="n">w</span><span class="p">{</span><span class="mi">5</span> <span class="o">*</span> <span class="n">m</span><span class="p">};</span>
-<span class="hll"><span class="n">horizontal_area</span> <span class="n">area1</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">w</span><span class="p">;</span>
-</span><span class="hll">  <span class="c1">// quantity_kind&lt;horizontal_area_kind, si::metre_per_second, int&gt;(25 * m * m)</span>
-</span><span class="hll"><span class="n">width</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">area1</span> <span class="o">/</span> <span class="n">w</span><span class="p">;</span> <span class="c1">// quantity_kind&lt;width_kind, si::metre, int&gt;(5 * m)</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">q1</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="n">w</span><span class="p">;</span> <span class="c1">// Dimensionless quantity kinds related to width</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">q2</span> <span class="o">=</span> <span class="n">w</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span> <span class="c1">// with .common() equal to quantity{1}</span>
+<span class="n">width</span><span class="w"> </span><span class="n">w</span><span class="p">{</span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">};</span>
+<span class="hll"><span class="n">horizontal_area</span><span class="w"> </span><span class="n">area1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">w</span><span class="p">;</span>
+</span><span class="hll"><span class="w">  </span><span class="c1">// quantity_kind&lt;horizontal_area_kind, si::metre_per_second, int&gt;(25 * m * m)</span>
+</span><span class="hll"><span class="n">width</span><span class="w"> </span><span class="n">w2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">area1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">w</span><span class="p">;</span><span class="w"> </span><span class="c1">// quantity_kind&lt;width_kind, si::metre, int&gt;(5 * m)</span>
+</span><span class="hll"><span class="k">auto</span><span class="w"> </span><span class="n">q1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">w</span><span class="p">;</span><span class="w"> </span><span class="c1">// Dimensionless quantity kinds related to width</span>
+</span><span class="hll"><span class="k">auto</span><span class="w"> </span><span class="n">q2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w"> </span><span class="c1">// with .common() equal to quantity{1}</span>
 </span></pre></div>
 </div>
 </section>
 <section id="quantity-points">
-<h2>Quantity Points<a class="headerlink" href="#quantity-points" title="Permalink to this headline"></a></h2>
+<h2>Quantity Points<a class="headerlink" href="#quantity-points" title="Permalink to this heading">¶</a></h2>
 <p>Quantity points have a more restricted set of operations.
 Quantity can be added to or subtracted
 from a quantity point of the same origin.
 The result will always be a quantity point of the same origin:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">QuantityPoint</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">+</span> <span class="n">dist2</span><span class="p">;</span>
-</span><span class="hll"><span class="n">QuantityPoint</span> <span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">+</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>
-</span><span class="hll"><span class="n">QuantityPoint</span> <span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">-</span> <span class="n">dist2</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="hll"><span class="n">QuantityPoint</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dist2</span><span class="p">;</span>
+</span><span class="hll"><span class="n">QuantityPoint</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>
+</span><span class="hll"><span class="n">QuantityPoint</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dist2</span><span class="p">;</span>
 </span></pre></div>
 </div>
 <p>We can also subtract two quantity points.
 The result is a relative quantity of the same dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="n">Length</span> <span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">-</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="hll"><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">res1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>
 </span></pre></div>
 </div>
 <div class="admonition note">
@@ -215,19 +314,19 @@ The result is a relative quantity of the same dimension:</p>
 <li><p>multiply nor divide quantity points with anything else, and</p></li>
 <li><p>mix quantity points with different origins:</p></li>
 </ul>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span> <span class="k">auto</span> <span class="n">dist1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">Length</span> <span class="k">auto</span> <span class="n">dist2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="hll"><span class="k">auto</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">+</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>  <span class="c1">// ERROR</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">res2</span> <span class="o">=</span> <span class="n">dist1</span> <span class="o">-</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span>                  <span class="c1">// ERROR</span>
-</span><span class="hll"><span class="k">auto</span> <span class="n">res3</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>                <span class="c1">// ERROR</span>
-</span><span class="k">auto</span> <span class="n">res4</span> <span class="o">=</span> <span class="n">quantity_point</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">utc_second</span><span class="p">{</span><span class="mi">1</span><span class="n">s</span><span class="p">}}</span> <span class="o">+</span>
-            <span class="n">quantity_point</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">sys_second</span><span class="p">{</span><span class="mi">1</span><span class="n">s</span><span class="p">}};</span>    <span class="c1">// ERROR</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">dist2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="hll"><span class="k">auto</span><span class="w"> </span><span class="n">res1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span><span class="w">  </span><span class="c1">// ERROR</span>
+</span><span class="hll"><span class="k">auto</span><span class="w"> </span><span class="n">res2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dist1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist2</span><span class="p">};</span><span class="w">                  </span><span class="c1">// ERROR</span>
+</span><span class="hll"><span class="k">auto</span><span class="w"> </span><span class="n">res3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">dist1</span><span class="p">}</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">);</span><span class="w">                </span><span class="c1">// ERROR</span>
+</span><span class="k">auto</span><span class="w"> </span><span class="n">res4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">utc_second</span><span class="p">{</span><span class="mi">1</span><span class="n">s</span><span class="p">}}</span><span class="w"> </span><span class="o">+</span>
+<span class="w">            </span><span class="n">quantity_point</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">sys_second</span><span class="p">{</span><span class="mi">1</span><span class="n">s</span><span class="p">}};</span><span class="w">    </span><span class="c1">// ERROR</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="quantity-point-kinds">
-<h2>Quantity Point Kinds<a class="headerlink" href="#quantity-point-kinds" title="Permalink to this headline"></a></h2>
+<h2>Quantity Point Kinds<a class="headerlink" href="#quantity-point-kinds" title="Permalink to this heading">¶</a></h2>
 <p>The same restrictions of a quantity point with respect to its quantity
 apply to a quantity point kind with respect to its quantity kind.</p>
 </section>
@@ -235,33 +334,50 @@ apply to a quantity point kind with respect to its quantity kind.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="units.html" class="btn btn-neutral float-left" title="Units" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="constants.html" class="btn btn-neutral float-right" title="Quantity Constants" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="units.html" class="btn btn-neutral float-left" title="Units" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -1,39 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Installation And Usage &mdash; mp-units 0.8.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="FAQ" href="faq.html" />
     <link rel="prev" title="conversion_factor" href="examples/custom_utilities/conversion_factor.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> mp-units
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.8.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,7 +84,18 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
@@ -57,13 +111,13 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#build-options">Build Options</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment Variables</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#conan-run-tests">CONAN_RUN_TESTS</a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="#conan-options">Conan Options</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#downcast-mode">downcast_mode</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#build-docs">build_docs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#conan-configuration-properties">Conan Configuration Properties</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#build-all">build_all</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#skip-docs">skip_docs</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#cmake-options">CMake Options</a><ul>
@@ -76,6 +130,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#cmake-with-presets-support">CMake with Presets Support</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-and-reuse">Installation and Reuse</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#copy">Copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#copy-cmake">Copy + CMake</a></li>
@@ -84,7 +139,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#install">Install</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#contributing-or-just-building-all-the-tests-examples-and-documentation">Contributing (or just building all the tests, examples, and documentation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-or-just-building-all-the-tests-and-examples">Contributing (or just building all the tests and examples)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-documentation">Building documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#packaging">Packaging</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#uploading-mp-units-package-to-the-conan-server">Uploading <strong>mp-units</strong> Package to the Conan Server</a></li>
 </ul>
@@ -105,32 +161,73 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">mp-units</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
       <li>Installation And Usage</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="installation-and-usage">
-<h1>Installation And Usage<a class="headerlink" href="#installation-and-usage" title="Permalink to this headline"></a></h1>
+<h1>Installation And Usage<a class="headerlink" href="#installation-and-usage" title="Permalink to this heading">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This library targets C++23/26 and extensively uses C++20 features. This is why it requires the latest C++
@@ -139,10 +236,11 @@ compilers. The following compilers (or newer) are supported:</p>
 <li><p>gcc-10</p></li>
 <li><p>clang-12</p></li>
 <li><p>Visual Studio 16.9</p></li>
+<li><p>Apple clang 13</p></li>
 </ul>
 </div>
 <section id="repository-structure-and-dependencies">
-<h2>Repository Structure and Dependencies<a class="headerlink" href="#repository-structure-and-dependencies" title="Permalink to this headline"></a></h2>
+<h2>Repository Structure and Dependencies<a class="headerlink" href="#repository-structure-and-dependencies" title="Permalink to this heading">¶</a></h2>
 <p>This repository contains three independent CMake-based projects:</p>
 <ul class="simple">
 <li><p><em>./src</em></p>
@@ -151,8 +249,8 @@ compilers. The following compilers (or newer) are supported:</p>
 <li><p>when this library will become part of the C++ standard it will have no external dependencies
 but until then it depends on:</p>
 <ul>
-<li><p><a class="reference external" href="https://github.com/fmtlib/fmt">{fmt}</a> to provide text formatting of quantities.</p></li>
 <li><p><a class="reference external" href="https://github.com/gsl-lite/gsl-lite">gsl-lite</a> to verify runtime contracts with the <code class="docutils literal notranslate"><span class="pre">gsl_Expects</span></code> macro.</p></li>
+<li><p>[for compilers other than VS2022] <a class="reference external" href="https://github.com/fmtlib/fmt">{fmt}</a> to provide text formatting of quantities.</p></li>
 <li><p>[only for clang &lt; 14 with libc++] <a class="reference external" href="https://github.com/ericniebler/range-v3">range-v3</a> to provide needed C++20 concepts and utilities.</p></li>
 </ul>
 </li>
@@ -168,9 +266,14 @@ but until then it depends on:</p>
 <li><p><a class="reference external" href="https://github.com/BobSteagall/wg21/tree/master/include">linear algebra</a>
 library based on proposal <a class="reference external" href="https://wg21.link/P1385">P1385</a> used in some examples
 and tests.</p></li>
+</ul>
+</li>
+<li><p>in case you also want to build the project’s documentation you will need:</p>
+<ul>
 <li><p><a class="reference external" href="http://www.doxygen.nl">Doxygen</a> to extract C++ entities information from the source
 code.</p></li>
 <li><p><a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a> to build the documentation.</p></li>
+<li><p><a class="reference external" href="https://sphinx-rtd-theme.readthedocs.io/">Sphinx ReadTheDocs Theme</a></p></li>
 <li><p><a class="reference external" href="https://recommonmark.readthedocs.io">Sphinx recommonmark</a>.</p></li>
 <li><p><a class="reference external" href="https://breathe.readthedocs.io/">Breathe</a> as a bridge between the Sphinx and Doxygen
 documentation systems.</p></li>
@@ -186,7 +289,7 @@ documentation systems.</p></li>
 </ul>
 </section>
 <section id="obtaining-dependencies">
-<h2>Obtaining Dependencies<a class="headerlink" href="#obtaining-dependencies" title="Permalink to this headline"></a></h2>
+<h2>Obtaining Dependencies<a class="headerlink" href="#obtaining-dependencies" title="Permalink to this heading">¶</a></h2>
 <p>This library assumes that most of the dependencies will be provided by the
 <a class="reference external" href="https://conan.io/">Conan Package Manager</a>. In case you would like to obtain required
 dependencies by other means some modifications to library’s CMake files might be needed.
@@ -197,61 +300,60 @@ The rest of the dependencies responsible for documentation generation are provid
 <p>A full list of dependencies can be found in <a class="reference internal" href="#repository-structure-and-dependencies">Repository Structure and Dependencies</a>.</p>
 </div>
 <section id="conan-quick-intro">
-<h3>Conan Quick Intro<a class="headerlink" href="#conan-quick-intro" title="Permalink to this headline"></a></h3>
+<h3>Conan Quick Intro<a class="headerlink" href="#conan-quick-intro" title="Permalink to this heading">¶</a></h3>
 <p>In case you are not familiar with Conan, to install it (or upgrade) just do:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip3 install -U conan
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>conan
 </pre></div>
 </div>
 <p>After that you might need to add a custom profile file for your development environment
 in <em>~/.conan/profiles</em> directory. An example profile can look as follows:</p>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[settings]</span><span class="w"></span>
-<span class="na">os</span><span class="o">=</span><span class="s">Linux</span><span class="w"></span>
-<span class="na">os_build</span><span class="o">=</span><span class="s">Linux</span><span class="w"></span>
-<span class="na">arch</span><span class="o">=</span><span class="s">x86_64</span><span class="w"></span>
-<span class="na">arch_build</span><span class="o">=</span><span class="s">x86_64</span><span class="w"></span>
-<span class="na">compiler</span><span class="o">=</span><span class="s">gcc</span><span class="w"></span>
-<span class="na">compiler.version</span><span class="o">=</span><span class="s">10</span><span class="w"></span>
-<span class="hll"><span class="na">compiler.cppstd</span><span class="o">=</span><span class="s">20</span><span class="w"></span>
-</span><span class="na">compiler.libcxx</span><span class="o">=</span><span class="s">libstdc++11</span><span class="w"></span>
-<span class="na">build_type</span><span class="o">=</span><span class="s">Release</span><span class="w"></span>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[settings]</span>
+<span class="na">os</span><span class="o">=</span><span class="s">Linux</span>
+<span class="na">os_build</span><span class="o">=</span><span class="s">Linux</span>
+<span class="na">arch</span><span class="o">=</span><span class="s">x86_64</span>
+<span class="na">arch_build</span><span class="o">=</span><span class="s">x86_64</span>
+<span class="na">compiler</span><span class="o">=</span><span class="s">gcc</span>
+<span class="na">compiler.version</span><span class="o">=</span><span class="s">12</span>
+<span class="hll"><span class="na">compiler.cppstd</span><span class="o">=</span><span class="s">20</span>
+</span><span class="na">compiler.libcxx</span><span class="o">=</span><span class="s">libstdc++11</span>
+<span class="na">build_type</span><span class="o">=</span><span class="s">Release</span>
 
-<span class="k">[options]</span><span class="w"></span>
-<span class="k">[build_requires]</span><span class="w"></span>
-
-<span class="k">[conf]</span><span class="w"></span>
-<span class="na">tools.cmake.cmaketoolchain:generator</span><span class="o">=</span><span class="s">Ninja</span><span class="w"></span>
-
-<span class="k">[env]</span><span class="w"></span>
-<span class="na">CC</span><span class="o">=</span><span class="s">/usr/bin/gcc-10</span><span class="w"></span>
-<span class="na">CXX</span><span class="o">=</span><span class="s">/usr/bin/g++-10</span><span class="w"></span>
+<span class="k">[env]</span>
+<span class="na">CC</span><span class="o">=</span><span class="s">/usr/bin/gcc-12</span>
+<span class="na">CXX</span><span class="o">=</span><span class="s">/usr/bin/g++-12</span>
 </pre></div>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Please note that <strong>mp-units</strong> library requires C++20 to be set either in a Conan profile or forced
 via Conan command line. If you do the former, you will not need to provide <code class="docutils literal notranslate"><span class="pre">-s</span> <span class="pre">compiler.cppstd=20</span></code>
-every time your run a Conan command line (as it is suggested below).</p>
+every time your run a Conan command line (as provided in the command line instructions below).</p>
+</div>
+<p>Additionally, it is recommended to set Ninja as a CMake generator for Conan. To do so you should create
+a <em>~/.conan/global.conf</em> file that will set <code class="docutils literal notranslate"><span class="pre">tools.cmake.cmaketoolchain:generator</span></code> to one of Ninja
+generators. For example:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tools.cmake.cmaketoolchain:generator=&quot;Ninja Multi-Config&quot;
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><em>~/.conan/global.conf</em> file may also set <code class="docutils literal notranslate"><span class="pre">tools.cmake.cmake_layout:build_folder_vars`</span></code> which
+<a class="reference external" href="https://docs.conan.io/en/latest/reference/conanfile/tools/cmake/cmake_layout.html#multi-setting-option-cmake-layout">makes working with several compilers or build configurations easier</a>.
+For example the below line will force Conan to generate separate CMake presets and folders for each compiler:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tools.cmake.cmake_layout:build_folder_vars=[&quot;settings.compiler&quot;, &quot;settings.compiler.version&quot;]
+</pre></div>
+</div>
+<p>In such a case you will need to use a configuration specific preset name in the Conan instructions provided below
+rather then just <code class="docutils literal notranslate"><span class="pre">default</span></code> and <code class="docutils literal notranslate"><span class="pre">release</span></code> (i.e. <code class="docutils literal notranslate"><span class="pre">gcc-11</span></code> and <code class="docutils literal notranslate"><span class="pre">gcc-11-release</span></code>)</p>
 </div>
 </section>
 </section>
 <section id="build-options">
-<h2>Build Options<a class="headerlink" href="#build-options" title="Permalink to this headline"></a></h2>
-<section id="environment-variables">
-<h3>Environment Variables<a class="headerlink" href="#environment-variables" title="Permalink to this headline"></a></h3>
-<section id="conan-run-tests">
-<h4>CONAN_RUN_TESTS<a class="headerlink" href="#conan-run-tests" title="Permalink to this headline"></a></h4>
-<p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-<p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-<p>Enables compilation of all the source code (tests and examples) and building the documentation.
-To support this it requires some additional Conan build dependencies described in
-<a class="reference internal" href="#repository-structure-and-dependencies">Repository Structure and Dependencies</a>.
-It also runs unit tests during Conan build.</p>
-</section>
-</section>
+<h2>Build Options<a class="headerlink" href="#build-options" title="Permalink to this heading">¶</a></h2>
 <section id="conan-options">
-<h3>Conan Options<a class="headerlink" href="#conan-options" title="Permalink to this headline"></a></h3>
+<h3>Conan Options<a class="headerlink" href="#conan-options" title="Permalink to this heading">¶</a></h3>
 <section id="downcast-mode">
-<h4>downcast_mode<a class="headerlink" href="#downcast-mode" title="Permalink to this headline"></a></h4>
+<h4>downcast_mode<a class="headerlink" href="#downcast-mode" title="Permalink to this heading">¶</a></h4>
 <p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">off</span></code>/<code class="docutils literal notranslate"><span class="pre">on</span></code>/<code class="docutils literal notranslate"><span class="pre">auto</span></code></p>
 <p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">on</span></code></p>
 <p>Specifies how <a class="reference internal" href="design/downcasting.html#the-downcasting-facility"><span class="std std-ref">The Downcasting Facility</span></a> works:</p>
@@ -261,57 +363,87 @@ It also runs unit tests during Conan build.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">automatic</span></code> - downcasting automatically enabled if no collisions are present</p></li>
 </ul>
 </section>
-<section id="build-docs">
-<h4>build_docs<a class="headerlink" href="#build-docs" title="Permalink to this headline"></a></h4>
+</section>
+<section id="conan-configuration-properties">
+<h3>Conan Configuration Properties<a class="headerlink" href="#conan-configuration-properties" title="Permalink to this heading">¶</a></h3>
+<section id="build-all">
+<h4>build_all<a class="headerlink" href="#build-all" title="Permalink to this heading">¶</a></h4>
 <p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code></p>
-<p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
-<p>If enabled, Conan installs the documentation generation dependencies (i.e. doxygen).
-Additionally, enables project documentation generation when the project is being built by Conan.</p>
+<p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+<p>Enables compilation of all the source code (tests and examples) and generating the documentation.
+To support this it requires some additional Conan build dependencies described in
+<a class="reference internal" href="#repository-structure-and-dependencies">Repository Structure and Dependencies</a>.
+It also runs unit tests during Conan build (unless <code class="docutils literal notranslate"><span class="pre">tools.build:skip_test</span></code> configuration property is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>)</p>
+</section>
+<section id="skip-docs">
+<h4>skip_docs<a class="headerlink" href="#skip-docs" title="Permalink to this heading">¶</a></h4>
+<p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+<p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
+<p>If <a class="reference internal" href="#build-all">build_all</a> is enabled, among others, Conan installs the documentation generation dependencies (i.e. doxygen) and
+turns on the project documentation generation. Such behavior can be disabled with this option.</p>
 </section>
 </section>
 <section id="cmake-options">
-<h3>CMake Options<a class="headerlink" href="#cmake-options" title="Permalink to this headline"></a></h3>
+<h3>CMake Options<a class="headerlink" href="#cmake-options" title="Permalink to this heading">¶</a></h3>
 <section id="units-as-system-headers">
-<h4>UNITS_AS_SYSTEM_HEADERS<a class="headerlink" href="#units-as-system-headers" title="Permalink to this headline"></a></h4>
+<h4>UNITS_AS_SYSTEM_HEADERS<a class="headerlink" href="#units-as-system-headers" title="Permalink to this heading">¶</a></h4>
 <p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">ON</span></code>/<code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
 <p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
 <p>Exports library as system headers.</p>
 </section>
 <section id="units-build-docs">
-<h4>UNITS_BUILD_DOCS<a class="headerlink" href="#units-build-docs" title="Permalink to this headline"></a></h4>
+<h4>UNITS_BUILD_DOCS<a class="headerlink" href="#units-build-docs" title="Permalink to this heading">¶</a></h4>
 <p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">ON</span></code>/<code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
 <p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">ON</span></code></p>
 <p>Enables project documentation generation.</p>
 </section>
 <section id="units-downcast-mode">
-<h4>UNITS_DOWNCAST_MODE<a class="headerlink" href="#units-downcast-mode" title="Permalink to this headline"></a></h4>
+<h4>UNITS_DOWNCAST_MODE<a class="headerlink" href="#units-downcast-mode" title="Permalink to this heading">¶</a></h4>
 <p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">OFF</span></code>/<code class="docutils literal notranslate"><span class="pre">ON</span></code>/<code class="docutils literal notranslate"><span class="pre">AUTO</span></code></p>
 <p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">ON</span></code></p>
 <p>Equivalent to <a class="reference internal" href="#downcast-mode">downcast_mode</a>.</p>
 </section>
 <section id="units-iwyu">
-<h4>UNITS_IWYU<a class="headerlink" href="#units-iwyu" title="Permalink to this headline"></a></h4>
+<h4>UNITS_IWYU<a class="headerlink" href="#units-iwyu" title="Permalink to this heading">¶</a></h4>
 <p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">ON</span></code>/<code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
 <p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
 <p>Enables include-what-you-use when compiling with a clang compiler.
 Additionally turns on <a class="reference internal" href="#units-as-system-headers">UNITS_AS_SYSTEM_HEADERS</a>.</p>
 </section>
 <section id="units-use-libfmt">
-<h4>UNITS_USE_LIBFMT<a class="headerlink" href="#units-use-libfmt" title="Permalink to this headline"></a></h4>
+<h4>UNITS_USE_LIBFMT<a class="headerlink" href="#units-use-libfmt" title="Permalink to this heading">¶</a></h4>
 <p><strong>Values</strong>: <code class="docutils literal notranslate"><span class="pre">ON</span></code>/<code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
 <p><strong>Defaulted to</strong>: <code class="docutils literal notranslate"><span class="pre">ON</span></code></p>
 <p>Enables usage of <a class="reference external" href="https://github.com/fmtlib/fmt">{fmt}</a> library instead of the C++20 Standard Library feature.</p>
 </section>
 </section>
 </section>
+<section id="cmake-with-presets-support">
+<h2>CMake with Presets Support<a class="headerlink" href="#cmake-with-presets-support" title="Permalink to this heading">¶</a></h2>
+<p>It is recommended to use at least CMake 3.23 to build this project as this version introduced a support
+for CMake Presets schema version 4 used now by Conan to generate presets files. All build instructions
+below assume that you have such a support. If not, your CMake invocations have to be replaced to something
+like:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>..<span class="w"> </span>-G<span class="w"> </span><span class="s2">&quot;Ninja Multi-Config&quot;</span><span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>&lt;path_to_generators_dir&gt;/conan_toolchain.cmake
+cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--config<span class="w"> </span>Release
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In case you can’t use CMake 3.23 but you have access to CMake 3.20 or later, you can append
+<code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">tools.cmake.cmaketoolchain.presets:max_schema_version=2</span></code> to the <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">install</span></code> command
+which will force Conan to use an older version of CMake Presets schema.</p>
+</div>
+</section>
 <section id="installation-and-reuse">
-<h2>Installation and Reuse<a class="headerlink" href="#installation-and-reuse" title="Permalink to this headline"></a></h2>
+<h2>Installation and Reuse<a class="headerlink" href="#installation-and-reuse" title="Permalink to this heading">¶</a></h2>
 <p>There are many different ways of installing/reusing <strong>mp-units</strong> in your project. Below we mention
 only a few of many options possible.</p>
 <section id="copy">
-<h3>Copy<a class="headerlink" href="#copy" title="Permalink to this headline"></a></h3>
-<p>As <strong>mp-units</strong> is a C++ header-only library you can simply copy <em>src/include</em> directory to
-your source tree and use it as regular header files.</p>
+<h3>Copy<a class="headerlink" href="#copy" title="Permalink to this heading">¶</a></h3>
+<p>As <strong>mp-units</strong> is a C++ header-only library you can simply copy all needed <code class="docutils literal notranslate"><span class="pre">src/*/include</span></code> subdirectories
+to your source tree.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>In such a case you are on your own to make sure all the dependencies are installed and their header
@@ -320,7 +452,7 @@ to make the code compile without issues.</p>
 </div>
 </section>
 <section id="copy-cmake">
-<h3>Copy + CMake<a class="headerlink" href="#copy-cmake" title="Permalink to this headline"></a></h3>
+<h3>Copy + CMake<a class="headerlink" href="#copy-cmake" title="Permalink to this heading">¶</a></h3>
 <p>In case you copy the whole <strong>mp-units</strong> repository to your project’s file tree you can reuse CMake targets
 defined by the library. To do so you should use <em>CMakeLists.txt</em> file from the <em>./src</em> directory:</p>
 <div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">&lt;path_to_units_folder&gt;/src</span><span class="p">)</span>
@@ -335,7 +467,7 @@ configuration files can be located during the build.</p>
 </div>
 </section>
 <section id="conan-cmake-release">
-<h3>Conan + CMake (release)<a class="headerlink" href="#conan-cmake-release" title="Permalink to this headline"></a></h3>
+<h3>Conan + CMake (release)<a class="headerlink" href="#conan-cmake-release" title="Permalink to this heading">¶</a></h3>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>If you are new to Conan package manager it is highly recommended to read <a class="reference internal" href="#obtaining-dependencies">Obtaining Dependencies</a>
@@ -352,13 +484,13 @@ For example the simplest file may look as follows:</p></li>
 </ol>
 <blockquote>
 <div><div class="literal-block-wrapper docutils container" id="id2">
-<div class="code-block-caption"><span class="caption-text">conanfile.txt</span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span><span class="w"></span>
-<span class="na">mp-units/0.7.0</span><span class="w"></span>
+<div class="code-block-caption"><span class="caption-text">conanfile.txt</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span>
+<span class="na">mp-units/0.7.0</span>
 
-<span class="k">[generators]</span><span class="w"></span>
-<span class="na">CMakeToolchain</span><span class="w"></span>
-<span class="na">CMakeDeps</span><span class="w"></span>
+<span class="k">[generators]</span>
+<span class="na">CMakeToolchain</span>
+<span class="na">CMakeDeps</span>
 </pre></div>
 </div>
 </div>
@@ -392,16 +524,16 @@ for each CMake target directly linking with <code class="docutils literal notran
 <li><p>Download, build, and install Conan dependencies before running CMake configuration step:</p></li>
 </ol>
 <blockquote>
-<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir my_project/build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> my_project/build
-conan install .. -pr &lt;your_conan_profile&gt; -s compiler.cppstd<span class="o">=</span><span class="m">20</span> -b<span class="o">=</span>missing
-cmake .. -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>conan_toolchain.cmake
-cmake --build .
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>my_project/build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>my_project/build
+conan<span class="w"> </span>install<span class="w"> </span>..<span class="w"> </span>-pr<span class="w"> </span>&lt;your_conan_profile&gt;<span class="w"> </span>-s<span class="w"> </span>compiler.cppstd<span class="o">=</span><span class="m">20</span><span class="w"> </span>-b<span class="o">=</span>missing
+cmake<span class="w"> </span>..<span class="w"> </span>-G<span class="w"> </span><span class="s2">&quot;Ninja Multi-Config&quot;</span><span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>conan_toolchain.cmake
+cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </span>--config<span class="w"> </span>Release
 </pre></div>
 </div>
 </div></blockquote>
 </section>
 <section id="conan-cmake-live-at-head">
-<h3>Conan + CMake (Live At Head)<a class="headerlink" href="#conan-cmake-live-at-head" title="Permalink to this headline"></a></h3>
+<h3>Conan + CMake (Live At Head)<a class="headerlink" href="#conan-cmake-live-at-head" title="Permalink to this heading">¶</a></h3>
 <p>This chapter describes the procedure to Live At Head which means to use the latest version
 of <strong>mp-units</strong> all the time.</p>
 <div class="admonition note">
@@ -418,7 +550,7 @@ differences:</p>
 <li><p>Before starting the previous procedure add <strong>mp-units</strong> remote to your Conan configuration:</p></li>
 </ol>
 <blockquote>
-<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan remote add conan-mpusz https://mpusz.jfrog.io/artifactory/api/conan/conan-oss
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>conan-mpusz<span class="w"> </span>https://mpusz.jfrog.io/artifactory/api/conan/conan-oss
 </pre></div>
 </div>
 </div></blockquote>
@@ -427,13 +559,16 @@ differences:</p>
 </ol>
 <blockquote>
 <div><div class="literal-block-wrapper docutils container" id="id3">
-<div class="code-block-caption"><span class="caption-text">conanfile.txt</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span><span class="w"></span>
-<span class="na">mp-units/0.8.0@mpusz/testing</span><span class="w"></span>
+<div class="code-block-caption"><span class="caption-text">conanfile.txt</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[requires]</span>
+<span class="na">mp-units/0.8.0@mpusz/testing</span>
 
-<span class="k">[generators]</span><span class="w"></span>
-<span class="na">CMakeToolchain</span><span class="w"></span>
-<span class="na">CMakeDeps</span><span class="w"></span>
+<span class="k">[layout]</span>
+<span class="na">cmake_layout</span>
+
+<span class="k">[generators]</span>
+<span class="na">CMakeToolchain</span>
+<span class="na">CMakeDeps</span>
 </pre></div>
 </div>
 </div>
@@ -448,66 +583,79 @@ differences:</p>
 <li><p>Force Conan to check for updated recipes <code class="docutils literal notranslate"><span class="pre">-u</span></code> and to build outdated packages <code class="docutils literal notranslate"><span class="pre">-b</span> <span class="pre">outdated</span></code>:</p></li>
 </ol>
 <blockquote>
-<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir my_project/build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> my_project/build
-conan install .. -pr &lt;your_conan_profile&gt; -s compiler.cppstd<span class="o">=</span><span class="m">20</span> -b<span class="o">=</span>outdated -u
-cmake .. -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>conan_toolchain.cmake
-cmake --build .
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>-pr<span class="w"> </span>&lt;your_conan_profile&gt;<span class="w"> </span>-s<span class="w"> </span>compiler.cppstd<span class="o">=</span><span class="m">20</span><span class="w"> </span>-b<span class="o">=</span>outdated<span class="w"> </span>-u
+cmake<span class="w"> </span>--preset<span class="w"> </span>default
+cmake<span class="w"> </span>--build<span class="w"> </span>--preset<span class="w"> </span>release
 </pre></div>
 </div>
 </div></blockquote>
 </section>
 <section id="install">
-<h3>Install<a class="headerlink" href="#install" title="Permalink to this headline"></a></h3>
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this heading">¶</a></h3>
 <p>In case you don’t want to use Conan in your project and just want to install the <strong>mp-units</strong>
 library on your file system and use it via <code class="docutils literal notranslate"><span class="pre">find_package(mp-units)</span></code> from another repository
 to find it, it is enough to perform the following steps:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir units/build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> units/build
-conan install .. -pr &lt;your_conan_profile&gt; -s compiler.cppstd<span class="o">=</span><span class="m">20</span> -b<span class="o">=</span>missing
-cmake ../src -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>conan_toolchain.cmake
-cmake --install . --prefix &lt;install_dir&gt;
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>-pr<span class="w"> </span>&lt;your_conan_profile&gt;<span class="w"> </span>-s<span class="w"> </span>compiler.cppstd<span class="o">=</span><span class="m">20</span><span class="w"> </span>-b<span class="o">=</span>missing
+mv<span class="w"> </span>CMakeUserPresets.json<span class="w"> </span>src
+<span class="nb">cd</span><span class="w"> </span>src
+cmake<span class="w"> </span>--preset<span class="w"> </span>default<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>&lt;your_installation_path&gt;
+cmake<span class="w"> </span>--build<span class="w"> </span>--preset<span class="w"> </span>release<span class="w"> </span>--target<span class="w"> </span>install
 </pre></div>
 </div>
 </section>
 </section>
-<section id="contributing-or-just-building-all-the-tests-examples-and-documentation">
-<h2>Contributing (or just building all the tests, examples, and documentation)<a class="headerlink" href="#contributing-or-just-building-all-the-tests-examples-and-documentation" title="Permalink to this headline"></a></h2>
-<p>In case you would like to build all the source code (with unit tests and examples) and documentation
-in <strong>mp-units</strong> repository, you should:</p>
+<section id="contributing-or-just-building-all-the-tests-and-examples">
+<h2>Contributing (or just building all the tests and examples)<a class="headerlink" href="#contributing-or-just-building-all-the-tests-and-examples" title="Permalink to this heading">¶</a></h2>
+<p>In case you would like to build all the source code (with unit tests and examples) in <strong>mp-units</strong> repository,
+you should:</p>
 <ol class="arabic simple">
-<li><p>Add remotes of additional Conan dependencies.</p></li>
 <li><p>Use the <em>CMakeLists.txt</em> from the top-level directory.</p></li>
-<li><p>Obtain Python dependencies.</p></li>
-<li><p>Run Conan with <a class="reference internal" href="#conan-run-tests">CONAN_RUN_TESTS</a> = <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p>Run Conan with <a class="reference internal" href="#build-all">build_all</a> = <code class="docutils literal notranslate"><span class="pre">True</span></code>
+(use <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">build_docs=False</span></code> if you want to skip the documentation generation).</p></li>
 </ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/mpusz/units.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> units
-pip3 install -r docs/requirements.txt
-mkdir units/build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> units/build
-conan install .. -pr &lt;your_conan_profile&gt; -s compiler.cppstd<span class="o">=</span><span class="m">20</span> -e mp-units:CONAN_RUN_TESTS<span class="o">=</span>True -b outdated -u
-conan build ..
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mpusz/units.git<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>units
+conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>-pr<span class="w"> </span>&lt;your_conan_profile&gt;<span class="w"> </span>-s<span class="w"> </span>compiler.cppstd<span class="o">=</span><span class="m">20</span><span class="w"> </span>-c<span class="w"> </span>user.build:all<span class="o">=</span>True<span class="w"> </span>-c<span class="w"> </span>user.build:skip_docs<span class="o">=</span>True<span class="w"> </span>-b<span class="w"> </span>outdated<span class="w"> </span>-u
+conan<span class="w"> </span>build<span class="w"> </span>.
 </pre></div>
 </div>
 <p>The above will download and install all of the dependencies needed for the development of the library,
-build all of the source code and documentation, and run unit tests.</p>
-<p>If you prefer to build the project via CMake rather then Conan, then you should replace the last <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">build</span> <span class="pre">..</span></code>
-step with the CMake build:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
-cmake .. -DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>conan_toolchain.cmake
-cmake --build .
-ctest
+build all of the source code and run unit tests.</p>
+<p>If you prefer to build the project via CMake rather then Conan, then you should replace the last <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">build</span> <span class="pre">.</span></code>
+step with the explicit CMake build:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>--preset<span class="w"> </span>default
+cmake<span class="w"> </span>--build<span class="w"> </span>--preset<span class="w"> </span>release
+cmake<span class="w"> </span>--build<span class="w"> </span>--preset<span class="w"> </span>release<span class="w"> </span>--target<span class="w"> </span><span class="nb">test</span>
 </pre></div>
 </div>
 </section>
+<section id="building-documentation">
+<h2>Building documentation<a class="headerlink" href="#building-documentation" title="Permalink to this heading">¶</a></h2>
+<p>In case you would like to build the project’s documentation, you should:</p>
+<ol class="arabic simple">
+<li><p>Use the <em>CMakeLists.txt</em> from the top-level directory.</p></li>
+<li><p>Obtain Python dependencies.</p></li>
+<li><p>Run Conan with <a class="reference internal" href="#build-all">build_all</a> = <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/mpusz/units.git<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>units
+pip3<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs/requirements.txt
+conan<span class="w"> </span>install<span class="w"> </span>.<span class="w"> </span>-pr<span class="w"> </span>&lt;your_conan_profile&gt;<span class="w"> </span>-s<span class="w"> </span>compiler.cppstd<span class="o">=</span><span class="m">20</span><span class="w"> </span>-c<span class="w"> </span>user.build:all<span class="o">=</span>True<span class="w"> </span>-b<span class="w"> </span>missing
+cmake<span class="w"> </span>--preset<span class="w"> </span>default
+cmake<span class="w"> </span>--build<span class="w"> </span>--preset<span class="w"> </span>release<span class="w"> </span>--target<span class="w"> </span>documentation
+</pre></div>
+</div>
+<p>The above will download and install all of the dependencies needed and build the documentation.</p>
+</section>
 <section id="packaging">
-<h2>Packaging<a class="headerlink" href="#packaging" title="Permalink to this headline"></a></h2>
+<h2>Packaging<a class="headerlink" href="#packaging" title="Permalink to this heading">¶</a></h2>
 <p>To test CMake installation and Conan packaging or create a Conan package run:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan create . &lt;username&gt;/&lt;channel&gt; -pr &lt;your_conan_profile&gt; -s compiler.cppstd<span class="o">=</span><span class="m">20</span> -e mp-units:CONAN_RUN_TESTS<span class="o">=</span>True -b outdated -u
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan<span class="w"> </span>create<span class="w"> </span>.<span class="w"> </span>&lt;username&gt;/&lt;channel&gt;<span class="w"> </span>-pr<span class="w"> </span>&lt;your_conan_profile&gt;<span class="w"> </span>-s<span class="w"> </span>compiler.cppstd<span class="o">=</span><span class="m">20</span><span class="w"> </span>-c<span class="w"> </span>user.build:all<span class="o">=</span>True<span class="w"> </span>-c<span class="w"> </span>user.build:skip_docs<span class="o">=</span>True<span class="w"> </span>-b<span class="w"> </span>outdated<span class="w"> </span>-u
 </pre></div>
 </div>
 <p>The above will create a Conan package and run tests provided in <em>./test_package</em> directory.</p>
 </section>
 <section id="uploading-mp-units-package-to-the-conan-server">
-<h2>Uploading <strong>mp-units</strong> Package to the Conan Server<a class="headerlink" href="#uploading-mp-units-package-to-the-conan-server" title="Permalink to this headline"></a></h2>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan upload -r &lt;remote-name&gt; --all mp-units/0.8.0@&lt;user&gt;/&lt;channel&gt;
+<h2>Uploading <strong>mp-units</strong> Package to the Conan Server<a class="headerlink" href="#uploading-mp-units-package-to-the-conan-server" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conan<span class="w"> </span>upload<span class="w"> </span>-r<span class="w"> </span>&lt;remote-name&gt;<span class="w"> </span>--all<span class="w"> </span>mp-units/0.8.0@&lt;user&gt;/&lt;channel&gt;
 </pre></div>
 </div>
 </section>
@@ -515,33 +663,50 @@ ctest
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="examples/custom_utilities/conversion_factor.html" class="btn btn-neutral float-left" title="conversion_factor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="faq.html" class="btn btn-neutral float-right" title="FAQ" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="examples/custom_utilities/conversion_factor.html" class="btn btn-neutral float-left" title="conversion_factor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

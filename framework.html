@@ -1,39 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Framework Basics &mdash; mp-units 0.8.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Basic Concepts" href="framework/basic_concepts.html" />
     <link rel="prev" title="Quick Start" href="quick_start.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="index.html" class="icon icon-home"> mp-units
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.8.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,21 +84,35 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Framework Basics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="framework/basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/quantity_like.html">Quantity-like Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/quantities.html">Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/quantity_points.html">Quantity Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/dimensions.html">Dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/magnitudes.html">Magnitudes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/units.html">Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/conversions_and_casting.html">Conversions and Casting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/angular_units.html">Angular Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/text_output.html">Text Output</a></li>
 </ul>
 </li>
@@ -79,43 +136,85 @@
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">mp-units</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
       <li>Framework Basics</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="_sources/framework.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="framework-basics">
-<h1>Framework Basics<a class="headerlink" href="#framework-basics" title="Permalink to this headline"></a></h1>
+<h1>Framework Basics<a class="headerlink" href="#framework-basics" title="Permalink to this heading">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For brevity all the code examples in this chapter assume:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="p">;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="p">;</span>
 </pre></div>
 </div>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="framework/basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework/quantity_like.html">Quantity-like Types</a></li>
 <li class="toctree-l1"><a class="reference internal" href="framework/quantities.html">Quantities</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="framework/quantities.html#construction">Construction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/quantities.html#quantity-construction-helpers">Quantity Construction Helpers</a></li>
@@ -143,6 +242,13 @@
 <li class="toctree-l2"><a class="reference internal" href="framework/dimensions.html#obtaining-a-unit-of-the-dimension">Obtaining a Unit of the Dimension</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="framework/magnitudes.html">Magnitudes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="framework/magnitudes.html#one-type-per-magnitude-one-value-per-type">One type per Magnitude, one value per type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/magnitudes.html#traits-integers-and-rational-magnitudes">Traits: integers and rational Magnitudes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/magnitudes.html#getting-values-out">Getting values out</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/magnitudes.html#how-to-use-magnitudes">How to use Magnitudes</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="framework/units.html">Units</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="framework/units.html#class-hierarchy">Class Hierarchy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/units.html#base-units">Base Units</a></li>
@@ -166,6 +272,12 @@
 <li class="toctree-l2"><a class="reference internal" href="framework/conversions_and_casting.html#implicit-conversions-of-dimensionless-quantities">Implicit conversions of dimensionless quantities</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="framework/angular_units.html">Angular Units</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="framework/angular_units.html#some-background-information">Some background information</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/angular_units.html#angular-quantities-in-the-library">Angular quantities in the library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="framework/angular_units.html#radians-and-degrees-support">Radians and degrees support</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="framework/text_output.html">Text Output</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="framework/text_output.html#output-streams">Output Streams</a></li>
 <li class="toctree-l2"><a class="reference internal" href="framework/text_output.html#std-format">std::format</a></li>
@@ -177,33 +289,50 @@
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="framework/basic_concepts.html" class="btn btn-neutral float-right" title="Basic Concepts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quick_start.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

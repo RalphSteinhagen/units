@@ -1,39 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Text Output &mdash; mp-units 0.8.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Use Cases" href="../use_cases.html" />
-    <link rel="prev" title="Conversions and Casting" href="conversions_and_casting.html" /> 
+    <link rel="prev" title="Angular Units" href="angular_units.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mp-units
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.8.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,21 +84,35 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../framework.html">Framework Basics</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_like.html">Quantity-like Types</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantities.html">Quantities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_points.html">Quantity Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="magnitudes.html">Magnitudes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="angular_units.html">Angular Units</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Text Output</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#output-streams">Output Streams</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#stream-output-formatting">Stream Output Formatting</a></li>
@@ -95,33 +152,75 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
+        
       <li>Text Output</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/framework/text_output.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="text-output">
-<h1>Text Output<a class="headerlink" href="#text-output" title="Permalink to this headline"></a></h1>
+<h1>Text Output<a class="headerlink" href="#text-output" title="Permalink to this heading">¶</a></h1>
 <p>Beside providing dimensional analysis and units conversions, the library
 also tries really hard to print any quantity in the most user friendly way.</p>
 <div class="admonition note">
@@ -130,19 +229,19 @@ also tries really hard to print any quantity in the most user friendly way.</p>
 quantity points or quantity (point) kinds.</p>
 </div>
 <section id="output-streams">
-<h2>Output Streams<a class="headerlink" href="#output-streams" title="Permalink to this headline"></a></h2>
+<h2>Output Streams<a class="headerlink" href="#output-streams" title="Permalink to this heading">¶</a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The streaming support is provided via the <code class="docutils literal notranslate"><span class="pre">&lt;units/quantity_io.h&gt;</span></code> header file.</p>
 </div>
 <p>The easiest way to print a quantity is to provide its object to the output
 stream:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">international</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">avg_speed</span><span class="p">(</span><span class="mf">220.</span> <span class="o">*</span> <span class="n">km</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
-<span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">avg_speed</span><span class="p">(</span><span class="mf">140.</span> <span class="o">*</span> <span class="n">mi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">v1</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>  <span class="c1">// 110 km/h</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">v2</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>  <span class="c1">// 70 mi/h</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">international</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="mf">220.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="mf">140.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mi</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">  </span><span class="c1">// 110 km/h</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">  </span><span class="c1">// 70 mi/h</span>
 </pre></div>
 </div>
 <p>The text output will always print the <a class="reference internal" href="../glossary.html#term-value-of-a-quantity"><span class="xref std std-term">value of a quantity</span></a> followed
@@ -151,24 +250,24 @@ by a space and then the symbol of a <a class="reference internal" href="../gloss
 <p class="admonition-title">Important</p>
 <p>Remember that it is a good practice to always <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity_cast</span></code> a quantity
 of an unknown <code class="docutils literal notranslate"><span class="pre">auto</span></code> type before passing it to the text output:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>  <span class="c1">// 110 km/h</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>    <span class="c1">// 30.5556 m/s</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">  </span><span class="c1">// 110 km/h</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span><span class="w">    </span><span class="c1">// 30.5556 m/s</span>
 </pre></div>
 </div>
 </div>
 <section id="stream-output-formatting">
-<h3>Stream Output Formatting<a class="headerlink" href="#stream-output-formatting" title="Permalink to this headline"></a></h3>
+<h3>Stream Output Formatting<a class="headerlink" href="#stream-output-formatting" title="Permalink to this heading">¶</a></h3>
 <p>Only a basic formatting can be applied for output streams. It includes control
 over width, fill, and alignment:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;|&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;|&quot;</span><span class="p">;</span>                       <span class="c1">// |     123 m|</span>
-<span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;|&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">left</span> <span class="o">&lt;&lt;</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;|&quot;</span><span class="p">;</span>          <span class="c1">// |123 m     |</span>
-<span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;|&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;|&quot;</span><span class="p">;</span>  <span class="c1">// |*****123 m|</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="p">;</span><span class="w">                       </span><span class="c1">// |     123 m|</span>
+<span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">left</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="p">;</span><span class="w">          </span><span class="c1">// |123 m     |</span>
+<span class="n">os</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">setw</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">setfill</span><span class="p">(</span><span class="sc">&#39;*&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;|&quot;</span><span class="p">;</span><span class="w">  </span><span class="c1">// |*****123 m|</span>
 </pre></div>
 </div>
 </section>
 </section>
 <section id="std-format">
-<h2>std::format<a class="headerlink" href="#std-format" title="Permalink to this headline"></a></h2>
+<h2>std::format<a class="headerlink" href="#std-format" title="Permalink to this heading">¶</a></h2>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>The text formatting support is provided via the <code class="docutils literal notranslate"><span class="pre">&lt;units/format.h&gt;</span></code> header file.</p>
@@ -176,7 +275,7 @@ over width, fill, and alignment:</p>
 <p>The <strong>mp-units</strong> via <code class="docutils literal notranslate"><span class="pre">std::format</span></code> provides a fine-grained control over what
 and how is being printed on the text output.</p>
 <section id="grammar">
-<h3>Grammar<a class="headerlink" href="#grammar" title="Permalink to this headline"></a></h3>
+<h3>Grammar<a class="headerlink" href="#grammar" title="Permalink to this heading">¶</a></h3>
 <pre>
 <strong id="grammar-token-units-format-spec">units-format-spec  </strong> ::=  [fill-and-align] [width] [units-specs]
 <strong id="grammar-token-units-specs">units-specs        </strong> ::=  conversion-spec
@@ -205,65 +304,65 @@ default Unicode symbols defined by the <a class="reference internal" href="../gl
 </ul>
 </section>
 <section id="default-formatting">
-<h3>Default formatting<a class="headerlink" href="#default-formatting" title="Permalink to this headline"></a></h3>
+<h3>Default formatting<a class="headerlink" href="#default-formatting" title="Permalink to this heading">¶</a></h3>
 <p>To format <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> values the formatting facility uses <a class="reference internal" href="#grammar-token-units-format-spec"><code class="xref std std-token docutils literal notranslate"><span class="pre">units-format-spec</span></code></a>.
 In case it is left empty the default formatting of <code class="docutils literal notranslate"><span class="pre">{:%Q</span> <span class="pre">%q}</span></code> is applied. The same
 default formatting is also applied to the output streams. This is why the following
 code lines produce the same output:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Distance: &quot;</span> <span class="o">&lt;&lt;</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;Distance: {}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;Distance: {:%Q %q}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Distance: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;Distance: {}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;Distance: {:%Q %q}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
 <section id="quantity-value-symbol-or-both">
-<h3>Quantity Value, Symbol, or Both?<a class="headerlink" href="#quantity-value-symbol-or-both" title="Permalink to this headline"></a></h3>
+<h3>Quantity Value, Symbol, or Both?<a class="headerlink" href="#quantity-value-symbol-or-both" title="Permalink to this heading">¶</a></h3>
 <p>The user can easily decide to either print a whole quantity (value and symbol) or
 only its parts. Also a different quantity formatting might be applied:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q}&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>    <span class="c1">// 123</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%q}&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>    <span class="c1">// km</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%q}&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>  <span class="c1">// 123km</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span><span class="w">    </span><span class="c1">// 123</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span><span class="w">    </span><span class="c1">// km</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span><span class="w">  </span><span class="c1">// 123km</span>
 </pre></div>
 </div>
 </section>
 <section id="controlling-width-fill-and-alignment">
-<h3>Controlling Width, Fill, and Alignment<a class="headerlink" href="#controlling-width-fill-and-alignment" title="Permalink to this headline"></a></h3>
+<h3>Controlling Width, Fill, and Alignment<a class="headerlink" href="#controlling-width-fill-and-alignment" title="Permalink to this heading">¶</a></h3>
 <p>To control width, fill, and alignment the C++ standard grammar tokens <code class="docutils literal notranslate"><span class="pre">fill-and-align</span></code>
 and <code class="docutils literal notranslate"><span class="pre">width</span></code> are being used and they treat a quantity value and symbol as a contiguous
 text:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:0}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>     <span class="c1">// |123 m|</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:10}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// |     123 m|</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:&lt;10}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// |123 m     |</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:&gt;10}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// |     123 m|</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:^10}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// |  123 m   |</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:*&lt;10}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// |123 m*****|</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:*&gt;10}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// |*****123 m|</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:*^10}|&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// |**123 m***|</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:0}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">     </span><span class="c1">// |123 m|</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:10}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// |     123 m|</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:&lt;10}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// |123 m     |</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:&gt;10}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// |     123 m|</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:^10}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// |  123 m   |</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:*&lt;10}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">  </span><span class="c1">// |123 m*****|</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:*&gt;10}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">  </span><span class="c1">// |*****123 m|</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;|{:*^10}|&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">  </span><span class="c1">// |**123 m***|</span>
 </pre></div>
 </div>
 </section>
 <section id="ascii-only-quantity-symbols">
-<h3>ASCII-only Quantity Symbols<a class="headerlink" href="#ascii-only-quantity-symbols" title="Permalink to this headline"></a></h3>
+<h3>ASCII-only Quantity Symbols<a class="headerlink" href="#ascii-only-quantity-symbols" title="Permalink to this heading">¶</a></h3>
 <p>Unit symbols of some quantities are specified to use Unicode signs by the <a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a>
 standard (i.e. <code class="docutils literal notranslate"><span class="pre">Ω</span></code> symbol for the resistance quantity). <strong>mp-units</strong> library follows
 this by default. From the engineering point of view sometimes Unicode text  might
 not be a solution as terminals of many (especially embedded) devices are ASCII-only.
 In such a case the unit symbol can be forced to be printed using ASCII-only characters:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">R</span><span class="p">);</span>                   <span class="c1">// 10 Ω</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q %Aq}&quot;</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">R</span><span class="p">);</span>            <span class="c1">// 10 ohm</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="mi">125</span> <span class="o">*</span> <span class="n">us</span><span class="p">);</span>                 <span class="c1">// 125 µs</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q %Aq}&quot;</span><span class="p">,</span> <span class="mi">125</span> <span class="o">*</span> <span class="n">us</span><span class="p">);</span>          <span class="c1">// 125 us</span>
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">s</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span> <span class="mf">9.8</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">/</span> <span class="n">s2</span><span class="p">));</span>           <span class="c1">// 9.8 m/s²</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q %Aq}&quot;</span><span class="p">,</span> <span class="mf">9.8</span> <span class="o">*</span> <span class="p">(</span><span class="n">m</span> <span class="o">/</span> <span class="n">s2</span><span class="p">));</span>    <span class="c1">// 9.8 m/s^2</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">R</span><span class="p">);</span><span class="w">                   </span><span class="c1">// 10 Ω</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q %Aq}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">R</span><span class="p">);</span><span class="w">            </span><span class="c1">// 10 ohm</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">125</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">us</span><span class="p">);</span><span class="w">                 </span><span class="c1">// 125 µs</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q %Aq}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">125</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">us</span><span class="p">);</span><span class="w">          </span><span class="c1">// 125 us</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">9.8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s2</span><span class="p">));</span><span class="w">           </span><span class="c1">// 9.8 m/s²</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q %Aq}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">9.8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s2</span><span class="p">));</span><span class="w">    </span><span class="c1">// 9.8 m/s^2</span>
 </pre></div>
 </div>
 </section>
 <section id="controlling-on-how-the-quantity-value-is-being-printed">
-<h3>Controlling on How the Quantity Value Is Being Printed<a class="headerlink" href="#controlling-on-how-the-quantity-value-is-being-printed" title="Permalink to this headline"></a></h3>
+<h3>Controlling on How the Quantity Value Is Being Printed<a class="headerlink" href="#controlling-on-how-the-quantity-value-is-being-printed" title="Permalink to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">sign</span></code> token allows us to specify on how the value’s sign is being printed:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{0:%Q %q},{0:%+Q %q},{0:%-Q %q},{0:% Q %q}&quot;</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// 1 m,+1 m,1 m, 1 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{0:%Q %q},{0:%+Q %q},{0:%-Q %q},{0:% Q %q}&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// -1 m,-1 m,-1 m,-1 m</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{0:%Q %q},{0:%+Q %q},{0:%-Q %q},{0:% Q %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// 1 m,+1 m,1 m, 1 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{0:%Q %q},{0:%+Q %q},{0:%-Q %q},{0:% Q %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">  </span><span class="c1">// -1 m,-1 m,-1 m,-1 m</span>
 </pre></div>
 </div>
 <p>where:</p>
@@ -275,57 +374,57 @@ In such a case the unit symbol can be forced to be printed using ASCII-only char
 than negative zero, and a minus sign for negative numbers and negative zero.</p></li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">precision</span></code> token is allowed only for floating-point representation types:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.0Q %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// 1 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.1Q %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// 1.2 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.2Q %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>  <span class="c1">// 1.23 m</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.0Q %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">  </span><span class="c1">// 1 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.1Q %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">  </span><span class="c1">// 1.2 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.2Q %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">  </span><span class="c1">// 1.23 m</span>
 </pre></div>
 </div>
 <p><a class="reference internal" href="#grammar-token-units-rep-type"><code class="xref std std-token docutils literal notranslate"><span class="pre">units-rep-type</span></code></a> specifies how a value of the representation type is being
 printed. For integral types:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%bQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 101010 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%BQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 101010 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%dQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 42 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%oQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 52 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%xQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 2a m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%XQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 2A m</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%bQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 101010 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%BQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 101010 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%dQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 42 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%oQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 52 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%xQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 2a m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%XQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 2A m</span>
 </pre></div>
 </div>
 <p>The above can be printed in an alternate version thanks to the <code class="docutils literal notranslate"><span class="pre">#</span></code> token:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#bQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// 0b101010 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#BQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// 0B101010 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#oQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// 052 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#xQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// 0x2a m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#XQ %q}&quot;</span><span class="p">,</span> <span class="mi">42</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>   <span class="c1">// 0X2A m</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#bQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// 0b101010 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#BQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// 0B101010 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#oQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// 052 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#xQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// 0x2a m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%#XQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">   </span><span class="c1">// 0X2A m</span>
 </pre></div>
 </div>
 <p>For floating-point values the <a class="reference internal" href="#grammar-token-units-rep-type"><code class="xref std std-token docutils literal notranslate"><span class="pre">units-rep-type</span></code></a> token works as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%aQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 0x9.e065152d8eae841p-3 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3aQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 0x9.e06p-3 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%AQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 0X9.E065152D8EAE841P-3 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3AQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 0X9.E06P-3 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%eQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.234568e+00 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3eQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.235e+00 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%EQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.234568E+00 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3EQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.235E+00 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%gQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.23457 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%gQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678e8</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 1.23457e+08 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3gQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.23 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3gQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678e8</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 1.23e+08 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%GQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.23457 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%GQ %q}&quot;</span><span class="p">,</span>   <span class="mf">1.2345678e8</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 1.23457E+08 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3GQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>      <span class="c1">// 1.23 m</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3GQ %q}&quot;</span><span class="p">,</span> <span class="mf">1.2345678e8</span> <span class="o">*</span> <span class="n">m</span><span class="p">);</span>    <span class="c1">// 1.23E+08 m</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%aQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 0x9.e065152d8eae841p-3 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3aQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 0x9.e06p-3 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%AQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 0X9.E065152D8EAE841P-3 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3AQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 0X9.E06P-3 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%eQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.234568e+00 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3eQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.235e+00 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%EQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.234568E+00 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3EQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.235E+00 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%gQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.23457 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%gQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678e8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 1.23457e+08 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3gQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.23 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3gQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678e8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 1.23e+08 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%GQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.23457 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%GQ %q}&quot;</span><span class="p">,</span><span class="w">   </span><span class="mf">1.2345678e8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 1.23457E+08 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3GQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">      </span><span class="c1">// 1.23 m</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%.3GQ %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1.2345678e8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">);</span><span class="w">    </span><span class="c1">// 1.23E+08 m</span>
 </pre></div>
 </div>
 </section>
 <section id="special-signs">
-<h3>Special Signs<a class="headerlink" href="#special-signs" title="Permalink to this headline"></a></h3>
+<h3>Special Signs<a class="headerlink" href="#special-signs" title="Permalink to this heading">¶</a></h3>
 <p>Beside adding any list of regular characters as a separator between the value and the
 symbol, it is possible to type a few special signs there too:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q_%q}&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>    <span class="c1">// 123_km</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%t%q}&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>   <span class="c1">// 123\tkm  &lt;tab&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%n%q}&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>   <span class="c1">// 123\nkm  &lt;new line&gt;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%% %q}&quot;</span><span class="p">,</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">);</span>  <span class="c1">// 123% km</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q_%q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span><span class="w">    </span><span class="c1">// 123_km</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%t%q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span><span class="w">   </span><span class="c1">// 123\tkm  &lt;tab&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%n%q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span><span class="w">   </span><span class="c1">// 123\nkm  &lt;new line&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">format</span><span class="p">(</span><span class="s">&quot;{:%Q%% %q}&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">);</span><span class="w">  </span><span class="c1">// 123% km</span>
 </pre></div>
 </div>
 </section>
@@ -334,33 +433,50 @@ symbol, it is possible to type a few special signs there too:</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="conversions_and_casting.html" class="btn btn-neutral float-left" title="Conversions and Casting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="../use_cases.html" class="btn btn-neutral float-right" title="Use Cases" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="angular_units.html" class="btn btn-neutral float-left" title="Angular Units" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

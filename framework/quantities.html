@@ -1,39 +1,82 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <title>Quantities &mdash; mp-units 0.8.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-    <script src="../_static/js/theme.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Quantity Points" href="quantity_points.html" />
-    <link rel="prev" title="Basic Concepts" href="basic_concepts.html" /> 
+    <link rel="prev" title="Quantity-like Types" href="quantity_like.html" /> 
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
+
+   
   <div class="wy-grid-for-nav">
+    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
+          
+
+          
             <a href="../index.html" class="icon icon-home"> mp-units
+          
+
+          
           </a>
+
+          
+            
+            
               <div class="version">
                 0.8.0
               </div>
+            
+          
+
+          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -41,13 +84,25 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../framework.html">Framework Basics</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_like.html">Quantity-like Types</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Quantities</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#construction">Construction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#quantity-construction-helpers">Quantity Construction Helpers</a><ul>
@@ -69,10 +124,12 @@
 <li class="toctree-l2"><a class="reference internal" href="quantity_points.html">Quantity Points</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="magnitudes.html">Magnitudes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="angular_units.html">Angular Units</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
 </ul>
 </li>
@@ -96,42 +153,84 @@
 <li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">mp-units</a>
+        
       </nav>
 
+
       <div class="wy-nav-content">
+        
         <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
   <ul class="wy-breadcrumbs">
+    
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
           <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
+        
       <li>Quantities</li>
+    
+    
       <li class="wy-breadcrumbs-aside">
+        
+          
             <a href="../_sources/framework/quantities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
       </li>
+    
   </ul>
+
+  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
+            
   <section id="quantities">
-<h1>Quantities<a class="headerlink" href="#quantities" title="Permalink to this headline"></a></h1>
+<h1>Quantities<a class="headerlink" href="#quantities" title="Permalink to this heading">¶</a></h1>
 <p>A <a class="reference internal" href="../glossary.html#term-quantity"><span class="xref std std-term">quantity</span></a> is a concrete amount of a unit for a specified dimension
 with a specific representation and is represented in the library with a
 <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> class template.</p>
 <section id="construction">
-<h2>Construction<a class="headerlink" href="#construction" title="Permalink to this headline"></a></h2>
+<h2>Construction<a class="headerlink" href="#construction" title="Permalink to this heading">¶</a></h2>
 <p>To create the quantity object from a <a class="reference internal" href="../glossary.html#term-scalable-number"><span class="xref std std-term">scalable number</span></a> we just have to pass
 the value to the <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> class template explicit constructor:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
-<span class="n">quantity</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_speed</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+<span class="n">quantity</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_speed</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -142,13 +241,13 @@ an “unsafe” fundamental type only via
 This is why the code below using
 <a class="reference external" href="https://en.cppreference.com/w/cpp/language/copy_initialization">copy initialization</a>
 <strong>does not compile</strong>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">123</span><span class="p">;</span>  <span class="c1">// ERROR</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="p">;</span><span class="w">  </span><span class="c1">// ERROR</span>
 </pre></div>
 </div>
 </div>
 </section>
 <section id="quantity-construction-helpers">
-<h2>Quantity Construction Helpers<a class="headerlink" href="#quantity-construction-helpers" title="Permalink to this headline"></a></h2>
+<h2>Quantity Construction Helpers<a class="headerlink" href="#quantity-construction-helpers" title="Permalink to this heading">¶</a></h2>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
 <p>Currently the library provides multiple experimental helpers to instantiate
@@ -159,44 +258,44 @@ out, vote, and share feedback in this
 please do not hesitate to vote on the one that suits you the best.</p>
 </div>
 <section id="dimension-specific-aliases-experimental">
-<h3>Dimension-Specific Aliases (Experimental)<a class="headerlink" href="#dimension-specific-aliases-experimental" title="Permalink to this headline"></a></h3>
+<h3>Dimension-Specific Aliases (Experimental)<a class="headerlink" href="#dimension-specific-aliases-experimental" title="Permalink to this heading">¶</a></h3>
 <p>To simplify <a class="reference internal" href="../reference/core/types/quantity.html#_CPPv4I_9Dimension_6UnitOfI1DE_14RepresentationEN5units8quantityE" title="units::quantity"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">quantity</span></code></a> objects creation the library provides helper aliases for
 quantities of each <a class="reference internal" href="../glossary.html#term-dimension"><span class="xref std std-term">dimension</span></a> which additionally set the representation
 type to <code class="docutils literal notranslate"><span class="pre">double</span></code> by default:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">si</span> <span class="p">{</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span><span class="w"> </span><span class="nn">si</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span>
-<span class="k">using</span> <span class="n">length</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span>
-<span class="k">using</span> <span class="n">speed</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_speed</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>Thanks to that, the above example can be rewritten as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
-<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
 <section id="unit-specific-aliases-experimental">
-<h3>Unit-Specific Aliases (Experimental)<a class="headerlink" href="#unit-specific-aliases-experimental" title="Permalink to this headline"></a></h3>
+<h3>Unit-Specific Aliases (Experimental)<a class="headerlink" href="#unit-specific-aliases-experimental" title="Permalink to this heading">¶</a></h3>
 <p>Additionally to the dimension-specific aliases there are also ones provided for
 each and every <a class="reference internal" href="../glossary.html#term-unit"><span class="xref std std-term">unit</span></a> in the library:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef UNITS_NO_ALIASES</span>
 
-<span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="kr">inline</span> <span class="n">length</span> <span class="p">{</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">aliases</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="kr">inline</span><span class="w"> </span><span class="nn">length</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">m</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">km</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="p">}</span>
 
-<span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="kr">inline</span> <span class="n">speed</span> <span class="p">{</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">aliases</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="kr">inline</span><span class="w"> </span><span class="nn">speed</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">m_per_s</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
-<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">km_per_h</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">m_per_s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">km_per_h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 
 <span class="p">}</span>
 
@@ -204,59 +303,59 @@ each and every <a class="reference internal" href="../glossary.html#term-unit"><
 </pre></div>
 </div>
 <p>Using the above our code can look as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="p">;</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">::</span><span class="n">km</span><span class="o">&lt;&gt;</span> <span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
-<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">::</span><span class="n">km_per_h</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">aliases</span><span class="o">::</span><span class="nn">isq</span><span class="p">;</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">::</span><span class="n">km</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="mi">123</span><span class="p">);</span>
+<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">::</span><span class="n">km_per_h</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Please note that with the C++20 <abbr title="Class Template Argument Deduction">CTAD</abbr> support
 for alias templates the above can be rewritten as:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="p">;</span>
-<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">::</span><span class="n">km</span> <span class="n">d</span><span class="p">(</span><span class="mf">123.</span><span class="p">);</span>
-<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">::</span><span class="n">km_per_h</span> <span class="n">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">aliases</span><span class="o">::</span><span class="nn">isq</span><span class="p">;</span>
+<span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">::</span><span class="n">km</span><span class="w"> </span><span class="nf">d</span><span class="p">(</span><span class="mf">123.</span><span class="p">);</span>
+<span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">::</span><span class="n">km_per_h</span><span class="w"> </span><span class="nf">v</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>which will deduce the representation type automatically from the initializer provided
 by the user.</p>
 <p>Also, this feature allows to be more terse if desired:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="n">km</span><span class="p">(</span><span class="mf">123.</span><span class="p">);</span>
-<span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">km_per_h</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">aliases</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">km</span><span class="p">(</span><span class="mf">123.</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">km_per_h</span><span class="p">(</span><span class="mi">70</span><span class="p">);</span>
 </pre></div>
 </div>
 </section>
 <section id="quantity-references-experimental">
-<h3>Quantity References (Experimental)<a class="headerlink" href="#quantity-references-experimental" title="Permalink to this headline"></a></h3>
+<h3>Quantity References (Experimental)<a class="headerlink" href="#quantity-references-experimental" title="Permalink to this heading">¶</a></h3>
 <p>Quantity References provide an alternative and simplified way to create quantities.
 They are defined using the <a class="reference internal" href="../reference/core/types/reference.html#_CPPv4I_9Dimension_6UnitOfI1DEEN5units9referenceE" title="units::reference"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">reference</span></code></a> class template:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef UNITS_NO_REFERENCES</span>
 
-<span class="k">namespace</span> <span class="n">length_references</span> <span class="p">{</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">length_references</span><span class="w"> </span><span class="p">{</span>
 
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">km</span> <span class="o">=</span> <span class="n">reference</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span> <span class="n">kilometre</span><span class="o">&gt;</span><span class="p">{};</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reference</span><span class="o">&lt;</span><span class="n">dim_length</span><span class="p">,</span><span class="w"> </span><span class="n">kilometre</span><span class="o">&gt;</span><span class="p">{};</span>
 
-<span class="p">}</span>  <span class="c1">// namespace length_references</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace length_references</span>
 
-<span class="k">namespace</span> <span class="n">time_references</span> <span class="p">{</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">time_references</span><span class="w"> </span><span class="p">{</span>
 
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">h</span> <span class="o">=</span> <span class="n">reference</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span> <span class="n">hour</span><span class="o">&gt;</span><span class="p">{};</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reference</span><span class="o">&lt;</span><span class="n">dim_time</span><span class="p">,</span><span class="w"> </span><span class="n">hour</span><span class="o">&gt;</span><span class="p">{};</span>
 
-<span class="p">}</span>  <span class="c1">// namespace time_references</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace time_references</span>
 
-<span class="k">namespace</span> <span class="n">references</span> <span class="p">{</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">references</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">length_references</span><span class="p">;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">time_references</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">length_references</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">time_references</span><span class="p">;</span>
 
-<span class="p">}</span>  <span class="c1">// namespace references</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// namespace references</span>
 
 <span class="cp">#endif </span><span class="c1">// UNITS_NO_REFERENCES</span>
 </pre></div>
 </div>
 <p>With the above our code can look as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">123.</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>       <span class="c1">// si::length&lt;si::kilometre, double&gt;</span>
-<span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">70</span> <span class="o">*</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">);</span>   <span class="c1">// si::speed&lt;si::kilometre_per_hour, int&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">       </span><span class="c1">// si::length&lt;si::kilometre, double&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">70</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span><span class="p">);</span><span class="w">   </span><span class="c1">// si::speed&lt;si::kilometre_per_hour, int&gt;</span>
 </pre></div>
 </div>
 <div class="admonition important">
@@ -265,25 +364,25 @@ They are defined using the <a class="reference internal" href="../reference/core
 <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">/</span> <span class="pre">s</span></code>, <code class="docutils literal notranslate"><span class="pre">km</span> <span class="pre">*</span> <span class="pre">3</span></code>, <code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">/</span> <span class="pre">4</span></code>, <code class="docutils literal notranslate"><span class="pre">70</span> <span class="pre">*</span> <span class="pre">km</span> <span class="pre">/</span> <span class="pre">h</span></code>.</p>
 </div>
 <p>It is also possible to easily define custom quantity references from existing ones:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">Nm</span> <span class="o">=</span> <span class="n">N</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">km_per_h</span> <span class="o">=</span> <span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">;</span>
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">mph</span> <span class="o">=</span> <span class="n">mi</span> <span class="o">/</span> <span class="n">h</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">Nm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">km_per_h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span><span class="p">;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">mph</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mi</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span><span class="p">;</span>
 </pre></div>
 </div>
 </section>
 <section id="user-defined-literals-experimental">
-<h3>User Defined Literals (Experimental)<a class="headerlink" href="#user-defined-literals-experimental" title="Permalink to this headline"></a></h3>
+<h3>User Defined Literals (Experimental)<a class="headerlink" href="#user-defined-literals-experimental" title="Permalink to this heading">¶</a></h3>
 <p>Alternatively, to construct quantities with compile-time known values the library provides
 <abbr title="User Defined Literal">UDL</abbr> s for each <a class="reference internal" href="../glossary.html#term-unit"><span class="xref std std-term">unit</span></a> of every <a class="reference internal" href="../glossary.html#term-dimension"><span class="xref std std-term">dimension</span></a>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef UNITS_NO_LITERALS</span>
 
-<span class="kr">inline</span> <span class="k">namespace</span> <span class="n">literals</span> <span class="p">{</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">literals</span><span class="w"> </span><span class="p">{</span>
 
-<span class="k">constexpr</span> <span class="k">auto</span> <span class="k">operator</span><span class="s">&quot;&quot;</span> <span class="n">_q_km</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">length</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="p">}</span>
-<span class="k">constexpr</span> <span class="k">auto</span> <span class="k">operator</span><span class="s">&quot;&quot;</span> <span class="n">_q_km</span><span class="p">(</span><span class="kt">long</span> <span class="kt">double</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">length</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="p">}</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="n">_q_km</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">length</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="n">_q_km</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">length</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 
-<span class="k">constexpr</span> <span class="k">auto</span> <span class="k">operator</span><span class="s">&quot;&quot;</span> <span class="n">_q_km_per_h</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">speed</span><span class="o">&lt;</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="p">}</span>
-<span class="k">constexpr</span> <span class="k">auto</span> <span class="k">operator</span><span class="s">&quot;&quot;</span> <span class="n">_q_km_per_h</span><span class="p">(</span><span class="kt">long</span> <span class="kt">double</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">speed</span><span class="o">&lt;</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span> <span class="p">}</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="n">_q_km_per_h</span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">speed</span><span class="o">&lt;</span><span class="n">kilometre_per_hour</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="n">_q_km_per_h</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">l</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">speed</span><span class="o">&lt;</span><span class="n">kilometre_per_hour</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">l</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 
 <span class="p">}</span>
 
@@ -291,9 +390,9 @@ They are defined using the <a class="reference internal" href="../reference/core
 </pre></div>
 </div>
 <p>Thanks to them the same code can be as simple as:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">123.</span><span class="n">_q_km</span><span class="p">;</span>     <span class="c1">// si::length&lt;si::kilometre, long double&gt;</span>
-<span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">70</span><span class="n">_q_km_per_h</span><span class="p">;</span> <span class="c1">// si::speed&lt;si::kilometre_per_hour, std::int64_t&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">literals</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123.</span><span class="n">_q_km</span><span class="p">;</span><span class="w">     </span><span class="c1">// si::length&lt;si::kilometre, long double&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">70</span><span class="n">_q_km_per_h</span><span class="p">;</span><span class="w"> </span><span class="c1">// si::speed&lt;si::kilometre_per_hour, std::int64_t&gt;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -307,22 +406,22 @@ language (i.e. <code class="docutils literal notranslate"><span class="pre">F</s
 </div>
 </section>
 <section id="udls-vs-quantity-references">
-<h3>UDLs vs Quantity References<a class="headerlink" href="#udls-vs-quantity-references" title="Permalink to this headline"></a></h3>
+<h3>UDLs vs Quantity References<a class="headerlink" href="#udls-vs-quantity-references" title="Permalink to this heading">¶</a></h3>
 <p>UDLs are helpful but they also have some disadvantages compared to Quantity References:</p>
 <ol class="arabic">
 <li><p>UDLs are only for compile-time known values and do not work for runtime variables</p>
 <ul>
 <li><p>UDLs:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">v1</span> <span class="o">=</span> <span class="mi">120</span><span class="n">_q_km</span> <span class="o">/</span> <span class="mi">2</span><span class="n">_q_h</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">length</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="o">&gt;</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span> <span class="o">/</span> <span class="n">time</span><span class="o">&lt;</span><span class="n">hour</span><span class="o">&gt;</span><span class="p">(</span><span class="n">duration</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">literals</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="n">_q_km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="n">_q_h</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="o">&lt;</span><span class="n">kilometre</span><span class="o">&gt;</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">time</span><span class="o">&lt;</span><span class="n">hour</span><span class="o">&gt;</span><span class="p">(</span><span class="n">duration</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
 <li><p>Quantity References:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">v1</span> <span class="o">=</span> <span class="mi">120</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
-<span class="k">auto</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">km</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">duration</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="n">h</span><span class="p">));</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">120</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">distance</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">duration</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">));</span>
 </pre></div>
 </div>
 </li>
@@ -334,18 +433,18 @@ constants and unit tests.</p>
 <li><p>UDLs cannot be disambiguated with a namespace name</p>
 <ul>
 <li><p>UDLs:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">cgs</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">1</span><span class="n">_q_cm</span><span class="p">;</span>   <span class="c1">// FAILS TO COMPILE</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">literals</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">cgs</span><span class="o">::</span><span class="nn">literals</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="n">_q_cm</span><span class="p">;</span><span class="w">   </span><span class="c1">// FAILS TO COMPILE</span>
 </pre></div>
 </div>
 </li>
 <li><p>Quantity References:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">si_cm</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="o">::</span><span class="n">cm</span><span class="p">;</span>
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">cgs_cm</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">cgs</span><span class="o">::</span><span class="n">references</span><span class="o">::</span><span class="n">cm</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">si_cm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="o">::</span><span class="n">cm</span><span class="p">;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">cgs_cm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">cgs</span><span class="o">::</span><span class="n">references</span><span class="o">::</span><span class="n">cm</span><span class="p">;</span>
 
-<span class="k">auto</span> <span class="n">d1</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">si_cm</span><span class="p">;</span>   <span class="c1">// si::length&lt;si::centimetre&gt;</span>
-<span class="k">auto</span> <span class="n">d2</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">*</span> <span class="n">cgs_cm</span><span class="p">;</span>  <span class="c1">// si::cgs::length&lt;si::centimetre&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">si_cm</span><span class="p">;</span><span class="w">   </span><span class="c1">// si::length&lt;si::centimetre&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cgs_cm</span><span class="p">;</span><span class="w">  </span><span class="c1">// si::cgs::length&lt;si::centimetre&gt;</span>
 </pre></div>
 </div>
 </li>
@@ -355,9 +454,9 @@ constants and unit tests.</p>
 <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code></p>
 <ul>
 <li><p>UDLs:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">literals</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">d1</span> <span class="o">=</span> <span class="mf">123.</span><span class="n">_q_km</span><span class="p">;</span>   <span class="c1">// si::length&lt;si::kilometre, long double&gt;</span>
-<span class="k">auto</span> <span class="n">d2</span> <span class="o">=</span> <span class="mi">123</span><span class="n">_q_km</span><span class="p">;</span>    <span class="c1">// si::length&lt;si::kilometre, std::int64_t&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">literals</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123.</span><span class="n">_q_km</span><span class="p">;</span><span class="w">   </span><span class="c1">// si::length&lt;si::kilometre, long double&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="n">_q_km</span><span class="p">;</span><span class="w">    </span><span class="c1">// si::length&lt;si::kilometre, std::int64_t&gt;</span>
 </pre></div>
 </div>
 <p>No possibility to obtain any other representation type. Additionally this gets contagious
@@ -366,13 +465,13 @@ type of its arguments. For example <code class="xref cpp cpp-any docutils litera
 <code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">si::length</span></code> type.</p>
 </li>
 <li><p>Quantity References:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">d1</span> <span class="o">=</span> <span class="mf">123.</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>   <span class="c1">// si::length&lt;si::kilometre, double&gt;</span>
-<span class="k">auto</span> <span class="n">d2</span> <span class="o">=</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>    <span class="c1">// si::length&lt;si::kilometre, int&gt;</span>
-<span class="k">auto</span> <span class="n">d3</span> <span class="o">=</span> <span class="mf">123.f</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>  <span class="c1">// si::length&lt;si::kilometre, float&gt;</span>
-<span class="k">auto</span> <span class="n">d4</span> <span class="o">=</span> <span class="mf">123.</span><span class="n">L</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>  <span class="c1">// si::length&lt;si::kilometre, long double&gt;</span>
-<span class="k">auto</span> <span class="n">d5</span> <span class="o">=</span> <span class="mi">123ul</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>  <span class="c1">// si::length&lt;si::kilometre, unsigned long&gt;</span>
-<span class="k">auto</span> <span class="n">d6</span> <span class="o">=</span> <span class="mi">123ll</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>  <span class="c1">// si::length&lt;si::kilometre, long long&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">   </span><span class="c1">// si::length&lt;si::kilometre, double&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">    </span><span class="c1">// si::length&lt;si::kilometre, int&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123.f</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">  </span><span class="c1">// si::length&lt;si::kilometre, float&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123.L</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">  </span><span class="c1">// si::length&lt;si::kilometre, long double&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123ul</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">  </span><span class="c1">// si::length&lt;si::kilometre, unsigned long&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123l</span><span class="n">l</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">  </span><span class="c1">// si::length&lt;si::kilometre, long long&gt;</span>
 </pre></div>
 </div>
 </li>
@@ -422,7 +521,7 @@ template instantiations in the application.</p>
 </ol>
 </section>
 <section id="quantity-references-vs-unit-specific-aliases">
-<h3>Quantity References vs Unit-specific Aliases<a class="headerlink" href="#quantity-references-vs-unit-specific-aliases" title="Permalink to this headline"></a></h3>
+<h3>Quantity References vs Unit-specific Aliases<a class="headerlink" href="#quantity-references-vs-unit-specific-aliases" title="Permalink to this heading">¶</a></h3>
 <ol class="arabic">
 <li><p>Shadowing issues</p>
 <ul>
@@ -447,12 +546,12 @@ namespaces prefixed in front of the alias.</p>
 <ul>
 <li><p>Quantity References</p>
 <p>References allow creating custom helpers for complex units. Instead of typing:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>one can do the following:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">kmph</span> <span class="o">=</span> <span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">;</span>
-<span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">kmph</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">kmph</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span><span class="p">;</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">kmph</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -461,10 +560,10 @@ namespaces prefixed in front of the alias.</p>
 a library already. However, this feature also allows controlling verbosity of the code. For
 example in the below example <code class="docutils literal notranslate"><span class="pre">d1</span></code>, <code class="docutils literal notranslate"><span class="pre">d2</span></code>, and <code class="docutils literal notranslate"><span class="pre">d3</span></code> will end up being of the same type
 and having the same value:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="mf">123.45</span><span class="p">);</span>
-<span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">123.45</span><span class="p">;</span>
-<span class="k">auto</span> <span class="n">d2</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
-<span class="k">auto</span> <span class="n">d3</span> <span class="o">=</span> <span class="n">length</span><span class="o">::</span><span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">(</span><span class="mf">123.45</span><span class="p">);</span>
+<span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">123.45</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">d3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="o">::</span><span class="n">m</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -474,15 +573,15 @@ and having the same value:</p>
 <ul>
 <li><p>Quantity References</p>
 <p>As long as references are easy to understand in the following code:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>it is not that nice when a variable is used instead of a compile time number:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="nf">avg_speed</span><span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">length_references</span><span class="p">;</span>
-  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">time_references</span><span class="p">;</span>
-  <span class="k">return</span> <span class="n">d</span> <span class="o">*</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">length_references</span><span class="p">;</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">time_references</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -492,18 +591,18 @@ included.</p>
 </li>
 <li><p>Unit-specific Aliases</p>
 <p>The same using aliases can look as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="nf">avg_speed</span><span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="p">;</span>
-  <span class="k">return</span> <span class="n">m</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">aliases</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">m</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>or:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="nf">avg_speed</span><span class="p">(</span><span class="kt">double</span> <span class="n">d</span><span class="p">,</span> <span class="kt">double</span> <span class="n">t</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">aliases</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="p">;</span>
-  <span class="k">return</span> <span class="n">length</span><span class="o">::</span><span class="n">m</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="n">time</span><span class="o">::</span><span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">aliases</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">length</span><span class="o">::</span><span class="n">m</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">time</span><span class="o">::</span><span class="n">s</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -517,7 +616,7 @@ included.</p>
 always takes a magnitude or a reference as <code class="docutils literal notranslate"><span class="pre">lhs</span></code> and a reference as <code class="docutils literal notranslate"><span class="pre">rhs</span></code>. All other comibnations
 are not allowed. It means that in order to satisfy the operators precedence sometimes quite a lot
 of parenthesis have to be sprinkled in the code in order for the code to compile:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -533,15 +632,15 @@ of parenthesis have to be sprinkled in the code in order for the code to compile
 predefined for units raised to a specific power (e.g. <code class="docutils literal notranslate"><span class="pre">m2</span></code>, <code class="docutils literal notranslate"><span class="pre">km3</span></code>, etc). All other derived units
 can be constructed using the provided ones already even if they do not correspond to any predefined
 dimension:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">kmph</span> <span class="o">=</span> <span class="n">km</span> <span class="o">/</span> <span class="n">h</span><span class="p">;</span>
-<span class="kr">inline</span> <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">kmph3</span> <span class="o">=</span> <span class="n">kmph</span> <span class="o">*</span> <span class="n">kmph</span> <span class="o">*</span> <span class="n">kmph</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">kmph</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">h</span><span class="p">;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">kmph3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kmph</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">kmph</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">kmph</span><span class="p">;</span>
 </pre></div>
 </div>
 </li>
 <li><p>Unit-specific Aliases</p>
 <p>Such a feature is not possible with aliases. In order to create a derived unit a full alias template
 has to be explicitly provided:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">km_per_h</span> <span class="o">=</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">km_per_h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">kilometre_per_hour</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
 </li>
@@ -553,14 +652,14 @@ to override it if needed.</p>
 </li>
 <li><p>Simplified quantity casting</p>
 <p>Aliases can easily replace <code class="docutils literal notranslate"><span class="pre">quantity_cast&lt;Unit&gt;()</span></code> which is not possible with references:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="k">auto</span> <span class="n">meter</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">m</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">international</span><span class="o">::</span><span class="n">foot</span><span class="o">&gt;</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">meter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">international</span><span class="o">::</span><span class="n">foot</span><span class="o">&gt;</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>The above code for references may look as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="k">auto</span> <span class="n">meter</span> <span class="o">=</span> <span class="n">m</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">international</span><span class="o">::</span><span class="n">ft</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-<span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ft</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">meter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">international</span><span class="o">::</span><span class="n">ft</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">ft</span><span class="p">(</span><span class="n">meter</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>The above will preserve the representation type of the source type.</p>
@@ -572,14 +671,8 @@ alias template is much faster than instantiating a class template).</p>
 </ol>
 </section>
 <section id="summary">
-<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline"></a></h3>
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h3>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 54%" />
-<col style="width: 15%" />
-<col style="width: 14%" />
-<col style="width: 17%" />
-</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Feature</p></th>
 <th class="head"><p>Aliases</p></th>
@@ -652,7 +745,7 @@ alias template is much faster than instantiating a class template).</p>
 </table>
 </section>
 <section id="don-t-pay-for-what-you-don-t-use-compile-time-performance">
-<h3>Don’t pay for what you don’t use (compile-time performance)<a class="headerlink" href="#don-t-pay-for-what-you-don-t-use-compile-time-performance" title="Permalink to this headline"></a></h3>
+<h3>Don’t pay for what you don’t use (compile-time performance)<a class="headerlink" href="#don-t-pay-for-what-you-don-t-use-compile-time-performance" title="Permalink to this heading">¶</a></h3>
 <p>As noted in the previous chapter, each quantity creation helper has a different impact on the compile-time
 performance. Aliases tend to be the fastest to compile but even their definition can be expensive for some
 if it is not used in the source code. This is why it is possible to opt-out from each or every quantity
@@ -665,12 +758,12 @@ creation helper with the following preprocessor defines:</p>
 </section>
 </section>
 <section id="dimension-specific-concepts">
-<h2>Dimension-specific Concepts<a class="headerlink" href="#dimension-specific-concepts" title="Permalink to this headline"></a></h2>
+<h2>Dimension-specific Concepts<a class="headerlink" href="#dimension-specific-concepts" title="Permalink to this heading">¶</a></h2>
 <p>In case the user does not care about the specific unit and representation but
 requires quantity of a concrete dimension than dimension-specific concepts can
 be used:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">constexpr</span> <span class="n">Length</span> <span class="k">auto</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">123</span> <span class="o">*</span> <span class="n">km</span><span class="p">;</span>  <span class="c1">// si::length&lt;si::kilometre, int&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">;</span><span class="w">  </span><span class="c1">// si::length&lt;si::kilometre, int&gt;</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -684,18 +777,18 @@ All other regular types that are not quantities are called
 assume that the user wants to implement an <code class="docutils literal notranslate"><span class="pre">avg_speed</span></code> function that will
 be calculating the average speed based on provided distance and duration
 quantities. The usage of such a function can look as follows:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">units</span><span class="o">::</span><span class="n">isq</span><span class="o">::</span><span class="n">si</span><span class="o">::</span><span class="n">international</span><span class="o">::</span><span class="n">references</span><span class="p">;</span>
-<span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">avg_speed</span><span class="p">(</span><span class="mi">220</span> <span class="o">*</span> <span class="n">km</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
-<span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">avg_speed</span><span class="p">(</span><span class="mi">140</span> <span class="o">*</span> <span class="n">mi</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">units</span><span class="o">::</span><span class="nn">isq</span><span class="o">::</span><span class="nn">si</span><span class="o">::</span><span class="nn">international</span><span class="o">::</span><span class="nn">references</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="mi">220</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="mi">140</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mi</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>In this and all other physical units libraries such a function can be
 implemented as:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span> <span class="n">avg_speed</span><span class="p">(</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span>
-                                                    <span class="n">si</span><span class="o">::</span><span class="n">time</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">second</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="n">si</span><span class="o">::</span><span class="n">time</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">second</span><span class="o">&gt;</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">return</span> <span class="n">d</span> <span class="o">/</span> <span class="n">t</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -704,10 +797,10 @@ conversions (from kilometers to meters, from hours to seconds,
 and from meters per second to kilometers per hour) which can affect
 runtime performance and the precision of the final result. To eliminate
 all that overhead we have to write a template function:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">U1</span><span class="p">,</span> <span class="k">typename</span> <span class="n">R1</span><span class="p">,</span> <span class="k">typename</span> <span class="n">U2</span><span class="p">,</span> <span class="k">typename</span> <span class="n">R2</span><span class="o">&gt;</span>
-<span class="k">constexpr</span> <span class="k">auto</span> <span class="n">avg_speed</span><span class="p">(</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">U1</span><span class="p">,</span> <span class="n">R1</span><span class="o">&gt;</span> <span class="n">d</span><span class="p">,</span> <span class="n">si</span><span class="o">::</span><span class="n">time</span><span class="o">&lt;</span><span class="n">U2</span><span class="p">,</span> <span class="n">R2</span><span class="o">&gt;</span> <span class="n">t</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">U1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">R1</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">U2</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">R2</span><span class="o">&gt;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="n">si</span><span class="o">::</span><span class="n">length</span><span class="o">&lt;</span><span class="n">U1</span><span class="p">,</span><span class="w"> </span><span class="n">R1</span><span class="o">&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">time</span><span class="o">&lt;</span><span class="n">U2</span><span class="p">,</span><span class="w"> </span><span class="n">R2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">return</span> <span class="n">d</span> <span class="o">/</span> <span class="n">t</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -718,9 +811,9 @@ the case. For more complicated calculations we would like to ensure that we
 are returning a physical quantity of a correct dimension. For this
 dimension-specific concepts come handy again and with usage of C++20 generic
 functions our function can look as simple as:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="nf">avg_speed</span><span class="p">(</span><span class="n">Length</span> <span class="k">auto</span> <span class="n">d</span><span class="p">,</span> <span class="n">Time</span> <span class="k">auto</span> <span class="n">t</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="n">Length</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="n">Time</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
 <span class="p">{</span>
-  <span class="k">return</span> <span class="n">d</span> <span class="o">/</span> <span class="n">t</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -735,7 +828,7 @@ information on different kinds of interfaces supported by the library.</p>
 </div>
 </section>
 <section id="working-with-constrained-deduced-quantity-types">
-<h2>Working With Constrained Deduced Quantity Types<a class="headerlink" href="#working-with-constrained-deduced-quantity-types" title="Permalink to this headline"></a></h2>
+<h2>Working With Constrained Deduced Quantity Types<a class="headerlink" href="#working-with-constrained-deduced-quantity-types" title="Permalink to this heading">¶</a></h2>
 <p>It is important to note that when we assign a result from the function to an
 automatically deduced type, even if it is constrained by a dimension-specific
 concept, we still do not know what is the exact unit and representation type
@@ -743,18 +836,18 @@ of such a quantity. In many cases it might be exactly what we want to get,
 but often we would like to know a specific type too. We have two options here:</p>
 <ul>
 <li><p>query the actual dimension, unit, and representation types:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">avg_speed</span><span class="p">(</span><span class="mi">220</span> <span class="o">*</span> <span class="n">km</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
-<span class="k">using</span> <span class="n">quantity_type</span> <span class="o">=</span> <span class="k">decltype</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
-<span class="k">using</span> <span class="n">dimension_type</span> <span class="o">=</span> <span class="n">quantity_type</span><span class="o">::</span><span class="n">dimension</span><span class="p">;</span>
-<span class="k">using</span> <span class="n">unit_type</span> <span class="o">=</span> <span class="n">quantity_type</span><span class="o">::</span><span class="n">unit</span><span class="p">;</span>
-<span class="k">using</span> <span class="n">rep_type</span> <span class="o">=</span> <span class="n">quantity_type</span><span class="o">::</span><span class="n">rep</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="mi">220</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<span class="k">using</span><span class="w"> </span><span class="n">quantity_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">decltype</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="k">using</span><span class="w"> </span><span class="n">dimension_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_type</span><span class="o">::</span><span class="n">dimension</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">unit_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_type</span><span class="o">::</span><span class="n">unit</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">rep_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_type</span><span class="o">::</span><span class="n">rep</span><span class="p">;</span>
 </pre></div>
 </div>
 </li>
 <li><p>convert or cast to a desired quantity type:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="n">v1</span> <span class="o">=</span> <span class="n">avg_speed</span><span class="p">(</span><span class="mf">220.</span> <span class="o">*</span> <span class="n">km</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">);</span>
-<span class="k">constexpr</span> <span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">v1</span><span class="p">;</span>
-<span class="k">constexpr</span> <span class="n">Speed</span> <span class="k">auto</span> <span class="n">v3</span> <span class="o">=</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">avg_speed</span><span class="p">(</span><span class="mf">220.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">h</span><span class="p">);</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v1</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">Speed</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">v3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">speed</span><span class="o">&lt;</span><span class="n">si</span><span class="o">::</span><span class="n">metre_per_second</span><span class="o">&gt;</span><span class="p">(</span><span class="n">v1</span><span class="p">);</span>
 </pre></div>
 </div>
 </li>
@@ -766,11 +859,11 @@ but often we would like to know a specific type too. We have two options here:</
 </div>
 </section>
 <section id="dimensionless-quantities">
-<h2>Dimensionless Quantities<a class="headerlink" href="#dimensionless-quantities" title="Permalink to this headline"></a></h2>
+<h2>Dimensionless Quantities<a class="headerlink" href="#dimensionless-quantities" title="Permalink to this heading">¶</a></h2>
 <p>Whenever we divide two quantities of the same dimension we end up with a
 <a class="reference internal" href="../glossary.html#term-dimensionless-quantity"><span class="xref std std-term">dimensionless quantity</span></a> otherwise known as <a class="reference internal" href="../glossary.html#term-quantity-of-dimension-one"><span class="xref std std-term">quantity of dimension one</span></a>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">km</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>
-<span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="n">km</span> <span class="o">/</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">km</span><span class="p">)),</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_one</span><span class="p">,</span> <span class="n">one</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">);</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static_assert</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">km</span><span class="p">)),</span><span class="w"> </span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_one</span><span class="p">,</span><span class="w"> </span><span class="n">one</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>According to the official ISO definition <a class="reference internal" href="../reference/systems/generic/dimensionless.html#_CPPv4N5units7dim_oneE" title="units::dim_one"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">dim_one</span></code></a> is a dimension “for which all the
@@ -783,11 +876,11 @@ are zero”.</p>
 </div>
 <p>To simplify the usage of the dimensionless quantity a following concept and alias template
 are provided:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">concept</span> <span class="n">Dimensionless</span> <span class="o">=</span> <span class="n">QuantityOf</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">dim_one</span><span class="o">&gt;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">concept</span><span class="w"> </span><span class="nc">Dimensionless</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">QuantityOf</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">dim_one</span><span class="o">&gt;</span><span class="p">;</span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span> <span class="n">U</span><span class="p">,</span> <span class="n">Representation</span> <span class="n">Rep</span> <span class="o">=</span> <span class="kt">double</span><span class="o">&gt;</span>
-<span class="k">using</span> <span class="n">dimensionless</span> <span class="o">=</span> <span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_one</span><span class="p">,</span> <span class="n">U</span><span class="p">,</span> <span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">template</span><span class="o">&lt;</span><span class="n">Unit</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Representation</span><span class="w"> </span><span class="n">Rep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">dimensionless</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">quantity</span><span class="o">&lt;</span><span class="n">dim_one</span><span class="p">,</span><span class="w"> </span><span class="n">U</span><span class="p">,</span><span class="w"> </span><span class="n">Rep</span><span class="o">&gt;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>There are two special units provided for usage with such a quantity:</p>
@@ -798,7 +891,7 @@ values of quantities of dimension one are numbers”),</p></li>
 <li><p><a class="reference internal" href="../reference/systems/generic/dimensionless.html#_CPPv4N5units7percentE" title="units::percent"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">percent</span></code></a> which has the symbol <code class="docutils literal notranslate"><span class="pre">%</span></code> and <code class="docutils literal notranslate"><span class="pre">ratio(1,</span> <span class="pre">100)</span></code> of the <a class="reference internal" href="../reference/systems/generic/dimensionless.html#_CPPv4N5units3oneE" title="units::one"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">one</span></code></a> unit.</p></li>
 </ul>
 <p>For example the following code:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">percent</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">50.</span> <span class="o">*</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="mf">100.</span> <span class="o">*</span> <span class="n">m</span><span class="p">))</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">quantity_cast</span><span class="o">&lt;</span><span class="n">percent</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">50.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">100.</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>will print <code class="docutils literal notranslate"><span class="pre">50</span> <span class="pre">%</span></code> to the console output.</p>
@@ -822,33 +915,50 @@ chapter.</p>
 
 
            </div>
+           
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="basic_concepts.html" class="btn btn-neutral float-left" title="Basic Concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="quantity_points.html" class="btn btn-neutral float-right" title="Quantity Points" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="quantity_like.html" class="btn btn-neutral float-left" title="Quantity-like Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2018-present, Mateusz Pusz.</p>
-  </div>
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
         </div>
       </div>
+
     </section>
+
   </div>
-  <script>
+  
+
+  <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>
