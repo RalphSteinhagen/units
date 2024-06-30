@@ -22,9 +22,12 @@
 
 #pragma once
 
+#include <mp-units/bits/requires_hosted.h>
+//
 #include <mp-units/bits/module_macros.h>
 #include <mp-units/framework/customization_points.h>
 #include <mp-units/framework/quantity.h>
+#include <mp-units/framework/quantity_point.h>
 #include <mp-units/framework/unit.h>
 #include <mp-units/framework/value_cast.h>
 
@@ -130,10 +133,10 @@ template<auto R, typename Rep>
 }
 
 /**
- * @brief Determines if a number is finite.
+ * @brief Determines if a quantity is finite.
  *
- * @param a: Number to analyze.
- * @return bool: Whether the number is finite or not.
+ * @param a: Quantity to analyze.
+ * @return bool: Whether the quantity is finite or not.
  */
 template<auto R, typename Rep>
   requires requires(Rep v) { isfinite(v); } || requires(Rep v) { std::isfinite(v); }
@@ -144,10 +147,23 @@ template<auto R, typename Rep>
 }
 
 /**
- * @brief Determines if a number is infinite.
+ * @brief Determines if a quantity point is finite.
  *
- * @param a: Number to analyze.
- * @return bool: Whether the number is infinite or not.
+ * @param a: Quantity point to analyze.
+ * @return bool: Whether the quantity point is finite or not.
+ */
+template<auto R, auto PO, typename Rep>
+  requires requires(quantity<R, Rep> q) { isfinite(q); }
+[[nodiscard]] constexpr bool isfinite(const quantity_point<R, PO, Rep>& a) noexcept
+{
+  return isfinite(a.quantity_ref_from(a.point_origin));
+}
+
+/**
+ * @brief Determines if a quantity is infinite.
+ *
+ * @param a: Quantity to analyze.
+ * @return bool: Whether the quantity is infinite or not.
  */
 template<auto R, typename Rep>
   requires requires(Rep v) { isinf(v); } || requires(Rep v) { std::isinf(v); }
@@ -157,12 +173,25 @@ template<auto R, typename Rep>
   return isinf(a.numerical_value_ref_in(a.unit));
 }
 
+/**
+ * @brief Determines if a quantity point is infinite.
+ *
+ * @param a: Quantity point to analyze.
+ * @return bool: Whether the quantity point is infinite or not.
+ */
+template<auto R, auto PO, typename Rep>
+  requires requires(quantity<R, Rep> q) { isinf(q); }
+[[nodiscard]] constexpr bool isinf(const quantity_point<R, PO, Rep>& a) noexcept
+{
+  return isinf(a.quantity_ref_from(a.point_origin));
+}
+
 
 /**
- * @brief Determines if a number is a nan.
+ * @brief Determines if a quantity is a nan.
  *
- * @param a: Number to analyze.
- * @return bool: Whether the number is a NaN or not.
+ * @param a: Quantity to analyze.
+ * @return bool: Whether the quantity is a NaN or not.
  */
 template<auto R, typename Rep>
   requires requires(Rep v) { isnan(v); } || requires(Rep v) { std::isnan(v); }
@@ -170,6 +199,20 @@ template<auto R, typename Rep>
 {
   using std::isnan;
   return isnan(a.numerical_value_ref_in(a.unit));
+}
+
+
+/**
+ * @brief Determines if a quantity point is a nan.
+ *
+ * @param a: Quantity point to analyze.
+ * @return bool: Whether the quantity point is a NaN or not.
+ */
+template<auto R, auto PO, typename Rep>
+  requires requires(quantity<R, Rep> q) { isnan(q); }
+[[nodiscard]] constexpr bool isnan(const quantity_point<R, PO, Rep>& a) noexcept
+{
+  return isnan(a.quantity_ref_from(a.point_origin));
 }
 
 /**
@@ -196,6 +239,29 @@ template<auto R, auto S, auto T, typename Rep1, typename Rep2, typename Rep3>
     common_reference(R * S, T)};
 }
 
+/**
+ * @brief Computes the fma of 2 quantities and a quantity point
+ *
+ * @param a: Multiplicand
+ * @param x: Multiplicand
+ * @param b: Addend
+ * @return QuantityPoint: The nearest floating point representable to ax+b
+ */
+template<auto R, auto S, auto T, auto Origin, typename Rep1, typename Rep2, typename Rep3>
+  requires requires { common_quantity_spec(get_quantity_spec(R) * get_quantity_spec(S), get_quantity_spec(T)); } &&
+           (get_unit(R) * get_unit(S) == get_unit(T)) && requires(Rep1 v1, Rep2 v2, Rep3 v3) {
+             requires requires { fma(v1, v2, v3); } || requires { std::fma(v1, v2, v3); };
+           }
+[[nodiscard]] constexpr QuantityPointOf<
+  common_quantity_spec(get_quantity_spec(R) * get_quantity_spec(S),
+                       get_quantity_spec(T))> auto fma(const quantity<R, Rep1>& a, const quantity<S, Rep2>& x,
+                                                       const quantity_point<T, Origin, Rep3>& b) noexcept
+{
+  using std::fma;
+  return Origin + quantity{fma(a.numerical_value_ref_in(a.unit), x.numerical_value_ref_in(x.unit),
+                               b.quantity_ref_from(b.point_origin).numerical_value_ref_in(b.unit)),
+                           common_reference(R * S, T)};
+}
 
 /**
  * @brief Computes the floating-point remainder of the division operation x / y.

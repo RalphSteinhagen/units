@@ -38,6 +38,7 @@
 #ifndef MP_UNITS_IN_MODULE_INTERFACE
 #include <concepts>
 #include <cstdint>
+#include <cstdlib>
 #include <numbers>
 #include <optional>
 #endif
@@ -278,7 +279,7 @@ template<typename T>
   // As this function should only be called at compile time, the terminations herein function as
   // "parameter-compatible static_asserts", and should not result in terminations at runtime.
   if (exp < 0) {
-    std::terminate();  // int_power only supports positive integer powers
+    std::abort();  // int_power only supports positive integer powers
   }
 
   constexpr auto checked_multiply = [](auto a, auto b) {
@@ -286,7 +287,7 @@ template<typename T>
     MP_UNITS_DIAGNOSTIC_PUSH
     MP_UNITS_DIAGNOSTIC_IGNORE_FLOAT_EQUAL
     if (result / a != b) {
-      std::terminate();  // Wraparound detected
+      std::abort();  // Wraparound detected
     }
     MP_UNITS_DIAGNOSTIC_POP
     return result;
@@ -294,17 +295,8 @@ template<typename T>
 
   constexpr auto checked_square = [checked_multiply](auto a) { return checked_multiply(a, a); };
 
-  // TODO(chogg): Unify this implementation with the one in pow.h.  That one takes its exponent as a
-  // template parameter, rather than a function parameter.
-
-  if (exp == 0) {
-    return T{1};
-  }
-
-  if (exp % 2 == 1) {
-    return checked_multiply(base, int_power(base, exp - 1));
-  }
-
+  if (exp == 0) return T{1};
+  if (exp % 2 == 1) return checked_multiply(base, int_power(base, exp - 1));
   return checked_square(int_power(base, exp / 2));
 }
 
@@ -319,12 +311,12 @@ template<typename T>
   // terminations is to act as "static_assert substitutes", not to actually terminate at runtime.
   const auto exp = get_exponent(el);
   if (exp.den != 1) {
-    std::terminate();  // Rational powers not yet supported
+    std::abort();  // Rational powers not yet supported
   }
 
   if (exp.num < 0) {
     if constexpr (std::is_integral_v<T>) {
-      std::terminate();  // Cannot represent reciprocal as integer
+      std::abort();  // Cannot represent reciprocal as integer
     } else {
       return T{1} / compute_base_power<T>(inverse(el));
     }
@@ -339,7 +331,6 @@ template<typename T>
 // The input is the desired result, but in a (wider) intermediate type.  The point of this function
 // is to cast to the desired type, but avoid overflow in doing so.
 template<typename To, typename From>
-// TODO(chogg): Migrate this to use `treat_as_floating_point`.
   requires(!std::is_integral_v<To> || std::is_integral_v<From>)
 [[nodiscard]] consteval To checked_static_cast(From x)
 {
@@ -347,7 +338,7 @@ template<typename To, typename From>
   // to produce compiler errors, because we cannot `static_assert` on function arguments.
   if constexpr (std::is_integral_v<To>) {
     if (!std::in_range<To>(x)) {
-      std::terminate();  // Cannot represent magnitude in this type
+      std::abort();  // Cannot represent magnitude in this type
     }
   }
 
@@ -523,11 +514,10 @@ inline constexpr bool is_specialization_of_magnitude<magnitude<Ms...>> = true;
  */
 template<typename T, auto... Ms>
   requires(is_integral(magnitude<Ms...>{})) || treat_as_floating_point<T>
-constexpr T get_value(const magnitude<Ms...>&)
+[[nodiscard]] consteval T get_value(const magnitude<Ms...>&)
 {
   // Force the expression to be evaluated in a constexpr context, to catch, e.g., overflow.
-  constexpr auto result = detail::checked_static_cast<T>((detail::compute_base_power<T>(Ms) * ... * T{1}));
-
+  constexpr T result = detail::checked_static_cast<T>((detail::compute_base_power<T>(Ms) * ... * T{1}));
   return result;
 }
 
@@ -591,7 +581,7 @@ MP_UNITS_EXPORT_END
 
 namespace detail {
 
-consteval bool less(MagnitudeSpec auto lhs, MagnitudeSpec auto rhs)
+[[nodiscard]] consteval bool less(MagnitudeSpec auto lhs, MagnitudeSpec auto rhs)
 {
   using lhs_base_t = decltype(get_base_value(lhs));
   using rhs_base_t = decltype(get_base_value(rhs));
@@ -609,9 +599,9 @@ consteval bool less(MagnitudeSpec auto lhs, MagnitudeSpec auto rhs)
 MP_UNITS_EXPORT_BEGIN
 
 // Base cases, for when either (or both) inputs are the identity.
-constexpr Magnitude auto operator*(magnitude<>, magnitude<>) { return magnitude<>{}; }
-constexpr Magnitude auto operator*(magnitude<>, Magnitude auto m) { return m; }
-constexpr Magnitude auto operator*(Magnitude auto m, magnitude<>) { return m; }
+[[nodiscard]] consteval Magnitude auto operator*(magnitude<>, magnitude<>) { return magnitude<>{}; }
+[[nodiscard]] consteval Magnitude auto operator*(magnitude<>, Magnitude auto m) { return m; }
+[[nodiscard]] consteval Magnitude auto operator*(Magnitude auto m, magnitude<>) { return m; }
 
 // Recursive case for the product of any two non-identity Magnitudes.
 template<auto H1, auto... T1, auto H2, auto... T2>
@@ -686,16 +676,6 @@ template<auto... Ms>
 
 [[nodiscard]] consteval auto denominator(Magnitude auto m) { return numerator(pow<-1>(m)); }
 
-// TODO This probably should not be exported but is used in chrono.h
-MP_UNITS_EXPORT constexpr ratio as_ratio(Magnitude auto m)
-  requires(is_rational(decltype(m){}))
-{
-  return ratio{
-    get_value<std::intmax_t>(numerator(m)),
-    get_value<std::intmax_t>(denominator(m)),
-  };
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Common Magnitude.
 //
@@ -767,7 +747,7 @@ template<auto H1, auto... T1, auto H2, auto... T2>
 template<auto... Ms>
 [[nodiscard]] consteval auto common_magnitude_type_impl(magnitude<Ms...>)
 {
-  return (... * decltype(get_base_value(Ms)){}) * std::intmax_t{};
+  return (std::intmax_t{} * ... * decltype(get_base_value(Ms)){});
 }
 
 // Returns the most precise type to express the magnitude factor

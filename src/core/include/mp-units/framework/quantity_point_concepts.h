@@ -32,7 +32,7 @@
 
 namespace mp_units {
 
-MP_UNITS_EXPORT template<typename Derived, QuantitySpec auto QS>
+MP_UNITS_EXPORT template<QuantitySpec auto QS>
 struct absolute_point_origin;
 
 namespace detail {
@@ -40,22 +40,15 @@ namespace detail {
 template<typename T>
 inline constexpr bool is_quantity_point = false;
 
-template<typename T>
-inline constexpr bool is_specialization_of_absolute_point_origin = false;
-
-template<typename D, auto Q>
-inline constexpr bool is_specialization_of_absolute_point_origin<absolute_point_origin<D, Q>> = true;
-
-template<typename D, auto Q>
-void to_base_specialization_of_absolute_point_origin(const volatile absolute_point_origin<D, Q>*);
+template<auto Q>
+void to_base_specialization_of_absolute_point_origin(const volatile absolute_point_origin<Q>*);
 
 template<typename T>
 inline constexpr bool is_derived_from_specialization_of_absolute_point_origin =
   requires(T* t) { to_base_specialization_of_absolute_point_origin(t); };
 
 template<typename T>
-concept AbsolutePointOrigin =
-  is_derived_from_specialization_of_absolute_point_origin<T> && !is_specialization_of_absolute_point_origin<T>;
+concept AbsolutePointOrigin = is_derived_from_specialization_of_absolute_point_origin<T> && std::is_final_v<T>;
 
 }  // namespace detail
 
@@ -72,12 +65,6 @@ struct relative_point_origin;
 
 namespace detail {
 
-template<typename T>
-inline constexpr bool is_specialization_of_relative_point_origin = false;
-
-template<auto QP>
-inline constexpr bool is_specialization_of_relative_point_origin<relative_point_origin<QP>> = true;
-
 template<auto QP>
 void to_base_specialization_of_relative_point_origin(const volatile relative_point_origin<QP>*);
 
@@ -86,8 +73,7 @@ inline constexpr bool is_derived_from_specialization_of_relative_point_origin =
   requires(T* t) { to_base_specialization_of_relative_point_origin(t); };
 
 template<typename T>
-concept RelativePointOrigin =
-  is_derived_from_specialization_of_relative_point_origin<T> && !is_specialization_of_relative_point_origin<T>;
+concept RelativePointOrigin = is_derived_from_specialization_of_relative_point_origin<T> && std::is_final_v<T>;
 
 }  // namespace detail
 
@@ -105,7 +91,7 @@ concept PointOrigin = detail::AbsolutePointOrigin<T> || detail::RelativePointOri
  * Satisfied by all quantity point origins that are defined using a provided quantity specification.
  */
 MP_UNITS_EXPORT template<typename T, auto QS>
-concept PointOriginFor = PointOrigin<T> && QuantitySpecOf<std::remove_const_t<decltype(QS)>, T::quantity_spec>;
+concept PointOriginFor = PointOrigin<T> && QuantitySpecOf<MP_UNITS_REMOVE_CONST(decltype(QS)), T::quantity_spec>;
 
 MP_UNITS_EXPORT template<Reference auto R, PointOriginFor<get_quantity_spec(R)> auto PO,
                          RepresentationOf<get_quantity_spec(R).character> Rep>
@@ -141,7 +127,7 @@ template<PointOrigin PO1, PointOrigin PO2>
 
 template<typename T, auto V>
 concept SameAbsolutePointOriginAs =
-  PointOrigin<T> && PointOrigin<std::remove_const_t<decltype(V)>> && same_absolute_point_origins(T{}, V);
+  PointOrigin<T> && PointOrigin<MP_UNITS_REMOVE_CONST(decltype(V))> && same_absolute_point_origins(T{}, V);
 
 }  // namespace detail
 

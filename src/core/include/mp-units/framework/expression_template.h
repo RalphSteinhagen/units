@@ -29,6 +29,7 @@
 
 #ifndef MP_UNITS_IN_MODULE_INTERFACE
 #include <cstdint>
+#include <functional>
 #endif
 
 namespace mp_units {
@@ -534,8 +535,8 @@ template<template<typename> typename Proj, template<typename...> typename To, ty
          expr_type_projectable<Proj>... Dens>
 [[nodiscard]] consteval auto expr_map_impl(type_list<Nums...>, type_list<Dens...>)
 {
-  return (OneType{} * ... * map_power(typename expr_type_map<std::remove_const_t<Nums>, Proj>::type{})) /
-         (OneType{} * ... * map_power(typename expr_type_map<std::remove_const_t<Dens>, Proj>::type{}));
+  return (OneType{} * ... * map_power(typename expr_type_map<Nums, Proj>::type{})) /
+         (OneType{} * ... * map_power(typename expr_type_map<Dens, Proj>::type{}));
 }
 
 /**

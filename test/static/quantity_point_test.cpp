@@ -26,55 +26,58 @@
 #include <mp-units/systems/isq.h>
 #include <mp-units/systems/si.h>
 #include <mp-units/systems/usc.h>
-#include <chrono>
 #include <concepts>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
 #include <utility>
+#if MP_UNITS_HOSTED
+#include <chrono>
+#endif
 
 namespace {
 
 using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
 using namespace mp_units::usc::unit_symbols;
+
+#if MP_UNITS_HOSTED
 using namespace std::chrono_literals;
 using sys_seconds = std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds>;
+#endif
 
-inline constexpr struct zeroth_length : absolute_point_origin<zeroth_length, isq::length> {
+inline constexpr struct zeroth_length final : absolute_point_origin<isq::length> {
 } zeroth_length;
 
-inline constexpr struct mean_sea_level : absolute_point_origin<mean_sea_level, isq::height> {
+inline constexpr struct mean_sea_level final : absolute_point_origin<isq::height> {
 } mean_sea_level;
 
-inline constexpr struct my_mean_sea_level : decltype(mean_sea_level) {
-} my_mean_sea_level;
+inline constexpr auto my_mean_sea_level = mean_sea_level;
 
-inline constexpr struct same_mean_sea_level : relative_point_origin<mean_sea_level + 0 * isq::height[m]> {
+inline constexpr struct same_mean_sea_level final : relative_point_origin<mean_sea_level + 0 * isq::height[m]> {
 } same_mean_sea_level;
 
-inline constexpr struct ground_level : relative_point_origin<mean_sea_level + 42 * isq::height[m]> {
+inline constexpr struct ground_level final : relative_point_origin<mean_sea_level + 42 * isq::height[m]> {
 } ground_level;
 
-inline constexpr struct my_ground_level : decltype(ground_level) {
-} my_ground_level;
+inline constexpr auto my_ground_level = ground_level;
 
-inline constexpr struct same_ground_level1 : relative_point_origin<mean_sea_level + 42 * isq::height[m]> {
+inline constexpr struct same_ground_level1 final : relative_point_origin<mean_sea_level + 42 * isq::height[m]> {
 } same_ground_level1;
 
-inline constexpr struct same_ground_level2 : relative_point_origin<my_mean_sea_level + 42 * isq::height[m]> {
+inline constexpr struct same_ground_level2 final : relative_point_origin<my_mean_sea_level + 42 * isq::height[m]> {
 } same_ground_level2;
 
-inline constexpr struct tower_peak : relative_point_origin<ground_level + 42 * isq::height[m]> {
+inline constexpr struct tower_peak final : relative_point_origin<ground_level + 42 * isq::height[m]> {
 } tower_peak;
 
-inline constexpr struct other_ground_level : relative_point_origin<mean_sea_level + 123 * isq::height[m]> {
+inline constexpr struct other_ground_level final : relative_point_origin<mean_sea_level + 123 * isq::height[m]> {
 } other_ground_level;
 
-inline constexpr struct other_absolute_level : absolute_point_origin<other_absolute_level, isq::height> {
+inline constexpr struct other_absolute_level final : absolute_point_origin<isq::height> {
 } other_absolute_level;
 
-inline constexpr struct zero : absolute_point_origin<zero, dimensionless> {
+inline constexpr struct zero final : absolute_point_origin<dimensionless> {
 } zero;
 
 QUANTITY_SPEC(special_height, isq::height);
@@ -102,12 +105,12 @@ static_assert(my_mean_sea_level != other_absolute_level);
 static_assert(ground_level != other_ground_level);
 
 template<auto QS>
-struct absolute_po_ : absolute_point_origin<absolute_po_<QS>, QS> {};
+struct absolute_po_ final : absolute_point_origin<QS> {};
 template<auto QS>
 inline constexpr absolute_po_<QS> absolute_po;
 
 template<auto QP>
-struct relative_po_ : relative_point_origin<QP> {};
+struct relative_po_ final : relative_point_origin<QP> {};
 template<auto QP>
 inline constexpr relative_po_<QP> relative_po;
 
@@ -115,7 +118,7 @@ static_assert(relative_po<absolute_po<isq::length> + isq::height(42 * m)>.quanti
 static_assert(relative_po<absolute_po<kind_of<isq::length>> + isq::height(42 * m)>.quantity_spec == isq::height);
 static_assert(relative_po<absolute_po<isq::height> + 42 * m>.quantity_spec == isq::height);
 
-inline constexpr struct my_kelvin : named_unit<"my_K", mag<10> * si::kelvin> {
+inline constexpr struct my_kelvin final : named_unit<"my_K", mag<10> * si::kelvin> {
 } my_kelvin;
 
 static_assert(default_point_origin(si::kelvin) == si::absolute_zero);
@@ -306,7 +309,7 @@ static_assert(quantity_point<si::degree_Celsius, si::ice_point>::dimension == is
 static_assert(quantity_point<si::degree_Celsius, si::ice_point>::unit == si::degree_Celsius);
 static_assert(is_of_type<quantity_point<si::degree_Celsius, si::ice_point>::point_origin, struct si::ice_point>);
 static_assert(
-  is_of_type<quantity_point<si::degree_Celsius, si::ice_point>::absolute_point_origin, struct si::zeroth_kelvin>);
+  is_of_type<quantity_point<si::degree_Celsius, si::ice_point>::absolute_point_origin, struct si::absolute_zero>);
 
 static_assert(quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::reference ==
               isq::Celsius_temperature[si::degree_Celsius]);
@@ -319,7 +322,7 @@ static_assert(is_of_type<quantity_point<isq::Celsius_temperature[si::degree_Cels
                          struct si::ice_point>);
 static_assert(
   is_of_type<quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::absolute_point_origin,
-             struct si::zeroth_kelvin>);
+             struct si::absolute_zero>);
 
 
 //////////////////
@@ -444,6 +447,7 @@ static_assert(!std::convertible_to<quantity<isq::length[m]>, quantity_point<isq:
 static_assert(!std::constructible_from<quantity_point<special_height[m]>, quantity<isq::height[m]>>);
 static_assert(!std::convertible_to<quantity<special_height[m]>, quantity_point<isq::height[m]>>);
 
+#if MP_UNITS_HOSTED
 // quantity-like
 static_assert(!std::constructible_from<quantity_point<si::second>, std::chrono::seconds>);
 static_assert(!std::convertible_to<std::chrono::seconds, quantity_point<si::second>>);
@@ -453,7 +457,7 @@ static_assert(!std::convertible_to<std::chrono::seconds, quantity_point<isq::tim
 
 static_assert(!std::constructible_from<quantity_point<isq::period_duration[s]>, std::chrono::seconds>);
 static_assert(!std::convertible_to<std::chrono::seconds, quantity_point<isq::period_duration[s]>>);
-
+#endif
 
 // ----------------------
 // explicit point origins
@@ -499,6 +503,7 @@ static_assert(!std::convertible_to<quantity<special_height[m]>, quantity_point<i
 static_assert(!std::constructible_from<quantity_point<si::metre, mean_sea_level>, quantity<isq::length[m]>>);
 static_assert(!std::convertible_to<quantity<isq::length[m]>, quantity_point<si::metre, mean_sea_level>>);
 
+#if MP_UNITS_HOSTED
 // quantity-like
 static_assert(!std::constructible_from<quantity_point<si::second, chrono_point_origin<std::chrono::system_clock>>,
                                        std::chrono::seconds>);
@@ -516,6 +521,7 @@ static_assert(
 static_assert(
   !std::convertible_to<std::chrono::seconds,
                        quantity_point<isq::period_duration[s], chrono_point_origin<std::chrono::system_clock>>>);
+#endif
 
 
 ///////////////////////////////////////
@@ -775,6 +781,7 @@ static_assert(!std::constructible_from<quantity_point<isq::height[m], other_abso
 static_assert(!std::convertible_to<quantity_point<isq::height[m], ground_level>,
                                    quantity_point<isq::height[m], other_absolute_level>>);
 
+#if MP_UNITS_HOSTED
 // quantity-point-like
 static_assert(
   std::constructible_from<quantity_point<isq::time[s], chrono_point_origin<std::chrono::system_clock>>, sys_seconds>);
@@ -786,6 +793,7 @@ static_assert(
   !std::constructible_from<quantity_point<isq::time[s], chrono_point_origin<std::chrono::steady_clock>>, sys_seconds>);
 static_assert(
   !std::convertible_to<sys_seconds, quantity_point<isq::time[s], chrono_point_origin<std::chrono::steady_clock>>>);
+#endif
 
 
 //////////////////////////////////
@@ -794,8 +802,10 @@ static_assert(
 
 static_assert(quantity_point{42 * m}.quantity_from_zero() == 42 * m);
 static_assert(quantity_point{isq::height(42 * m)}.quantity_from_zero() == 42 * m);
-static_assert(quantity_point{20 * deg_C}.quantity_from_zero() == 20 * deg_C);
-static_assert(quantity_point{20. * deg_C}.in(deg_F).quantity_from_zero() == 68 * deg_F);
+static_assert(quantity_point{delta<deg_C>(20)}.quantity_from_zero() == delta<deg_C>(20));
+static_assert(quantity_point{delta<deg_C>(20.)}.in(deg_F).quantity_from_zero() == delta<deg_F>(68));
+static_assert(absolute<deg_C>(20).quantity_from_zero() == delta<deg_C>(20));
+static_assert(absolute<deg_C>(20.).in(deg_F).quantity_from_zero() == delta<deg_F>(68));
 
 static_assert((mean_sea_level + 42 * m).quantity_from_zero() == 42 * m);
 static_assert((ground_level + 42 * m).quantity_from_zero() == 84 * m);
@@ -881,14 +891,15 @@ static_assert(std::is_same_v<std::remove_const_t<decltype(quantity_point{isq::he
 static_assert(quantity_point{isq::height(123 * m)}.unit == si::metre);
 static_assert(quantity_point{isq::height(123 * m)}.quantity_spec == isq::height);
 
-static_assert(std::is_same_v<decltype(quantity_point{20 * deg_C})::rep, int>);
-static_assert(std::is_same_v<std::remove_const_t<decltype(quantity_point{20 * deg_C}.point_origin)>,
-                             struct si::zeroth_degree_Celsius>);
-static_assert(std::is_same_v<std::remove_const_t<decltype(quantity_point{20 * deg_C}.absolute_point_origin)>,
-                             struct si::zeroth_kelvin>);
-static_assert(quantity_point{20 * deg_C}.unit == si::degree_Celsius);
-static_assert(quantity_point{20 * deg_C}.quantity_spec == kind_of<isq::thermodynamic_temperature>);
+static_assert(std::is_same_v<decltype(quantity_point{delta<deg_C>(20)})::rep, int>);
+static_assert(
+  std::is_same_v<std::remove_const_t<decltype(quantity_point{delta<deg_C>(20)}.point_origin)>, struct si::ice_point>);
+static_assert(std::is_same_v<std::remove_const_t<decltype(quantity_point{delta<deg_C>(20)}.absolute_point_origin)>,
+                             struct si::absolute_zero>);
+static_assert(quantity_point{delta<deg_C>(20)}.unit == si::degree_Celsius);
+static_assert(quantity_point{delta<deg_C>(20)}.quantity_spec == kind_of<isq::thermodynamic_temperature>);
 
+#if MP_UNITS_HOSTED
 using namespace std::chrono_literals;
 static_assert(std::is_same_v<decltype(quantity_point{sys_seconds{123s}})::rep, std::chrono::seconds::rep>);
 static_assert(std::is_same_v<std::remove_const_t<decltype(quantity_point{sys_seconds{123s}}.point_origin)>,
@@ -897,6 +908,7 @@ static_assert(std::is_same_v<std::remove_const_t<decltype(quantity_point{sys_sec
                              chrono_point_origin_<std::chrono::system_clock>>);
 static_assert(quantity_point{sys_seconds{24h}}.unit == si::second);
 static_assert(quantity_point{sys_seconds{24h}}.quantity_spec == kind_of<isq::time>);
+#endif
 
 
 ////////////
@@ -1427,6 +1439,17 @@ static_assert((ground_level + 42 * m) - (other_ground_level + 42 * m) == -81 * m
 static_assert((other_ground_level + 42 * m) - (tower_peak + 42 * m) == 39 * m);
 static_assert((tower_peak + 42 * m) - (other_ground_level + 42 * m) == -39 * m);
 
+static_assert((mean_sea_level + 42 * m).quantity_from(ground_level + 42 * m) == -42 * m);
+static_assert((ground_level + 42 * m).quantity_from(mean_sea_level + 42 * m) == 42 * m);
+static_assert((tower_peak + 42 * m).quantity_from(ground_level + 42 * m) == 42 * m);
+static_assert((ground_level + 42 * m).quantity_from(tower_peak + 42 * m) == -42 * m);
+static_assert((tower_peak + 42 * m).quantity_from(mean_sea_level + 42 * m) == 84 * m);
+static_assert((mean_sea_level + 42 * m).quantity_from(tower_peak + 42 * m) == -84 * m);
+static_assert((other_ground_level + 42 * m).quantity_from(ground_level + 42 * m) == 81 * m);
+static_assert((ground_level + 42 * m).quantity_from(other_ground_level + 42 * m) == -81 * m);
+static_assert((other_ground_level + 42 * m).quantity_from(tower_peak + 42 * m) == 39 * m);
+static_assert((tower_peak + 42 * m).quantity_from(other_ground_level + 42 * m) == -39 * m);
+
 static_assert((mean_sea_level + 42 * m).quantity_from(mean_sea_level) == 42 * m);
 static_assert((42 * m + mean_sea_level).quantity_from(mean_sea_level) == 42 * m);
 static_assert((mean_sea_level - 42 * m).quantity_from(mean_sea_level) == -42 * m);
@@ -1481,7 +1504,7 @@ static_assert(ground_level - other_ground_level == -81 * m);
 static_assert(other_ground_level - tower_peak == 39 * m);
 static_assert(tower_peak - other_ground_level == -39 * m);
 
-inline constexpr struct zero_m_per_s : absolute_point_origin<zero_m_per_s, kind_of<isq::speed>> {
+inline constexpr struct zero_m_per_s final : absolute_point_origin<kind_of<isq::speed>> {
 } zero_m_per_s;
 
 // commutativity and associativity
@@ -1569,7 +1592,7 @@ static_assert(
   is_of_type<quantity_point{10 * isq::height[m] / (2 * isq::time[s])} + (10 * isq::height[m] / (2 * isq::time[s])),
              quantity_point<(isq::height / isq::time)[m / s], zeroth_point_origin<isq::height / isq::time>, int>>);
 
-inline constexpr struct zero_Hz : absolute_point_origin<zero_Hz, kind_of<isq::frequency>> {
+inline constexpr struct zero_Hz final : absolute_point_origin<kind_of<isq::frequency>> {
 } zero_Hz;
 
 static_assert(((zero_Hz + 10 / (2 * isq::period_duration[s])) + 5 * isq::frequency[Hz]).quantity_from(zero_Hz) ==
@@ -1653,7 +1676,7 @@ consteval bool invalid_subtraction(Ts... ts)
   return !requires { (... - ts); };
 }
 
-inline constexpr struct zero_Bq : absolute_point_origin<zero_Bq, kind_of<isq::activity>> {
+inline constexpr struct zero_Bq final : absolute_point_origin<kind_of<isq::activity>> {
 } zero_Bq;
 
 static_assert(invalid_addition(zero_Bq + 5 * isq::activity[Bq], 5 * isq::frequency[Hz]));
@@ -1676,5 +1699,57 @@ static_assert(invalid_addition(5 * isq::activity[Bq], quantity_point{10 / (2 * i
 static_assert(invalid_addition(5 * isq::activity[Bq], 10 / (2 * isq::time[s]), quantity_point{5 * isq::frequency[Hz]}));
 static_assert(invalid_subtraction(quantity_point{5 * isq::activity[Bq]}, 10 / (2 * isq::time[s]),
                                   5 * isq::frequency[Hz]));
+
+// value_cast
+
+static_assert(value_cast<m>(quantity_point{2 * km}).quantity_from_zero().numerical_value_in(m) == 2000);
+static_assert(value_cast<km>(quantity_point{2000 * m}).quantity_from_zero().numerical_value_in(km) == 2);
+static_assert(value_cast<int>(quantity_point{1.23 * m}).quantity_from_zero().numerical_value_in(m) == 1);
+static_assert(
+  value_cast<km / h>(quantity_point{2000.0 * m / (3600.0 * s)}).quantity_from_zero().numerical_value_in(km / h) == 2);
+// lvalue references in value_cast
+namespace lvalue_tests {
+constexpr quantity_point lvalue_qp{2 * km};
+static_assert(value_cast<m>(lvalue_qp).quantity_from_zero().numerical_value_in(m) == 2000);
+static_assert(value_cast<float>(lvalue_qp).quantity_from_zero().numerical_value_in(km) == 2.f);
+static_assert(value_cast<m, float>(lvalue_qp).quantity_from_zero().numerical_value_in(m) == 2000.f);
+}  // namespace lvalue_tests
+
+static_assert(value_cast<quantity<km, int>>(quantity_point{2000 * m}).quantity_from_zero().numerical_value_in(km) == 2);
+static_assert(value_cast<quantity_point<km>>(quantity_point{2000 * m}).quantity_from_zero().numerical_value_in(km) ==
+              2);
+
+template<typename ToQ, typename FromQ>
+constexpr bool value_cast_is_forbidden()
+{
+  // it appears we cannot have the requires clause right inside static_assert
+  return !requires(FromQ q) { value_cast<ToQ>(q); };
+}
+static_assert(value_cast_is_forbidden<quantity_point<m>, quantity_point<isq::width[m]>>(),
+              "value_cast shall not cast between different quantity types");
+static_assert(value_cast_is_forbidden<quantity_point<isq::width[m]>, quantity_point<m>>(),
+              "value_cast shall not cast between different quantity types");
+// value_cast which does not touch the point_origin
+static_assert(value_cast<quantity_point<isq::height[m]>>(quantity_point{2 * isq::height[km]})
+                .quantity_from_origin_is_an_implementation_detail_.numerical_value_in(m) == 2000);
+static_assert(value_cast<quantity_point<isq::height[km]>>(quantity_point{2000 * isq::height[m]})
+                .quantity_from_origin_is_an_implementation_detail_.numerical_value_in(km) == 2);
+// a value_cast which includes a change to the point origin
+static_assert(value_cast<quantity_point<isq::height[m], mean_sea_level>>(quantity_point{2000 * isq::height[m],
+                                                                                        ground_level})
+                .quantity_from_origin_is_an_implementation_detail_.numerical_value_in(m) == 2042);
+// a value_cast which includes a change to the point origin as-well as a change in units
+static_assert(value_cast<quantity_point<isq::height[m], mean_sea_level>>(quantity_point{2 * isq::height[km],
+                                                                                        ground_level})
+                .quantity_from_origin_is_an_implementation_detail_.numerical_value_in(m) == 2042);
+// a value_cast which changes all three of unit, rep, point_origin simultaneously, and the range of either FromQP or
+// ToQP does not include the other's point_origin
+static_assert(value_cast<quantity_point<isq::height[cm], mean_sea_level, int>>(
+                quantity_point{std::int8_t{100} * isq::height[mm], ground_level})
+                .quantity_from_origin_is_an_implementation_detail_.numerical_value_in(cm) == 4210);
+static_assert(value_cast<quantity_point<isq::height[mm], ground_level, std::int8_t>>(
+                quantity_point{4210 * isq::height[cm], mean_sea_level})
+                .quantity_from_origin_is_an_implementation_detail_.numerical_value_in(mm) == 100);
+
 
 }  // namespace

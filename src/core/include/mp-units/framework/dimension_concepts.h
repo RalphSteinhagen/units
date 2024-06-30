@@ -42,20 +42,13 @@ template<typename T>
 inline constexpr bool is_derived_from_specialization_of_base_dimension =
   requires(T* t) { to_base_specialization_of_base_dimension(t); };
 
-template<typename T>
-inline constexpr bool is_specialization_of_base_dimension = false;
-
-template<symbol_text Symbol>
-inline constexpr bool is_specialization_of_base_dimension<base_dimension<Symbol>> = true;
-
 /**
  * @brief A concept matching all named base dimensions in the library.
  *
  * Satisfied by all dimension types derived from a specialization of `base_dimension`.
  */
 template<typename T>
-concept BaseDimension =
-  is_derived_from_specialization_of_base_dimension<T> && (!is_specialization_of_base_dimension<T>);
+concept BaseDimension = is_derived_from_specialization_of_base_dimension<T> && std::is_final_v<T>;
 
 template<typename T>
 struct is_dimension_one : std::false_type {};
@@ -91,7 +84,8 @@ namespace detail {
  * being the `dimension_one`.
  */
 template<typename T>
-concept DerivedDimension = is_specialization_of<T, derived_dimension> || is_dimension_one<T>::value;
+concept DerivedDimension =
+  (is_specialization_of<T, derived_dimension> || is_dimension_one<T>::value) && std::is_final_v<T>;
 
 }  // namespace detail
 
@@ -103,12 +97,20 @@ concept DerivedDimension = is_specialization_of<T, derived_dimension> || is_dime
 MP_UNITS_EXPORT template<typename T>
 concept Dimension = detail::BaseDimension<T> || detail::DerivedDimension<T>;
 
+namespace detail {
+
+template<auto D1, auto D2>
+concept SameDimension =
+  Dimension<MP_UNITS_REMOVE_CONST(decltype(D1))> && Dimension<MP_UNITS_REMOVE_CONST(decltype(D2))> && (D1 == D2);
+
+}
+
 /**
  * @brief A concept checking if the argument is of the same dimension.
  *
  * Satisfied when both argument satisfy a `Dimension` concept and when they compare equal.
  */
 MP_UNITS_EXPORT template<typename T, auto D>
-concept DimensionOf = Dimension<T> && Dimension<std::remove_const_t<decltype(D)>> && (T{} == D);
+concept DimensionOf = Dimension<T> && Dimension<MP_UNITS_REMOVE_CONST(decltype(D))> && detail::SameDimension<T{}, D>;
 
 }  // namespace mp_units

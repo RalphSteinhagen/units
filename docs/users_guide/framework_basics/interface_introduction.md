@@ -6,8 +6,8 @@ The **mp-units** library decided to use a rather unusual pattern to define entit
 Here is how we define `metre` and `second` [SI](../../appendix/glossary.md#si) base units:
 
 ```cpp
-inline constexpr struct metre : named_unit<"m", kind_of<isq::length>> {} metre;
-inline constexpr struct second : named_unit<"s", kind_of<isq::time>> {} second;
+inline constexpr struct metre final : named_unit<"m", kind_of<isq::length>> {} metre;
+inline constexpr struct second final : named_unit<"s", kind_of<isq::time>> {} second;
 ```
 
 Please note that the above reuses the same identifier for a type and its value. The rationale
@@ -22,6 +22,9 @@ behind this is that:
     a user's written code, a new idiom in the library is to use the same identifier for
     a type and its instance.
 
+    Also, to prevent possible issues in compile-time logic, all of the library's entities must be
+    marked `final`. This prevents the users to derive own strong types from them, which would
+    prevent expression template simplification of equivalent entities.
 
 ## Strong types instead of aliases
 
@@ -94,9 +97,9 @@ the value-based [unit equation](../../appendix/glossary.md#unit-equation) to a c
 definition:
 
 ```cpp
-inline constexpr struct newton : named_unit<"N", kilogram * metre / square(second)> {} newton;
-inline constexpr struct pascal : named_unit<"Pa", newton / square(metre)> {} pascal;
-inline constexpr struct joule : named_unit<"J", newton * metre> {} joule;
+inline constexpr struct newton final : named_unit<"N", kilogram * metre / square(second)> {} newton;
+inline constexpr struct pascal final : named_unit<"Pa", newton / square(metre)> {} pascal;
+inline constexpr struct joule  final : named_unit<"J", newton * metre> {} joule;
 ```
 
 
@@ -233,6 +236,17 @@ the resulting expression template.
     | `power<A, 2>, per<A>` |         `A`          |
     | `power<A, 3>, per<A>` |    `power<A, 2>`     |
     | `A, per<power<A, 2>>` | `{identity}, per<A>` |
+
+    It is important to notice here that only the elements with exactly the same type are being
+    simplified. This means that, for example, `m/m` results in `one`, but `km/m` will not be
+    simplified. The resulting derived unit will preserve both symbols and their relative
+    magnitude. This allows us to properly print symbols of some units or constants that require
+    such behavior. For example, the Hubble constant is expressed in `km⋅s⁻¹⋅Mpc⁻¹`, where both
+    `km` and `Mpc` are units of _length_.
+
+    Also, to prevent possible issues in compile-time logic, all of the library's entities must be
+    marked `final`. This prevents the users to derive own strong types from them, which would
+    prevent expression template simplification of equivalent entities.
 
 4. **Repacking**
 

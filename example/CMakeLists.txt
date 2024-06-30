@@ -23,21 +23,17 @@
 cmake_minimum_required(VERSION 3.5)
 
 # find dependencies
-if(NOT TARGET gsl::gsl-lite)
-    find_package(gsl-lite REQUIRED)
-endif()
-
 if(${projectPrefix}BUILD_CXX_MODULES)
     add_library(example_utils INTERFACE)
     target_compile_features(example_utils INTERFACE cxx_std_20)
     target_compile_definitions(example_utils INTERFACE ${projectPrefix}MODULES)
     target_include_directories(example_utils INTERFACE include)
-    target_link_libraries(example_utils INTERFACE gsl::gsl-lite)
+    target_link_libraries(example_utils INTERFACE mp-units-contracts)
 endif()
 
 add_library(example_utils-headers INTERFACE)
 target_include_directories(example_utils-headers INTERFACE include)
-target_link_libraries(example_utils-headers INTERFACE gsl::gsl-lite)
+target_link_libraries(example_utils-headers INTERFACE mp-units-contracts)
 
 #
 # add_example(target <depependencies>...)
@@ -72,4 +68,4 @@ add_example(total_energy)
 add_example(unmanned_aerial_vehicle example_utils)
 
 add_subdirectory(glide_computer_lib)
-# add_subdirectory(kalman_filter)
+add_subdirectory(kalman_filter)

@@ -45,10 +45,10 @@ namespace mp_units {
  * @code{.cpp}
  * // hypothetical natural system of units for c=1
  *
- * inline constexpr struct second : named_unit<"s"> {} second;
- * inline constexpr struct minute : named_unit<"min", mag<60> * second> {} minute;
- * inline constexpr struct gram : named_unit<"g"> {} gram;
- * inline constexpr struct kilogram : decltype(si::kilo<gram>) {} kilogram;
+ * inline constexpr struct second final : named_unit<"s"> {} second;
+ * inline constexpr struct minute final : named_unit<"min", mag<60> * second> {} minute;
+ * inline constexpr struct gram final : named_unit<"g"> {} gram;
+ * inline constexpr auto kilogram = si::kilo<gram>;
  *
  * inline constexpr struct time : system_reference<isq::time, second> {} time;
  * inline constexpr struct length : system_reference<isq::length, second> {} length;
@@ -60,17 +60,17 @@ namespace mp_units {
  * @tparam CoU coherent unit for a quantity in this system
  */
 template<QuantitySpec auto Q, Unit auto CoU>
-  requires(!AssociatedUnit<std::remove_const_t<decltype(CoU)>>) || (CoU == one)
+  requires(!AssociatedUnit<decltype(CoU)>) || (CoU == one)
 struct system_reference {
   static constexpr auto quantity_spec = Q;
   static constexpr auto coherent_unit = CoU;
 
   template<Unit U>
-    requires(convertible(coherent_unit, U{}))
+    requires detail::UnitConvertibleTo<coherent_unit, U{}>
 #if MP_UNITS_COMP_MSVC
-  [[nodiscard]] constexpr decltype(reference<std::remove_const_t<decltype(quantity_spec)>, U>{}) operator[](U) const
+  [[nodiscard]] constexpr decltype(reference<MP_UNITS_REMOVE_CONST(decltype(Q)), U>{}) operator[](U) const
 #else
-  [[nodiscard]] constexpr reference<std::remove_const_t<decltype(quantity_spec)>, U> operator[](U) const
+  [[nodiscard]] constexpr reference<MP_UNITS_REMOVE_CONST(decltype(Q)), U> operator[](U) const
 #endif
   {
     return {};

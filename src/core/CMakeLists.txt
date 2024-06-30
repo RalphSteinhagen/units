@@ -23,40 +23,34 @@
 cmake_minimum_required(VERSION 3.23)
 
 function(set_feature_flag name)
-    set(val_list "TRUE" "FALSE")
-    if(${projectPrefix}${name} IN_LIST val_list)
+    if(NOT ${projectPrefix}${name} STREQUAL "AUTO")
         target_compile_definitions(
             mp-units-core ${${projectPrefix}TARGET_SCOPE} ${projectPrefix}${name}=$<BOOL:${${projectPrefix}${name}}>
         )
     endif()
 endfunction()
 
-# find dependencies
-if(NOT TARGET gsl::gsl-lite)
-    find_package(gsl-lite REQUIRED)
-endif()
-
 # core library definition
 add_mp_units_module(
     core mp-units-core
-    DEPENDENCIES gsl::gsl-lite
     HEADERS include/mp-units/bits/core_gmf.h
-            include/mp-units/bits/fmt.h
             include/mp-units/bits/get_associated_quantity.h
-            include/mp-units/bits/get_common_base.h
             include/mp-units/bits/hacks.h
             include/mp-units/bits/math_concepts.h
             include/mp-units/bits/module_macros.h
+            include/mp-units/bits/quantity_spec_hierarchy.h
             include/mp-units/bits/ratio.h
             include/mp-units/bits/sudo_cast.h
             include/mp-units/bits/text_tools.h
             include/mp-units/bits/type_list.h
             include/mp-units/ext/algorithm.h
+            include/mp-units/ext/contracts.h
             include/mp-units/ext/fixed_string.h
             include/mp-units/ext/prime.h
             include/mp-units/ext/type_name.h
             include/mp-units/ext/type_traits.h
             include/mp-units/framework/compare.h
+            include/mp-units/framework/construction_helpers.h
             include/mp-units/framework/customization_points.h
             include/mp-units/framework/dimension.h
             include/mp-units/framework/dimension_concepts.h
@@ -79,20 +73,36 @@ add_mp_units_module(
             include/mp-units/framework/value_cast.h
             include/mp-units/compat_macros.h
             include/mp-units/concepts.h
-            include/mp-units/format.h
             include/mp-units/framework.h
-            include/mp-units/math.h
-            include/mp-units/ostream.h
-            include/mp-units/random.h
     MODULE_INTERFACE_UNIT mp-units-core.cpp
 )
+
+if(NOT ${projectPrefix}API_FREESTANDING)
+    target_sources(
+        mp-units-core
+        PUBLIC FILE_SET
+               HEADERS
+               BASE_DIRS
+               ${CMAKE_CURRENT_SOURCE_DIR}/include
+               FILES
+               include/mp-units/bits/fmt.h
+               include/mp-units/bits/requires_hosted.h
+               include/mp-units/ext/format.h
+               include/mp-units/math.h
+               include/mp-units/ostream.h
+               include/mp-units/format.h
+               include/mp-units/random.h
+    )
+endif()
 
 set_feature_flag(API_STD_FORMAT)
 set_feature_flag(API_STRING_VIEW_RET)
 set_feature_flag(API_NO_CRTP)
 
-if(${projectPrefix}API_STD_FORMAT STREQUAL "FALSE" OR (${projectPrefix}API_STD_FORMAT STREQUAL "AUTO"
-                                                       AND NOT ${projectPrefix}LIB_FORMAT_SUPPORTED)
+# Text formatting
+if(NOT ${projectPrefix}API_FREESTANDING
+   AND (NOT ${projectPrefix}API_STD_FORMAT OR (${projectPrefix}API_STD_FORMAT STREQUAL "AUTO"
+                                               AND NOT ${projectPrefix}LIB_FORMAT_SUPPORTED))
 )
     if(NOT TARGET fmt::fmt)
         find_package(fmt REQUIRED)
@@ -100,6 +110,10 @@ if(${projectPrefix}API_STD_FORMAT STREQUAL "FALSE" OR (${projectPrefix}API_STD_F
     target_link_libraries(mp-units-core ${${projectPrefix}TARGET_SCOPE} fmt::fmt)
 endif()
 
+# Contracts checking
+target_link_libraries(mp-units-core ${${projectPrefix}TARGET_SCOPE} mp-units-contracts)
+
+# C++20 modules
 if(${projectPrefix}BUILD_CXX_MODULES)
     if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
         if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 18)
@@ -112,6 +126,7 @@ if(${projectPrefix}BUILD_CXX_MODULES)
     endif()
 endif()
 
+# UTF-8 source and execution character set
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(
         mp-units-core ${${projectPrefix}TARGET_SCOPE}
@@ -119,4 +134,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     )
 endif()
 
-# target_compile_options(mp-units-core ${${projectPrefix}TARGET_SCOPE} "-ftime-trace")
+# Freestanding
+target_compile_definitions(
+    mp-units-core ${${projectPrefix}TARGET_SCOPE}
+                  ${projectPrefix}HOSTED=$<NOT:$<BOOL:${${projectPrefix}API_FREESTANDING}>>
+)

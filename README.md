@@ -1,15 +1,17 @@
 <img align="right" height=135px src="docs/assets/images/mp-units-color.svg">
 
 [![GitHub license](https://img.shields.io/github/license/mpusz/mp-units?cacheSeconds=3600&color=informational&label=License)](./LICENSE.md)
-[![GitHub license](https://img.shields.io/badge/C%2B%2B-20-blue)](https://en.cppreference.com/w/cpp/compiler_support#cpp20)
+[![GitHub license](https://img.shields.io/badge/C%2B%2B-20%2F23-blue)](https://en.cppreference.com/w/cpp/compiler_support#cpp20)
 
-[![Conan CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-conan.yml?branch=master&label=Conan%20CI)](https://github.com/mpusz/mp-units/actions?query=workflow%3A%22Conan%20CI%22+branch%3Amaster)
-[![CMake CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-test-package-cmake.yml?branch=master&label=CMake%20CI)](https://github.com/mpusz/mp-units/actions?query=workflow%3A%22CMake+Test+Package+CI%22+branch%3Amaster)
-[![Formatting CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-formatting.yml?branch=master&label=Formatting%20CI)](https://github.com/mpusz/mp-units/actions?query=workflow%3A%22Formatting%20CI%22+branch%3Amaster)
+[![Conan CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-conan.yml?branch=master&label=Conan%20CI)](https://github.com/mpusz/mp-units/actions/workflows/ci-conan.yml)
+[![CMake CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-test-package-cmake.yml?branch=master&label=CMake%20CI)](https://github.com/mpusz/mp-units/actions/workflows/ci-test-package-cmake.yml)
+[![clang-tidy CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-clang-tidy.yml?branch=master&label=clang-tidy%20CI)](https://github.com/mpusz/mp-units/actions/workflows/ci-clang-tidy.yml)
+[![Freestanding CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-freestanding.yml?branch=master&label=Freestanding%20CI)](https://github.com/mpusz/mp-units/actions/workflows/ci-freestanding.yml)
+[![Formatting CI](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/ci-formatting.yml?branch=master&label=Formatting%20CI)](https://github.com/mpusz/mp-units/actions/workflows/ci-formatting.yml)
 [![GitHub Workflow Documentation](https://img.shields.io/github/actions/workflow/status/mpusz/mp-units/documentation.yml?branch=master&label=Documentation)](https://github.com/mpusz/mp-units/actions?query=workflow%3ADocumentation+branch%3Amaster)
 
 [![Conan stable](https://img.shields.io/conan/v/mp-units?label=ConanCenter&color=blue)](https://conan.io/center/mp-units)
-[![Conan testing](https://img.shields.io/badge/mpusz.jfrog.io-2.2.0%3Atesting-blue)](https://mpusz.jfrog.io/ui/packages/conan:%2F%2Fmp-units/2.2.0)
+[![Conan testing](https://img.shields.io/badge/mpusz.jfrog.io-2.3.0%3Atesting-blue)](https://mpusz.jfrog.io/ui/packages/conan:%2F%2Fmp-units/2.3.0)
 
 
 # `mp-units` - The quantities and units library for C++
@@ -57,7 +59,7 @@ analysis and unit/quantity manipulation.
 Here is a small example of possible operations:
 
 ```cpp
-import mp_units;
+#include <mp-units/systems/si.h>
 
 using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
@@ -81,7 +83,7 @@ static_assert(10 * km / (5 * km) == 2 * one);
 static_assert(1000 / (1 * s) == 1 * kHz);
 ```
 
-_Try it on the [Compiler Explorer](https://godbolt.org/z/ox8a8dGTz)._
+_Try it on the [Compiler Explorer](https://godbolt.org/z/8acPeq743)._
 
 This library heavily uses C++20 features (concepts, classes as NTTPs, ...). Thanks to
 them the user gets a powerful but still easy to use interfaces and all unit conversions
@@ -89,11 +91,15 @@ and dimensional analysis can be performed without sacrificing on runtime perform
 accuracy. Please see the below example for a quick preview of basic library features:
 
 ```cpp
+#include <mp-units/format.h>
+#include <mp-units/ostream.h>
+#include <mp-units/systems/international.h>
+#include <mp-units/systems/isq.h>
+#include <mp-units/systems/si.h>
 #include <format>
 #include <iomanip>
 #include <iostream>
 #include <print>
-import mp_units;
 
 using namespace mp_units;
 
@@ -126,4 +132,4 @@ int main()
 }
 ```
 
-_Try it on the [Compiler Explorer](https://godbolt.org/z/Pe8ah9WYT)._
+_Try it on the [Compiler Explorer](https://godbolt.org/z/nhqhT8Mzb)._

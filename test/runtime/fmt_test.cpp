@@ -24,6 +24,7 @@
 #include <catch2/matchers/catch_matchers.hpp>
 #include <catch2/matchers/catch_matchers_exception.hpp>
 #include <mp-units/compat_macros.h>
+#include <mp-units/ext/format.h>
 #include <cstdint>
 #include <iomanip>
 #include <limits>
@@ -34,7 +35,6 @@
 #ifdef MP_UNITS_MODULES
 import mp_units;
 #else
-#include <mp-units/ext/fixed_string.h>
 #include <mp-units/format.h>
 #include <mp-units/ostream.h>  // IWYU pragma: keep
 #include <mp-units/systems/cgs.h>
@@ -50,18 +50,6 @@ inline constexpr bool mp_units::is_vector<T> = true;
 
 using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
-
-TEST_CASE("fixed_string", "[text][ostream][fmt]")
-{
-  basic_fixed_string txt = "units";
-  SECTION("iostream")
-  {
-    std::ostringstream os;
-    os << txt;
-    CHECK(os.str() == "units");
-  }
-  SECTION("fmt") { CHECK(MP_UNITS_STD_FMT::format("{}", txt) == "units"); }
-}
 
 TEST_CASE("operator<< on a quantity", "[text][ostream][fmt]")
 {

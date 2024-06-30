@@ -45,14 +45,6 @@ struct is_specialization_of_reference<reference<Q, U>> : std::true_type {};
 
 MP_UNITS_EXPORT_BEGIN
 
-/**
- * @brief A concept matching all references in the library.
- *
- * Satisfied by all specializations of @c reference.
- */
-template<typename T>
-concept Reference = AssociatedUnit<T> || detail::is_specialization_of_reference<T>::value;
-
 [[nodiscard]] consteval QuantitySpec auto get_quantity_spec(AssociatedUnit auto u);
 
 template<typename Q, typename U>
@@ -70,14 +62,30 @@ template<typename Q, typename U>
 }
 
 /**
+ * @brief A concept matching all references in the library.
+ *
+ * Satisfied by all specializations of @c reference.
+ */
+template<typename T>
+concept Reference = AssociatedUnit<T> || detail::is_specialization_of_reference<T>::value;
+
+/**
  * @brief A concept matching all references with provided quantity spec
  *
  * Satisfied by all references with a quantity_spec being the instantiation derived from
  * the provided quantity_spec type.
  */
 template<typename T, auto QS>
-concept ReferenceOf = Reference<T> && QuantitySpecOf<std::remove_const_t<decltype(get_quantity_spec(T{}))>, QS>;
+concept ReferenceOf = Reference<T> && QuantitySpecOf<decltype(get_quantity_spec(T{})), QS>;
 
 MP_UNITS_EXPORT_END
+
+namespace detail {
+
+template<auto R1, auto R2>
+concept SameReference =
+  Reference<MP_UNITS_REMOVE_CONST(decltype(R1))> && Reference<MP_UNITS_REMOVE_CONST(decltype(R2))> && (R1 == R2);
+
+}  // namespace detail
 
 }  // namespace mp_units

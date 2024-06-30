@@ -85,11 +85,11 @@ the `value_cast<U, Rep>(q)` which always returns the most precise result:
 === "C++23"
 
     ```cpp
-    inline constexpr struct dim_currency : base_dimension<"$"> {} dim_currency;
-    inline constexpr struct currency : quantity_spec<dim_currency> {} currency;
+    inline constexpr struct dim_currency final : base_dimension<"$"> {} dim_currency;
+    inline constexpr struct currency final : quantity_spec<dim_currency> {} currency;
 
-    inline constexpr struct us_dollar : named_unit<"USD", kind_of<currency>> {} us_dollar;
-    inline constexpr struct scaled_us_dollar : named_unit<"USD_s", mag_power<10, -8> * us_dollar> {} scaled_us_dollar;
+    inline constexpr struct us_dollar final : named_unit<"USD", kind_of<currency>> {} us_dollar;
+    inline constexpr struct scaled_us_dollar final : named_unit<"USD_s", mag_power<10, -8> * us_dollar> {} scaled_us_dollar;
 
     namespace unit_symbols {
 
@@ -105,11 +105,11 @@ the `value_cast<U, Rep>(q)` which always returns the most precise result:
 === "C++20"
 
     ```cpp
-    inline constexpr struct dim_currency : base_dimension<"$"> {} dim_currency;
-    inline constexpr struct currency : quantity_spec<currency, dim_currency> {} currency;
+    inline constexpr struct dim_currency final : base_dimension<"$"> {} dim_currency;
+    inline constexpr struct currency final : quantity_spec<currency, dim_currency> {} currency;
 
-    inline constexpr struct us_dollar : named_unit<"USD", kind_of<currency>> {} us_dollar;
-    inline constexpr struct scaled_us_dollar : named_unit<"USD_s", mag_power<10, -8> * us_dollar> {} scaled_us_dollar;
+    inline constexpr struct us_dollar final : named_unit<"USD", kind_of<currency>> {} us_dollar;
+    inline constexpr struct scaled_us_dollar final : named_unit<"USD_s", mag_power<10, -8> * us_dollar> {} scaled_us_dollar;
 
     namespace unit_symbols {
 
@@ -125,11 +125,11 @@ the `value_cast<U, Rep>(q)` which always returns the most precise result:
 === "Portable"
 
     ```cpp
-    inline constexpr struct dim_currency : base_dimension<"$"> {} dim_currency;
+    inline constexpr struct dim_currency final : base_dimension<"$"> {} dim_currency;
     QUANTITY_SPEC(currency, dim_currency);
 
-    inline constexpr struct us_dollar : named_unit<"USD", kind_of<currency>> {} us_dollar;
-    inline constexpr struct scaled_us_dollar : named_unit<"USD_s", mag_power<10, -8> * us_dollar> {} scaled_us_dollar;
+    inline constexpr struct us_dollar final : named_unit<"USD", kind_of<currency>> {} us_dollar;
+    inline constexpr struct scaled_us_dollar final : named_unit<"USD_s", mag_power<10, -8> * us_dollar> {} scaled_us_dollar;
 
     namespace unit_symbols {
 
@@ -147,3 +147,31 @@ using namespace unit_symbols;
 Price price{12.95 * USD};
 Scaled spx = value_cast<USD_s, std::int64_t>(price);
 ```
+
+As a shortcut, instead of providing a unit and a representation type to `value_cast`, you may also provide a
+`Quantity` type directly, from which unit and representation type are taken. However, `value_cast<Quantity>`,
+still only allows for changes in unit and representation type, but not changing the type of the quantity.
+For that, you will have to use a `quantity_cast` instead.
+
+Overloads are also provided for instances of `quantity_point`.
+All variants of `value_cast<...>(q)` that apply to instances of `quantity`
+have a corresponding version applicable to `quantity_point`, where the `point_origin` remains untouched,
+and the cast changes how the "offset" from the origin is represented.
+Specifically, for any `quantity_point` instance `qp`, all of the following equivalences hold:
+```cpp
+static_assert( value_cast<Rep>(qp) == quantity_point{value_cast<Rep>(qp.quantity_from(qp.point_origin)), qp.point_origin} );
+static_assert( value_cast<U>(qp) == quantity_point{value_cast<U>(qp.quantity_from(qp.point_origin)), qp.point_origin} );
+static_assert( value_cast<U, Rep>(qp) == quantity_point{value_cast<U, Rep>(qp.quantity_from(qp.point_origin)), qp.point_origin} );
+static_assert( value_cast<Q>(qp) == quantity_point{value_cast<Q>(qp.quantity_from(qp.point_origin)), qp.point_origin} );
+```
+
+Furthermore, there is one additional overload `value_cast<ToQP>(qp)`.
+This overload permits to additionally replace the `point_origin` with another compatible one,
+while still representing the same point in the affine space.
+Thus, it is roughly equivalent to
+`value_cast<ToQP::unit, ToQP::rep>(qp).point_for(ToQP::point_origin)`.
+In contrast to a separate `value_cast` followed by `point_for` (or vice-versa), the combined
+`value_cast` tries to choose the order of the individual conversion steps in a way
+to avoid both overflow and unnecessary loss of precision. Overflow is a risk because the change of origin point
+may require an addition of a potentially large offset (the difference between the origin points),
+which may well be outside the range of one or both quantity types.

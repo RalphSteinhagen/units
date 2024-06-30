@@ -26,6 +26,7 @@
 #include <mp-units/bits/get_associated_quantity.h>
 #include <mp-units/bits/module_macros.h>
 #include <mp-units/framework/quantity_concepts.h>
+#include <mp-units/framework/quantity_point_concepts.h>
 #include <mp-units/framework/reference_concepts.h>
 #include <mp-units/framework/representation_concepts.h>
 
@@ -38,9 +39,9 @@ namespace mp_units {
 namespace detail {
 
 template<QuantitySpec auto Q, Unit auto U>
-using reference_t = reference<std::remove_const_t<decltype(Q)>, std::remove_const_t<decltype(U)>>;
+using reference_t = reference<MP_UNITS_REMOVE_CONST(decltype(Q)), MP_UNITS_REMOVE_CONST(decltype(U))>;
 
-}
+}  // namespace detail
 
 MP_UNITS_EXPORT_BEGIN
 
@@ -174,28 +175,60 @@ struct reference {
 
 
 template<typename Rep, Reference R>
-  requires RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
+  requires(!detail::OffsetUnit<decltype(get_unit(R{}))>) &&
+          RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
 [[nodiscard]] constexpr quantity<R{}, std::remove_cvref_t<Rep>> operator*(Rep&& lhs, R)
 {
   return quantity{std::forward<Rep>(lhs), R{}};
 }
 
 template<typename Rep, Reference R>
-  requires RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
+  requires(!detail::OffsetUnit<decltype(get_unit(R{}))>) &&
+          RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
 [[nodiscard]] constexpr quantity<inverse(R{}), std::remove_cvref_t<Rep>> operator/(Rep&& lhs, R)
 {
   return quantity{std::forward<Rep>(lhs), inverse(R{})};
 }
 
-template<Reference R, typename Rep>
-  requires RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
-// NOLINTNEXTLINE(cppcoreguidelines-missing-std-forward)
-constexpr auto operator*(R, Rep&&) = delete;
+template<typename Rep, Reference R>
+  requires detail::OffsetUnit<decltype(get_unit(R{}))> &&
+           RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
+[[noreturn]] constexpr auto operator*(Rep&&, R)
+{
+  static_assert(!detail::OffsetUnit<decltype(get_unit(R{}))>,
+                "References using offset units (e.g., temperatures) may be constructed only with the `delta` or "
+                "`absolute` helpers");
+}
+
+template<typename Rep, Reference R>
+  requires detail::OffsetUnit<decltype(get_unit(R{}))> &&
+           RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
+[[noreturn]] constexpr auto operator/(Rep&&, R)
+{
+  static_assert(!detail::OffsetUnit<decltype(get_unit(R{}))>,
+                "References using offset units (e.g., temperatures) may be constructed only with the `delta` or "
+                "`absolute` helpers");
+}
 
 template<Reference R, typename Rep>
   requires RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
 // NOLINTNEXTLINE(cppcoreguidelines-missing-std-forward)
-constexpr auto operator/(R, Rep&&) = delete;
+constexpr auto operator*(R, Rep&&)
+#if __cpp_deleted_function
+  = delete("To create a `quantity` or `quantity_point` use `Rep * R`");
+#else
+  = delete;
+#endif
+
+template<Reference R, typename Rep>
+  requires RepresentationOf<std::remove_cvref_t<Rep>, get_quantity_spec(R{}).character>
+// NOLINTNEXTLINE(cppcoreguidelines-missing-std-forward)
+constexpr auto operator/(R, Rep&&)
+#if __cpp_deleted_function
+  = delete("To create a `quantity` or `quantity_point` use `Rep / R`");
+#else
+  = delete;
+#endif
 
 template<typename Q, Reference R>
   requires Quantity<std::remove_cvref_t<Q>>
@@ -258,13 +291,13 @@ MP_UNITS_EXPORT_END
 namespace detail {
 
 template<AssociatedUnit auto To, AssociatedUnit From>
-[[nodiscard]] consteval std::remove_const_t<decltype(To)> clone_reference_with(From)
+[[nodiscard]] consteval MP_UNITS_REMOVE_CONST(decltype(To)) clone_reference_with(From)
 {
   return {};
 }
 
 template<Unit auto To, QuantitySpec QS, Unit U>
-[[nodiscard]] consteval reference<QS, std::remove_const_t<decltype(To)>> clone_reference_with(reference<QS, U>)
+[[nodiscard]] consteval reference<QS, MP_UNITS_REMOVE_CONST(decltype(To))> clone_reference_with(reference<QS, U>)
 {
   return {};
 }

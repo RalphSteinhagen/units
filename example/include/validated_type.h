@@ -22,9 +22,10 @@
 
 #pragma once
 
-#include <gsl/gsl-lite.hpp>
 #include <mp-units/bits/hacks.h>
 #include <mp-units/compat_macros.h>
+#include <mp-units/ext/contracts.h>
+#include <mp-units/ext/format.h>
 #include <compare>  // IWYU pragma: export
 #include <ostream>
 #include <utility>
@@ -50,13 +51,13 @@ public:
     requires std::copyable<T>
       : value_(value)
   {
-    gsl_Expects(validate(value_));
+    MP_UNITS_EXPECTS(validate(value_));
   }
 
   constexpr explicit validated_type(T&& value) noexcept(std::is_nothrow_move_constructible_v<T>) :
       value_(std::move(value))
   {
-    gsl_Expects(validate(value_));
+    MP_UNITS_EXPECTS(validate(value_));
   }
 
   constexpr validated_type(const T& value, validated_tag) noexcept(std::is_nothrow_copy_constructible_v<T>)
@@ -96,7 +97,6 @@ public:
 
 #endif
 
-  constexpr T& value() & noexcept = delete;
   [[nodiscard]] constexpr const T& value() const& noexcept { return value_; }
   [[nodiscard]] constexpr T&& value() && noexcept { return std::move(value_); }
   [[nodiscard]] constexpr const T&& value() const&& noexcept { return std::move(value_); }

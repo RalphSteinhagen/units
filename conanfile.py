@@ -28,15 +28,9 @@ from conan.errors import ConanInvalidConfiguration
 from conan.tools.build import can_run, default_cppstd, valid_min_cppstd
 from conan.tools.cmake import CMake, CMakeDeps, CMakeToolchain, cmake_layout
 from conan.tools.files import copy, load, rmdir
+from conan.tools.scm import Version
 
 required_conan_version = ">=2.0.0"
-
-
-def loose_lt_semver(v1, v2):
-    lv1 = [int(v) for v in v1.split(".")]
-    lv2 = [int(v) for v in v2.split(".")]
-    min_length = min(len(lv1), len(lv2))
-    return lv1[:min_length] < lv2[:min_length]
 
 
 class MPUnitsConan(ConanFile):
@@ -65,12 +59,16 @@ class MPUnitsConan(ConanFile):
         "std_format": ["auto", True, False],
         "string_view_ret": ["auto", True, False],
         "no_crtp": ["auto", True, False],
+        "contracts": ["none", "gsl-lite", "ms-gsl"],
+        "freestanding": [True, False],
     }
     default_options = {
         "cxx_modules": "auto",
         "std_format": "auto",
         "string_view_ret": "auto",
         "no_crtp": "auto",
+        "contracts": "gsl-lite",
+        "freestanding": False,
     }
     tool_requires = "cmake/[>=3.29]"
     implements = "auto_header_only"
@@ -109,7 +107,7 @@ class MPUnitsConan(ConanFile):
             },
             "cxx_modules": {
                 "std": "20",
-                "compiler": {"gcc": "14", "clang": "17", "apple-clang": "", "msvc": ""},
+                "compiler": {"gcc": "", "clang": "17", "apple-clang": "", "msvc": ""},
             },
             "static_constexpr_vars_in_constexpr_func": {
                 "std": "23",
@@ -155,7 +153,7 @@ class MPUnitsConan(ConanFile):
             raise ConanInvalidConfiguration(
                 f"'{name}' is not yet supported by any known {compiler} compiler"
             )
-        if loose_lt_semver(str(compiler.version), min_version):
+        if Version(compiler.version) < min_version:
             raise ConanInvalidConfiguration(
                 f"'{name}' requires at least {compiler}-{min_version} ({compiler}-{compiler.version} in use)"
             )
@@ -171,7 +169,7 @@ class MPUnitsConan(ConanFile):
             or (
                 opt == "auto"
                 and min_version
-                and not loose_lt_semver(str(compiler.version), min_version)
+                and Version(compiler.version) >= min_version
             )
         )
 
@@ -191,6 +189,10 @@ class MPUnitsConan(ConanFile):
     def _skip_la(self):
         return bool(self.conf.get("user.mp-units.build:skip_la", default=False))
 
+    @property
+    def _run_clang_tidy(self):
+        return bool(self.conf.get("user.mp-units.analyze:clang-tidy", default=False))
+
     def set_version(self):
         content = load(self, os.path.join(self.recipe_folder, "src/CMakeLists.txt"))
         version = re.search(
@@ -198,14 +200,23 @@ class MPUnitsConan(ConanFile):
         ).group(1)
         self.version = version.strip()
 
+    def configure(self):
+        if self.options.freestanding:
+            self.options.rm_safe("std_format")
+
     def requirements(self):
-        self.requires("gsl-lite/0.41.0")
-        if self._use_fmtlib:
-            self.requires("fmt/10.2.1")
+        if not self.options.freestanding:
+            if self.options.contracts == "gsl-lite":
+                self.requires("gsl-lite/0.41.0")
+            elif self.options.contracts == "ms-gsl":
+                self.requires("ms-gsl/4.0.0")
+            if self._use_fmtlib:
+                self.requires("fmt/10.2.1")
 
     def build_requirements(self):
         if self._build_all:
-            self.test_requires("catch2/3.5.1")
+            if not self.options.freestanding:
+                self.test_requires("catch2/3.5.1")
             if not self._skip_la:
                 self.test_requires("wg21-linear_algebra/0.7.3")
 
@@ -214,28 +225,41 @@ class MPUnitsConan(ConanFile):
         for key, value in self._option_feature_map.items():
             if self.options.get_safe(key) == True:
                 self._check_feature_supported(key, value)
+        if self.options.freestanding and self.options.contracts != "none":
+            raise ConanInvalidConfiguration(
+                "'contracts' should be set to 'none' for a freestanding build"
+            )
 
     def layout(self):
         cmake_layout(self)
 
     def generate(self):
         tc = CMakeToolchain(self)
+        tc.absolute_paths = True  # only needed for CMake CI
         if self._build_all:
             tc.cache_variables["CMAKE_EXPORT_COMPILE_COMMANDS"] = True
             tc.cache_variables["CMAKE_VERIFY_INTERFACE_HEADER_SETS"] = True
             tc.cache_variables["MP_UNITS_DEV_BUILD_LA"] = not self._skip_la
+            if self._run_clang_tidy:
+                tc.cache_variables["MP_UNITS_DEV_CLANG_TIDY"] = True
         if self._build_cxx_modules:
             tc.cache_variables["CMAKE_CXX_SCAN_FOR_MODULES"] = True
             tc.cache_variables["MP_UNITS_BUILD_CXX_MODULES"] = str(
                 self.options.cxx_modules
             ).upper()
-        tc.cache_variables["MP_UNITS_API_STD_FORMAT"] = str(
-            self.options.std_format
-        ).upper()
+        if self.options.freestanding:
+            tc.cache_variables["MP_UNITS_API_FREESTANDING"] = True
+        else:
+            tc.cache_variables["MP_UNITS_API_STD_FORMAT"] = str(
+                self.options.std_format
+            ).upper()
         tc.cache_variables["MP_UNITS_API_STRING_VIEW_RET"] = str(
             self.options.string_view_ret
         ).upper()
         tc.cache_variables["MP_UNITS_API_NO_CRTP"] = str(self.options.no_crtp).upper()
+        tc.cache_variables["MP_UNITS_API_CONTRACTS"] = str(
+            self.options.contracts
+        ).upper()
         tc.generate()
         deps = CMakeDeps(self)
         deps.generate()
@@ -243,7 +267,8 @@ class MPUnitsConan(ConanFile):
     def build(self):
         cmake = CMake(self)
         cmake.configure(build_script_folder=None if self._build_all else "src")
-        cmake.build()
+        if self._build_all or self._build_cxx_modules:
+            cmake.build()
         if self._build_all:
             cmake.build(target="all_verify_interface_header_sets")
             if can_run(self):
@@ -262,9 +287,39 @@ class MPUnitsConan(ConanFile):
 
     def package_info(self):
         compiler = self.settings.compiler
-        self.cpp_info.components["core"].requires = ["gsl-lite::gsl-lite"]
+
+        # handle contracts
+        if self.options.contracts == "none":
+            self.cpp_info.components["core"].defines.append("MP_UNITS_API_CONTRACTS=0")
+        elif self.options.contracts == "gsl-lite":
+            self.cpp_info.components["core"].requires.append("gsl-lite::gsl-lite")
+            self.cpp_info.components["core"].defines.append("MP_UNITS_API_CONTRACTS=2")
+        elif self.options.contracts == "ms-gsl":
+            self.cpp_info.components["core"].requires.append("ms-gsl::ms-gsl")
+            self.cpp_info.components["core"].defines.append("MP_UNITS_API_CONTRACTS=3")
+
+        # handle API options
+        if self.options.string_view_ret != "auto":
+            self.cpp_info.components["core"].defines.append(
+                "MP_UNITS_API_STRING_VIEW_RET="
+                + str(int(self.options.string_view_ret == True))
+            )
+        if self.options.no_crtp != "auto":
+            self.cpp_info.components["core"].defines.append(
+                "MP_UNITS_API_NO_CRTP=" + str(int(self.options.no_crtp == True))
+            )
+        if self.options.std_format != "auto":
+            self.cpp_info.components["core"].defines.append(
+                "MP_UNITS_API_STD_FORMAT=" + str(int(self.options.std_format == True))
+            )
         if self._use_fmtlib:
             self.cpp_info.components["core"].requires.append("fmt::fmt")
+
+        # handle hosted configuration
+        if not self.options.freestanding:
+            self.cpp_info.components["core"].defines.append("MP_UNITS_HOSTED=1")
+
         if compiler == "msvc":
             self.cpp_info.components["core"].cxxflags = ["/utf-8"]
+
         self.cpp_info.components["systems"].requires = ["core"]

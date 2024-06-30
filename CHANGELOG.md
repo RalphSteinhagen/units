@@ -2,20 +2,29 @@
 
 ## mp-units
 
-### 2.2.0 <small>WIP</small> { id="2.2.0" }
+### 2.3.0 <small>WIP</small> { id="2.3.0" }
+
+- (!) feat: `delta` and `absolute` construction helpers
+
+### 2.2.0 <small>June 14, 2024</small> { id="2.2.0" }
 
 - (!) feat: C++ modules support added by [@JohelEGP](https://github.com/JohelEGP)
-- (!) feat: formatting grammar improved and units formatting support added
+- (!) feat: New formatting specification implemented
 - (!) feat: `has_unit_symbol` support removed
 - (!) feat: ABI concerns resolved with introduction of u8 strings for symbols
+- (!) feat: API-related Conan, CMake, and preprocessor options redesigned
+- (!) feat: `core.h` removed
+- (!) feat: from now on units, dimensions, quantity specifications, and point origins have to be marked as `final`
 - feat: implicit point origins support added
 - feat: unit default point origin support added
 - feat: `fma`, `isfinite`, `isinf`, and `isnan` math function added by [@NAThompson](https://github.com/NAThompson)
+- feat: `fma` for quantity points added
 - feat: `quantity_point` support added for `quantity_cast` and `value_cast`
 - feat: `value_cast<Unit, Representation>` added
+- feat: `value_cast<Quantity>(q)`, `value_cast<Quantity>(qp)` and `value_cast<QuantityPoint>(qp)` added by [@burnpanck](https://github.com/burnpanck)
 - feat: `interconvertible(QuantitySpec, QuantitySpec)` added
 - feat: `qp.quantity_from_zero()` added
-- feat: `underlying_type` type trait added
+- feat: `value_type` type trait added
 - feat: do not print space between a number and `percent` or `per_mille`
 - feat: `ppm` parts per million added by [@nebkat](https://github.com/nebkat)
 - feat: `atan2` 2-argument arctangent added by [@nebkat](https://github.com/nebkat)
@@ -25,6 +34,10 @@
 - feat: unit text output support added
 - feat: formatting error messages improved
 - feat: improve types readability by eliminating extraneous `()` in references, prefixes, and `kind_of`
+- feat: dimension and unit text output added
+- feat: some light and radiation ISQ quantities added
+- feat: allow configuring GSL library use
+- feat: freestanding support added
 - (!) refactor: `zero_Fahrenheit` renamed to `zeroth_degree_Fahrenheit`
 - (!) refactor: SI-related trigonometric functions moved to the `si` subnamespace
 - (!) refactor: `math.h` header file broke up to smaller pieces
@@ -32,15 +45,33 @@
 - (!) refactor: `ReferenceOf` does not take a dimension anymore
 - (!) refactor: 'o' replaced with '1' as a modifier for `unit_symbol_solidus::one_denominator`
 - (!) refactor: `get_kind()` now returns `kind_of`
+- (!) refactor: FMT macros moved to `compat_macros.h`
+- (!) refactor: `fixed_string` refactored to reflect the latest changes to [P3094R2](https://wg21.link/P3094R2)
+- (!) refactor: `basic_symbol_text` renamed to `symbol_text`
+- (!) refactor: `ratio` hidden as an implementation detail behind `mag_ratio`
+- (!) refactor: `framework.h` introduced
+- (!) refactor: type list tools made an implementation detail of the library
+- (!) refactor: header files with the entire system definitions moved up in the directory tree
+- (!) refactor: `absolute_point_origin` does not use CRTP anymore
+- refactor: system's units do not inherit from one another anymore
+- refactor: all units made `final`
 - refactor: math functions constraints refactored
 - refactor: `si_quantities.h` added to improve compile-times
 - refactor: `validate_ascii_string` refactored to `is_basic_literal_character_set`
+- refactor: `underlying_type` split to `wrapped_type` and `value_type` and used in code
+- refactor: code refactored to comply with clang-tidy
+- refactor: remove dependency on `<ranges>` header and switch to use an iterator-based `copy` algorithm
+- refactor: `terminate` replaced with `abort` and a header file added
+- refactor: most `std::remove_const_t` removed and some replaced with the GCC-specific workaround
+- refactor: not needed `remove_reference_t` and `remove_cvref_t` removed
 - fix: `QuantityLike` conversions required `Q::rep` instead of using one provided by `quantity_like_traits`
 - fix: `QuantitySpec[Unit]` replaced with `make_reference` in `value_cast`
 - fix: `ice_point` is now defined with the integral offset from `absolute_zero`
 - fix: performance regression in `sudo_cast` fixed
 - fix: explicit object parameter support fixed
 - fix: missing `version` header file added to `hacks.h`
+- fix: `quantity_cast` to accept lvalue references (thanks [@burnpanck](https://github.com/burnpanck))
+- fix: `value_cast` with lvalue references to `quantity_point` (thanks [@burnpanck](https://github.com/burnpanck))
 - docs: project blog and first posts added
 - docs: project documentation layout refactored
 - docs: "Interoperability with Other Libraries" chapter added
@@ -55,16 +86,34 @@
 - docs: mkdocs social plugin enabled
 - docs: project logo and custom color scheme added
 - docs: minimum compiler requirements updated
+- docs: unit symbols admonition extended in the "Quick Start" chapter
 - docs: Cairo dependency described in the MkDocs section
+- docs: "hello units" example updated with dimensions output
+- docs: "Text Output" chapter updated with the recent formatting changes
+- docs: formatting grammar language changed to EBNF
+- docs: "Project structure" chapter expanded
+- docs: CITATION.cff updated
 - (!) build: Conan and CMake options refactored
-- (!) build: `MP_UNITS_AS_SYSTEM_HEADERS` support removed
+- (!) build: `MP_UNITS_AS_SYSTEM_HEADERS` renamed to `MP_UNITS_BUILD_AS_SYSTEM_HEADERS`
+- (!) build: `MP_UNITS_BUILD_LA` and `MP_UNITS_IWYU` CMake options now have `_DEV_` in the name
 - build: gsl-lite updated to 0.41.0
 - build: catch2 updated to 3.5.1
 - build: fmt updated to 10.2.1
 - build: gitpod environment updated
 - build: `check_cxx_feature_supported` added
+- build: IWYU path handling fixed
+- build: IWYU enabled on GCC
+- build: `CMAKE_EXPORT_COMPILE_COMMANDS` flag enabled for the developer's build
 - build(conan): `generate()` now set `cache_variables`
 - build(conan): `can_run` check added before running tests
+- ci: Conan and CMake CI now use different cache names
+- ci: gcc-14 added
+- ci: `clang-tidy` CI added
+
+### 2.1.1 <small>May 16, 2024</small> { id="2.1.1" }
+
+- fix: unit tests compilation on gcc-14 fixed
+- fix: explicit `this` parameter support fixed
 
 ### 2.1.0 <small>December 9, 2023</small> { id="2.1.0" }
 

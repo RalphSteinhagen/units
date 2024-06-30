@@ -16,6 +16,8 @@ or derived [quantity](../../appendix/glossary.md#quantity):
   by the library's framework based on the [quantity equation](../../appendix/glossary.md#quantity-equation)
   provided in the [quantity specification](../../appendix/glossary.md#quantity_spec).
 
+All of the above dimensions have to be marked as `final`.
+
 
 ### `DimensionOf<T, V>` { #DimensionOf }
 
@@ -41,6 +43,8 @@ including:
 - [Quantity kinds](../../appendix/glossary.md#kind) describing a family of mutually comparable quantities.
 - Intermediate [derived quantity](../../appendix/glossary.md#derived-quantity) specifications being
   a result of a [quantity equations](../../appendix/glossary.md#quantity-equation) on other specifications.
+
+All of the above quantity specifications have to be marked as `final`.
 
 
 ### `QuantitySpecOf<T, V>` { #QuantitySpecOf }
@@ -84,6 +88,8 @@ and when `T` is implicitly convertible to `V`.
 - [Derived unnamed units](../../appendix/glossary.md#derived-unit) being a result of a
   [unit equations](../../appendix/glossary.md#unit-equation) on other units.
 
+All of the above units have to be marked as `final`.
+
 !!! note
 
     In the **mp-units** library, [physical constants are also implemented as units](faster_than_lightspeed_constants.md).
@@ -95,7 +101,7 @@ and when `T` is implicitly convertible to `V`.
 and is satisfied by:
 
 - All units derived from a `named_unit` class template instantiated with a unique symbol identifier
-  and a [`QuantitySpec`](#quantityspec) of a [quantity kind](../../appendix/glossary.md#kind).
+  and a [`QuantitySpec`](#QuantitySpec) of a [quantity kind](../../appendix/glossary.md#kind).
 - All units being a result of [unit equations](../../appendix/glossary.md#unit-equation) on other
   associated units.
 
@@ -140,16 +146,6 @@ concept with an associated quantity type implicitly convertible to `V`.
     This condition is required to make `dimensionless[si::radian]` invalid as `si::radian` should
     be only used for `isq::angular_measure`, which is a
     [nested quantity kind within the dimensionless quantities tree](dimensionless_quantities.md/#nested-quantity-kinds).
-
-
-### `UnitCompatibleWith<T, V1, V2>` { #UnitCompatibleWith }
-
-`UnitCompatibleWith` concept is satisfied for all units `T` when:
-
-- `V1` is a [`Unit`](#Unit),
-- `V2` is a [`QuantitySpec`](#QuantitySpec),
-- `T` and `V1` are defined in terms of the same reference unit,
-- if `T` is an [`AssociatedUnit`](#AssociatedUnit) it should satisfy [`UnitOf<V2>`](#UnitOf).
 
 
 ## `Reference<T>` { #Reference }
@@ -235,7 +231,7 @@ implicitly convertible from quantity specification `V`, which means that `V` mus
     However, if we define `mean_sea_level` in the following way:
 
     ```cpp
-    inline constexpr struct mean_sea_level : absolute_point_origin<isq::altitude> {} mean_sea_level;
+    inline constexpr struct mean_sea_level final : absolute_point_origin<isq::altitude> {} mean_sea_level;
     ```
 
     then it can't be used as a point origin for _points_ of `isq::length` or `isq::width` as none of them
@@ -328,7 +324,7 @@ for which an instantiation of `quantity_point_like_traits` type trait yields a v
     struct mp_units::quantity_point_like_traits<std::chrono::time_point<C, std::chrono::seconds>> {
       using T = std::chrono::time_point<C, std::chrono::seconds>;
       static constexpr auto reference = si::second;
-      static constexpr struct point_origin : absolute_point_origin<isq::time> {} point_origin{};
+      static constexpr struct point_origin final : absolute_point_origin<isq::time> {} point_origin{};
       using rep = std::chrono::seconds::rep;
 
       [[nodiscard]] static constexpr convert_implicitly<quantity<reference, rep>> to_quantity(const T& qp)

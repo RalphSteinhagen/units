@@ -24,6 +24,7 @@
 
 // IWYU pragma: begin_exports
 #include <mp-units/framework/compare.h>
+#include <mp-units/framework/construction_helpers.h>
 #include <mp-units/framework/customization_points.h>
 #include <mp-units/framework/dimension.h>
 #include <mp-units/framework/dimension_concepts.h>

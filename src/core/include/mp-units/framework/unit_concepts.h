@@ -33,9 +33,8 @@ namespace mp_units {
 
 namespace detail {
 
-// do not refactor below to a variable template - GCC-11 does not like it
 template<typename T>
-struct is_unit : std::false_type {};
+inline constexpr bool is_unit = false;
 
 }  // namespace detail
 
@@ -45,13 +44,15 @@ struct is_unit : std::false_type {};
  * Satisfied by all unit types provided by the library.
  */
 MP_UNITS_EXPORT template<typename T>
-concept Unit = detail::is_unit<T>::value;
+concept Unit = detail::is_unit<T>;
 
 template<Magnitude auto M, Unit U>
 struct scaled_unit;
 
 MP_UNITS_EXPORT template<symbol_text Symbol, auto...>
 struct named_unit;
+
+MP_UNITS_EXPORT struct one;
 
 namespace detail {
 
@@ -127,25 +128,17 @@ void is_unit_impl(const scaled_unit<M, U>*);
 template<symbol_text Symbol, auto... Args>
 void is_unit_impl(const named_unit<Symbol, Args...>*);
 
+template<symbol_text Symbol, auto M, auto U>
+void is_unit_impl(const prefixed_unit<Symbol, M, U>*);
+
 template<typename... Expr>
 void is_unit_impl(const derived_unit<Expr...>*);
 
-template<typename T>
-inline constexpr bool is_specialization_of_unit = false;
-
-template<symbol_text Symbol, auto... Args>
-inline constexpr bool is_specialization_of_unit<named_unit<Symbol, Args...>> = true;
+void is_unit_impl(const one*);
 
 template<typename T>
-inline constexpr bool is_specialization_of_prefixed_unit = false;
-
-template<symbol_text Symbol, Magnitude auto M, PrefixableUnit auto U>
-inline constexpr bool is_specialization_of_prefixed_unit<prefixed_unit<Symbol, M, U>> = true;
-
-template<typename T>
-  requires requires(T* t) { is_unit_impl(t); } && (!is_specialization_of_named_unit<T>) &&
-           (!is_specialization_of_prefixed_unit<T>)
-struct is_unit<T> : std::true_type {};
+  requires requires(T* t) { is_unit_impl(t); } && std::is_final_v<T>
+inline constexpr bool is_unit<T> = true;
 
 template<Unit U>
 [[nodiscard]] consteval bool has_associated_quantity(U);
@@ -189,17 +182,20 @@ concept AssociatedUnit = Unit<U> && detail::has_associated_quantity(U{});
  * the provided quantity_spec type.
  */
 MP_UNITS_EXPORT template<typename U, auto QS>
-concept UnitOf =
-  AssociatedUnit<U> && QuantitySpec<std::remove_const_t<decltype(QS)>> &&
-  implicitly_convertible(get_quantity_spec(U{}), QS) &&
-  // the below is to make `dimensionless[radian]` invalid
-  (get_kind(QS) == get_kind(get_quantity_spec(U{})) || !detail::NestedQuantityKindSpecOf<get_quantity_spec(U{}), QS>);
+concept UnitOf = AssociatedUnit<U> && QuantitySpec<MP_UNITS_REMOVE_CONST(decltype(QS))> &&
+                 detail::QuantitySpecConvertibleTo<get_quantity_spec(U{}), QS> &&
+                 // the below is to make `dimensionless[radian]` invalid
+                 (detail::SameQuantitySpec<get_kind(QS), get_kind(get_quantity_spec(U{}))> ||
+                  !detail::NestedQuantityKindSpecOf<get_quantity_spec(U{}), QS>);
+
+MP_UNITS_EXPORT template<Unit From, Unit To>
+[[nodiscard]] consteval bool convertible(From from, To to);
 
 namespace detail {
 
-[[nodiscard]] consteval bool have_same_canonical_reference_unit(Unit auto u1, Unit auto u2);
-
-}
+template<auto From, auto To>
+concept UnitConvertibleTo =
+  Unit<MP_UNITS_REMOVE_CONST(decltype(From))> && Unit<MP_UNITS_REMOVE_CONST(decltype(To))> && (convertible(From, To));
 
 /**
  * @brief A concept matching all units compatible with the provided unit and quantity spec
@@ -207,10 +203,14 @@ namespace detail {
  * Satisfied by all units that have the same canonical reference as `U2` and in case they
  * have associated quantity specification it should satisfy `UnitOf<QS>`.
  */
-MP_UNITS_EXPORT template<typename U, auto U2, auto QS>
+MP_UNITS_EXPORT template<typename U, auto FromU, auto QS>
 concept UnitCompatibleWith =
-  Unit<U> && Unit<std::remove_const_t<decltype(U2)>> && QuantitySpec<std::remove_const_t<decltype(QS)>> &&
-  (!AssociatedUnit<U> || UnitOf<U, QS>)&&detail::have_same_canonical_reference_unit(U{}, U2);
+  Unit<U> && Unit<MP_UNITS_REMOVE_CONST(decltype(FromU))> && QuantitySpec<MP_UNITS_REMOVE_CONST(decltype(QS))> &&
+  (!AssociatedUnit<U> || UnitOf<U, QS>)&&detail::UnitConvertibleTo<FromU, U{}>;
 
+template<typename T>
+concept OffsetUnit = Unit<T> && requires { T::point_origin; };
+
+}  // namespace detail
 
 }  // namespace mp_units
