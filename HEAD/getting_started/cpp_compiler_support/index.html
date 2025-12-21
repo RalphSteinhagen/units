@@ -3607,7 +3607,7 @@ a specific C++ feature:</p>
 <td style="text-align: center;">20</td>
 <td style="text-align: center;">12+</td>
 <td style="text-align: center;">16+ &amp;&amp; !19</td>
-<td style="text-align: center;">15+</td>
+<td style="text-align: center;">15-16 &amp;&amp; !17.0</td>
 <td style="text-align: center;">194+ <img alt="🐛" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/1f41b.svg" title="BEWARE of MSVC Bugs!" /></td>
 </tr>
 <tr>
@@ -3648,6 +3648,12 @@ a specific C++ feature:</p>
 <summary>Clang-19 unfixable bug</summary>
 <p>Unfortunately, Clang-19 does not build <strong>mp-units</strong> because of an
 <a href="https://github.com/llvm/llvm-project/pull/118288">unfixable bug in the compiler</a>.</p>
+</details>
+<details class="note">
+<summary>Apple Clang-17.0 unfixable bug</summary>
+<p>Unfortunately, Apple Clang-17.0 (Xcode 16.3, 16.4, 26.0, 26.0.1, 26.1, and 26.2-beta) does not
+build <strong>mp-units</strong> because it has the same
+<a href="https://github.com/llvm/llvm-project/pull/118288">unfixable bug as Clang-19</a>.</p>
 </details>
 <details class="note">
 <summary>MSVC bugs</summary>
