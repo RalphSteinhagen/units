@@ -201,51 +201,51 @@
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_1/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/affine_spaces/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_10/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/custom_base_dimensions/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_11/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/custom_dimensionless_units/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_12/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/custom_quantity_specifications/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_2/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/distinct_quantity_kinds/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_3/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/extracting_numeric_values/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_4/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/faster_than_lightspeed_constants/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_5/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/generic_type_safe_interfaces/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_6/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/interop_with_std_chrono/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_7/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/refactor_to_strong_types/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_8/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/typed_quantities_same_kind/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/tutorial_9/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/tutorials/working_with_temperatures/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
@@ -313,6 +313,26 @@
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/how_to_guides/interoperability_with_other_libraries/</loc>
+         <lastmod>2026-01-13</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/how_to_guides/pure_dimensional_analysis/</loc>
+         <lastmod>2026-01-13</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/how_to_guides/using_custom_representation_types/</loc>
+         <lastmod>2026-01-13</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/how_to_guides/wide_compatibility/</loc>
+         <lastmod>2026-01-13</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/how_to_guides/working_with_legacy_interfaces/</loc>
+         <lastmod>2026-01-13</lastmod>
+    </url>
+    <url>
          <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/systems/cgs/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
@@ -334,26 +354,6 @@
     </url>
     <url>
          <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/systems/strong_angular_system/</loc>
-         <lastmod>2026-01-13</lastmod>
-    </url>
-    <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/use_cases/interoperability_with_other_libraries/</loc>
-         <lastmod>2026-01-13</lastmod>
-    </url>
-    <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/use_cases/pure_dimensional_analysis/</loc>
-         <lastmod>2026-01-13</lastmod>
-    </url>
-    <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/use_cases/using_custom_representation_types/</loc>
-         <lastmod>2026-01-13</lastmod>
-    </url>
-    <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/use_cases/wide_compatibility/</loc>
-         <lastmod>2026-01-13</lastmod>
-    </url>
-    <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/users_guide/use_cases/working_with_legacy_interfaces/</loc>
          <lastmod>2026-01-13</lastmod>
     </url>
     <url>
