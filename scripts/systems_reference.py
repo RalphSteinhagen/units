@@ -1507,7 +1507,10 @@ class DocumentationGenerator:
             f.write("- [Quantities](quantities_index.md) - All quantities\n")
             f.write("- [Units](units_index.md) - All units\n")
             f.write("- [Prefixes](prefixes_index.md) - All prefixes\n")
-            f.write("- [Point Origins](point_origins_index.md) - All point origins\n\n")
+            f.write("- [Point Origins](point_origins_index.md) - All point origins\n")
+            f.write(
+                "- [Quantity Hierarchies](hierarchies/index.md) - ISQ quantity type hierarchies\n\n"
+            )
             f.write("## Systems\n\n")
 
             # Write table header
