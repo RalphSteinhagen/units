@@ -83,7 +83,7 @@ Unit safety eliminates these issues through automatic unit conversions and type-
 **mp-units provides stronger unit safety than most libraries**, especially in value
 extraction. While `std::chrono::duration::count()` returns raw numbers without verification,
 `mp-units::numerical_value_in(Unit)` requires specifying the exact unit. For more details,
-see [Working with Legacy Interfaces](../../how_to_guides/integration/working_with_legacy_interfaces.md).
+see [Working with Legacy Interfaces](../how_to_guides/integration/working_with_legacy_interfaces.md).
 
 
 ## Representation Safety
