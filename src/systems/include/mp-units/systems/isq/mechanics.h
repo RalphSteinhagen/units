@@ -65,8 +65,8 @@ QUANTITY_SPEC(angular_impulse, angular_momentum, moment_of_force* time);  // vec
 QUANTITY_SPEC(pressure, force / area, quantity_character::real_scalar);
 QUANTITY_SPEC(gauge_pressure, pressure);
 QUANTITY_SPEC(stress, pressure, quantity_character::tensor);
-QUANTITY_SPEC(normal_stress, pressure, quantity_character::real_scalar);
-QUANTITY_SPEC(shear_stress, pressure, quantity_character::real_scalar);
+QUANTITY_SPEC(normal_stress, stress, quantity_character::real_scalar);
+QUANTITY_SPEC(shear_stress, stress, quantity_character::real_scalar);
 QUANTITY_SPEC(strain, dimensionless, quantity_character::tensor);
 QUANTITY_SPEC(relative_linear_strain, length / length);
 QUANTITY_SPEC(shear_strain, dimensionless, displacement / thickness, quantity_character::real_scalar);
