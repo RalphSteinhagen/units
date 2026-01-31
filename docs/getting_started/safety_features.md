@@ -125,26 +125,26 @@ by `std::chrono::duration`) and compile-time scaling overflow detection.
 represent different physical concepts.
 
 ```cpp
-quantity<si::radian> plane_angle = 1.5 * rad;
-quantity<si::steradian> solid_angle = 2.0 * sr;
+quantity absorbed_dose = 1.5 * Gy;
+quantity dose_equivalent = 2.0 * Sv;
 
-// auto result = plane_angle + solid_angle;                 // ❌ Compile-time error!
-// Error: cannot add plane angle and solid angle (both dimensionless, but different kinds)
+// auto result = absorbed_dose + dose_equivalent;           // ❌ Compile-time error!
+// Error: cannot add absorbed dose and dose equivalent (both L²T⁻², but different kinds)
 
-// QuantityOf<isq::angular_measure> auto alpha = 2.5 * sr;  // ❌ Compile-time error!
-// Error: cannot initialize plane angle with solid angle (different quantity kinds)
+// QuantityOf<isq::absorbed_dose> auto d = 2.5 * Sv;        // ❌ Compile-time error!
+// Error: cannot initialize absorbed dose with dose equivalent (different quantity kinds)
 ```
 
 Examples of quantities with same dimension but different kinds:
 
-- **Frequency (Hz)** and **Activity (Bq)**: Both `1/time`
 - **Absorbed dose (Gy)** and **Dose equivalent (Sv)**: Both `length²/time²`
+- **Frequency (Hz)** and **Activity (Bq)**: Both `1/time`
 - **Plane angle (rad)** and **Solid angle (sr)**: Both dimensionless
 
 !!! important
 
     **mp-units is the only C++ library implementing quantity kind safety.** It fully
-    distinguishes all SI quantity kinds including Hz/Bq, rad/sr, and Gy/Sv.
+    distinguishes all SI quantity kinds including Gy/Sv, Hz/Bq, and rad/sr.
 
 
 ## Quantity Safety
