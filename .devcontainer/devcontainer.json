@@ -4,6 +4,10 @@
   // Dockerfile: https://github.com/train-it-eu/docker-images/blob/main/mp-units/Dockerfile
   "image": "trainiteu/mp-units:latest",
   "remoteUser": "ubuntu",
+  "mounts": [
+    "source=conan-cache,target=/home/ubuntu/.conan2,type=volume",
+    "source=pipx-cache,target=/home/ubuntu/.pipx,type=volume"
+  ],
   "features": {},
   "customizations": {
     "vscode": {
