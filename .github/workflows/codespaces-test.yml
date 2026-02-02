@@ -53,6 +53,4 @@ jobs:
           imageName: mp-units-dev
           cacheFrom: mp-units-dev
           push: never
-          runCmd: |
-            echo "✅ Devcontainer build and setup completed successfully"
-            echo "Validation was performed during postCreateCommand"
+          runCmd: echo "✅ Devcontainer build and setup completed successfully with pre-built packages only"
