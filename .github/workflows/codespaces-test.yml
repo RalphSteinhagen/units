@@ -49,8 +49,10 @@ jobs:
 
       - name: Test Dev Container Build and Setup
         uses: devcontainers/ci@v0.3.1900000417
+        env:
+          CI_NEVER_BUILD: "1"
         with:
           imageName: mp-units-dev
           cacheFrom: mp-units-dev
           push: never
-          runCmd: echo "✅ Devcontainer build and setup completed successfully with pre-built packages only"
+          runCmd: echo "✅ Devcontainer setup completed successfully with pre-built packages only"

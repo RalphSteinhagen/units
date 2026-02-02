@@ -6,13 +6,7 @@
 
 set -e
 
-# Auto-detect CI environment and use "never" build policy
-if [[ -n "${CI:-}" ]]; then
-  build_policy="never"
-else
-  build_policy="missing"
-fi
-
+build_policy="missing"
 while getopts :hdn opt
 do
   case $opt in

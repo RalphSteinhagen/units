@@ -4,6 +4,9 @@
   // Dockerfile: https://github.com/train-it-eu/docker-images/blob/main/mp-units/Dockerfile
   "image": "trainiteu/mp-units:latest",
   "remoteUser": "ubuntu",
+  "containerEnv": {
+    "CI_NEVER_BUILD": "${localEnv:CI_NEVER_BUILD}"
+  },
   "mounts": [
     "source=conan-cache,target=/home/ubuntu/.conan2,type=volume",
     "source=pipx-cache,target=/home/ubuntu/.pipx,type=volume"
@@ -74,7 +77,7 @@
     "--init"
   ],
   "updateContentCommand": "sudo mkdir -p /workspaces/api_reference_deps && sudo chown -R ubuntu:ubuntu /workspaces/api_reference_deps",
-  "postCreateCommand": "pipx upgrade-all && .devcontainer/validate_environment.sh && .devcontainer/check_all.sh -d install && .devcontainer/api_reference.sh -s",
+  "postCreateCommand": "bash -c 'pipx upgrade-all && .devcontainer/validate_environment.sh && .devcontainer/check_all.sh -d ${CI_NEVER_BUILD:+-n} install && .devcontainer/api_reference.sh -s'",
   "postStartCommand": "echo '🚀 mp-units development environment ready!' && echo '🧪 Use `.devcontainer/check_all.sh [-d] build` to test all compiler configurations.' && echo '📖 Use `.devcontainer/api_reference.sh` to generate the API reference documentation.'",
   "forwardPorts": [
     8000
