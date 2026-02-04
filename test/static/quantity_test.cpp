@@ -457,16 +457,16 @@ struct child_quantity : quantity<R, Rep> {
   // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
   constexpr explicit(false) child_quantity(const quantity_type& t) : quantity_type(t) {}
   // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
-  constexpr explicit(false) child_quantity(quantity_type&& t) : quantity_type(std::move(t)) {}
+  constexpr explicit(false) child_quantity(quantity_type&& qt) : quantity_type(std::move(qt)) {}
 
-  constexpr child_quantity& operator=(const quantity_type& q)
+  constexpr child_quantity& operator=(const quantity_type& qt)
   {
-    quantity_type::operator=(q);
+    quantity_type::operator=(qt);
     return *this;
   }
-  constexpr child_quantity& operator=(quantity_type&& q)
+  constexpr child_quantity& operator=(quantity_type&& qt)
   {
-    quantity_type::operator=(std::move(q));
+    quantity_type::operator=(std::move(qt));
     return *this;
   }
   // NOLINTBEGIN(google-explicit-constructor, hicpp-explicit-conversions)

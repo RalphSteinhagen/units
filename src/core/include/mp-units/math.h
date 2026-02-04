@@ -412,9 +412,9 @@ template<Unit auto To, auto R, typename Rep>
     value_cast<To>(representation_values<Rep>::one() / q);
   }
 {
-  constexpr QuantitySpec auto qs = get_quantity_spec(To) * quantity<R, Rep>::quantity_spec;
+  constexpr QuantitySpec auto spec = get_quantity_spec(To) * quantity<R, Rep>::quantity_spec;
   constexpr Unit auto unit = To * quantity<R, Rep>::unit;
-  return qs(representation_values<Rep>::one() * one).force_in(unit) / q;
+  return spec(representation_values<Rep>::one() * one).force_in(unit) / q;
 }
 
 /**

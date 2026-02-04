@@ -342,7 +342,7 @@ constexpr Out magnitude_symbol_impl(Out out, const unit_symbol_formatting& fmt)
     if (fmt.solidus == always || (fmt.solidus == one_denominator && den_size == 1)) {
       if (!numerator) *out++ = '1';
       *out++ = '/';
-      if (den_size > 1) *out++ = '(';
+      if constexpr (den_size > 1) *out++ = '(';
     } else if (numerator) {
       out = print_separator<CharT>(out, fmt);
     }
@@ -477,10 +477,10 @@ private:
     return ((get_base_value(Ms) == base ? get_exponent(Ms) : ratio{0}) + ... + ratio{0});
   }
 
-  [[nodiscard]] friend consteval std::intmax_t extract_power_of_10(unit_magnitude m)
+  [[nodiscard]] friend consteval std::intmax_t extract_power_of_10(unit_magnitude mag)
   {
-    const auto power_of_2 = get_power(2, m);
-    const auto power_of_5 = get_power(5, m);
+    const auto power_of_2 = get_power(2, mag);
+    const auto power_of_5 = get_power(5, mag);
 
     if ((power_of_2 * power_of_5).num <= 0) return 0;
 

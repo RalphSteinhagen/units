@@ -538,8 +538,8 @@ template<typename F, int Num, int... Den, typename... Us>
 [[nodiscard]] consteval auto get_canonical_unit_impl(const power<F, Num, Den...>&, const type_list<Us...>&)
 {
   auto mag = (mp_units::mag<1> * ... * pow<Num, Den...>(get_canonical_unit_impl(Us{}, Us{}).mag));
-  auto u = (one * ... * pow<Num, Den...>(get_canonical_unit_impl(Us{}, Us{}).reference_unit));
-  return canonical_unit{mag, u};
+  auto ref_unit = (one * ... * pow<Num, Den...>(get_canonical_unit_impl(Us{}, Us{}).reference_unit));
+  return canonical_unit{mag, ref_unit};
 }
 
 template<typename T, typename F, int Num, int... Den>
@@ -560,8 +560,8 @@ template<typename... Us>
 [[nodiscard]] consteval auto get_canonical_unit_impl(const type_list<Us...>&)
 {
   auto unit_magnitude = (mp_units::mag<1> * ... * get_canonical_unit_impl(Us{}, Us{}).mag);
-  auto u = (one * ... * get_canonical_unit_impl(Us{}, Us{}).reference_unit);
-  return canonical_unit{unit_magnitude, u};
+  auto ref_unit = (one * ... * get_canonical_unit_impl(Us{}, Us{}).reference_unit);
+  return canonical_unit{unit_magnitude, ref_unit};
 }
 
 template<Unit T, typename... Expr>
