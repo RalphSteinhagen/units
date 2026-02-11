@@ -129,6 +129,12 @@ if(MP_UNITS_BUILD_CXX_MODULES)
         if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 18)
             target_compile_options(mp-units-core PUBLIC "-Wno-include-angled-in-module-purview")
         endif()
+
+        # Clang-18 has a known bug where pragmas don't work correctly inside C++ modules
+        # and we need to silent truncation warnings in sudo_cast
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19)
+            target_compile_options(mp-units-core PUBLIC "-Wno-error=implicit-float-conversion")
+        endif()
     endif()
 
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
