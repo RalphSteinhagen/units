@@ -101,12 +101,24 @@ template<Quantity To, typename FwdFrom, Quantity From = std::remove_cvref_t<FwdF
 // TODO how to constrain the second part here?
 [[nodiscard]] constexpr To sudo_cast(FwdFrom&& q)
 {
+  auto silent_cast = [](auto value) {
+    // We need to return a representation type used by the user's quantity type. It might have
+    // a lower precision than we get as a results of the intermediate scaling calculations.
+    // For example, when converting between degree and radian we need to multiply/divide by `pi`
+    // which is implemented in terms of `long double`. If the user's quantity type has `double`
+    // or `float` representation, this will cause a warning on conversion from `long double`
+    // (even with the `static_cast` usage). However, the value truncation is exactly what we want
+    // in this case, so we need to suppress the warning here.
+    MP_UNITS_DIAGNOSTIC_PUSH
+    MP_UNITS_DIAGNOSTIC_IGNORE_FLOAT_CONVERSION
+    return static_cast<To::rep>(value);
+    MP_UNITS_DIAGNOSTIC_POP
+  };
+
   constexpr auto q_unit = From::unit;
   if constexpr (equivalent(q_unit, To::unit)) {
     // no scaling of the number needed
-    return {static_cast<To::rep>(std::forward<FwdFrom>(q).numerical_value_is_an_implementation_detail_),
-            To::reference};  // this is the only (and recommended) way to do a truncating conversion on a number, so we
-                             // are using static_cast to suppress all the compiler warnings on conversions
+    return {silent_cast(std::forward<FwdFrom>(q).numerical_value_is_an_implementation_detail_), To::reference};
   } else {
     constexpr UnitMagnitude auto c_mag = get_canonical_unit(From::unit).mag / get_canonical_unit(To::unit).mag;
     using type_traits = conversion_type_traits<c_mag, typename From::rep, typename To::rep>;
@@ -114,9 +126,8 @@ template<Quantity To, typename FwdFrom, Quantity From = std::remove_cvref_t<FwdF
     // TODO the below crashed nearly every compiler I tried it on
     // auto scale = [&](std::invocable<typename type_traits::c_type> auto func) {
     auto scale = [&](auto func) {
-      auto res =
-        static_cast<To::rep>(func(static_cast<type_traits::c_type>(q.numerical_value_is_an_implementation_detail_)));
-      return To{res, To::reference};
+      const auto arg = static_cast<type_traits::c_type>(q.numerical_value_is_an_implementation_detail_);
+      return To{silent_cast(func(arg)), To::reference};
     };
 
     // scale the number

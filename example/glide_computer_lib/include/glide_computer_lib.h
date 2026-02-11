@@ -102,7 +102,7 @@ struct weather {
 
 struct waypoint {
   std::string name;
-  geographic::position<long double> pos;
+  geographic::position<double> pos;
   geographic::msl_altitude alt;
 };
 

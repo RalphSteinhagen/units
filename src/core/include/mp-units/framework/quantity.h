@@ -198,11 +198,20 @@ public:
   // construction and assignment
   quantity() = default;
 
-  template<typename FwdValue, Reference R2>
-    requires(equivalent(unit, get_unit(R2{}))) && detail::ValuePreservingConstruction<rep, FwdValue>
-  constexpr quantity(FwdValue&& val, R2) : numerical_value_is_an_implementation_detail_(std::forward<FwdValue>(val))
+  template<Reference R2>
+    requires(equivalent(unit, get_unit(R2{})))
+  constexpr quantity(rep val, R2) : numerical_value_is_an_implementation_detail_(std::move(val))
   {
   }
+
+  template<typename Value, Reference R2>
+    requires(equivalent(unit, get_unit(R2{}))) && (!detail::ValuePreservingConstruction<rep, Value>)
+  constexpr quantity(Value val, R2)
+#if __cpp_deleted_function
+    = delete("Conversion is not value-preserving");
+#else
+    = delete;
+#endif
 
   template<typename FwdValue, Reference R2>
     requires(!equivalent(unit, get_unit(R2{}))) &&
@@ -211,16 +220,40 @@ public:
   {
   }
 
-  template<typename FwdValue>
-    requires detail::ExplicitFromNumber<reference> && detail::ValuePreservingConstruction<rep, FwdValue>
-  constexpr explicit(!std::convertible_to<FwdValue, rep> || !implicitly_convertible(quantity_spec, dimensionless))
-    quantity(FwdValue&& val) :
-      numerical_value_is_an_implementation_detail_(std::forward<FwdValue>(val))
+  constexpr explicit(!implicitly_convertible(quantity_spec, dimensionless)) quantity(rep val)
+    requires detail::ExplicitFromNumber<reference>
+      : numerical_value_is_an_implementation_detail_(std::move(val))
+  {
+  }
+
+  template<typename Value>
+    requires detail::ExplicitFromNumber<reference> && detail::ValuePreservingConstruction<rep, Value> &&
+             (!std::convertible_to<Value, rep>)
+  constexpr explicit quantity(Value val) : numerical_value_is_an_implementation_detail_(std::move(val))
+  {
+  }
+
+  template<typename Value, Reference R2>
+    requires detail::ExplicitFromNumber<reference> && (!detail::ValuePreservingConstruction<rep, Value>)
+  constexpr explicit(!std::convertible_to<Value, rep> || !implicitly_convertible(quantity_spec, dimensionless))
+    quantity(Value val)
+#if __cpp_deleted_function
+    = delete("Conversion is not value-preserving");
+#else
+    = delete;
+#endif
+
+  template<auto R2, typename Rep2>
+    requires detail::QuantityConstructibleFrom<quantity, quantity<R2, Rep2>> && (equivalent(unit, get_unit(R2)))
+  // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
+  constexpr explicit(!implicitly_convertible(get_quantity_spec(R2), quantity_spec) || !std::convertible_to<Rep2, rep>)
+    quantity(const quantity<R2, Rep2>& q) :
+      numerical_value_is_an_implementation_detail_(q.numerical_value_in(q.unit))
   {
   }
 
   template<auto R2, typename Rep2>
-    requires detail::QuantityConstructibleFrom<quantity, quantity<R2, Rep2>>
+    requires detail::QuantityConstructibleFrom<quantity, quantity<R2, Rep2>> && (!equivalent(unit, get_unit(R2)))
   // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
   constexpr explicit(!implicitly_convertible(get_quantity_spec(R2), quantity_spec) || !std::convertible_to<Rep2, rep>)
     quantity(const quantity<R2, Rep2>& q) :

@@ -98,7 +98,7 @@ struct MP_UNITS_STD_FMT::formatter<QP, Char> : formatter<typename QP::quantity_t
   }
 };
 
-double GeographicLibWhatsMyOffset(long double /* lat */, long double /* lon */)
+double GeographicLibWhatsMyOffset(double /* lat */, double /* lon */)
 {
   // for example use GeographicLib for that:
   // - https://geographiclib.sourceforge.io/C++/doc/geoid.html
@@ -107,7 +107,7 @@ double GeographicLibWhatsMyOffset(long double /* lat */, long double /* lon */)
 }
 
 template<earth_gravity_model M>
-hae_altitude<M> to_hae(msl_altitude msl, position<long double> pos)
+hae_altitude<M> to_hae(msl_altitude msl, position<double> pos)
 {
   const auto geoid_undulation =
     isq::height(GeographicLibWhatsMyOffset(pos.lat.quantity_from_zero().numerical_value_in(si::degree),
@@ -173,7 +173,7 @@ int main()
 
   struct waypoint {
     std::string name;
-    geographic::position<long double> pos;
+    geographic::position<double> pos;
     msl_altitude msl_alt;
   };
 
