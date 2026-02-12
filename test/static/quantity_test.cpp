@@ -184,6 +184,35 @@ static_assert(quantity<isq::length[m], double>::max().numerical_value_in(m) == s
 
 
 /////////////////////////////////////////////////
+// construction from value and a unit
+/////////////////////////////////////////////////
+
+static_assert(std::constructible_from<quantity<si::metre>, double, struct si::metre>);
+static_assert(std::constructible_from<quantity<isq::length[m]>, double, decltype(isq::length[m])>);
+static_assert(std::constructible_from<quantity<si::metre>, double, si::kilo_<struct si::metre>>);
+static_assert(std::constructible_from<quantity<si::kilo<si::metre>>, double, struct si::metre>);
+
+static_assert(std::constructible_from<quantity<si::metre, float>, double, struct si::metre>);
+static_assert(std::constructible_from<quantity<isq::length[m], float>, double, decltype(isq::length[m])>);
+static_assert(std::constructible_from<quantity<si::metre, float>, double, si::kilo_<struct si::metre>>);
+static_assert(std::constructible_from<quantity<si::kilo<si::metre>, float>, double, struct si::metre>);
+
+static_assert(std::constructible_from<quantity<si::metre, int>, int, struct si::metre>);
+static_assert(std::constructible_from<quantity<isq::length[m], int>, int, decltype(isq::length[m])>);
+static_assert(std::constructible_from<quantity<si::metre, int>, int, si::kilo_<struct si::metre>>);
+static_assert(
+  !std::constructible_from<quantity<si::kilo<si::metre>, int>, int, struct si::metre>);  // truncating unit conversion
+
+static_assert(std::constructible_from<quantity<si::metre>, int, struct si::metre>);
+static_assert(std::constructible_from<quantity<si::metre>, int, si::kilo_<struct si::metre>>);
+static_assert(std::constructible_from<quantity<si::kilo<si::metre>>, int, struct si::metre>);
+
+// truncating representation conversion
+static_assert(!std::constructible_from<quantity<si::metre, int>, double, struct si::metre>);
+static_assert(!std::constructible_from<quantity<si::metre, int>, double, si::kilo_<struct si::metre>>);
+static_assert(!std::constructible_from<quantity<si::kilo<si::metre>, int>, double, struct si::metre>);
+
+/////////////////////////////////////////////////
 // no construction from value (unless unit one)
 /////////////////////////////////////////////////
 
@@ -199,6 +228,9 @@ static_assert(std::convertible_to<double, quantity<one>>);
 
 static_assert(std::constructible_from<quantity<one>, int>);
 static_assert(std::convertible_to<int, quantity<one>>);
+
+static_assert(!std::constructible_from<quantity<one, int>, double>);  // truncating
+static_assert(!std::convertible_to<double, quantity<one, int>>);      // truncating
 
 static_assert(std::constructible_from<quantity<dimensionless[one]>, double>);
 static_assert(std::convertible_to<double, quantity<dimensionless[one]>>);

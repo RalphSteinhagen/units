@@ -233,7 +233,7 @@ public:
   {
   }
 
-  template<typename Value, Reference R2>
+  template<typename Value>
     requires detail::ExplicitFromNumber<reference> && (!detail::ValuePreservingConstruction<rep, Value>)
   constexpr explicit(!std::convertible_to<Value, rep> || !implicitly_convertible(quantity_spec, dimensionless))
     quantity(Value val)
