@@ -3312,16 +3312,18 @@ class CppMetadataExtractor:
                 "}",
                 "",
                 "template<QuantitySpec QS>",
-                "void print_quantity(std::string_view namespace_name, std::string_view name, QS qs)",
+                "void print_quantity(std::string_view namespace_name, "
+                "std::string_view name, QS qs)",
                 "{",
-                '  std::cout << namespace_name << ","                                                  // namespace',
-                '            << name << ","                                                            // quantity name',
-                '            << character_to_string(qs.character) << ","                               // character',
-                '            << dimension_symbol(qs.dimension) << ","                                  // dimension',
-                '            << std::boolalpha << (qs == detail::get_kind_tree_root(qs)) << ","        // is kind',
-                '            << detail::type_name<decltype(get_kind(qs))>() << ","                     // kind quantity',
-                '            << get_parent(qs) << ","                                                  // parent quantity',
-                '            << detail::type_name<decltype(detail::get_hierarchy_root(qs))>() << "\\n"; // hierarchy root',
+                '  std::cout << namespace_name << ","'
+                '            << name << ","'
+                '            << character_to_string(qs.character) << ","'
+                '            << dimension_symbol(qs.dimension) << ","'
+                '            << std::boolalpha << (qs == detail::get_kind_tree_root(qs)) << ","'
+                '            << detail::type_name<decltype(get_kind(qs))>() << ","'
+                '            << get_parent(qs) << ","'
+                "            << detail::type_name<decltype(detail::get_hierarchy_root(qs))>() "
+                '            << "\\n";',
                 "}",
                 "",
                 "#define PRINT_QTY(ns, qty) print_quantity(#ns, #qty, ns::qty)",
