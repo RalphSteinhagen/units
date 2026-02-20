@@ -133,6 +133,9 @@ class SystemInfo:
     inline_subnamespaces: Set[str] = field(
         default_factory=set
     )  # Track inline subnamespaces (e.g., "si2019", "codata2018")
+    imported_systems: Set[str] = field(
+        default_factory=set
+    )  # Track systems imported via using declarations (e.g., {"si"})
 
 
 class SystemsParser:
@@ -145,6 +148,15 @@ class SystemsParser:
         # Determine the source root directory for parsing core framework files
         # systems_dir is src/systems/include/mp-units/systems, so we need to go up 5 levels to get to repo root
         self.source_root = systems_dir.parent.parent.parent.parent.parent
+
+    @staticmethod
+    def _strip_comments(content: str) -> str:
+        """Remove C++ comments (both // and /* */) from source code"""
+        # Remove multi-line comments /* ... */
+        content = re.sub(r"/\*.*?\*/", "", content, flags=re.DOTALL)
+        # Remove single-line comments //...
+        content = re.sub(r"//.*?$", "", content, flags=re.MULTILINE)
+        return content
 
     def parse_all_systems(self):
         """Parse all system header files, following include order"""
@@ -228,13 +240,14 @@ class SystemsParser:
         unit_path = self.source_root / "src/core/include/mp-units/framework/unit.h"
         if unit_path.exists():
             try:
-                content = unit_path.read_text()
-                # Only parse content after "common dimensionless units" comment
-                # and before "Common unit" comment to avoid parsing examples
-                start_marker = content.find("// common dimensionless units")
-                end_marker = content.find("// Common unit")
+                raw_content = unit_path.read_text()
+                # Find markers before stripping comments
+                start_marker = raw_content.find("// common dimensionless units")
+                end_marker = raw_content.find("// Common unit")
                 if start_marker != -1 and end_marker != -1:
-                    content = content[start_marker:end_marker]
+                    # Extract the section, then strip comments
+                    section_content = raw_content[start_marker:end_marker]
+                    content = self._strip_comments(section_content)
                     # Parse units at mp_units namespace level (no sub-namespace)
                     self._parse_units(
                         content, core_system, str(unit_path), namespace_to_search=None
@@ -249,7 +262,7 @@ class SystemsParser:
 
     def parse_system_with_includes(self, main_header: Path):
         """Parse a system header and all its includes in order"""
-        content = main_header.read_text()
+        content = self._strip_comments(main_header.read_text())
 
         # Extract includes from this header
         include_pattern = r"#include\s+<mp-units/systems/([^>]+)>"
@@ -298,7 +311,7 @@ class SystemsParser:
             return
 
         self.parsed_files.add(header_file)
-        content = header_file.read_text()
+        content = self._strip_comments(header_file.read_text())
 
         # Extract namespace
         namespace_match = re.search(r"namespace\s+mp_units::(\w+)", content)
@@ -1306,11 +1319,17 @@ class SystemsParser:
             if "std" in full_namespace:
                 continue
 
+            # Extract the source system from the namespace
+            # e.g., "si" from "si" or "si::non_si" from "si::non_si"
+            source_system = full_namespace.split("::")[0]
+            system.imported_systems.add(source_system)
+
             unit = Unit(
                 name=unit_name,
                 symbol=f"(imported from {full_namespace})",
                 definition=f"using {full_namespace}::{unit_name}",
                 namespace=f"mp_units::{system.namespace}",
+                origin_namespace=f"mp_units::{full_namespace}",
                 file=file,
                 is_alias=True,
             )
@@ -2667,6 +2686,34 @@ class DocumentationGenerator:
         # Collect all possible references from all systems
         all_refs = {}  # name -> (system_namespace, anchor_name)
 
+        # Build priority-aware reference map
+        # For the current system, prioritize units from imported systems
+        priority_refs = (
+            {}
+        )  # name -> (system_namespace, anchor_name) for imported systems
+
+        if current_system.imported_systems:
+            for imported_sys in current_system.imported_systems:
+                if imported_sys in self.parser.systems:
+                    imported_system = self.parser.systems[imported_sys]
+                    for unit in imported_system.units:
+                        if not unit.is_alias:
+                            subns_prefix = None
+                            if unit.origin_namespace:
+                                parts = unit.origin_namespace.replace(
+                                    "mp_units::", ""
+                                ).split("::")
+                                if len(parts) > 1:
+                                    subns_prefix = parts[-1]
+                            elif unit.subnamespace:
+                                subns_prefix = unit.subnamespace
+                            anchor_id = (
+                                f"{subns_prefix}-{unit.name}"
+                                if subns_prefix
+                                else unit.name
+                            )
+                            priority_refs[unit.name] = (imported_sys, anchor_id)
+
         for sys_ns, system in self.parser.systems.items():
             # Add units
             for unit in system.units:
@@ -2681,8 +2728,11 @@ class DocumentationGenerator:
 
                 anchor_id = f"{subns_prefix}-{unit.name}" if subns_prefix else unit.name
 
-                all_refs[unit.name] = (sys_ns, anchor_id)
-                # Also add qualified names
+                # For unqualified names, only add if not an alias and not already present
+                # This prevents aliases and redefinitions from overwriting the primary definition
+                if not unit.is_alias and unit.name not in all_refs:
+                    all_refs[unit.name] = (sys_ns, anchor_id)
+                # Always add qualified names (these are system-specific)
                 all_refs[f"{sys_ns}::{unit.name}"] = (sys_ns, anchor_id)
                 # If there's a subnamespace, also add subnamespace::name format
                 if subns_prefix:
@@ -2694,7 +2744,9 @@ class DocumentationGenerator:
 
             # Add point origins
             for origin in system.point_origins:
-                all_refs[origin.name] = (sys_ns, origin.name)
+                # Only add unqualified name if not already present (first system wins)
+                if origin.name not in all_refs:
+                    all_refs[origin.name] = (sys_ns, origin.name)
                 all_refs[f"{sys_ns}::{origin.name}"] = (sys_ns, origin.name)
                 if origin.secondary_namespaces:
                     for sec_ns in origin.secondary_namespaces:
@@ -2702,7 +2754,9 @@ class DocumentationGenerator:
 
             # Add quantities
             for qty in system.quantities:
-                all_refs[qty.name] = (sys_ns, qty.name)
+                # Only add unqualified name if not already present (first system wins)
+                if qty.name not in all_refs:
+                    all_refs[qty.name] = (sys_ns, qty.name)
                 all_refs[f"{sys_ns}::{qty.name}"] = (sys_ns, qty.name)
                 if qty.secondary_namespaces:
                     for sec_ns in qty.secondary_namespaces:
@@ -2850,6 +2904,14 @@ class DocumentationGenerator:
                     return make_link(display_text, "core.md#dimensionless")
                 elif "dimensionless" in all_refs:
                     target_sys, anchor = all_refs["dimensionless"]
+                    return make_link(display_text, f"{target_sys}.md#{anchor}")
+
+            # Check priority refs first (imported systems)
+            if unqualified_check in priority_refs:
+                target_sys, anchor = priority_refs[unqualified_check]
+                if target_sys == current_system.namespace:
+                    return make_link(display_text, f"#{anchor}")
+                else:
                     return make_link(display_text, f"{target_sys}.md#{anchor}")
 
             if current_sys_key in all_refs:
@@ -3201,59 +3263,73 @@ class CppMetadataExtractor:
 
     def _generate_cpp_program(self) -> str:
         """Generate C++ program that outputs metadata for all quantities"""
-        lines = [
-            "// Auto-generated program to extract quantity metadata",
-            "#include <mp-units/systems/isq.h>",
-            "#include <mp-units/systems/isq_angle.h>",
-            "#include <mp-units/systems/angular.h>",
-            "#include <mp-units/systems/natural.h>",
-            "#include <mp-units/systems/iec80000.h>",
-            "#include <iostream>",
-            "",
-            "using namespace mp_units;",
-            "",
-            "constexpr std::string_view get_parent(QuantitySpec auto qs)",
-            "{",
-            "  if constexpr (requires { qs._parent_; })",
-            "    return detail::type_name<std::remove_const_t<decltype(qs._parent_)>>();",
-            "  else",
-            '    return "<root>";',
-            "}",
-            "",
-            "constexpr std::string_view character_to_string(quantity_character ch)",
-            "{",
-            "  switch (ch) {",
-            "    case quantity_character::real_scalar:",
-            '      return "Real";',
-            "    case quantity_character::complex_scalar:",
-            '      return "Complex";',
-            "    case quantity_character::vector:",
-            '      return "Vector";',
-            "    case quantity_character::tensor:",
-            '      return "Tensor";',
-            "    default:",
-            '      return "Unknown";',
-            "  }",
-            "}",
-            "",
-            "template<QuantitySpec QS>",
-            "void print_quantity(std::string_view namespace_name, std::string_view name, QS qs)",
-            "{",
-            '  std::cout << namespace_name << ","                                                  // namespace',
-            '            << name << ","                                                            // quantity name',
-            '            << character_to_string(qs.character) << ","                               // character',
-            '            << dimension_symbol(qs.dimension) << ","                                  // dimension',
-            '            << std::boolalpha << (qs == detail::get_kind_tree_root(qs)) << ","        // is kind',
-            '            << detail::type_name<decltype(get_kind(qs))>() << ","                     // kind quantity',
-            '            << get_parent(qs) << ","                                                  // parent quantity',
-            '            << detail::type_name<decltype(detail::get_hierarchy_root(qs))>() << "\\n"; // hierarchy root',
-            "}",
-            "",
-            "#define PRINT_QTY(ns, qty) print_quantity(#ns, #qty, ns::qty)",
-            "",
-            "int main()",
-            "{",
-        ]
+        # Discover all system header files dynamically
+        systems_include_dir = (
+            self.source_dir / "src" / "systems" / "include" / "mp-units" / "systems"
+        )
+        system_headers = sorted(
+            [
+                f.name
+                for f in systems_include_dir.iterdir()
+                if f.is_file() and f.suffix == ".h"
+            ]
+        )
+
+        lines = ["// Auto-generated program to extract quantity metadata"]
+
+        # Add includes for all discovered system headers
+        for header in system_headers:
+            lines.append(f"#include <mp-units/systems/{header}>")
+
+        lines.extend(
+            [
+                "#include <iostream>",
+                "",
+                "using namespace mp_units;",
+                "",
+                "constexpr std::string_view get_parent(QuantitySpec auto qs)",
+                "{",
+                "  if constexpr (requires { qs._parent_; })",
+                "    return detail::type_name<std::remove_const_t<decltype(qs._parent_)>>();",
+                "  else",
+                '    return "<root>";',
+                "}",
+                "",
+                "constexpr std::string_view character_to_string(quantity_character ch)",
+                "{",
+                "  switch (ch) {",
+                "    case quantity_character::real_scalar:",
+                '      return "Real";',
+                "    case quantity_character::complex_scalar:",
+                '      return "Complex";',
+                "    case quantity_character::vector:",
+                '      return "Vector";',
+                "    case quantity_character::tensor:",
+                '      return "Tensor";',
+                "    default:",
+                '      return "Unknown";',
+                "  }",
+                "}",
+                "",
+                "template<QuantitySpec QS>",
+                "void print_quantity(std::string_view namespace_name, std::string_view name, QS qs)",
+                "{",
+                '  std::cout << namespace_name << ","                                                  // namespace',
+                '            << name << ","                                                            // quantity name',
+                '            << character_to_string(qs.character) << ","                               // character',
+                '            << dimension_symbol(qs.dimension) << ","                                  // dimension',
+                '            << std::boolalpha << (qs == detail::get_kind_tree_root(qs)) << ","        // is kind',
+                '            << detail::type_name<decltype(get_kind(qs))>() << ","                     // kind quantity',
+                '            << get_parent(qs) << ","                                                  // parent quantity',
+                '            << detail::type_name<decltype(detail::get_hierarchy_root(qs))>() << "\\n"; // hierarchy root',
+                "}",
+                "",
+                "#define PRINT_QTY(ns, qty) print_quantity(#ns, #qty, ns::qty)",
+                "",
+                "int main()",
+                "{",
+            ]
+        )
 
         # Add dimensionless (special case - no namespace)
         lines.append('  print_quantity("", "dimensionless", dimensionless);')
