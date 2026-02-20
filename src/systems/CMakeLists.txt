@@ -24,6 +24,8 @@ add_mp_units_module(
     systems mp-units-systems
     DEPENDENCIES mp-units::core
     HEADERS include/mp-units/systems/angular/units.h
+            include/mp-units/systems/hep/quantities.h
+            include/mp-units/systems/hep/units.h
             include/mp-units/systems/iec/binary_prefixes.h
             include/mp-units/systems/iec/quantities.h
             include/mp-units/systems/iec/unit_symbols.h

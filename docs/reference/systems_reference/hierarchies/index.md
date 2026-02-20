@@ -15,39 +15,50 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: E
 
+- [`hep::energy`](energy_hep.md) (1 quantity)
 - [`natural::energy`](energy_natural.md) (5 quantities)
 
 ## Dimension: I
 
-- [`isq::electric_current`](electric_current.md) (7 quantities)
+- [`hep::luminous_intensity`](luminous_intensity_hep.md) (1 quantity)
+- [`isq::electric_current`](electric_current_isq.md) (7 quantities)
 
 ## Dimension: J
 
-- [`isq::luminous_intensity`](luminous_intensity.md) (1 quantity)
+- [`isq::luminous_intensity`](luminous_intensity_isq.md) (1 quantity)
 
 ## Dimension: L
 
-- [`isq::length`](length.md) (13 quantities)
+- [`hep::length`](length_hep.md) (1 quantity)
+- [`isq::length`](length_isq.md) (13 quantities)
 
 ## Dimension: M
 
-- [`isq::mass`](mass.md) (1 quantity)
+- [`isq::mass`](mass_isq.md) (1 quantity)
 
 ## Dimension: N
 
-- [`isq::amount_of_substance`](amount_of_substance.md) (1 quantity)
+- [`hep::amount_of_substance`](amount_of_substance_hep.md) (1 quantity)
+- [`isq::amount_of_substance`](amount_of_substance_isq.md) (1 quantity)
+
+## Dimension: Q
+
+- [`hep::electric_charge`](electric_charge_hep.md) (1 quantity)
 
 ## Dimension: T
 
-- [`isq::duration`](duration.md) (5 quantities)
+- [`hep::duration`](duration_hep.md) (1 quantity)
+- [`isq::duration`](duration_isq.md) (5 quantities)
 
 ## Dimension: Θ
 
+- [`hep::temperature`](temperature.md) (1 quantity)
 - [`isq::thermodynamic_temperature`](thermodynamic_temperature.md) (3 quantities)
 
 ## Dimension: α
 
-- [`angular::angle`](angle.md) (1 quantity)
+- [`angular::angle`](angle_angular.md) (1 quantity)
+- [`hep::angle`](angle_hep.md) (1 quantity)
 
 ## Dimension: E²
 
@@ -55,17 +66,19 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: IT
 
-- [`isq::electric_charge`](electric_charge.md) (2 quantities)
+- [`isq::electric_charge`](electric_charge_isq.md) (2 quantities)
 - [`isq::electric_flux`](electric_flux.md) (1 quantity)
 
 ## Dimension: L²
 
-- [`isq::area`](area.md) (1 quantity)
+- [`hep::area`](area_hep.md) (1 quantity)
+- [`isq::area`](area_isq.md) (1 quantity)
 
 ## Dimension: L³
 
+- [`hep::volume`](volume_hep.md) (1 quantity)
 - [`isq::section_modulus`](section_modulus.md) (1 quantity)
-- [`isq::volume`](volume.md) (1 quantity)
+- [`isq::volume`](volume_isq.md) (1 quantity)
 
 ## Dimension: L⁴
 
@@ -74,7 +87,8 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: α²
 
-- [`angular::solid_angle`](solid_angle.md) (1 quantity)
+- [`angular::solid_angle`](solid_angle_angular.md) (1 quantity)
+- [`hep::solid_angle`](solid_angle_hep.md) (1 quantity)
 - [`isq_angle::solid_angular_measure`](solid_angular_measure.md) (1 quantity)
 
 ## Dimension: E⁻¹
@@ -108,12 +122,14 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: T⁻¹
 
-- [`isq::activity`](activity.md) (1 quantity)
+- [`hep::activity`](activity_hep.md) (1 quantity)
+- [`hep::frequency`](frequency_hep.md) (1 quantity)
+- [`isq::activity`](activity_isq.md) (1 quantity)
 - [`isq::angular_frequency`](angular_frequency_isq.md) (1 quantity)
 - [`isq::angular_velocity`](angular_velocity_isq.md) (1 quantity)
 - [`isq::call_intensity`](call_intensity.md) (2 quantities)
 - [`isq::damping_coefficient`](damping_coefficient.md) (1 quantity)
-- [`isq::frequency`](frequency.md) (2 quantities)
+- [`isq::frequency`](frequency_isq.md) (2 quantities)
 - [`isq::modulation_rate`](modulation_rate.md) (1 quantity)
 - [`isq::rotational_frequency`](rotational_frequency.md) (1 quantity)
 - [`isq::transfer_rate`](transfer_rate.md) (3 quantities)
@@ -123,6 +139,26 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 - [`isq::cubic_expansion_coefficient`](cubic_expansion_coefficient.md) (1 quantity)
 - [`isq::linear_expansion_coefficient`](linear_expansion_coefficient.md) (1 quantity)
 - [`isq::relative_pressure_coefficient`](relative_pressure_coefficient.md) (1 quantity)
+
+## Dimension: α²I
+
+- [`hep::luminous_flux`](luminous_flux.md) (1 quantity)
+
+## Dimension: EL⁻³
+
+- [`hep::pressure`](pressure_hep.md) (1 quantity)
+
+## Dimension: EL⁻¹
+
+- [`hep::force`](force_hep.md) (1 quantity)
+
+## Dimension: EQ⁻¹
+
+- [`hep::electric_potential`](electric_potential_hep.md) (1 quantity)
+
+## Dimension: ET⁻¹
+
+- [`hep::power`](power_hep.md) (1 quantity)
 
 ## Dimension: IL⁻²
 
@@ -175,6 +211,10 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 - [`isq::mass_change_rate`](mass_change_rate.md) (1 quantity)
 - [`isq::mass_flow_rate`](mass_flow_rate.md) (1 quantity)
 
+## Dimension: QT⁻¹
+
+- [`hep::electric_current`](electric_current_hep.md) (1 quantity)
+
 ## Dimension: αL⁻¹
 
 - [`isq_angle::angular_repetency`](angular_repetency_isq_angle.md) (1 quantity)
@@ -189,6 +229,14 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 - [`isq_angle::angular_frequency`](angular_frequency_isq_angle.md) (1 quantity)
 - [`isq_angle::angular_velocity`](angular_velocity_isq_angle.md) (1 quantity)
+
+## Dimension: ETQ⁻²
+
+- [`hep::electric_resistance`](electric_resistance.md) (1 quantity)
+
+## Dimension: ETQ⁻¹
+
+- [`hep::magnetic_flux`](magnetic_flux_hep.md) (1 quantity)
 
 ## Dimension: ITL⁻²
 
@@ -205,7 +253,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: LMT⁻²
 
-- [`isq::force`](force.md) (6 quantities)
+- [`isq::force`](force_isq.md) (6 quantities)
 - [`isq::spectral_radiant_energy`](spectral_radiant_energy.md) (1 quantity)
 
 ## Dimension: LMT⁻³
@@ -219,7 +267,8 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: L²T⁻²
 
-- [`isq::absorbed_dose`](absorbed_dose.md) (1 quantity)
+- [`hep::absorbed_dose`](absorbed_dose_hep.md) (1 quantity)
+- [`isq::absorbed_dose`](absorbed_dose_isq.md) (1 quantity)
 - [`isq::dose_equivalent`](dose_equivalent.md) (1 quantity)
 - [`isq::specific_energy`](specific_energy.md) (5 quantities)
 
@@ -236,6 +285,18 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 - [`isq::volume_flow_rate`](volume_flow_rate.md) (1 quantity)
 
+## Dimension: Q²E⁻¹
+
+- [`hep::electric_capacitance`](electric_capacitance.md) (1 quantity)
+
+## Dimension: ET²L⁻²
+
+- [`hep::mass`](mass_hep.md) (1 quantity)
+
+## Dimension: ET²Q⁻²
+
+- [`hep::inductance`](inductance_hep.md) (1 quantity)
+
 ## Dimension: LT²M⁻¹
 
 - [`isq::compressibility`](compressibility.md) (3 quantities)
@@ -249,7 +310,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 - [`isq::complex_power`](complex_power.md) (3 quantities)
 - [`isq::heat_flow_rate`](heat_flow_rate.md) (1 quantity)
-- [`isq::power`](power.md) (7 quantities)
+- [`isq::power`](power_isq.md) (7 quantities)
 - [`isq::radiant_intensity`](radiant_intensity.md) (1 quantity)
 - [`isq::reactive_power`](reactive_power.md) (1 quantity)
 
@@ -265,6 +326,10 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 ## Dimension: ΘT³M⁻¹
 
 - [`isq::thermal_insulance`](thermal_insulance.md) (1 quantity)
+
+## Dimension: α²IL⁻²
+
+- [`hep::illuminance`](illuminance.md) (1 quantity)
 
 ## Dimension: LΘT²M⁻¹
 
@@ -288,7 +353,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 - [`isq::modulus_of_compression`](modulus_of_compression.md) (1 quantity)
 - [`isq::modulus_of_elasticity`](modulus_of_elasticity.md) (1 quantity)
 - [`isq::modulus_of_rigidity`](modulus_of_rigidity.md) (1 quantity)
-- [`isq::pressure`](pressure.md) (5 quantities)
+- [`isq::pressure`](pressure_isq.md) (5 quantities)
 - [`isq::radiant_energy_density`](radiant_energy_density.md) (1 quantity)
 - [`isq::spectral_radiant_exposure`](spectral_radiant_exposure.md) (1 quantity)
 
@@ -306,6 +371,10 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 - [`isq::coefficient_of_heat_transfer`](coefficient_of_heat_transfer.md) (1 quantity)
 - [`isq::surface_coefficient_of_heat_transfer`](surface_coefficient_of_heat_transfer.md) (1 quantity)
+
+## Dimension: ETQ⁻¹L⁻²
+
+- [`hep::magnetic_field`](magnetic_field.md) (1 quantity)
 
 ## Dimension: LMI⁻²T⁻²
 
@@ -332,7 +401,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: L²MI⁻²T⁻²
 
-- [`isq::inductance`](inductance.md) (1 quantity)
+- [`isq::inductance`](inductance_isq.md) (1 quantity)
 - [`isq::mutual_inductance`](mutual_inductance.md) (1 quantity)
 - [`isq::permeance`](permeance.md) (1 quantity)
 
@@ -342,12 +411,12 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: L²MI⁻¹T⁻²
 
-- [`isq::magnetic_flux`](magnetic_flux.md) (3 quantities)
+- [`isq::magnetic_flux`](magnetic_flux_isq.md) (3 quantities)
 - [`isq::protoflux`](protoflux.md) (1 quantity)
 
 ## Dimension: L²MI⁻¹T⁻³
 
-- [`isq::electric_potential`](electric_potential.md) (6 quantities)
+- [`isq::electric_potential`](electric_potential_isq.md) (6 quantities)
 
 ## Dimension: L²MΘ⁻¹T⁻²
 
@@ -406,4 +475,4 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 - [`isq::pressure_coefficient`](pressure_coefficient.md) (1 quantity)
 
-**Total hierarchies:** 149
+**Total hierarchies:** 176

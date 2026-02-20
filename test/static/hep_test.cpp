@@ -22,35 +22,59 @@
 
 #include "test_tools.h"
 #include <mp-units/systems/hep.h>
-#include <mp-units/systems/isq.h>
-#include <mp-units/systems/si.h>
 
 namespace {
 
 using namespace mp_units;
 using namespace mp_units::hep::unit_symbols;
-using namespace mp_units::si::unit_symbols;
-using mp_units::hep::unit_symbols::h;
+using enum mp_units::quantity_character;
 
-// length
-static_assert(isq::length(1 * fm) == isq::length(1e-15 * m));
+[[nodiscard]] consteval bool verify(QuantitySpec auto q, quantity_character ch, Unit auto... units)
+{
+  return q.character == ch && (... && requires { q[units]; });
+}
 
-// mass
-static_assert(isq::mass(1'000 * eV / c2) == isq::mass(1 * keV / c2));
+// space and time
+static_assert(verify(hep::length, real_scalar, mm, cm));  // Gaudi: mm, ROOT: cm
+static_assert(verify(hep::area, real_scalar, mm2));
+static_assert(verify(hep::volume, real_scalar, mm3));
+static_assert(verify(hep::angle, real_scalar, hep::radian, hep::degree));  // Gaudi: radian, ROOT: degree
+static_assert(verify(hep::solid_angle, real_scalar, hep::steradian));
+static_assert(verify(hep::duration, real_scalar, ns, s));  // Gaudi: ns, ROOT: s
 
-// atomic mass unit relationship
-static_assert(approx_equal(isq::mass(1 * u), 1.660'539'066'605e-27 * kg));
+// electric
+static_assert(verify(hep::electric_charge, real_scalar, hep::eplus));
+static_assert(verify(hep::electric_current, real_scalar, hep::ampere));
+static_assert(verify(hep::electric_potential, real_scalar, hep::volt));
+static_assert(verify(hep::electric_resistance, real_scalar, hep::ohm));
+static_assert(verify(hep::electric_capacitance, real_scalar, hep::farad));
 
-// momentum
-static_assert(isq::momentum(1'000'000 * eV / c) == isq::momentum(1 * MeV / c));
+// magnetic
+static_assert(verify(hep::magnetic_flux, real_scalar, hep::weber));
+static_assert(verify(hep::magnetic_field, real_scalar, hep::tesla));
+static_assert(verify(hep::inductance, real_scalar, hep::henry));
 
-// area
-static_assert(isq::area(1e28 * b) == isq::area(1. * m2));
+// energy, power, force, pressure
+static_assert(verify(hep::energy, real_scalar, MeV, GeV));  // Gaudi: MeV, ROOT: GeV
+static_assert(verify(hep::power, real_scalar, hep::watt));
+static_assert(verify(hep::force, real_scalar, hep::newton));
+static_assert(verify(hep::pressure, real_scalar, hep::pascal));
 
-// fundamental constants
-static_assert(approx_equal(isq::speed(1 * c), 299'792'458. * m / s));
-static_assert(approx_equal(isq::action(1 * h), 6.626'070'15e-34 * J * s));
-static_assert(isq::action(1 * hbar) == isq::action(1 * h / (mag<2> * π)));
-static_assert(approx_equal(isq::electric_charge(1 * e), 1.602'176'634e-19 * C, 1e-6));
+// mechanical
+static_assert(verify(hep::mass, real_scalar, hep::gram));
+static_assert(verify(hep::frequency, real_scalar, hep::hertz));
+
+// thermodynamic
+static_assert(verify(hep::temperature, real_scalar, hep::kelvin));
+static_assert(verify(hep::amount_of_substance, real_scalar, hep::mole));
+
+// radiometric
+static_assert(verify(hep::activity, real_scalar, hep::becquerel));
+static_assert(verify(hep::absorbed_dose, real_scalar, hep::gray));
+
+// photometric
+static_assert(verify(hep::luminous_intensity, real_scalar, hep::candela));
+static_assert(verify(hep::luminous_flux, real_scalar, hep::lumen));
+static_assert(verify(hep::illuminance, real_scalar, hep::lux));
 
 }  // namespace
