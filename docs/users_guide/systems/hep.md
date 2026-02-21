@@ -177,13 +177,13 @@ Major HEP frameworks currently use hand-maintained header files with `constexpr 
       static constexpr double mm  = 1.;
       static constexpr double mm2 = mm*mm;
       static constexpr double mm3 = mm*mm*mm;
-      
+
       static constexpr double centimeter = 10.*mm;
       static constexpr double meter = 1000.*mm;
-      
+
       static constexpr double nanosecond = 1.;
       static constexpr double second = 1.e+9 *nanosecond;
-      
+
       static constexpr double MeV = 1.;
       static constexpr double GeV = 1.e+3*MeV;
     }
@@ -198,13 +198,13 @@ Major HEP frameworks currently use hand-maintained header files with `constexpr 
         static constexpr double millimeter = 1.;
         static constexpr double millimeter2 = millimeter * millimeter;
         static constexpr double millimeter3 = millimeter * millimeter * millimeter;
-        
+
         static constexpr double centimeter = 10. * millimeter;
         static constexpr double meter = 1000. * millimeter;
-        
+
         static constexpr double nanosecond = 1.;
         static constexpr double second = 1.e+9 * nanosecond;
-        
+
         static constexpr double MeV = 1.;
         static constexpr double GeV = 1.e+3 * MeV;
       }
@@ -232,11 +232,11 @@ Major HEP frameworks currently use hand-maintained header files with `constexpr 
       static constexpr double mm = 0.1;
       static constexpr double cm = 1.;     // Base unit (centimeter)
       static constexpr double m = 100.;
-      
+
       // Note: ROOT uses seconds as base, differs from others!
       static constexpr double ns = 1.e-9;
       static constexpr double s = 1.;      // Base unit (second)
-      
+
       static constexpr double GeV = 1.;    // Base unit (GeV not MeV!)
       static constexpr double MeV = 1.e-3;
     }
@@ -245,13 +245,13 @@ Major HEP frameworks currently use hand-maintained header files with `constexpr 
 !!! warning "Inconsistencies Between Frameworks"
 
     Note that different frameworks choose different base units:
-    
+
     - **_Length_**: CLHEP/Gaudi/Geant4 use mm=1, ROOT uses cm=1
     - **_Time_**: CLHEP/Gaudi/Geant4 use ns=1, ROOT uses s=1  
     - **_Energy_**: CLHEP/Gaudi/Geant4 use MeV=1, ROOT uses GeV=1
-    
-    These differences require careful attention at framework boundaries. The **mp-units** HEP 
-    system uses mm, ns, and MeV as base units (matching the majority), but supports all 
+
+    These differences require careful attention at framework boundaries. The **mp-units** HEP
+    system uses mm, ns, and MeV as base units (matching the majority), but supports all
     units with proper conversions.
 
 ### The "Multiply to Set, Divide to Get" Pattern
@@ -360,87 +360,127 @@ raw `double`s still compile without any modification.
     overloading on return type alone, so the existing `double` getters must remain
     unchanged. Only setters — which differ by parameter type — can be overloaded.
 
-```cpp
-class Particle {
-  double m_mass{};    // Still raw double — internals untouched
-  double m_width{};
-  double m_charge{};
-public:
-  // Existing double-based interface — unchanged, still works:
-  double getMass()   const { return m_mass; }
-  double getWidth()  const { return m_width; }
-  double getCharge() const { return m_charge; }
-
-  void setMass(double mass_MeV_per_c2)  { m_mass  = mass_MeV_per_c2; }
-  void setWidth(double width_MeV)       { m_width = width_MeV; }
-  void setCharge(double charge_eplus)   { m_charge = charge_eplus; }
-
-  // New typed overloads — convert at the boundary, delegate to existing setters:
-  void setMass(quantity<hep::rest_mass[MeV / c2]> mass)
-  {
-    setMass(mass.numerical_value_in(MeV / c2));
-  }
-  void setWidth(quantity<hep::decay_width[MeV]> width)
-  {
-    setWidth(width.numerical_value_in(MeV));
-  }
-  void setCharge(quantity<hep::electric_charge[eplus]> charge)
-  {
-    setCharge(charge.numerical_value_in(eplus));
-  }
-};
-```
-
-#### Phase 4: Refactor internals; deprecate the `double` API
+#### Phase 4: Refactor internals; add typed getters; deprecate `double` API
 
 Once all external interfaces are wrapped and there is time to tackle the internals,
-refactor the class to store typed quantities as data members. The `double`-based
-setters become deprecated forwarding wrappers that construct quantities and call the
-new typed implementation. Old callers still compile but receive a deprecation warning,
-driving them to migrate. Remove the deprecated overloads once all call sites have been
-updated.
+refactor the class to store typed quantities as data members. Add new typed getters
+with a `_qty` suffix (e.g., `getMass_qty()`) alongside the existing `double` getters.
+Deprecate both the old `double` setters and getters, driving migration to the typed API.
 
-!!! warning
+!!! note
 
-    Typed **getters** are a breaking change for callers: because C++ cannot overload on
-    return type, changing `double getMass()` to `quantity<...> getMass()` breaks every
-    existing call site that assigns the result to a `double`. Introduce typed getters only
-    when all callers on the receiving end are ready to handle the update.
+    Because C++ cannot overload on return type alone, typed getters must use different
+    names. The `_qty` suffix makes scripted migration easy: consumers can mechanically
+    replace `getMass_qty()` → `getMass()` in Phase 5. Old code continues to work with
+    deprecation warnings; new code uses the typed interface.
 
-```cpp
-class Particle {
-  quantity<hep::rest_mass[MeV / c2]>    m_mass{};    // Now typed quantities
-  quantity<hep::decay_width[MeV]>       m_width{};
-  quantity<hep::electric_charge[eplus]> m_charge{};
-public:
-  // New primary setter interface — works directly with typed quantities:
-  void setMass(quantity<hep::rest_mass[MeV / c2]> mass)         { m_mass  = mass; }
-  void setWidth(quantity<hep::decay_width[MeV]> width)          { m_width = width; }
-  void setCharge(quantity<hep::electric_charge[eplus]> charge)  { m_charge = charge; }
+#### Phase 5: Complete the migration; remove `_qty` suffix
 
-  // Old double-based setters demoted to deprecated forwarding wrappers:
-  [[deprecated("Use setMass(quantity<hep::rest_mass[MeV / c2]>) instead")]]
-  void setMass(double mass_MeV_per_c2)
-  {
-    setMass(mass_MeV_per_c2 * MeV / c2);
-  }
-  [[deprecated("Use setWidth(quantity<hep::decay_width[MeV]>) instead")]]
-  void setWidth(double width_MeV)
-  {
-    setWidth(width_MeV * MeV);
-  }
-  [[deprecated("Use setCharge(quantity<hep::electric_charge[eplus]>) instead")]]
-  void setCharge(double charge_eplus)
-  {
-    setCharge(charge_eplus * eplus);
-  }
+Once all call sites have migrated to the typed API (no more uses of deprecated `double`
+methods), remove the deprecated overloads and rename the typed getters to their final
+names. Since all consumers are already using typed quantities, this phase is just a
+simple rename with no logic changes.
 
-  // Typed getters can only replace the double ones once all callers are ready:
-  quantity<hep::rest_mass[MeV / c2]>    getMass()   const { return m_mass; }
-  quantity<hep::decay_width[MeV]>       getWidth()  const { return m_width; }
-  quantity<hep::electric_charge[eplus]> getCharge() const { return m_charge; }
-};
-```
+!!! tip
+
+    This phase can be done with a simple regex replace: `s/(\w+)_qty\(\)/\1()/g`.
+    For example, `getMass_qty()` → `getMass()`. All the heavy lifting (migrating to typed
+    quantities) was already done in Phase 4 when consumers switched away from the deprecated API.
+
+=== "Phase 3"
+
+    ```cpp
+    class Particle {
+      double m_mass{};    // Still raw double — internals untouched
+      double m_width{};
+      double m_charge{};
+    public:
+      // Existing double-based interface — unchanged, still works:
+      double getMass()   const { return m_mass; }
+      double getWidth()  const { return m_width; }
+      double getCharge() const { return m_charge; }
+
+      void setMass(double mass_MeV_per_c2)  { m_mass  = mass_MeV_per_c2; }
+      void setWidth(double width_MeV)       { m_width = width_MeV; }
+      void setCharge(double charge_eplus)   { m_charge = charge_eplus; }
+
+      // New typed overloads — convert at the boundary, delegate to existing setters:
+      void setMass(quantity<hep::rest_mass[MeV / c2]> mass)
+      {
+        setMass(mass.numerical_value_in(MeV / c2));
+      }
+      void setWidth(quantity<hep::decay_width[MeV]> width)
+      {
+        setWidth(width.numerical_value_in(MeV));
+      }
+      void setCharge(quantity<hep::electric_charge[eplus]> charge)
+      {
+        setCharge(charge.numerical_value_in(eplus));
+      }
+    };
+    ```
+
+=== "Phase 4"
+
+    ```cpp
+    class Particle {
+      quantity<hep::rest_mass[MeV / c2]>    m_mass{};    // Now typed quantities
+      quantity<hep::decay_width[MeV]>       m_width{};
+      quantity<hep::electric_charge[eplus]> m_charge{};
+    public:
+      // New typed interface — getters with _qty suffix and setters:
+      quantity<hep::rest_mass[MeV / c2]>    getMass_qty()   const { return m_mass; }
+      quantity<hep::decay_width[MeV]>       getWidth_qty()  const { return m_width; }
+      quantity<hep::electric_charge[eplus]> getCharge_qty() const { return m_charge; }
+
+      void setMass(quantity<hep::rest_mass[MeV / c2]> mass)         { m_mass  = mass; }
+      void setWidth(quantity<hep::decay_width[MeV]> width)          { m_width = width; }
+      void setCharge(quantity<hep::electric_charge[eplus]> charge)  { m_charge = charge; }
+
+      // Old double interface — now deprecated:
+      [[deprecated("Use getMass_qty() instead")]]
+      double getMass()   const { return m_mass.numerical_value_in(MeV / c2); }
+      [[deprecated("Use getWidth_qty() instead")]]
+      double getWidth()  const { return m_width.numerical_value_in(MeV); }
+      [[deprecated("Use getCharge_qty() instead")]]
+      double getCharge() const { return m_charge.numerical_value_in(eplus); }
+
+      [[deprecated("Use setMass(quantity<hep::rest_mass[MeV / c2]>) instead")]]
+      void setMass(double mass_MeV_per_c2)
+      {
+        setMass(mass_MeV_per_c2 * MeV / c2);
+      }
+      [[deprecated("Use setWidth(quantity<hep::decay_width[MeV]>) instead")]]
+      void setWidth(double width_MeV)
+      {
+        setWidth(width_MeV * MeV);
+      }
+      [[deprecated("Use setCharge(quantity<hep::electric_charge[eplus]>) instead")]]
+      void setCharge(double charge_eplus)
+      {
+        setCharge(charge_eplus * eplus);
+      }
+    };
+    ```
+
+=== "Phase 5"
+
+    ```cpp
+    class Particle {
+      quantity<hep::rest_mass[MeV / c2]>    m_mass{};
+      quantity<hep::decay_width[MeV]>       m_width{};
+      quantity<hep::electric_charge[eplus]> m_charge{};
+    public:
+      // Fully typed interface — deprecated methods removed, _qty suffix removed:
+      quantity<hep::rest_mass[MeV / c2]>    getMass()   const { return m_mass; }
+      quantity<hep::decay_width[MeV]>       getWidth()  const { return m_width; }
+      quantity<hep::electric_charge[eplus]> getCharge() const { return m_charge; }
+
+      void setMass(quantity<hep::rest_mass[MeV / c2]> mass)         { m_mass  = mass; }
+      void setWidth(quantity<hep::decay_width[MeV]> width)          { m_width = width; }
+      void setCharge(quantity<hep::electric_charge[eplus]> charge)  { m_charge = charge; }
+    };
+    ```
 
 
 ## Type Safety in Practice
@@ -457,9 +497,9 @@ confusion.
     void setParticleProperties(double mass_MeV_per_c2,   // Mass in MeV/c²
                                double width_MeV,         // Decay width in MeV
                                double charge);           // Electric charge
-    
+
     // DISASTER 1: Wrong dimensions (energy passed as mass)
-    {    
+    {  
       double higgs_mass = 125.0 * GeV;  // Stores 125'000.0 (energy in MeV, not mass!)
       double higgs_width = 4.0 * MeV;   // Stores 4.0
 
@@ -607,16 +647,16 @@ As noted by ATLAS Offline Software Coordinator John Chapman:
 
 !!! quote "CERN Feedback"
 
-    "The values used in the physical constants headers are taken from the CODATA recommendations. 
-    Note that these do change over time! This is particularly a problem for applications where 
-    it is then not clear which version of a constant should be used. It also, unfortunately, 
+    "The values used in the physical constants headers are taken from the CODATA recommendations.
+    Note that these do change over time! This is particularly a problem for applications where
+    it is then not clear which version of a constant should be used. It also, unfortunately,
     ties any updates to physical constants to releases of CLHEP, ROOT, Gaudi or Geant4.
-    
-    For example, currently the head versions of CLHEP and Gaudi use the 2018 CODATA 
+
+    For example, currently the head versions of CLHEP and Gaudi use the 2018 CODATA
     recommendations and the head version of ROOT uses the 2022 CODATA recommendations.
-    
-    I would like to find a way to avoid this. If they all depended on a single external 
-    library which we could easily configure to use a particular set of recommendations, then 
+
+    I would like to find a way to avoid this. If they all depended on a single external
+    library which we could easily configure to use a particular set of recommendations, then
     that would make things easier."
 
 ### The Solution: CODATA Namespaces
@@ -665,8 +705,8 @@ quantity validate_legacy_analysis(quantity<MeV> E_gamma)
 
 !!! note "SI 2019 Redefinition"
 
-    Since the 2019 SI redefinition, several fundamental constants (Planck constant, Boltzmann 
-    constant, Avogadro constant, elementary charge) are **exact by definition**. This is why 
+    Since the 2019 SI redefinition, several fundamental constants (Planck constant, Boltzmann
+    constant, Avogadro constant, elementary charge) are **exact by definition**. This is why
     the Boltzmann constant doesn't change between CODATA 2018 and 2022 - it's now fixed.
 
 ### Available Constants
