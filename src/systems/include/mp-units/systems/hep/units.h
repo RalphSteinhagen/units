@@ -151,6 +151,13 @@ inline constexpr auto kg = si::kilo<gram>;
 inline constexpr auto g = gram;
 inline constexpr auto mg = si::milli<gram>;
 
+inline constexpr auto b = barn;
+inline constexpr auto mb = si::milli<barn>;
+inline constexpr auto ub = si::micro<barn>;
+inline constexpr auto nb = si::nano<barn>;
+inline constexpr auto pb = si::pico<barn>;
+inline constexpr auto fb = si::femto<barn>;
+
 inline constexpr auto Bq = becquerel;
 inline constexpr auto kBq = si::kilo<becquerel>;
 inline constexpr auto MBq = si::mega<becquerel>;
