@@ -82,12 +82,16 @@ This User's Guide provides in-depth documentation for the following systems:
   angle as a dimensional quantity:
     - **`angular`** - Standalone system with strong angular dimensions and units
     - **`isq_angle`** - ISQ amendment incorporating strong angular definitions
+- **[High Energy Physics (HEP)](hep.md)** - System of Quantities and Units for
+  particle physics with energy and electric charge as base quantities (unlike
+  ISQ), using mm, ns, MeV, eplus as base units; provides CODATA 2014/2018/2022
+  physical constants for interoperability with CLHEP, Gaudi, Geant4, and ROOT
 - **[Natural Units](natural_units.md)** - High-energy physics system where fundamental constants
   equal unity
 
 !!! tip "Complete Catalog"
 
-    For a comprehensive list of all available systems (including IEC, Typographic, HEP,
+    For a comprehensive list of all available systems (including IEC, Typographic,
     and the `astronomy` utility system for commonly used astronomy units like light-years,
     jansky, sidereal days, etc.), see the
     [Systems Reference](../../reference/systems_reference/index.md) in the Reference section.
@@ -106,7 +110,13 @@ The choice of system depends on your application domain and requirements:
 - Use **IAU** for professional astronomy/astrophysics requiring official IAU standardized
   constants (nominal solar/planetary values, CODATA masses); use **`astronomy`** utilities
   for common astronomy units like light-years, jansky, sidereal days not standardized by IAU
-- Use **Natural Units** for particle physics and cosmology calculations
+- Use **HEP** for particle physics experiments and detector simulations that
+  need dimensional analysis with energy and electric charge as base quantities
+  (instead of mass and current); provides HEP-natural base units (mm, ns, MeV,
+  eplus) and CODATA 2014/2018/2022 physical constants for compatibility with
+  CLHEP, Gaudi, Geant4, and ROOT frameworks
+- Use **Natural Units** for theoretical particle physics and cosmology
+  calculations where setting ℏ = c = 1 simplifies equations
 - Use **CGS** when interfacing with legacy physics code or specific scientific domains where
   it's standard
 - Use **`yard_pound`**, **`imperial`**, or **`usc`** when required by industry standards or
