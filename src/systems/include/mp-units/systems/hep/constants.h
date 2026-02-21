@@ -68,7 +68,7 @@ inline constexpr struct avogadro_constant final :
 
 // Speed of light (exact since 1983)
 inline constexpr struct speed_of_light_in_vacuum final :
-    named_unit<"c", mag_ratio<299'792'458, 1> * meter / second> {} speed_of_light_in_vacuum;
+    named_unit<"c", mag<299'792'458> * meter / second> {} speed_of_light_in_vacuum;
 
 // Planck constant (exact since 2019 SI redefinition)
 inline constexpr struct planck_constant final :
