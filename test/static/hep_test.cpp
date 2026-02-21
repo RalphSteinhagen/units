@@ -77,4 +77,235 @@ static_assert(verify(hep::luminous_intensity, real_scalar, hep::candela));
 static_assert(verify(hep::luminous_flux, real_scalar, hep::lumen));
 static_assert(verify(hep::illuminance, real_scalar, hep::lux));
 
+// specialized length quantities
+static_assert(verify(hep::path_length, real_scalar, mm, cm));
+static_assert(verify(hep::displacement, vector, mm, cm));
+static_assert(verify(hep::position_vector, vector, mm, cm));
+static_assert(verify(hep::interaction_length, real_scalar, cm, mm));
+static_assert(verify(hep::radiation_length, real_scalar, cm, mm));
+static_assert(verify(hep::nuclear_interaction_length, real_scalar, cm, mm));
+static_assert(verify(hep::mean_free_path, real_scalar, mm, cm));
+static_assert(verify(hep::impact_parameter, real_scalar, mm, cm));
+static_assert(verify(hep::decay_length, real_scalar, mm, cm));
+static_assert(verify(hep::vertex_position, real_scalar, mm, cm));
+static_assert(verify(hep::wavelength, real_scalar, mm, nm));
+static_assert(verify(hep::radius, real_scalar, mm, cm));
+static_assert(verify(hep::range, real_scalar, mm, cm));
+
+// specialized time quantities
+static_assert(verify(hep::proper_time, real_scalar, ns, s));
+static_assert(verify(hep::coordinate_time, real_scalar, ns, s));
+static_assert(verify(hep::lifetime, real_scalar, ns, s));
+static_assert(verify(hep::half_life, real_scalar, ns, s));
+static_assert(verify(hep::mean_lifetime, real_scalar, ns, s));
+static_assert(verify(hep::time_of_flight, real_scalar, ns, s));
+
+// specialized energy quantities
+static_assert(verify(hep::kinetic_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::rest_mass_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::total_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::center_of_mass_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::binding_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::separation_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::Q_value, real_scalar, MeV, GeV));
+static_assert(verify(hep::excitation_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::ionization_energy, real_scalar, MeV, eV));
+static_assert(verify(hep::threshold_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::missing_energy, real_scalar, MeV, GeV));
+static_assert(verify(hep::transverse_energy, real_scalar, MeV, GeV));
+
+// specialized mass and momentum quantities
+static_assert(verify(hep::rest_mass, real_scalar, hep::gram, si::kilo<hep::gram>));
+static_assert(verify(hep::invariant_mass, real_scalar, hep::gram, si::kilo<hep::gram>));
+static_assert(verify(hep::effective_mass, real_scalar, hep::gram, si::kilo<hep::gram>));
+static_assert(verify(hep::reduced_mass, real_scalar, hep::gram, si::kilo<hep::gram>));
+static_assert(verify(hep::momentum, real_scalar, GeV / c));
+static_assert(verify(hep::transverse_momentum, real_scalar, GeV / c));
+
+// specialized angular quantities
+static_assert(verify(hep::scattering_angle, real_scalar, hep::radian, hep::degree));
+static_assert(verify(hep::opening_angle, real_scalar, hep::radian, hep::degree));
+static_assert(verify(hep::azimuthal_angle, real_scalar, hep::radian, hep::degree));
+static_assert(verify(hep::polar_angle, real_scalar, hep::radian, hep::degree));
+static_assert(verify(hep::phase, real_scalar, one));  // phase is dimensionless (cyclic, not an angle)
+
+// Test quantity hierarchy conversions
+// All specialized lengths can be implicitly converted up the hierarchy to generic length
+static_assert(implicitly_convertible(hep::radiation_length, hep::length));
+static_assert(implicitly_convertible(hep::decay_length, hep::length));
+static_assert(implicitly_convertible(hep::interaction_length, hep::length));
+static_assert(implicitly_convertible(hep::nuclear_interaction_length, hep::interaction_length));
+
+// But cannot be implicitly converted between each other (different physical concepts!)
+static_assert(!implicitly_convertible(hep::radiation_length, hep::decay_length));
+static_assert(!implicitly_convertible(hep::decay_length, hep::interaction_length));
+static_assert(!implicitly_convertible(hep::impact_parameter, hep::vertex_position));
+
+// Specialized times: proper_time vs coordinate_time are distinct
+static_assert(implicitly_convertible(hep::proper_time, hep::duration));
+static_assert(implicitly_convertible(hep::coordinate_time, hep::duration));
+static_assert(!implicitly_convertible(hep::proper_time, hep::coordinate_time));
+static_assert(!implicitly_convertible(hep::coordinate_time, hep::proper_time));
+
+// Lifetime hierarchy
+static_assert(implicitly_convertible(hep::half_life, hep::lifetime));
+static_assert(implicitly_convertible(hep::mean_lifetime, hep::lifetime));
+static_assert(!implicitly_convertible(hep::half_life, hep::mean_lifetime));
+
+// Energy types are distinct
+static_assert(implicitly_convertible(hep::kinetic_energy, hep::total_energy));
+static_assert(implicitly_convertible(hep::rest_mass_energy, hep::total_energy));
+static_assert(implicitly_convertible(hep::total_energy, hep::energy));
+static_assert(!implicitly_convertible(hep::kinetic_energy, hep::rest_mass_energy));
+static_assert(!implicitly_convertible(hep::rest_mass_energy, hep::kinetic_energy));
+static_assert(!implicitly_convertible(hep::binding_energy, hep::kinetic_energy));
+
+// Total energy hierarchy: KE and E0 are children of total_energy
+// This ensures KE + E0 naturally gives total_energy
+static_assert(std::same_as<decltype(quantity<hep::kinetic_energy[MeV]>{} + quantity<hep::rest_mass_energy[MeV]>{}),
+                           quantity<hep::total_energy[MeV]>>);
+
+// Binding energy hierarchy
+static_assert(implicitly_convertible(hep::separation_energy, hep::binding_energy));
+static_assert(implicitly_convertible(hep::binding_energy, hep::energy));
+
+// Mass types are distinct
+static_assert(implicitly_convertible(hep::rest_mass, hep::mass));
+static_assert(implicitly_convertible(hep::invariant_mass, hep::mass));
+static_assert(!implicitly_convertible(hep::rest_mass, hep::invariant_mass));
+
+// Momentum hierarchy
+static_assert(implicitly_convertible(hep::transverse_momentum, hep::momentum));
+
+// Angular quantities
+static_assert(implicitly_convertible(hep::scattering_angle, hep::angle));
+static_assert(implicitly_convertible(hep::opening_angle, hep::angle));
+static_assert(!implicitly_convertible(hep::scattering_angle, hep::opening_angle));
+
+// Phase is a distinct kind (marked with is_kind) - cannot convert to/from angle
+static_assert(!implicitly_convertible(hep::phase, hep::angle));
+static_assert(!explicitly_convertible(hep::phase, hep::angle));
+static_assert(!castable(hep::phase, hep::angle));
+static_assert(!implicitly_convertible(hep::angle, hep::phase));
+
+// Test that specialized quantities cannot implicitly convert to siblings
+// (but they CAN be compared since they have same dimension - this is by design)
+static_assert(!implicitly_convertible(hep::decay_length, hep::radiation_length));
+static_assert(!implicitly_convertible(hep::kinetic_energy, hep::rest_mass_energy));
+static_assert(!implicitly_convertible(hep::proper_time, hep::coordinate_time));
+
+// Derived quantities using specialized quantities
+static_assert(verify(hep::speed, real_scalar, m / s, cm / ns));
+static_assert(verify(hep::velocity, vector, m / s, cm / ns));
+static_assert(verify(hep::decay_constant, real_scalar, hep::hertz));
+static_assert(verify(hep::proper_velocity, vector, m / s));
+
+// Specialized dimensionless derived quantities with physical meaning
+static_assert(verify(hep::lorentz_factor, real_scalar, one));     // γ = E/E₀
+static_assert(verify(hep::relativistic_beta, real_scalar, one));  // β = v/c
+
+// Interaction and scattering quantities
+static_assert(verify(hep::cross_section, real_scalar, hep::barn, mb, pb));
+static_assert(verify(hep::number_density, real_scalar, inverse(cm3)));
+
+// Test that derived quantity expressions using specialized quantities implicitly convert properly
+// speed is defined as path_length / duration
+static_assert(implicitly_convertible(hep::path_length / hep::duration, hep::speed));
+
+// velocity is defined as displacement / duration
+static_assert(implicitly_convertible(hep::displacement / hep::duration, hep::velocity));
+
+// decay_constant is a frequency (λ = 1/τ where τ is mean_lifetime)
+static_assert(implicitly_convertible(hep::decay_constant, hep::frequency));  // child->parent
+static_assert(implicitly_convertible(inverse(hep::mean_lifetime), hep::frequency));
+
+// lorentz_factor and relativistic_beta are distinct dimensionless kinds
+// They cannot be created from arbitrary dimensionless values (marked with is_kind)
+static_assert(!implicitly_convertible(dimensionless, hep::lorentz_factor));
+static_assert(!implicitly_convertible(dimensionless, hep::relativistic_beta));
+static_assert(!implicitly_convertible(hep::lorentz_factor, hep::relativistic_beta));
+
+// cross_section is a specialized area
+static_assert(implicitly_convertible(hep::cross_section, hep::area));
+// But general area cannot implicitly become cross_section (preserves physics meaning)
+static_assert(!implicitly_convertible(hep::area, hep::cross_section));
+
+// number_density is inverse(volume)
+static_assert(implicitly_convertible(inverse(hep::volume), hep::number_density));
+static_assert(!implicitly_convertible(hep::frequency, hep::number_density));  // both inverse dimensions but different
+
+// unit prefix relationships
+static_assert(1'000 * eV / c2 == 1 * keV / c2);
+static_assert(1'000'000 * eV / c == 1 * MeV / c);
+
+// barn definition: 1 b = 10⁻²⁸ m²
+static_assert(1e28 * b == 1. * m2);
+
+// ---- fundamental exact constants (CODATA-independent, post-2019 SI) --------
+
+// Speed of light (exact since 1983): c = 299 792 458 m/s
+static_assert(1 * c == 299'792'458 * m / s);
+
+// Planck constant (exact since 2019): h = 6.62607015e-34 J·s
+static_assert(approx_equal(1. * h, 6.626'070'15e-34 * hep::joule * s));
+
+// Reduced Planck constant: ℏ = h/(2π) (exact by definition)
+static_assert(1 * hbar == 1 * h / (mag<2> * π));
+
+// Elementary charge (exact since 2019):  e = 1 e⁺ (exact by definition)
+static_assert(1 * e == 1 * hep::eplus);
+
+// Avogadro constant (exact since 2019): N_A = 6.02214076e23 mol⁻¹
+static_assert(approx_equal(1. * N_A, 6.022'140'76e23 * inverse(hep::mole)));
+
+// ---- CODATA 2018 constants (default via inline namespace) ------------------
+
+// Boltzmann constant (exact in 2019 SI): k_B = 8.617333262e-11 MeV/K
+static_assert(approx_equal(1. * k_B, 8.617'333'262e-11 * MeV / hep::kelvin));
+
+// Particle masses
+static_assert(approx_equal(1. * m_e, 0.510'998'950'00 * MeV / c2));
+static_assert(approx_equal(1. * m_p, 938.272'088'16 * MeV / c2));
+static_assert(approx_equal(1. * m_n, 939.565'420'52 * MeV / c2));
+static_assert(approx_equal(1. * u, 931.494'102'42 * MeV / c2));
+
+// Fine structure constant (dimensionless)
+static_assert(approx_equal(1. * alpha, 7.297'352'569'3e-3 * one));
+
+// Atomic length scales
+static_assert(approx_equal(1. * r_e, 2.817'940'326'2e-15 * m));
+static_assert(approx_equal(1. * lambda_C, 2.426'310'238'67e-12 * m));
+static_assert(approx_equal(1. * a_0, 5.291'772'109'03e-11 * m));
+
+// Magnetons
+static_assert(approx_equal(1. * mu_B, 9.274'010'078'3e-24 * hep::joule / hep::tesla));
+static_assert(approx_equal(1. * mu_N, 5.050'783'746'1e-27 * hep::joule / hep::tesla));
+
+// ---- CODATA 2014 constants -------------------------------------------------
+
+static_assert(approx_equal(1. * hep::codata2014::boltzmann_constant, 8.617'330'3e-11 * MeV / hep::kelvin));
+static_assert(approx_equal(1. * hep::codata2014::electron_mass, 0.510'998'946'1 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2014::proton_mass, 938.272'081'3 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2014::neutron_mass, 939.565'413'3 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2014::atomic_mass_unit, 931.494'095'4 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2014::fine_structure_constant, 7.297'352'566'4e-3 * one));
+static_assert(approx_equal(1. * hep::codata2014::classical_electron_radius, 2.817'940'322'7e-15 * m));
+static_assert(approx_equal(1. * hep::codata2014::electron_compton_wavelength, 2.426'310'236'7e-12 * m));
+static_assert(approx_equal(1. * hep::codata2014::bohr_radius, 5.291'772'106'7e-11 * m));
+static_assert(approx_equal(1. * hep::codata2014::bohr_magneton, 9.274'009'994e-24 * hep::joule / hep::tesla));
+static_assert(approx_equal(1. * hep::codata2014::nuclear_magneton, 5.050'783'699e-27 * hep::joule / hep::tesla));
+
+// ---- CODATA 2022 constants -------------------------------------------------
+
+// boltzmann_constant and electron_compton_wavelength are unchanged from CODATA 2018
+static_assert(approx_equal(1. * hep::codata2022::electron_mass, 0.510'998'950'69 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2022::proton_mass, 938.272'089'43 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2022::neutron_mass, 939.565'421'94 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2022::atomic_mass_unit, 931.494'103'72 * MeV / c2));
+static_assert(approx_equal(1. * hep::codata2022::fine_structure_constant, 7.297'352'564'3e-3 * one));
+static_assert(approx_equal(1. * hep::codata2022::classical_electron_radius, 2.817'940'320'5e-15 * m));
+static_assert(approx_equal(1. * hep::codata2022::bohr_radius, 5.291'772'105'44e-11 * m));
+static_assert(approx_equal(1. * hep::codata2022::bohr_magneton, 9.274'010'065'7e-24 * hep::joule / hep::tesla));
+static_assert(approx_equal(1. * hep::codata2022::nuclear_magneton, 5.050'783'739'3e-27 * hep::joule / hep::tesla));
+
 }  // namespace
