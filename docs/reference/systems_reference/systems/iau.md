@@ -13,6 +13,7 @@
 
 | Unit Name | Symbol | unit_symbol | Definition |
 |-----------|:------:|:-----------:|------------|
+| <span id="astronomical_unit"></span><code>astronomical_<wbr>unit</code> | (imported from non_si) | — | <code>using [non_<wbr>si::astronomical_<wbr>unit](si.md#astronomical_unit)</code> |
 | <span id="codata2018-jovian_mass"></span><code>codata2018::jovian_<wbr>mass</code> | M_♃ (M_JUP) | `M_JUP` | <code>[nominal_<wbr>jovian_<wbr>mass_<wbr>parameter](#nominal_jovian_mass_parameter) / <wbr>[newtonian_<wbr>constant_<wbr>of_<wbr>gravitation](#codata2018-newtonian_constant_of_gravitation)</code> |
 | <span id="codata2018-newtonian_constant_of_gravitation"></span><code>codata2018::newtonian_<wbr>constant_<wbr>of_<wbr>gravitation</code> | G | `G` | <code>mag_ratio<667'430, 100'000> * <wbr>mag_power<10, -11> * <wbr>cubic([si::metre](si.md#metre)) / <wbr>[si::kilogram](si.md#kilogram) / <wbr>square([si::second](si.md#second))</code> |
 | <span id="codata2018-solar_mass"></span><code>codata2018::solar_<wbr>mass</code> | M_☉ (M_SUN) | `M_SUN` | <code>[nominal_<wbr>solar_<wbr>mass_<wbr>parameter](#nominal_solar_mass_parameter) / <wbr>[newtonian_<wbr>constant_<wbr>of_<wbr>gravitation](#codata2018-newtonian_constant_of_gravitation)</code> |
@@ -28,7 +29,7 @@
 | <span id="nominal_terrestrial_mass_parameter"></span><code>nominal_<wbr>terrestrial_<wbr>mass_<wbr>parameter</code> | (GM)_⊕ᴺ ((GM)_EARTH_N) | `GM_EARTH_N` | <code>mag_ratio<3'986'004, 1'000'000> * <wbr>mag_power<10, 14> * <wbr>cubic([si::metre](si.md#metre)) / <wbr>square([si::second](si.md#second))</code> |
 | <span id="nominal_terrestrial_polar_radius"></span><code>nominal_<wbr>terrestrial_<wbr>polar_<wbr>radius</code> | R_⊕ₚᴺ (R_EARTH_P_N) | `R_EARTH_P_N` | <code>mag_ratio<63'568, 10'000> * <wbr>mag_power<10, 6> * <wbr>[si::metre](si.md#metre)</code> |
 | <span id="nominal_total_solar_irradiance"></span><code>nominal_<wbr>total_<wbr>solar_<wbr>irradiance</code> | S_☉ᴺ (S_SUN_N) | `S_SUN_N` | <code>mag<1361> * <wbr>[si::watt](si.md#watt) / <wbr>square([si::metre](si.md#metre))</code> |
-| <span id="parsec"></span><code>parsec</code> | pc | `pc` | <code>[astronomical_<wbr>unit](si.md#astronomical_unit) / <wbr>(mag_ratio<1, 3600> * <wbr>[si::degree](si.md#degree))</code> |
+| <span id="parsec"></span><code>parsec</code> | pc | `pc` | <code>[astronomical_<wbr>unit](#astronomical_unit) / <wbr>(mag_ratio<1, 3600> * <wbr>[si::degree](si.md#degree))</code> |
 
 !!! note "Inline Namespaces"
 

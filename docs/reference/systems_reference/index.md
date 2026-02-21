@@ -20,10 +20,10 @@ Automatically generated reference documentation for all **mp-units** systems.
 |--------|:----------:|:----------:|:-----:|:--------:|:-------------:|
 | [Angular](systems/angular.md) | 1 | 2 | 5 | — | — |
 | [Astronomy](systems/astronomy.md) | — | — | 10 | — | — |
-| [CGS](systems/cgs.md) | — | — | 8 | — | — |
+| [CGS](systems/cgs.md) | — | — | 10 | — | — |
 | [Core](systems/core.md) | 1 | 1 | 7 | — | — |
-| [HEP](systems/hep.md) | 8 | 27 | 44 | — | — |
-| [IAU](systems/iau.md) | — | — | 16 | — | — |
+| [HEP](systems/hep.md) | 8 | 27 | 86 | — | — |
+| [IAU](systems/iau.md) | — | — | 17 | — | — |
 | [IEC](systems/iec.md) | — | 31 | 6 | 8 | — |
 | [Imperial](systems/imperial.md) | — | — | 22 | — | — |
 | [ISQ](systems/isq.md) | 8 | 352 | — | — | — |

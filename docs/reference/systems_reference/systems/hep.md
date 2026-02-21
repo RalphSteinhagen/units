@@ -11,6 +11,7 @@
 
 **Secondary Headers:**
 
+- `<mp-units/systems/hep/constants.h>`
 - `<mp-units/systems/hep/quantities.h>`
 - `<mp-units/systems/hep/units.h>`
 
@@ -67,17 +68,53 @@
 | <span id="angstrom"></span><code>angstrom</code> | Å (A) | — | <code>mag_power<10, -10> * <wbr>[meter](#meter)</code> |
 | <span id="astronomical_unit"></span><code>astronomical_<wbr>unit</code> | au | — | <code>mag<149'597'870'700> * <wbr>[meter](#meter)</code> |
 | <span id="atmosphere"></span><code>atmosphere</code> | atm | — | <code>mag<101'325> * <wbr>[pascal](#pascal)</code> |
+| <span id="avogadro_constant"></span><code>avogadro_<wbr>constant</code> | N_A | `N_A` | <code>mag_ratio<602'214'076, 100'000'000> * <wbr>mag_power<10, 23> / <wbr>[mole](#mole)</code> |
 | <span id="bar"></span><code>bar</code> | bar | — | <code>mag_power<10, 5> * <wbr>[pascal](#pascal)</code> |
 | <span id="barn"></span><code>barn</code> | b | — | <code>mag_power<10, -28> * <wbr>square([meter](#meter))</code> |
 | <span id="becquerel"></span><code>becquerel</code> | Bq | `Bq` | <code>[one](core.md#one) / <wbr>[second](#second)<br>kind: [activity](#activity)</code> |
 | <span id="candela"></span><code>candela</code> | cd | — | <code>kind: [luminous_<wbr>intensity](#luminous_intensity)</code> |
+| <span id="codata2014-atomic_mass_unit"></span><code>codata2014::atomic_<wbr>mass_<wbr>unit</code> | u | `u` | <code>mag_ratio<931'494'0954, 10'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2014-bohr_magneton"></span><code>codata2014::bohr_<wbr>magneton</code> | μ_B (mu_B) | `mu_B` | <code>mag_ratio<927'400'9994, 100'000'000'000> * <wbr>mag_power<10, -26> * <wbr>[joule](#joule) / <wbr>[tesla](#tesla)</code> |
+| <span id="codata2014-bohr_radius"></span><code>codata2014::bohr_<wbr>radius</code> | a_0 | `a_0` | <code>mag_ratio<529'177'210'67, 100'000'000'000'00> * <wbr>mag_power<10, -11> * <wbr>[meter](#meter)</code> |
+| <span id="codata2014-boltzmann_constant"></span><code>codata2014::boltzmann_<wbr>constant</code> | k_B | `k_B` | <code>mag_ratio<8'617'330'3, 10'000'000'00> * <wbr>mag_power<10, -11> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>[kelvin](#kelvin)</code> |
+| <span id="codata2014-classical_electron_radius"></span><code>codata2014::classical_<wbr>electron_<wbr>radius</code> | r_e | `r_e` | <code>mag_ratio<2'817'940'3227, 10'000'000'000'000> * <wbr>mag_power<10, -15> * <wbr>[meter](#meter)</code> |
+| <span id="codata2014-electron_compton_wavelength"></span><code>codata2014::electron_<wbr>compton_<wbr>wavelength</code> | λ_C (lambda_C) | `lambda_C` | <code>mag_ratio<2'426'310'2367, 10'000'000'000'000> * <wbr>mag_power<10, -12> * <wbr>[meter](#meter)</code> |
+| <span id="codata2014-electron_mass"></span><code>codata2014::electron_<wbr>mass</code> | m_e | `m_e` | <code>mag_ratio<510'998'9461, 10'000'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2014-fine_structure_constant"></span><code>codata2014::fine_<wbr>structure_<wbr>constant</code> | α (alpha) | `alpha` | <code>mag_ratio<72'973'525'664, 10'000'000'000'000> * <wbr>mag_power<10, -3> * <wbr>[one](core.md#one)</code> |
+| <span id="codata2014-neutron_mass"></span><code>codata2014::neutron_<wbr>mass</code> | m_n | `m_n` | <code>mag_ratio<939'565'4133, 10'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2014-nuclear_magneton"></span><code>codata2014::nuclear_<wbr>magneton</code> | μ_N (mu_N) | `mu_N` | <code>mag_ratio<5'050'783'699, 1'000'000'000'000> * <wbr>mag_power<10, -27> * <wbr>[joule](#joule) / <wbr>[tesla](#tesla)</code> |
+| <span id="codata2014-proton_mass"></span><code>codata2014::proton_<wbr>mass</code> | m_p | `m_p` | <code>mag_ratio<938'272'0813, 10'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2018-atomic_mass_unit"></span><code>codata2018::atomic_<wbr>mass_<wbr>unit</code> | u | — | <code>mag_ratio<931'494'10242, 100'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2018-bohr_magneton"></span><code>codata2018::bohr_<wbr>magneton</code> | μ_B (mu_B) | — | <code>mag_ratio<9'274'010'0783, 100'000'000'000'000> * <wbr>mag_power<10, -24> * <wbr>[joule](#joule) / <wbr>[tesla](#tesla)</code> |
+| <span id="codata2018-bohr_radius"></span><code>codata2018::bohr_<wbr>radius</code> | a_0 | — | <code>mag_ratio<529'177'210'903, 10'000'000'000'000> * <wbr>mag_power<10, -11> * <wbr>[meter](#meter)</code> |
+| <span id="codata2018-boltzmann_constant"></span><code>codata2018::boltzmann_<wbr>constant</code> | k_B | — | <code>mag_ratio<8'617'333'262, 10'000'000'000> * <wbr>mag_power<10, -11> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>[kelvin](#kelvin)</code> |
+| <span id="codata2018-classical_electron_radius"></span><code>codata2018::classical_<wbr>electron_<wbr>radius</code> | r_e | — | <code>mag_ratio<2'817'940'3262, 10'000'000'000'000> * <wbr>mag_power<10, -15> * <wbr>[meter](#meter)</code> |
+| <span id="codata2018-electron_compton_wavelength"></span><code>codata2018::electron_<wbr>compton_<wbr>wavelength</code> | λ_C (lambda_C) | — | <code>mag_ratio<2'426'310'238'67, 100'000'000'000'000> * <wbr>mag_power<10, -12> * <wbr>[meter](#meter)</code> |
+| <span id="codata2018-electron_mass"></span><code>codata2018::electron_<wbr>mass</code> | m_e | — | <code>mag_ratio<510'998'95000, 100'000'000'00> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2018-fine_structure_constant"></span><code>codata2018::fine_<wbr>structure_<wbr>constant</code> | α (alpha) | — | <code>mag_ratio<72'973'525'693, 10'000'000'000'000> * <wbr>mag_power<10, -3> * <wbr>[one](core.md#one)</code> |
+| <span id="codata2018-neutron_mass"></span><code>codata2018::neutron_<wbr>mass</code> | m_n | — | <code>mag_ratio<939'565'42052, 100'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2018-nuclear_magneton"></span><code>codata2018::nuclear_<wbr>magneton</code> | μ_N (mu_N) | — | <code>mag_ratio<5'050'783'7461, 100'000'000'000'000> * <wbr>mag_power<10, -27> * <wbr>[joule](#joule) / <wbr>[tesla](#tesla)</code> |
+| <span id="codata2018-proton_mass"></span><code>codata2018::proton_<wbr>mass</code> | m_p | — | <code>mag_ratio<938'272'08816, 100'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2022-atomic_mass_unit"></span><code>codata2022::atomic_<wbr>mass_<wbr>unit</code> | u | — | <code>mag_ratio<931'494'10372, 100'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2022-bohr_magneton"></span><code>codata2022::bohr_<wbr>magneton</code> | μ_B (mu_B) | — | <code>mag_ratio<9'274'010'0657, 100'000'000'000'000> * <wbr>mag_power<10, -24> * <wbr>[joule](#joule) / <wbr>[tesla](#tesla)</code> |
+| <span id="codata2022-bohr_radius"></span><code>codata2022::bohr_<wbr>radius</code> | a_0 | — | <code>mag_ratio<529'177'210'544, 10'000'000'000'000> * <wbr>mag_power<10, -11> * <wbr>[meter](#meter)</code> |
+| <span id="codata2022-boltzmann_constant"></span><code>codata2022::boltzmann_<wbr>constant</code> | (imported from codata2018) | — | <code>using [codata2018::boltzmann_<wbr>constant](hep.md#codata2018-boltzmann_constant)</code> |
+| <span id="codata2022-classical_electron_radius"></span><code>codata2022::classical_<wbr>electron_<wbr>radius</code> | r_e | — | <code>mag_ratio<2'817'940'3205, 10'000'000'000'000> * <wbr>mag_power<10, -15> * <wbr>[meter](#meter)</code> |
+| <span id="codata2022-electron_compton_wavelength"></span><code>codata2022::electron_<wbr>compton_<wbr>wavelength</code> | (imported from codata2018) | — | <code>using [codata2018::electron_<wbr>compton_<wbr>wavelength](hep.md#codata2018-electron_compton_wavelength)</code> |
+| <span id="codata2022-electron_mass"></span><code>codata2022::electron_<wbr>mass</code> | m_e | — | <code>mag_ratio<510'998'95069, 100'000'000'00> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2022-fine_structure_constant"></span><code>codata2022::fine_<wbr>structure_<wbr>constant</code> | α (alpha) | — | <code>mag_ratio<72'973'525'643, 10'000'000'000'000> * <wbr>mag_power<10, -3> * <wbr>[one](core.md#one)</code> |
+| <span id="codata2022-neutron_mass"></span><code>codata2022::neutron_<wbr>mass</code> | m_n | — | <code>mag_ratio<939'565'42194, 100'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
+| <span id="codata2022-nuclear_magneton"></span><code>codata2022::nuclear_<wbr>magneton</code> | μ_N (mu_N) | — | <code>mag_ratio<5'050'783'7393, 100'000'000'000'000> * <wbr>mag_power<10, -27> * <wbr>[joule](#joule) / <wbr>[tesla](#tesla)</code> |
+| <span id="codata2022-proton_mass"></span><code>codata2022::proton_<wbr>mass</code> | m_p | — | <code>mag_ratio<938'272'08943, 100'000'000> * <wbr>[si::mega](si.md#mega)<[electronvolt](#electronvolt)> / <wbr>square([speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum](#speed_of_light_in_vacuum))</code> |
 | <span id="coulomb"></span><code>coulomb</code> | C | — | <code>mag_ratio<1'602'176'634, 1'000'000'000> * <wbr>[eplus](#eplus)</code> |
 | <span id="curie"></span><code>curie</code> | Ci | `Ci` | <code>mag_ratio<37, 10> * <wbr>mag_power<10, 10> * <wbr>[becquerel](#becquerel)</code> |
 | <span id="degree"></span><code>degree</code> | ° (deg) | `deg` | <code>mag_ratio<1, 180> * <wbr>[π](core.md#π) * <wbr>[radian](#radian)</code> |
 | <span id="electronvolt"></span><code>electronvolt</code> | eV | `eV` | <code>kind: [energy](#energy)</code> |
+| <span id="elementary_charge"></span><code>elementary_<wbr>charge</code> | e | `e` | <code>[eplus](#eplus)</code> |
 | <span id="eplus"></span><code>eplus</code> | e⁺ (e+) | — | <code>kind: [electric_<wbr>charge](#electric_charge)</code> |
 | <span id="farad"></span><code>farad</code> | F | — | <code>[coulomb](#coulomb) / <wbr>[volt](#volt)</code> |
 | <span id="fermi"></span><code>fermi</code> | — | — | <code>[si::femto](si.md#femto)<[meter](#meter)></code> |
+| <span id="gas_threshold"></span><code>gas_<wbr>threshold</code> | gas_threshold | — | <code>mag<10> * <wbr>[si::milli](si.md#milli)<[gram](#gram)> / <wbr>cubic([si::centi](si.md#centi)<[meter](#meter)>)</code> |
 | <span id="gauss"></span><code>gauss</code> | G | — | <code>mag_power<10, -4> * <wbr>[tesla](#tesla)</code> |
 | <span id="gram"></span><code>gram</code> | g | `g` | <code>mag_ratio<1, 1000> * <wbr>[joule](#joule) * <wbr>square([second](#second)) / <wbr>square([meter](#meter))</code> |
 | <span id="gray"></span><code>gray</code> | Gy | — | <code>[joule](#joule) / <wbr>[si::kilo](si.md#kilo)<[gram](#gram)><br>kind: [absorbed_<wbr>dose](#absorbed_dose)</code> |
@@ -98,12 +135,22 @@
 | <span id="perCent"></span><code>perCent</code> | — | — | alias to [mp_<wbr>units::percent](core.md#percent) |
 | <span id="perMillion"></span><code>perMillion</code> | — | — | alias to [mp_<wbr>units::parts_<wbr>per_<wbr>million](core.md#parts_per_million) |
 | <span id="perThousand"></span><code>perThousand</code> | — | — | alias to [mp_<wbr>units::per_<wbr>mille](core.md#per_mille) |
+| <span id="permeability_of_vacuum"></span><code>permeability_<wbr>of_<wbr>vacuum</code> | μ₀ (mu_0) | `mu_0` | <code>mag<4> * <wbr>mag_power<10, -7> * <wbr>[π](core.md#π) * <wbr>[henry](#henry) / <wbr>[meter](#meter)</code> |
 | <span id="pi"></span><code>pi</code> | — | — | alias to ::[π](core.md#π) |
+| <span id="planck_constant"></span><code>planck_<wbr>constant</code> | h | `h` | <code>mag_ratio<662'607'015, 100'000'000> * <wbr>mag_power<10, -34> * <wbr>[joule](#joule) * <wbr>[second](#second)</code> |
 | <span id="radian"></span><code>radian</code> | rad | `rad` | <code>kind: [angle](#angle)</code> |
 | <span id="second"></span><code>second</code> | s | `s` | <code>kind: [duration](#duration)</code> |
+| <span id="speed_of_light_in_vacuum"></span><code>speed_<wbr>of_<wbr>light_<wbr>in_<wbr>vacuum</code> | c | `c` | <code>mag<299'792'458> * <wbr>[meter](#meter) / <wbr>[second](#second)</code> |
+| <span id="standard_pressure"></span><code>standard_<wbr>pressure</code> | P_STP | — | <code>[atmosphere](#atmosphere)</code> |
+| <span id="standard_temperature"></span><code>standard_<wbr>temperature</code> | T_STP | — | <code>mag_ratio<273'15, 100> * <wbr>[kelvin](#kelvin)</code> |
 | <span id="steradian"></span><code>steradian</code> | sr | `sr` | <code>square([radian](#radian))</code> |
 | <span id="tesla"></span><code>tesla</code> | T | — | <code>[weber](#weber) / <wbr>square([meter](#meter))</code> |
 | <span id="twopi"></span><code>twopi</code> | — | — | <code>mag<2> * <wbr>[pi](#pi)</code> |
+| <span id="universe_mean_density"></span><code>universe_<wbr>mean_<wbr>density</code> | ρ_universe (rho_universe) | — | <code>mag_power<10, -25> * <wbr>[gram](#gram) / <wbr>cubic([si::centi](si.md#centi)<[meter](#meter)>)</code> |
 | <span id="volt"></span><code>volt</code> | V | — | <code>[electronvolt](#electronvolt) / <wbr>[eplus](#eplus)</code> |
 | <span id="watt"></span><code>watt</code> | W | — | <code>[joule](#joule) / <wbr>[second](#second)</code> |
 | <span id="weber"></span><code>weber</code> | Wb | — | <code>[volt](#volt) * <wbr>[second](#second)</code> |
+
+!!! note "Inline Namespaces"
+
+    The `mp_units::hep::codata2018` namespace is inline in `mp_units::hep`, making its units directly accessible from the parent namespace.
