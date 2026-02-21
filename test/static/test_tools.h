@@ -33,18 +33,19 @@ import std;
 
 namespace mp_units {
 
-// Floating-point comparison helper for compile-time tests
+// Floating-point comparison helper for compile-time tests.
+// Both quantities are expressed in q1's unit before comparison to ensure
+// the relative tolerance is computed on a consistent numerical scale.
 constexpr bool approx_equal(Quantity auto q1, Quantity auto q2,
                             double rel_epsilon = 1000 * std::numeric_limits<double>::epsilon())
 {
-  const auto diff = q1 - q2;
-  const auto abs_diff = diff.numerical_value_ref_in(diff.unit) >= 0 ? diff.numerical_value_ref_in(diff.unit)
-                                                                    : -diff.numerical_value_ref_in(diff.unit);
-  const auto abs_q1 =
-    q1.numerical_value_ref_in(q1.unit) >= 0 ? q1.numerical_value_ref_in(q1.unit) : -q1.numerical_value_ref_in(q1.unit);
-  const auto abs_q2 =
-    q2.numerical_value_ref_in(q2.unit) >= 0 ? q2.numerical_value_ref_in(q2.unit) : -q2.numerical_value_ref_in(q2.unit);
-  const auto max_abs = abs_q1 > abs_q2 ? abs_q1 : abs_q2;
+  const auto v1 = q1.numerical_value_ref_in(q1.unit);
+  const auto v2 = q2.numerical_value_in(q1.unit);
+  const auto diff = v1 - v2;
+  const auto abs_diff = diff >= 0 ? diff : -diff;
+  const auto abs_v1 = v1 >= 0 ? v1 : -v1;
+  const auto abs_v2 = v2 >= 0 ? v2 : -v2;
+  const auto max_abs = abs_v1 > abs_v2 ? abs_v1 : abs_v2;
   return abs_diff <= rel_epsilon * max_abs;
 }
 
