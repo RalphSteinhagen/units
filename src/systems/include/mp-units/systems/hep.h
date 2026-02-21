@@ -28,6 +28,7 @@
 
 #pragma once
 
+#include <mp-units/systems/hep/constants.h>
 #include <mp-units/systems/hep/quantities.h>
 #include <mp-units/systems/hep/units.h>
 
