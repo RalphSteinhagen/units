@@ -461,7 +461,7 @@ This however, creates an important trade-off:
     process(widgets, items);     // ❌ Compile error! Good.
 
     // Another problem: can mix semantically different types in arithmetic
-    auto total = items + widgets;  // ⚠️ Compiles! Both convert to dimensionless
+    auto mixed = items + widgets;  // ⚠️ Compiles! Both convert to dimensionless
     if (items < widgets) {         // ⚠️ Compiles! Comparison through dimensionless
       // ...
     }
