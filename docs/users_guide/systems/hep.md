@@ -485,134 +485,173 @@ simple rename with no logic changes.
 
 ## Type Safety in Practice
 
-The following example contrasts a typical `double`-based HEP API with its mp-units
-equivalent. It covers all four categories of bugs that specialized quantity types
-eliminate: dimensional errors, argument swaps, unit scale mismatches, and same-kind
-confusion.
+The following examples demonstrate four categories of bugs that specialized quantity
+types eliminate: dimensional errors, argument swaps, unit scale mismatches, and
+same-kind confusion. Each example compares legacy `double`-based code with the
+type-safe mp-units equivalent.
+
+For all examples, consider this typical HEP API:
+
+=== "Legacy API"
+
+    ```cpp
+    // All parameters are just double - units documented in comments
+    void setParticleProperties(double mass_MeV_per_c2,   // Mass in MeV/c²
+                               double width_MeV,         // Decay width in MeV
+                               double charge);           // Electric charge
+    ```
+
+=== "Type-safe API"
+
+    ```cpp
+    // Types enforce correct dimensions and units at compile time
+    void setParticleProperties(quantity<hep::rest_mass[MeV / c2]> mass,
+                               quantity<hep::decay_width[MeV]> width,
+                               quantity<hep::electric_charge[eplus]> charge);
+    ```
+
+### Wrong Dimensions
+
+Passing a value with incorrect physical dimensions is a common error. For example,
+passing _energy_ (E) where _mass_ (E/c²) is expected. In legacy code, the compiler
+cannot detect this — both are just `double`. The wrong numerical value flows through
+calculations, producing physically incorrect results.
 
 === "Legacy (unsafe)"
 
     ```cpp
-    // Typical HEP API - all parameters are just double
-    void setParticleProperties(double mass_MeV_per_c2,   // Mass in MeV/c²
-                               double width_MeV,         // Decay width in MeV
-                               double charge);           // Electric charge
+    double higgs_mass = 125.0 * GeV;  // Energy in MeV (125'000.0), not mass!
+    double higgs_width = 4.0 * MeV;
 
-    // DISASTER 1: Wrong dimensions (energy passed as mass)
-    {  
-      double higgs_mass = 125.0 * GeV;  // Stores 125'000.0 (energy in MeV, not mass!)
-      double higgs_width = 4.0 * MeV;   // Stores 4.0
-
-      setParticleProperties(higgs_mass, higgs_width, 0.0);
-      // Passes 125'000.0 as mass_MeV_per_c2 - but it's energy in MeV!
-      // Should have divided by c_squared first
-      // ✓ Compiles  ☠️ Wrong physics  ❌ No warning
-    }
-
-    // DISASTER 2: Arguments swapped
-    {
-      double higgs_mass = 125.0 * GeV / c_squared;  // Stores correct mass value
-      double higgs_width = 4.0 * MeV;               // Stores 4.0
-
-      setParticleProperties(higgs_width,  // should be higgs_mass!
-                            higgs_mass,   // should be higgs_width!
-                            0.0);
-      // Results: mass=4.0 MeV/c² (should be 125'000 MeV/c²), width has mass dimension!
-      // ✓ Compiles  ☠️ Catastrophic  ❌ No warning
-    }
-
-    // DISASTER 3: Wrong unit scale (ROOT GeV vs CLHEP MeV framework mismatch)
-    {
-      double higgs_mass = 125.0 * GeV / c_squared;   // Stores correct mass value
-      double higgs_width = get_from_ROOT();          // Stores 0.004 (ROOT GeV base: 4 MeV = 0.004 GeV)
-
-      // get_from_ROOT() returns 0.004 - correct in ROOT (GeV=1), but CLHEP API expects MeV!
-      setParticleProperties(higgs_mass,   // correct mass value
-                            higgs_width,  // 0.004 → API reads as 0.004 MeV (should be 4 MeV!)
-                            0.0);
-      // Forgot ROOT→CLHEP conversion: value needs ×1000 to be in MeV!
-      // Results: width=0.004 MeV (should be 4 MeV) - off by 1000×!
-      // ✓ Compiles  ☠️ 1000× wrong  ❌ No warning
-    }
-
-    // DISASTER 4: Wrong quantity of the same kind (invariant_mass vs rest_mass)
-    {
-      double m_inv = compute_invariant_mass();  // reconstructed from 4-momenta, in MeV/c²
-      double higgs_width = 4.0 * MeV;
-
-      setParticleProperties(m_inv,        // invariant mass of a candidate event
-                            higgs_width,
-                            0.0);
-      // Invariant mass of a single event ≠ rest mass of the Higgs boson!
-      // Both are mass dimension (MeV/c²), but physically different concepts
-      // ✓ Compiles  ☠️ Wrong physics  ❌ No warning
-    }
+    // Should have divided by c_squared first - but compiler doesn't know!
+    setParticleProperties(higgs_mass, higgs_width, 0.0);
+    // Passes 125'000.0 as mass_MeV_per_c2 - catastrophically wrong
+    // ✓ Compiles  ☠️ Wrong physics  ❌ No warning
     ```
 
 === "mp-units (safe)"
 
     ```cpp
-    // Type-safe API - compiler enforces correct types
-    void setParticleProperties(quantity<hep::rest_mass[MeV / c2]> mass,
-                               quantity<hep::decay_width[MeV]> width,
-                               quantity<hep::electric_charge[eplus]> charge);
+    quantity higgs_mass = 125.0 * GeV;  // Compiler knows this is energy
+    quantity higgs_width = 4.0 * MeV;
 
-    // ERROR 1: Wrong dimensions caught at compile time
-    {
-      quantity higgs_mass = 125.0 * GeV;  // energy quantity, not mass
-      quantity higgs_width = 4.0 * MeV;
+    // setParticleProperties(higgs_mass, higgs_width, 0.0 * eplus);
+    // Compile error! Cannot convert energy to mass
+    // "note: no known conversion from energy to rest_mass"
 
-      // setParticleProperties(higgs_mass, higgs_width, 0.0 * eplus);
-      // Compile error! Cannot convert quantity<GeV> to rest_mass
-      // "note: no known conversion from energy to rest_mass"
-
-      // Must explicitly convert energy to mass:
-      setParticleProperties(higgs_mass / c2, higgs_width, 0.0 * eplus);  // ✓
-    }
-
-    // ERROR 2: Swapped arguments caught at compile time
-    {
-      quantity higgs_mass = 125.0 * GeV / c2;
-      quantity higgs_width = 4.0 * MeV;
-
-      // setParticleProperties(higgs_width, higgs_mass, 0.0 * eplus);
-      // Compile error! Cannot convert decay_width to rest_mass
-      // "note: no known conversion from decay_width to rest_mass"
-
-      setParticleProperties(higgs_mass, higgs_width, 0.0 * eplus);  // ✓
-    }
-
-    // ERROR 3: Unit scale confusion caught - raw doubles rejected
-    {
-      quantity higgs_mass = 125.0 * GeV / c2;
-      double higgs_width = get_from_ROOT();  // 0.004
-
-      // setParticleProperties(higgs_mass, higgs_width, 0.0 * eplus);
-      // Compile error! Cannot convert double to quantity<decay_width[MeV]>
-      // Forces explicit unit attachment - you must decide: GeV or MeV?
-
-      // Correct: attach the right unit and conversion is automatic
-      setParticleProperties(higgs_mass, higgs_width * GeV, 0.0 * eplus);
-      // ✓ Compiles! 0.004 * GeV = 4 MeV, converted automatically
-    }
-
-    // ERROR 4: Wrong quantity of the same kind caught at compile time
-    {
-      quantity<hep::invariant_mass[GeV / c2]> compute_invariant_mass();
-
-      quantity m_inv = compute_invariant_mass();  // from 4-momenta
-      quantity higgs_width = hep::decay_width(4.0 * MeV);
-
-      // setParticleProperties(m_inv, higgs_width, 0.0 * eplus);
-      // Compile error! Cannot convert invariant_mass to rest_mass
-      // "note: no known conversion from invariant_mass to rest_mass"
-      // Both are mass, but they are distinct quantity kinds
-    }
+    // Must explicitly convert - the dimension error is caught:
+    setParticleProperties(higgs_mass / c2, higgs_width, 0.0 * eplus);  // ✓
     ```
 
-The mp-units version makes all four classes of error **impossible** — they're caught at
-compile time before the code ever runs. The physics constraints are enforced by the type
-system.
+### Arguments Swapped
+
+Function parameters with the same underlying type (`double`) but different semantic
+meanings can be accidentally swapped. The compiler has no way to detect this in
+legacy code because all parameters have identical types.
+
+=== "Legacy (unsafe)"
+
+    ```cpp
+    double higgs_mass = 125.0 * GeV / c_squared;
+    double higgs_width = 4.0 * MeV;
+
+    // Accidentally reversed the arguments!
+    setParticleProperties(higgs_width,  // should be higgs_mass
+                          higgs_mass,   // should be higgs_width
+                          0.0);
+    // Results: mass=4.0 MeV/c² (off by 31'000×), width=125'000 MeV
+    // ✓ Compiles  ☠️ Catastrophic  ❌ No warning
+    ```
+
+=== "mp-units (safe)"
+
+    ```cpp
+    quantity higgs_mass = 125.0 * GeV / c2;
+    quantity higgs_width = 4.0 * MeV;
+
+    // setParticleProperties(higgs_width, higgs_mass, 0.0 * eplus);
+    // Compile error! Types don't match
+    // "note: no known conversion from decay_width to rest_mass"
+
+    setParticleProperties(higgs_mass, higgs_width, 0.0 * eplus);  // ✓
+    ```
+
+### Wrong Unit Scale (Framework Mismatch)
+
+Different HEP frameworks use different base units (ROOT uses GeV=1, CLHEP uses MeV=1).
+When interfacing between frameworks, forgetting to convert units produces values
+off by factors of 1000 or more. In legacy code, these are just `double` values —
+the compiler cannot detect the mismatch.
+
+=== "Legacy (unsafe)"
+
+    ```cpp
+    double higgs_mass = 125.0 * GeV / c_squared;
+    double higgs_width = get_from_ROOT();  // Returns 0.004 (ROOT uses GeV=1)
+
+    // Forgot to convert ROOT's GeV to CLHEP's MeV!
+    setParticleProperties(higgs_mass, higgs_width, 0.0);
+    // API expects MeV, receives 0.004 → width = 0.004 MeV (off by 1000×!)
+    // ✓ Compiles  ☠️ 1000× wrong  ❌ No warning
+    ```
+
+=== "mp-units (safe)"
+
+    ```cpp
+    quantity higgs_mass = 125.0 * GeV / c2;
+    double higgs_width = get_from_ROOT();  // Returns bare 0.004
+
+    // setParticleProperties(higgs_mass, higgs_width, 0.0 * eplus);
+    // Compile error! Cannot convert double to quantity
+    // Forces explicit unit attachment
+
+    // Must specify the unit - conversion happens automatically:
+    setParticleProperties(higgs_mass, higgs_width * GeV, 0.0 * eplus);
+    // ✓ Compiles! 0.004 * GeV = 4 MeV (automatic conversion)
+    ```
+
+### Wrong Quantity of the Same Kind
+
+Some physically distinct concepts share the same dimension but have different meanings.
+For example, _invariant mass_ reconstructed from decay products vs. _rest mass_ of a
+particle species. Mixing these is physically meaningless even though they're
+dimensionally identical. Legacy `double` code cannot distinguish them.
+
+=== "Legacy (unsafe)"
+
+    ```cpp
+    // From 4-momenta reconstruction
+    double compute_invariant_mass();
+
+    double m_inv = compute_invariant_mass();
+    double higgs_width = 4.0 * MeV;
+
+    // Invariant mass of ONE EVENT ≠ rest mass of THE HIGGS BOSON
+    setParticleProperties(m_inv, higgs_width, 0.0);
+    // Both are mass dimension (MeV/c²) - compiler cannot tell them apart
+    // ✓ Compiles  ☠️ Wrong physics  ❌ No warning
+    ```
+
+=== "mp-units (safe)"
+
+    ```cpp
+    // From 4-momenta reconstruction
+    quantity<hep::invariant_mass[GeV / c2]> compute_invariant_mass();
+
+    quantity m_inv = compute_invariant_mass();
+    quantity higgs_width = hep::decay_width(4.0 * MeV);
+
+    // setParticleProperties(m_inv, higgs_width, 0.0 * eplus);
+    // Compile error! Wrong quantity kind
+    // "note: no known conversion from invariant_mass to rest_mass"
+    // Physics constraints enforced by type system
+    ```
+
+### Summary
+
+The mp-units type system makes all four classes of error **impossible** — they're
+caught at compile time before the code ever runs. The physics constraints are
+enforced by the compiler, not just by documentation and code review.
 
 The type hierarchy also captures physical relationships. For _energy_, adding child
 quantities yields their common parent, enforcing E = KE + mc²:
