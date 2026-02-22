@@ -59,7 +59,7 @@ inline constexpr struct nominal_jovian_mass_parameter final : named_unit<symbol_
 // https://www.iau.org/Iau/Publications/List-of-Resolutions
 using non_si::astronomical_unit;
 
-// Derived unitss
+// Derived units
 inline constexpr struct parsec final : named_unit<"pc", astronomical_unit / (mag_ratio<1, 3600> * si::degree)> {} parsec;
 
 inline namespace codata2018 {
