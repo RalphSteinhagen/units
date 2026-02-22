@@ -725,11 +725,19 @@
          <lastmod>2026-02-22</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/momentum/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/momentum_hep/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/momentum_isq/</loc>
          <lastmod>2026-02-22</lastmod>
     </url>
     <url>
          <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/mutual_inductance/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/number_density/</loc>
          <lastmod>2026-02-22</lastmod>
     </url>
     <url>
@@ -786,6 +794,10 @@
     </url>
     <url>
          <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/propagation_coefficient_isq_angle/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/proper_velocity/</loc>
          <lastmod>2026-02-22</lastmod>
     </url>
     <url>
@@ -917,7 +929,11 @@
          <lastmod>2026-02-22</lastmod>
     </url>
     <url>
-         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/speed/</loc>
+         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/speed_hep/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/speed_isq/</loc>
          <lastmod>2026-02-22</lastmod>
     </url>
     <url>
@@ -970,6 +986,10 @@
     </url>
     <url>
          <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/transfer_rate/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://mpusz.github.io/mp-units/HEAD/reference/systems_reference/hierarchies/velocity/</loc>
          <lastmod>2026-02-22</lastmod>
     </url>
     <url>
