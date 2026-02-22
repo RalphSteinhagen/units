@@ -3,13 +3,19 @@
 
 # dimensionless Hierarchy
 
-**Systems:** Core, ISQ, Natural
+**Systems:** Core, ISQ, Natural, HEP
 
 **Dimension:** dimensionless
 
 ```mermaid
 flowchart LR
     dimensionless["<b><a href="../../systems/core/#dimensionless" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">dimensionless</a></b>"]
+    hep_lorentz_factor["<b><a href="../../systems/hep/#lorentz_factor" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::lorentz_factor</a> 🔒</b>"]
+    dimensionless --- hep_lorentz_factor
+    hep_phase["<b><a href="../../systems/hep/#phase" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::phase</a> 🔒</b>"]
+    dimensionless --- hep_phase
+    hep_relativistic_beta["<b><a href="../../systems/hep/#relativistic_beta" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::relativistic_beta</a> 🔒</b>"]
+    dimensionless --- hep_relativistic_beta
     isq_Hamming_distance["<b><a href="../../systems/isq/#Hamming_distance" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::Hamming_distance</a></b>"]
     dimensionless --- isq_Hamming_distance
     isq_Poisson_number["<b><a href="../../systems/isq/#Poisson_number" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::Poisson_number</a></b><br><i>(<a href="../../systems/isq/#width" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">width</a> / <a href="../../systems/isq/#length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">length</a>)</i>"]

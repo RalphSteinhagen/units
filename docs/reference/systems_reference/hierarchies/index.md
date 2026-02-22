@@ -7,7 +7,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: 1
 
-- [`dimensionless`](dimensionless.md) (54 quantities)
+- [`dimensionless`](dimensionless.md) (57 quantities)
 
 ## Dimension: A
 
@@ -15,7 +15,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: E
 
-- [`hep::energy`](energy_hep.md) (1 quantity)
+- [`hep::energy`](energy_hep.md) (13 quantities)
 - [`natural::energy`](energy_natural.md) (5 quantities)
 
 ## Dimension: I
@@ -29,7 +29,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: L
 
-- [`hep::length`](length_hep.md) (1 quantity)
+- [`hep::length`](length_hep.md) (14 quantities)
 - [`isq::length`](length_isq.md) (13 quantities)
 
 ## Dimension: M
@@ -47,7 +47,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: T
 
-- [`hep::duration`](duration_hep.md) (1 quantity)
+- [`hep::duration`](duration_hep.md) (7 quantities)
 - [`isq::duration`](duration_isq.md) (5 quantities)
 
 ## Dimension: Θ
@@ -58,7 +58,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 ## Dimension: α
 
 - [`angular::angle`](angle_angular.md) (1 quantity)
-- [`hep::angle`](angle_hep.md) (1 quantity)
+- [`hep::angle`](angle_hep.md) (5 quantities)
 
 ## Dimension: E²
 
@@ -71,7 +71,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: L²
 
-- [`hep::area`](area_hep.md) (1 quantity)
+- [`hep::area`](area_hep.md) (2 quantities)
 - [`isq::area`](area_isq.md) (1 quantity)
 
 ## Dimension: L³
@@ -107,6 +107,10 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 - [`isq::moment_of_inertia`](moment_of_inertia_isq.md) (1 quantity)
 
+## Dimension: L⁻³
+
+- [`hep::number_density`](number_density.md) (1 quantity)
+
 ## Dimension: L⁻¹
 
 - [`isq::angular_repetency`](angular_repetency_isq.md) (1 quantity)
@@ -123,7 +127,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 ## Dimension: T⁻¹
 
 - [`hep::activity`](activity_hep.md) (1 quantity)
-- [`hep::frequency`](frequency_hep.md) (1 quantity)
+- [`hep::frequency`](frequency_hep.md) (2 quantities)
 - [`isq::activity`](activity_isq.md) (1 quantity)
 - [`isq::angular_frequency`](angular_frequency_isq.md) (1 quantity)
 - [`isq::angular_velocity`](angular_velocity_isq.md) (1 quantity)
@@ -175,10 +179,13 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: LT⁻¹
 
+- [`hep::proper_velocity`](proper_velocity.md) (1 quantity)
+- [`hep::speed`](speed_hep.md) (1 quantity)
+- [`hep::velocity`](velocity.md) (1 quantity)
 - [`isq::group_speed`](group_speed.md) (1 quantity)
 - [`isq::phase_speed`](phase_speed.md) (1 quantity)
 - [`isq::phase_speed_of_electromagnetic_waves`](phase_speed_of_electromagnetic_waves.md) (1 quantity)
-- [`isq::speed`](speed.md) (4 quantities)
+- [`isq::speed`](speed_isq.md) (4 quantities)
 
 ## Dimension: ML⁻²
 
@@ -230,6 +237,10 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 - [`isq_angle::angular_frequency`](angular_frequency_isq_angle.md) (1 quantity)
 - [`isq_angle::angular_velocity`](angular_velocity_isq_angle.md) (1 quantity)
 
+## Dimension: ETL⁻¹
+
+- [`hep::momentum`](momentum_hep.md) (2 quantities)
+
 ## Dimension: ETQ⁻²
 
 - [`hep::electric_resistance`](electric_resistance.md) (1 quantity)
@@ -263,7 +274,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: LMT⁻¹
 
-- [`isq::momentum`](momentum.md) (2 quantities)
+- [`isq::momentum`](momentum_isq.md) (2 quantities)
 
 ## Dimension: L²T⁻²
 
@@ -291,7 +302,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 ## Dimension: ET²L⁻²
 
-- [`hep::mass`](mass_hep.md) (1 quantity)
+- [`hep::mass`](mass_hep.md) (5 quantities)
 
 ## Dimension: ET²Q⁻²
 
@@ -475,4 +486,4 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 
 - [`isq::pressure_coefficient`](pressure_coefficient.md) (1 quantity)
 
-**Total hierarchies:** 176
+**Total hierarchies:** 181

@@ -13,7 +13,7 @@ kind _length_:
 !!! tip "Understanding the hierarchy"
 
     To better understand how _width_, _height_, _radius_, and _distance_ relate to _length_,
-    see the [`isq::length` hierarchy tree](../../reference/systems_reference/hierarchies/length.md).
+    see the [`isq::length` hierarchy tree](../../reference/systems_reference/hierarchies/length_isq.md).
 
 ```cpp
 // ce-embed height=850 compiler=clang2110 flags="-std=c++23 -stdlib=libc++ -O3" mp-units=trunk

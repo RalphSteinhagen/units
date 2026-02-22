@@ -22,7 +22,7 @@ Automatically generated reference documentation for all **mp-units** systems.
 | [Astronomy](systems/astronomy.md) | — | — | 10 | — | — |
 | [CGS](systems/cgs.md) | — | — | 10 | — | — |
 | [Core](systems/core.md) | 1 | 1 | 7 | — | — |
-| [HEP](systems/hep.md) | 8 | 27 | 86 | — | — |
+| [HEP](systems/hep.md) | 8 | 77 | 86 | — | — |
 | [IAU](systems/iau.md) | — | — | 17 | — | — |
 | [IEC](systems/iec.md) | — | 31 | 6 | 8 | — |
 | [Imperial](systems/imperial.md) | — | — | 22 | — | — |
