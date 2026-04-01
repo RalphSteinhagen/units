@@ -33,12 +33,12 @@ wouldn't be possible without the dedication and hard work of our amazing communi
 ## Statistics
 
 - **Total Contributors**: 36
-- **Total Contributions**: 326
+- **Total Contributions**: 327
 - **Major Contributors** (50+ contributions): 0
 - **Regular Contributors** (10-49 contributions): 10
 - **Occasional Contributors** (1-9 contributions): 26
 
-_Last updated: 2026-03-01_
+_Last updated: 2026-04-01_
 
 
 ### Major Contributors
@@ -52,8 +52,8 @@ _50+ contributions_
 
 _10-49 contributions_
 
+- **[burnpanck](https://github.com/burnpanck)** (49 contributions)
 - **[czjhoppe](https://github.com/czjhoppe)** (48 contributions)
-- **[burnpanck](https://github.com/burnpanck)** (48 contributions)
 - **[rbrugo](https://github.com/rbrugo)** (44 contributions)
 - **[yasamoka](https://github.com/yasamoka)** (20 contributions)
 - **[hofbi](https://github.com/hofbi)** (19 contributions)
