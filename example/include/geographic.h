@@ -70,23 +70,97 @@ struct MP_UNITS_STD_FMT::formatter<geographic::msl_altitude, Char> :
 
 namespace geographic {
 
-// quantity specifications for geographic coordinates
-QUANTITY_SPEC(geo_latitude, mp_units::isq::angular_measure);
-QUANTITY_SPEC(geo_longitude, mp_units::isq::angular_measure);
+// quantity specifications for geographic coordinates and orientation angles
+//
+// Geographic coordinates use different wrapping behaviors:
+// - latitude: symmetric/reflects at ±90° (can't go past poles)
+// - longitude: mirrored wrapping [-180°, 180°) — half-open interval, 180° wraps to -180°
+// - elevation: symmetric/reflects at ±90° (like latitude)
+//
+// Orientation angles have different zero references and rotation directions.
+// All use mirrored wrapping [-180°, 180°) — half-open interval where max is exclusive:
+// - geometric_azimuth: 0° = East, increases counter-clockwise
+// - bearing: 0° = North, increases clockwise
+//   Conversion: bearing = 90° - geometric_azimuth
+// - heading_azimuth: 0° = North, increases counter-clockwise
+//   Conversion: heading = geometric_azimuth - 90°
+//
+// All geographic quantity specs are marked with is_kind to prevent accidental mixing
+// (e.g., latitude + longitude, bearing + heading) and to require explicit conversions
+// between different angle reference frames.
+//
+// For trigonometric functions (sin/cos/etc.), explicit conversion to angular_measure is needed:
+//   const quantity<angular_measure> angle = isq::angular_measure(lat.quantity_from_unit_zero());
+//   sin(angle);  // Now works with plain angular_measure
+
+// Basic geographic coordinates
+QUANTITY_SPEC(geo_latitude, mp_units::isq::angular_measure, mp_units::is_kind);
+QUANTITY_SPEC(geo_longitude, mp_units::isq::angular_measure, mp_units::is_kind);
+QUANTITY_SPEC(geo_elevation, mp_units::isq::angular_measure, mp_units::is_kind);
+
+// Orientation angles (different zero references and rotation directions)
+QUANTITY_SPEC(geometric_azimuth, mp_units::isq::angular_measure, mp_units::is_kind);
+QUANTITY_SPEC(geo_bearing, mp_units::isq::angular_measure, mp_units::is_kind);
+QUANTITY_SPEC(heading_azimuth, mp_units::isq::angular_measure, mp_units::is_kind);
 
 inline constexpr struct equator final : mp_units::absolute_point_origin<geo_latitude> {
 } equator;
+
 inline constexpr struct prime_meridian final : mp_units::absolute_point_origin<geo_longitude> {
 } prime_meridian;
 
+inline constexpr struct horizon final : mp_units::absolute_point_origin<geo_elevation> {
+} horizon;
+
+// Geometric azimuth: 0° = East, counter-clockwise positive, mirrored wrapping [-180°, 180°)
+inline constexpr struct east final : mp_units::absolute_point_origin<geometric_azimuth> {
+} east;
+
 }  // namespace geographic
 
+// Geometric azimuth: mirrored wrapping [-180°, 180°)
+// Note: This must be defined before using 'east' in relative_point_origin
+template<>
+inline constexpr auto mp_units::quantity_bounds<geographic::east> =
+  mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
+
+namespace geographic {
+
+// Bearing: 0° = North, clockwise positive
+// Note: bearing = 90° - geometric_azimuth (involves sign flip - cannot use relative_point_origin)
+inline constexpr struct north_cw final : mp_units::absolute_point_origin<geo_bearing> {
+} north_cw;
+
+// Heading azimuth: 0° = North, counter-clockwise positive (heading = geometric_azimuth - 90°)
+// Implemented as a relative origin: offset -90° from east
+inline constexpr struct north_ccw final : mp_units::relative_point_origin<east - 90.0 * mp_units::si::degree> {
+} north_ccw;
+
+}  // namespace geographic
+
+// Latitude: reflects at ±90° (symmetric wrapping - can't go past poles)
 template<>
 inline constexpr auto mp_units::quantity_bounds<geographic::equator> =
   mp_units::reflect_in_range{-90 * mp_units::si::degree, 90 * mp_units::si::degree};
 
+// Longitude: mirrored wrapping [-180°, 180°)
 template<>
 inline constexpr auto mp_units::quantity_bounds<geographic::prime_meridian> =
+  mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
+
+// Elevation: reflects at ±90° (symmetric wrapping like latitude)
+template<>
+inline constexpr auto mp_units::quantity_bounds<geographic::horizon> =
+  mp_units::reflect_in_range{-90 * mp_units::si::degree, 90 * mp_units::si::degree};
+
+// Bearing: mirrored wrapping [-180°, 180°)
+template<>
+inline constexpr auto mp_units::quantity_bounds<geographic::north_cw> =
+  mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
+
+// Heading azimuth: mirrored wrapping [-180°, 180°)
+template<>
+inline constexpr auto mp_units::quantity_bounds<geographic::north_ccw> =
   mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
 
 namespace geographic {
@@ -96,6 +170,18 @@ using latitude = mp_units::quantity_point<geo_latitude[mp_units::si::degree], eq
 
 template<typename T = double>
 using longitude = mp_units::quantity_point<geo_longitude[mp_units::si::degree], prime_meridian, T>;
+
+template<typename T = double>
+using elevation = mp_units::quantity_point<geo_elevation[mp_units::si::degree], horizon, T>;
+
+template<typename T = double>
+using azimuth = mp_units::quantity_point<geometric_azimuth[mp_units::si::degree], east, T>;
+
+template<typename T = double>
+using bearing = mp_units::quantity_point<geo_bearing[mp_units::si::degree], north_cw, T>;
+
+template<typename T = double>
+using heading = mp_units::quantity_point<heading_azimuth[mp_units::si::degree], north_ccw, T>;
 
 template<class CharT, class Traits, typename T>
 std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, const latitude<T>& lat)
@@ -111,20 +197,47 @@ std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>&
   return (is_gteq_zero(q)) ? (os << q << " E") : (os << -q << " W");
 }
 
+template<class CharT, class Traits, typename T>
+std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, const elevation<T>& elev)
+{
+  return os << elev.quantity_ref_from(geographic::horizon);
+}
+
+template<class CharT, class Traits, typename T>
+std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, const azimuth<T>& az)
+{
+  return os << "Az " << az.quantity_ref_from(geographic::east);
+}
+
+template<class CharT, class Traits, typename T>
+std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, const bearing<T>& brg)
+{
+  return os << "BRG " << brg.quantity_ref_from(geographic::north_cw);
+}
+
+template<class CharT, class Traits, typename T>
+std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, const heading<T>& hdg)
+{
+  return os << "HDG " << hdg.quantity_ref_from(geographic::north_ccw);
+}
+
 inline namespace literals {
 
 constexpr latitude<double> operator""_N(long double v)
 {
   return equator + static_cast<double>(v) * geo_latitude[mp_units::si::degree];
 }
+
 constexpr latitude<double> operator""_S(long double v)
 {
   return equator - static_cast<double>(v) * geo_latitude[mp_units::si::degree];
 }
+
 constexpr longitude<double> operator""_E(long double v)
 {
   return prime_meridian + static_cast<double>(v) * geo_longitude[mp_units::si::degree];
 }
+
 constexpr longitude<double> operator""_W(long double v)
 {
   return prime_meridian - static_cast<double>(v) * geo_longitude[mp_units::si::degree];
@@ -134,19 +247,9 @@ constexpr longitude<double> operator""_W(long double v)
 
 }  // namespace geographic
 
-template<typename T>
-class std::numeric_limits<geographic::latitude<T>> : public numeric_limits<T> {
-  static constexpr auto min() noexcept { return geographic::latitude<T>(-90); }
-  static constexpr auto lowest() noexcept { return geographic::latitude<T>(-90); }
-  static constexpr auto max() noexcept { return geographic::latitude<T>(90); }
-};
-
-template<typename T>
-class std::numeric_limits<geographic::longitude<T>> : public numeric_limits<T> {
-  static constexpr auto min() noexcept { return geographic::longitude<T>(-180); }
-  static constexpr auto lowest() noexcept { return geographic::longitude<T>(-180); }
-  static constexpr auto max() noexcept { return geographic::longitude<T>(180); }
-};
+// Note: No std::numeric_limits specializations needed!
+// The generic specialization in quantity_point.h automatically handles all bounded quantity_points
+// by querying the quantity_bounds customization point.
 
 template<typename T, typename Char>
 struct MP_UNITS_STD_FMT::formatter<geographic::latitude<T>, Char> :
@@ -156,7 +259,7 @@ struct MP_UNITS_STD_FMT::formatter<geographic::latitude<T>, Char> :
   {
     const auto& q = lat.quantity_ref_from(geographic::equator);
     ctx.advance_to(formatter<typename geographic::latitude<T>::quantity_type, Char>::format(q >= 0 ? q : -q, ctx));
-    return MP_UNITS_STD_FMT::format_to(ctx.out(), "{}", q >= 0 ? " N" : "S");
+    return MP_UNITS_STD_FMT::format_to(ctx.out(), "{}", q >= 0 ? " N" : " S");
   }
 };
 
@@ -169,6 +272,53 @@ struct MP_UNITS_STD_FMT::formatter<geographic::longitude<T>, Char> :
     const auto& q = lon.quantity_ref_from(geographic::prime_meridian);
     ctx.advance_to(formatter<typename geographic::longitude<T>::quantity_type, Char>::format(q >= 0 ? q : -q, ctx));
     return MP_UNITS_STD_FMT::format_to(ctx.out(), "{}", q >= 0 ? " E" : " W");
+  }
+};
+
+template<typename T, typename Char>
+struct MP_UNITS_STD_FMT::formatter<geographic::elevation<T>, Char> :
+    formatter<typename geographic::elevation<T>::quantity_type, Char> {
+  template<typename FormatContext>
+  auto format(geographic::elevation<T> elev, FormatContext& ctx) const -> decltype(ctx.out())
+  {
+    return formatter<typename geographic::elevation<T>::quantity_type, Char>::format(
+      elev.quantity_ref_from(geographic::horizon), ctx);
+  }
+};
+
+template<typename T, typename Char>
+struct MP_UNITS_STD_FMT::formatter<geographic::azimuth<T>, Char> :
+    formatter<typename geographic::azimuth<T>::quantity_type, Char> {
+  template<typename FormatContext>
+  auto format(geographic::azimuth<T> az, FormatContext& ctx) const -> decltype(ctx.out())
+  {
+    ctx.advance_to(MP_UNITS_STD_FMT::format_to(ctx.out(), "Az "));
+    return formatter<typename geographic::azimuth<T>::quantity_type, Char>::format(
+      az.quantity_ref_from(geographic::east), ctx);
+  }
+};
+
+template<typename T, typename Char>
+struct MP_UNITS_STD_FMT::formatter<geographic::bearing<T>, Char> :
+    formatter<typename geographic::bearing<T>::quantity_type, Char> {
+  template<typename FormatContext>
+  auto format(geographic::bearing<T> brg, FormatContext& ctx) const -> decltype(ctx.out())
+  {
+    ctx.advance_to(MP_UNITS_STD_FMT::format_to(ctx.out(), "BRG "));
+    return formatter<typename geographic::bearing<T>::quantity_type, Char>::format(
+      brg.quantity_ref_from(geographic::north_cw), ctx);
+  }
+};
+
+template<typename T, typename Char>
+struct MP_UNITS_STD_FMT::formatter<geographic::heading<T>, Char> :
+    formatter<typename geographic::heading<T>::quantity_type, Char> {
+  template<typename FormatContext>
+  auto format(geographic::heading<T> hdg, FormatContext& ctx) const -> decltype(ctx.out())
+  {
+    ctx.advance_to(MP_UNITS_STD_FMT::format_to(ctx.out(), "HDG "));
+    return formatter<typename geographic::heading<T>::quantity_type, Char>::format(
+      hdg.quantity_ref_from(geographic::north_ccw), ctx);
   }
 };
 
@@ -191,10 +341,10 @@ distance spherical_distance(position<T> from, position<T> to)
 
   using si::sin, si::cos, si::asin, si::acos;
 
-  const quantity from_lat = from.lat.quantity_from_unit_zero();
-  const quantity from_lon = from.lon.quantity_from_unit_zero();
-  const quantity to_lat = to.lat.quantity_from_unit_zero();
-  const quantity to_lon = to.lon.quantity_from_unit_zero();
+  const quantity from_lat = isq::angular_measure(from.lat.quantity_from_unit_zero());
+  const quantity from_lon = isq::angular_measure(from.lon.quantity_from_unit_zero());
+  const quantity to_lat = isq::angular_measure(to.lat.quantity_from_unit_zero());
+  const quantity to_lon = isq::angular_measure(to.lon.quantity_from_unit_zero());
 
   // https://en.wikipedia.org/wiki/Great-circle_distance#Formulae
   if constexpr (sizeof(T) >= 8) {

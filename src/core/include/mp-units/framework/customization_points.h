@@ -25,6 +25,9 @@
 // IWYU pragma: private, include <mp-units/framework.h>
 #include <mp-units/bits/module_macros.h>
 #include <mp-units/ext/type_traits.h>
+#include <mp-units/framework/point_origin_concepts.h>
+#include <mp-units/framework/quantity_character.h>
+#include <mp-units/framework/quantity_spec_concepts.h>
 
 #ifndef MP_UNITS_IN_MODULE_INTERFACE
 #ifdef MP_UNITS_IMPORT_STD
@@ -32,6 +35,7 @@ import std;
 #else
 #include <concepts>
 #include <limits>
+#include <string_view>
 #include <type_traits>
 #if MP_UNITS_HOSTED
 #include <chrono>
@@ -150,27 +154,64 @@ struct representation_values {
 template<typename Rep>
 using quantity_values [[deprecated("2.5.0: Use `representation_values` instead")]] = representation_values<Rep>;
 
-
 /**
  * @brief Customization point for providing bounds on a quantity point relative to an origin.
  *
- * Users specialize this variable template for their absolute point origins.
+ * Users specialize this variable template for point origins (both absolute and relative).
  * The value should be an overflow-policy object that stores the bounds
  * (e.g. `reflect_in_range`, `clamp_to_range`, `wrap_to_range`).
  *
+ * Bounds are always enforced as constraints on `quantity_from(Origin)` — the displacement
+ * measured in the frame of the specialized origin. Different origins (including relative
+ * ones) may have independent bounds; it is the user's responsibility to keep them
+ * consistent when multiple levels of bounds are in use.
+ *
  * Example:
  * @code{.cpp}
+ * // Absolute origin: latitude reflects at poles
  * inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
- *
  * template<>
  * constexpr auto quantity_bounds<equator> = reflect_in_range{-90 * deg, 90 * deg};
+ *
+ * // Relative origin: AC controller setpoint — comfort range clamped around 21 °C
+ * inline constexpr struct room_reference_temp final :
+ *     relative_point_origin<point<deg_C>(21)> {} room_reference_temp;
+ * template<>
+ * constexpr auto quantity_bounds<room_reference_temp> = clamp_to_range{delta<deg_C>(-3), delta<deg_C>(3)};
  * @endcode
  *
  * @tparam PO a point origin for which bounds are defined
  */
-template<auto PO>
+template<PointOrigin auto PO>
+  requires(PO._quantity_spec_.character == quantity_character::real_scalar)
 inline constexpr auto quantity_bounds = detail::undefined;
 
+MP_UNITS_EXPORT_END
+
+/**
+ * @brief Customization point for handling domain constraint violations.
+ *
+ * The library calls `constraint_violation_handler<Rep>::on_violation(msg)` when
+ * a domain constraint is violated (e.g., out-of-bounds value, non-negativity).
+ *
+ * No default implementation is provided. When no specialization exists for a given
+ * Rep, the library uses MP_UNITS_EXPECTS directly (which may compile to nothing in
+ * release builds). Specializing this trait opts the type into guaranteed enforcement.
+ *
+ * @tparam Rep the representation type
+ */
+MP_UNITS_EXPORT template<typename Rep>
+struct constraint_violation_handler;
+
+namespace detail {
+
+template<typename Rep>
+concept HasConstraintViolationHandler =
+  requires(std::string_view msg) { constraint_violation_handler<Rep>::on_violation(msg); };
+
+}  // namespace detail
+
+MP_UNITS_EXPORT_BEGIN
 
 /**
  * @brief Provides support for external quantity-like types

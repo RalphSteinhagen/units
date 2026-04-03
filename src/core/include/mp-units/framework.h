@@ -28,8 +28,10 @@
 #include <mp-units/framework/customization_points.h>
 #include <mp-units/framework/dimension.h>
 #include <mp-units/framework/dimension_concepts.h>
+#include <mp-units/framework/point_origin_concepts.h>
 #include <mp-units/framework/quantity.h>
 #include <mp-units/framework/quantity_cast.h>
+#include <mp-units/framework/quantity_character.h>
 #include <mp-units/framework/quantity_concepts.h>
 #include <mp-units/framework/quantity_point.h>
 #include <mp-units/framework/quantity_point_concepts.h>

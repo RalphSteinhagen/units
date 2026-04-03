@@ -113,19 +113,38 @@ quantity<mm, std::int16_t> length_mm2 = length2;    // ✅ OK: 2000 fits in int1
 // std::chrono allows: delays.emplace_back(42) — silently 1000× wrong if type changes
 std::vector<quantity<si::milli<si::second>>> delays;
 // delays.emplace_back(42);    // ❌ Compile-time error — unit required!
-delays.emplace_back(42 * ms); // ✅ Explicit unit — safe regardless of container type
-delays.emplace_back(42, ms);  // ✅ OK
+delays.emplace_back(42 * ms);  // ✅ Explicit unit — safe regardless of container type
+delays.emplace_back(42, ms);   // ✅ OK
 ```
 
 **mp-units** provides strong representation safety through truncation prevention (inspired
 by `std::chrono::duration`), compile-time scaling overflow detection, and mandatory
 unit-qualified construction.
 
-!!! warning "Runtime Overflow Limitations"
+### Runtime Safety Infrastructure
 
-    No library can prevent runtime arithmetic overflow at compile time (e.g., `quantity * 2`).
-    Additionally, no library prevents overflow or underflow for floating-point types.
-    For such cases, use custom representation types with runtime checks.
+No library can prevent runtime arithmetic overflow at compile time (e.g., `quantity * 2`).
+**mp-units** provides built-in tools for domains that need guaranteed runtime enforcement:
+
+```cpp
+#include <mp-units/safe_int.h>
+#include <mp-units/constrained.h>
+
+// Built-in safe_int detects arithmetic overflow at runtime
+quantity distance = safe_int{std::int16_t{100}} * m;
+// quantity overflow = distance * std::int16_t{1'000};  // throws std::overflow_error at runtime
+
+// constrained<T> tags a type with an error policy for bounds checking
+using safe_double = constrained<double, throw_policy>;
+using latitude = quantity_point<geo_latitude[deg], equator, safe_double>;
+latitude lat{95.0 * deg, equator};  // throws std::domain_error (out of [-90, 90])
+```
+
+!!! tip "Deep Dive"
+
+    For complete coverage, see
+    [Ensure Ultimate Safety](../how_to_guides/advanced_usage/ultimate_safety.md) and
+    [Representation Types: `constraint_violation_handler`](../users_guide/framework_basics/representation_types.md#constraint-violation-handler).
 
 
 ## Level 4: Quantity Kind Safety
@@ -249,6 +268,11 @@ no extra effort. From there, two independent opt-in choices extend coverage furt
   affine spaces — _time_ instants, _temperatures_, _positions_ — at no additional code overhead.
   If adding two quantities of the same kind makes no physical or domain sense — as with
   two _timestamps_ or two absolute _temperatures_ — they should be modeled as points.
+  Additionally, quantity points support
+  [range validation](../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points):
+  `quantity_bounds<Origin>` lets you attach overflow policies (`check_in_range`,
+  `clamp_to_range`, `wrap_to_range`, `reflect_in_range`) to point origins, enforcing
+  valid ranges for geographic coordinates, sensor operating limits, and similar domains.
 - [**Typed quantities**](../users_guide/framework_basics/simple_and_typed_quantities.md#typed-quantities)
   (`quantity<isq::quantity[unit], Rep>`) add Level 5: full ISQ quantity hierarchy
   enforcement (e.g., `isq::height` vs `isq::width` vs `isq::distance`). The tradeoffs are:
@@ -267,7 +291,13 @@ To dive deeper into **mp-units** safety features:
 - [Understanding Safety Levels (Blog)](../blog/posts/understanding-safety-levels.md) -
   In-depth analysis, library comparisons, and why safety matters for C++ standardization
 - [Simple and Typed Quantities](../users_guide/framework_basics/simple_and_typed_quantities.md) -
-  Choose your level of type safety
+Choose your level of type safety
+- [Representation Types](../users_guide/framework_basics/representation_types.md) -
+  Customization points including `constraint_violation_handler`
+- [Range-Validated Quantity Points](../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points) -
+  Bounded quantity points with overflow policies
+- [Ensure Ultimate Safety](../how_to_guides/advanced_usage/ultimate_safety.md) -
+  Combining `constrained` reps, `safe_int`, and bounded quantity points
 - [Systems of Quantities](../users_guide/framework_basics/systems_of_quantities.md) -
   Understanding the ISQ hierarchy
 - [Character of a Quantity](../users_guide/framework_basics/character_of_a_quantity.md) -

@@ -328,9 +328,13 @@ the new representation type through `sudo_cast`, and the resulting `quantity` (o
 
 ## Customization Points
 
-The library provides several customization mechanisms for representation types. These fall
-into two categories: **Character determination** (what kind of representation type you have)
-and **Behavior and values** (how the library interacts with your type).
+The library provides several customization mechanisms for representation types.
+For a complete implementation guide and code examples for custom types, see
+[Using Custom Representation Types](../../how_to_guides/integration/using_custom_representation_types.md).
+
+These mechanisms fall into two categories: **Character determination** (what kind of
+representation type you have) and **Behavior and values** (how the library interacts with
+your type).
 
 ### Character Determination
 
@@ -651,7 +655,13 @@ struct mp_units::representation_values<my_custom_type<T>> {
 - Mathematical operations like `floor()`, `ceil()`, `round()`
 - Division by zero checks
 
+---
 
+#### `constraint_violation_handler<Rep>` { #constraint-violation-handler }
+
+A specializable class template that defines how constraint violations are reported for
+a representation type. For usage and code examples, see
+[Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md).
 
 
 ## Character-Specific Operations
@@ -713,4 +723,5 @@ examples.
 - [Value Conversions](value_conversions.md) - How `treat_as_floating_point` affects conversions
 - [Concepts](concepts.md#RepresentationOf) - The `RepresentationOf` concept definition
 - [Using Custom Representation Types](../../how_to_guides/integration/using_custom_representation_types.md) - Step-by-step guide to creating custom representation types
+- [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) - Combining `constrained` reps with bounded quantity points
 <!-- markdownlint-enable MD013 -->

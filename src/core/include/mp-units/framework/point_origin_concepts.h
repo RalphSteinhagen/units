@@ -22,16 +22,24 @@
 
 #pragma once
 
-// IWYU pragma: begin_exports
-#include <mp-units/compat_macros.h>
-#include <mp-units/concepts.h>
-#include <mp-units/constrained.h>
-#include <mp-units/framework.h>
-#include <mp-units/overflow_policies.h>
+// IWYU pragma: private, include <mp-units/framework.h>
+#include <mp-units/bits/module_macros.h>
+#include <mp-units/framework/symbolic_expression.h>
 
-#if MP_UNITS_HOSTED
-#include <mp-units/cartesian_vector.h>
-#include <mp-units/math.h>
-#include <mp-units/random.h>
-#endif
-// IWYU pragma: end_exports
+namespace mp_units {
+
+namespace detail {
+
+struct point_origin_interface;
+
+}  // namespace detail
+
+/**
+ * @brief A concept matching all quantity point origins in the library
+ *
+ * Satisfied by either quantity points or by all types derived from `absolute_point_origin` class template.
+ */
+MP_UNITS_EXPORT template<typename T>
+concept PointOrigin = std::derived_from<T, detail::point_origin_interface> && detail::SymbolicConstant<T>;
+
+}  // namespace mp_units

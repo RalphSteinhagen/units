@@ -21,7 +21,7 @@ tags:
 
 - [`glide_computer_lib/glide_computer_lib.h`](https://github.com/mpusz/mp-units/blob/c54d18e4892d8b4c0173054750aca5507fbf8e2e/example/glide_computer_lib/include/glide_computer_lib.h) - Glider performance models and polar curves
 - [`glide_computer_lib/glide_computer_lib.cpp`](https://github.com/mpusz/mp-units/blob/c54d18e4892d8b4c0173054750aca5507fbf8e2e/example/glide_computer_lib/glide_computer_lib.cpp) - Implementation
-- [`include/geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h) - Geographic primitives with bounded _latitude_/_longitude_ using overflow policies
+- [`include/geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h) - Geographic primitives: bounded coordinates (_latitude_, _longitude_, _elevation_) and orientation angles (_azimuth_, _bearing_, _heading_) with overflow policies and type-safe `is_kind` constraints
 
 **Example:**
 
@@ -90,25 +90,42 @@ The example uses a separate `geographic` module that provides type-safe geograph
 
 ### Position and Coordinates
 
-```cpp title="geographic.h" linenums="71"
---8<-- "example/include/geographic.h:71:90"
+```cpp title="geographic.h" linenums="96"
+--8<-- "example/include/geographic.h:96:184"
 ```
 
-_Latitude_ and _longitude_ are modeled as `quantity_point` with:
+The module defines **six distinct angle types** for geographic and aviation use:
 
-- Distinct origins (`equator`, `prime_meridian`)
-- Range-validated representations (±90° for _latitude_, ±180° for _longitude_)
-- Custom user-defined literals (`_N`, `_S`, `_E`, `_W`)
+- **_Latitude_**: reflects at ±90° boundaries (symmetric wrapping - can't cross poles)
+- **_Longitude_**: wraps in half-open interval [-180°, 180°) (exclusive max)
+- **_Elevation_**: reflects at ±90° (like _latitude_)
+- **_Geometric Azimuth_**: 0° = East, counter-clockwise, wraps [-180°, 180°)
+- **_Bearing_**: 0° = North, clockwise, wraps [-180°, 180°)
+- **_Heading_**: 0° = North, counter-clockwise, wraps [-180°, 180°)
+
+All types use **`is_kind`** to prevent accidental mixing (e.g., `latitude + longitude` or
+`bearing + heading` won't compile). Each has:
+
+- Distinct point origins with appropriate overflow policies
+- Custom user-defined literals for coordinates (`_N`, `_S`, `_E`, `_W`)
+- Aviation-style display formatting with prefixes (`"Az "`, `"BRG "`, `"HDG "`)
 
 ### Great Circle Distance
 
-```cpp title="geographic.h" linenums="185"
---8<-- "example/include/geographic.h:185:187"
+```cpp title="geographic.h" linenums="335"
+--8<-- "example/include/geographic.h:335:337"
 ```
 
 The `spherical_distance` function calculates the shortest _distance_ between two points
-on Earth's surface using the great-circle formula, automatically handling all unit
-conversions and trigonometric operations with proper dimensional analysis.
+on Earth's surface using the great-circle formula. Since _latitude_ and _longitude_ use
+`is_kind`, the function explicitly converts them to plain `angular_measure` for
+trigonometric operations:
+
+```cpp title="geographic.h" linenums="344"
+--8<-- "example/include/geographic.h:344:347"
+```
+
+This ensures type safety while allowing mathematical operations when explicitly intended.
 
 ### Waypoint Definition
 
@@ -255,7 +272,7 @@ Scenario: Glider = SZD-56 Diana, Weather = Good
 | Final Glide  | 44.1 min (Total: 106.4 min) | 80.8 km (Total: 162.5 km) | -1685 m (   5 m AMSL) |
 ```
 
-??? note
+!!! note
 
     The above is just a part of the actual text output.
 

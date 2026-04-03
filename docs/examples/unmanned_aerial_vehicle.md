@@ -18,11 +18,11 @@ tags:
 <!-- markdownlint-disable MD013 -->
 **Library:**
 
-- [`include/geographic.h`](https://github.com/mpusz/mp-units/blob/c54d18e4892d8b4c0173054750aca5507fbf8e2e/example/include/geographic.h) - Geographic primitives (MSL altitude, position)
+- [`include/geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h) - Geographic primitives: 6 bounded angle types (_latitude_, _longitude_, _elevation_, _azimuth_, _bearing_, _heading_) with distinct point origins, overflow policies, and `is_kind` type safety
 
 **Example:**
 
-- [`unmanned_aerial_vehicle.cpp`](https://github.com/mpusz/mp-units/blob/c54d18e4892d8b4c0173054750aca5507fbf8e2e/example/unmanned_aerial_vehicle.cpp) - UAV altitude reference systems
+- [`unmanned_aerial_vehicle.cpp`](https://github.com/mpusz/mp-units/blob/master/example/unmanned_aerial_vehicle.cpp) - UAV altitude reference systems
 <!-- markdownlint-enable MD013 -->
 
 This advanced example demonstrates a critical challenge in aviation software: managing
@@ -66,6 +66,26 @@ The example uses MSL altitude from the `geographic` module as the base reference
 
 This defines the _standard barometric altitude_ reference used in aviation, with custom
 formatting that appends "AMSL" (Above Mean Sea Level) to clearly identify the reference system.
+
+!!! note "Geographic Coordinate Types"
+
+    The `geographic` module provides **6 distinct angle types**, each with `is_kind` to prevent
+    accidental mixing:
+
+    - **Coordinates**: _latitude_ (reflects ±90°), _longitude_ (wraps [-180°, 180°)), _elevation_ (reflects ±90°)
+    - **Orientation**: _azimuth_ (0° = East, CCW), _bearing_ (0° = North, CW), _heading_ (0° = North, CCW)
+
+    All use half-open intervals `[min, max)` for wrapping (max wraps to min). The `is_kind` marker
+    prevents operations like `latitude + longitude` or `bearing + heading` at compile time.
+    For trigonometric functions, explicit conversion to `angular_measure` is required:
+
+    ```cpp
+    const quantity lat_angle = isq::angular_measure(lat.quantity_from_unit_zero());
+    sin(lat_angle);  // OK - explicitly converted
+    ```
+
+    See [`geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h)
+    for complete implementation details.
 
 ### Multiple Earth Gravity Models
 

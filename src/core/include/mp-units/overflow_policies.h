@@ -24,6 +24,7 @@
 
 #include <mp-units/bits/module_macros.h>
 #include <mp-units/ext/contracts.h>
+#include <mp-units/framework/customization_points.h>
 #include <mp-units/framework/quantity_concepts.h>
 
 #ifndef MP_UNITS_IN_MODULE_INTERFACE
@@ -31,93 +32,61 @@
 import std;
 #else
 #include <concepts>
-#include <cstdlib>
-#if MP_UNITS_HOSTED
-#include <stdexcept>
-#endif
 #endif
 #endif
 
 namespace mp_units {
 
 // ============================================================================
-// Overflow policies
+// Bounds-checking and value-transformation policies
 //
 // Each policy is a class template parameterised on a quantity type Q.
 // It stores the [min, max] bounds and provides operator()(V v) that
 // enforces those bounds on a quantity of compatible type.
 //
 // Available policies:
-//   1. assert_in_range       - Contract checking (may be disabled in release)
-//   2. throw_on_overflow     - Throw exception (recoverable errors) [hosted only]
-//   3. terminate_on_overflow - Always terminate (safety-critical) [freestanding-safe]
-//   4. clamp_to_range        - Saturate to boundaries (error correction)
-//   5. wrap_to_range         - Modulo wrapping to [min, max)
-//   6. reflect_in_range      - Bounce/fold at boundaries (physics)
+//   1. check_in_range       - Error reporting via constraint_violation_handler or MP_UNITS_EXPECTS
+//   2. clamp_to_range       - Saturate to boundaries (error correction)
+//   3. wrap_to_range         - Modulo wrapping to [min, max)
+//   4. reflect_in_range      - Bounce/fold at boundaries (physics)
 //
 // When to use:
-//   - Use throw_on_overflow when overflow is an error that callers can recover from
-//   - Use terminate_on_overflow in safety-critical systems requiring immediate halt
-//   - Use assert_in_range for logic errors during development (debug only)
+//   - Use check_in_range for bounds-checked points (error behavior depends on the rep type)
 //   - Use clamp_to_range when you want to "correct" out-of-range values
 //   - Use wrap_to_range for periodic/cyclic values (angles, hours)
 //   - Use reflect_in_range for physical boundaries (latitude, bouncing particles)
 // ============================================================================
 
 /**
- * @brief Policy that asserts the value is within [min, max] (terminates on violation).
+ * @brief Policy that checks the value is within [min, max] and reports violations.
  *
- * Contract checking via MP_UNITS_EXPECTS - may be disabled in release builds
- * depending on contract checking configuration. For guaranteed bounds checking
- * in all builds, use terminate_on_overflow or throw_on_overflow instead.
- */
-MP_UNITS_EXPORT template<Quantity Q>
-struct assert_in_range {
-  Q min;
-  Q max;
-
-  template<Quantity V>
-  constexpr V operator()(V v) const
-  {
-    MP_UNITS_EXPECTS(v >= min && v <= max);
-    return v;
-  }
-};
-
-#if MP_UNITS_COMP_CLANG && MP_UNITS_COMP_CLANG < 17
-
-template<Quantity Q>
-assert_in_range(Q, Q) -> assert_in_range<Q>;
-
-#endif
-
-#if MP_UNITS_HOSTED
-
-/**
- * @brief Policy that throws std::overflow_error when value is outside [min, max] (hosted only).
- *
- * Use this policy when overflow represents a recoverable error condition
- * that should be handled by caller code via exception handling.
+ * If the quantity's representation type has a `constraint_violation_handler` specialization,
+ * the handler's `on_violation()` is called on out-of-bounds values (providing guaranteed
+ * enforcement regardless of build mode). Otherwise, falls back to `MP_UNITS_EXPECTS`,
+ * which may be disabled in release builds.
  *
  * Example:
  * @code{cpp}
- * try {
- *   auto p = point_for<throw_on_overflow{0 * deg, 90 * deg}>(91 * deg);
- * } catch (const std::overflow_error& e) {
- *   // Handle out-of-range error
- * }
+ * // With constrained<double, throw_policy> rep → throws std::domain_error on violation
+ * // With plain double rep → asserts via MP_UNITS_EXPECTS (may be no-op in release)
+ * template<>
+ * constexpr auto quantity_bounds<equator> = check_in_range{-90 * deg, 90 * deg};
  * @endcode
  */
 MP_UNITS_EXPORT template<Quantity Q>
-struct throw_on_overflow {
+struct check_in_range {
   Q min;
   Q max;
 
   template<Quantity V>
   constexpr V operator()(V v) const
   {
-    if (v < min || v > max) {
-      throw std::overflow_error("Value out of bounds");
+    const V vmin{min};
+    const V vmax{max};
+    if constexpr (detail::HasConstraintViolationHandler<typename V::rep>) {
+      if (v < vmin || v > vmax) constraint_violation_handler<typename V::rep>::on_violation("value out of bounds");
+    } else {
+      MP_UNITS_EXPECTS(v >= vmin && v <= vmax);
     }
     return v;
   }
@@ -126,48 +95,7 @@ struct throw_on_overflow {
 #if MP_UNITS_COMP_CLANG && MP_UNITS_COMP_CLANG < 17
 
 template<Quantity Q>
-throw_on_overflow(Q, Q) -> throw_on_overflow<Q>;
-
-#endif
-
-#endif  // MP_UNITS_HOSTED
-
-/**
- * @brief Policy that terminates the program when value is outside [min, max] (freestanding-safe).
- *
- * Use this policy in safety-critical systems where overflow represents
- * an unrecoverable error that must halt execution immediately.
- * Provides a diagnostic message before terminating.
- *
- * Unlike assert_in_range (which may be disabled in release builds),
- * terminate_on_overflow ALWAYS checks bounds and ALWAYS terminates.
- *
- * Example:
- * @code{cpp}
- * // For safety-critical systems:
- * auto critical_sensor = point_for<terminate_on_overflow{-100 * deg, 100 * deg}>(value);
- * // Out-of-range values will print diagnostic and terminate
- * @endcode
- */
-MP_UNITS_EXPORT template<Quantity Q>
-struct terminate_on_overflow {
-  Q min;
-  Q max;
-
-  template<Quantity V>
-  constexpr V operator()(V v) const
-  {
-    if (v < min || v > max) {
-      std::abort();
-    }
-    return v;
-  }
-};
-
-#if MP_UNITS_COMP_CLANG && MP_UNITS_COMP_CLANG < 17
-
-template<Quantity Q>
-terminate_on_overflow(Q, Q) -> terminate_on_overflow<Q>;
+check_in_range(Q, Q) -> check_in_range<Q>;
 
 #endif
 
@@ -185,8 +113,10 @@ struct clamp_to_range {
   template<Quantity V>
   constexpr V operator()(V v) const
   {
-    if (v < min) return V{min};
-    if (v > max) return V{max};
+    const V vmin{min};
+    const V vmax{max};
+    if (v < vmin) return vmin;
+    if (v > vmax) return vmax;
     return v;
   }
 };
@@ -213,9 +143,11 @@ struct wrap_to_range {
   template<Quantity V>
   constexpr V operator()(V v) const
   {
-    const quantity range = max - min;
-    while (v >= max) v -= range;
-    while (v < min) v += range;
+    const V vmin{min};
+    const V vmax{max};
+    const quantity range = vmax - vmin;
+    while (v >= vmax) v -= range;
+    while (v < vmin) v += range;
     return v;
   }
 };
@@ -241,11 +173,13 @@ struct reflect_in_range {
   template<Quantity V>
   constexpr V operator()(V v) const
   {
-    const quantity range = max - min;
+    const V vmin{min};
+    const V vmax{max};
+    const quantity range = vmax - vmin;
     const quantity period = V{2 * range};
-    while (v >= V{min + period}) v -= period;
-    while (v < min) v += period;
-    if (v > max) v = V{2 * max} - v;
+    while (v >= V{vmin + period}) v -= period;
+    while (v < vmin) v += period;
+    if (v > vmax) v = V{2 * vmax} - v;
     return v;
   }
 };

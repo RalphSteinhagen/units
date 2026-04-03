@@ -307,21 +307,6 @@ quantity length2 = std::int16_t{2} * m;
 quantity<mm, std::int16_t> length_mm2 = length2;  // ✅ OK: 2000 fits in int16_t
 ```
 
-!!! note "Advanced: Au's Magic Number Approach"
-
-    The [Au library](https://aurora-opensource.github.io/au/main/discussion/concepts/overflow/#adapt)
-    goes further with "magic number" overflow detection. Au computes a threshold at compile time
-    and checks whether scaling would overflow, providing stronger guarantees for more scenarios.
-    This however, might be too aggressive for some cases. This is why Au library also provided
-    an [opt-out mechanism](https://aurora-opensource.github.io/au/main/discussion/concepts/conversion_risks/#opting-out-of-safety-checks)
-    that allows to explicitly ignore the built-in checkers.
-
-    **mp-units** uses a simpler model that detects overflow when the scaling factor definitely
-    exceeds the representation range. This is nearly always true, as the only value that would
-    survive such a conversion is the value zero. With this, we also don't have to provide any
-    opt-out alternatives. If users require more safety, they should decay to runtime checks
-    embedded in their custom safe representation types (see next admonition).
-
 !!! warning "Compile-Time Limitations for Runtime Overflow Detection"
 
     The values involved in arithmetic operations are only known at runtime,
@@ -332,35 +317,45 @@ quantity<mm, std::int16_t> length_mm2 = length2;  // ✅ OK: 2000 fits in int16_
     quantity overflow = small * 2;  // ⚠️ Runtime overflow! No compile-time detection possible
     ```
     **No general-purpose units library can prevent all cases of runtime arithmetic overflow at
-    compile time.** Doing this in the generic framework would be very hard and expensive.
+    compile time.** Compile-time programming can only detect when conversions or scaling
+    factors themselves are guaranteed to overflow the representation type (as shown in the
+    integer examples above). But for general arithmetic, the actual values are only known at
+    runtime, so no general-purpose units library can prevent all cases of runtime arithmetic
+    overflow at compile time—this is fundamentally impossible in C++.
 
-    Compile-time programming can only detect when conversions or scaling factors themselves are
-    guaranteed to overflow the representation type (as shown in the integer examples above).
+    **Solution: Built-in Runtime Safety Infrastructure**
 
-    **Solution: Custom Representation Types**
+    **mp-units** ships built-in tools for runtime overflow and bounds protection:
 
-    If runtime overflow protection is required, you can provide custom representation types
-    with runtime checks:
+    - **`safe_int<T>`** — a drop-in integer wrapper that detects arithmetic overflow at runtime
+      (`#include <mp-units/safe_int.h>`)
+    - **`constrained<T, ErrorPolicy>`** — a transparent wrapper that tags a representation type
+      with an error policy, enabling guaranteed bounds enforcement via `constraint_violation_handler`
+      (`#include <mp-units/constrained.h>`)
+    - **`quantity_bounds<Origin>`** — a customization point that attaches a validation policy
+      (e.g. `check_in_range`, `clamp_to_range`, `wrap_to_range`, `reflect_in_range`) to a
+      quantity point origin
 
     ```cpp
-    template<typename T>
-    class SafeInt {
-      T value;
-    public:
-      friend SafeInt operator*(SafeInt lhs, SafeInt rhs)
-      {
-        if (/* overflow check */) throw std::overflow_error("...");
-        return SafeInt{lhs.value * rhs.value};
-      }
-      // ... other operations with checks
-    };
+    #include <mp-units/safe_int.h>
+    #include <mp-units/constrained.h>
 
-    quantity distance = SafeInt{100} * m;
-    quantity doubled = distance * 2;  // Throws if overflow occurs
+    // Built-in safe_int detects arithmetic overflow at runtime
+    quantity distance = safe_int{std::int16_t{100}} * m;
+    // quantity overflow = distance * std::int16_t{1'000};  // throws std::overflow_error at runtime
+
+    // Bounds-checked quantity points with guaranteed enforcement
+    inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
+    template<>
+    inline constexpr auto mp_units::quantity_bounds<equator> = check_in_range{-90 * deg, 90 * deg};
+
+    using safe_double = mp_units::constrained<double, mp_units::throw_policy>;
+    using latitude = quantity_point<geo_latitude[deg], equator, safe_double>;
+    latitude lat{95.0 * deg, equator};  // throws std::domain_error (out of [-90, 90])
     ```
 
-    This is the only way to achieve runtime overflow protection — when values are unknown
-    at compile time, there is no alternative to runtime checking.
+    For the full walkthrough, see
+    [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md).
 
 !!! question "Should Libraries Check Floating-Point Unit Scaling Overflow?"
 
@@ -384,6 +379,45 @@ quantity<mm, std::int16_t> length_mm2 = length2;  // ✅ OK: 2000 fits in int16_
 
     This is an area where library designers must balance safety, performance, and practical
     utility. Feedback and use cases from the community would help inform future decisions.
+
+!!! note "Comparison: Au's Approach to Representation Safety"
+
+    Au differs from mp-units in two compile-time aspects:
+
+    **Magic number heuristic**
+
+    The [Au library](https://aurora-opensource.github.io/au/main/discussion/concepts/overflow/#adapt)
+    uses a stricter threshold than mp-units: it blocks conversions where the scaling factor
+    would overflow their chosen "magic number" value of 2'147, catching cases where the
+    scaling factor is within the type's range but a typical value might still overflow. The trade-off: the heuristic produces false positives (blocking valid
+    conversions), which is why Au must also provide an
+    [opt-out mechanism](https://aurora-opensource.github.io/au/main/discussion/concepts/conversion_risks/#opting-out-of-safety-checks).
+    Once the opt-out is used, the safety guarantee is gone — the same silence returns.
+    Critically, neither Au's heuristic nor its runtime checkers cover overflow in hidden
+    common-unit arithmetic (e.g. `m + yd` with `int32_t`) — the most surprising case for users.
+
+    **mp-units** uses the simpler threshold model — the only value that survives a definitely-overflowing
+    conversion is zero, so blocking it is unambiguous and requires no opt-out. For runtime
+    coverage of *all* arithmetic including common-unit operations, use `safe_int<T>` as the
+    representation type.
+
+    **Integral division disallowed**
+
+    [Au rejects integer `Quantity / Quantity` division](https://aurora-opensource.github.io/au/main/troubleshooting/#integer-division-forbidden)
+    whenever the denominator's unit is not quantity-equivalent to the numerator's —
+    covering both cross-dimension cases (`meters(60) / (miles/hour)(65)`) and
+    same-dimension cases with different magnitudes (`hours(8) / minutes(40)`). The hazard
+    is not ordinary truncation but *divide-before-convert*: `hours(8) / minutes(40)`
+    computes `8 / 40 = 0` in integer arithmetic and then applies the unit division,
+    giving `(hours/minute)(0)` instead of the expected `12`. The escape hatches are
+    `unblock_int_div(denominator)` (opt-in, use with caution) and
+    `divide_using_common_unit(a, b)` (converts both operands to their common unit first,
+    which is safe). Division by a raw integer or by a quantity-equivalent unit is always
+    allowed.
+
+    **mp-units** currently permits all integer quantity division, consistent with plain
+    C++ behaviour. Whether to adopt Au's stricter stance is an open question that may be
+    evisited based on ISO C++ Committee guidance or production experience.
 
 ### Unit-Qualified Construction
 
@@ -425,6 +459,37 @@ delays.emplace_back(42, us);   // ✅ OK
 ```
 
 There is no construction path that silently discards unit information.
+
+### Bounded Quantity Points
+
+Representation safety also extends to **quantity points** (Level 6). The library's
+`quantity_bounds<Origin>` customization point lets you attach a validation policy to
+any quantity point origin, so geographic coordinates, sensor ranges, and similar
+constrained domains are validated at construction and during arithmetic:
+
+```cpp
+inline constexpr struct geo_latitude final : quantity_spec<isq::angular_measure> {} geo_latitude;
+inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
+
+// Latitude must stay within [-90°, 90°] — reflects at boundaries
+template<>
+inline constexpr auto mp_units::quantity_bounds<equator> = reflect_in_range{-90 * deg, 90 * deg};
+
+using latitude = quantity_point<geo_latitude[deg], equator>;
+latitude lat{95.0 * deg};  // reflects to 85° (boundary mirror)
+```
+
+The library ships four overflow policies (`check_in_range`, `clamp_to_range`,
+`wrap_to_range`, `reflect_in_range`), and the interface is extensible — you can write
+your own policy (e.g. a `clamp_bottom` for halflines that only enforce a lower bound)
+as long as it provides `V operator()(V)`. Combined with the `constrained<T, ErrorPolicy>`
+wrapper described above, `check_in_range` provides **guaranteed enforcement** in every
+build mode — not just debug builds.
+
+For the complete walkthrough, see
+[Range-Validated Quantity Points](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points)
+(including [Custom Policies](../../users_guide/framework_basics/the_affine_space.md#custom-policies-one-sided-bounds))
+and [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md).
 
 
 ## Level 4: Quantity Kind Safety
@@ -1180,6 +1245,29 @@ V2 provides two types; V3 adds **absolute quantities** as a first-class third ab
 | **A + Delta**            |                ✅ Point (shift)                |                     ✅ Delta                     |               ✅ Delta               |
 | **API**                  |            `quantity<point<...>>`             |                 `quantity<...>`                 |       `quantity<delta<...>>`        |
 
+### Bounds Checking
+
+mp-units provides optional runtime bounds checking for mathematical space conversions:
+
+- **Point bounds checking**: When constructing a quantity point optional bounds checking
+  can verify that the resulting point value stays within valid ranges. This is especially
+  useful for physical quantities with natural bounds (e.g., preventing negative absolute
+  _temperatures_ when working with Kelvin, or _longitude_ and _latitude_). Bounds are
+  automatically scaled and translated to remain consistent when the unit changes
+  (e.g., bounds specified in meters remain correct when converting to kilometers).
+  The library supports multiple boundary semantics:
+
+    - **Clamping**: Values outside the range are clamped to the nearest boundary
+    - **Wrap-around**: Values wrap cyclically
+    - **Reflect**: Values bounce back at boundaries
+
+- **Absolute quantity bounds checking** *(V3 planned)*: When converting deltas to absolute
+  quantities (via `.absolute()`), optional runtime precondition checks verify non-negativity.
+  This ensures that negative values can't accidentally become absolute quantities representing
+  physical magnitudes that should always be non-negative (like _mass_, _distance_, _duration_).
+  The precondition check fails at runtime if the value is negative, providing an additional
+  safety layer beyond compile-time type distinctions.
+
 ### Why This Matters?
 
 **Mathematical space safety prevents an entire class of conceptual errors** that dimension
@@ -1362,32 +1450,32 @@ The following table compares safety features across major C++ units libraries:
 <td><strong>Unit Safety</strong></td>
 <td>✅ Full</td>
 <td>✅ Full</td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Cross-unit conversion requires explicit construction: <code>quantity&lt;target_unit&gt;(q)</code>; implicit conversion is only allowed when units reduce to identical base units (e.g., SI seconds ↔ CGS seconds). Working with prefixed SI units (e.g., kilometres, milliseconds) or custom units requires verbose boilerplate — defining base units, scaled units, and conversion factors separately</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Implicit conversions between compatible units; less strict than mp-units</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Basic unit type system; limited compile-time enforcement of unit correctness</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Cross-unit conversion requires explicit construction: <code>quantity&lt;target_unit&gt;(q)</code>; implicit conversion is only allowed when units reduce to identical base units (e.g., SI seconds ↔ CGS seconds). Working with prefixed SI units (e.g., kilometres, milliseconds) or custom units requires verbose boilerplate — defining base units, scaled units, and conversion factors separately</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Implicit conversions between compatible units; less strict than mp-units</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Basic unit type system; limited compile-time enforcement of unit correctness</span></span></td>
 <td>✅ Full</td>
 </tr>
 <tr>
 <td><strong>Representation Safety</strong></td>
-<td>✅ Strong</td>
-<td>✅ Strong</td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">No systematic overflow detection; representation is a template parameter (<code>quantity&lt;Unit, Y&gt;</code>), so safety depends entirely on the chosen <code>Y</code> — no defaults, no guidance, and no built-in checks</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Uses floating-point by default, which avoids truncation in practice; no systematic overflow detection. Integer representations silently truncate on unit conversion — no compile-time guard</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Minimal representation type checking; primarily focused on correct dimensions</span></span></td>
-<td><span class="tooltip">⭐ Strong+<span class="tooltiptext">Two-tier approach: (1) compile-time "overflow safety surface" — an adaptive heuristic that blocks risky conversions based on type size and conversion factor, covering all conversions including hidden common-unit operations in addition/subtraction/comparison; (2) optional runtime checkers (<code>is_conversion_lossy</code> + <code>.coerce_as()</code>) for exact safety on explicit conversions only — common-unit operations are not covered. The heuristic can be defeated by intermediate conversions. Separate opt-out for truncation checking. Meets and exceeds <code>std::chrono</code> baseline</span></span></td>
+<td><span class="tooltip">⭐ Strong<span class="tooltiptext">Compile-time: blocks conversions where the scaling factor definitely overflows the representation type; fixed-point arithmetic prevents intermediate overflow during non-integer unit scaling; does not suppress <code>-Wconversion</code> in internal calculations so compiler warnings remain actionable. Runtime: <code>safe_int&lt;T&gt;</code> drop-in wrapper detects arithmetic overflow for all operations including hidden common-unit arithmetic in <code>operator+</code>/<code>operator==</code>; <code>quantity_bounds&lt;Origin&gt;</code> enforces domain range constraints on quantity points.</span></span></td>
+<td><span class="tooltip">⭐ Strong<span class="tooltiptext">Same compile-time and runtime guarantees as current mp-units, extended to cover absolute quantities and delta types introduced in V3.</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">No systematic overflow detection; representation is a template parameter (<code>quantity&lt;Unit, Y&gt;</code>), so safety depends entirely on the chosen <code>Y</code> — no defaults, no guidance, and no built-in checks</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Uses floating-point by default, which avoids truncation in practice; no systematic overflow detection. Integer representations silently truncate on unit conversion — no compile-time guard</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Minimal representation type checking; primarily focused on correct dimensions</span></span></td>
+<td><span class="tooltip">⭐ Strong<span class="tooltiptext">Compile-time: adaptive "smallest overflowing value" threshold (2'147) — more aggressive than mp-units but produces false positives requiring opt-out via <code>ignore(OVERFLOW_RISK)</code> or <code>ignore(TRUNCATION_RISK)</code>; disallows risky integer <code>Quantity / Quantity</code> division to prevent divide-before-convert trap, with escape hatches <code>unblock_int_div()</code> and <code>divide_using_common_unit()</code>. Runtime: opt-in helpers (<code>will_conversion_overflow</code>, <code>will_conversion_truncate</code>, <code>is_conversion_lossy</code>) check explicit conversions only — no automatic detection of overflow in common-unit arithmetic or equivalent to <code>safe_int</code>.</span></span></td>
 </tr>
 <tr>
 <td><strong>Quantity Kind Safety</strong></td>
 <td>✅ Full</td>
 <td>✅ Full</td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Custom quantity types possible but not systematically enforced</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Custom quantity types possible but not systematically enforced</span></span></td>
 <td>❌ None</td>
 <td>❌ None</td>
 <td><span class="tooltip">❌ None<span class="tooltiptext">Au documentation states 'No plans at present to support' quantity kind types; intentional design tradeoff to reduce learning curve and improve compiler error readability</span></span></td>
 </tr>
 <tr>
 <td><strong>Quantity Safety</strong></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Provides quantity hierarchy with named types; V3 will add proper vector, tensor, and complex number support</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Provides quantity hierarchy with named types; V3 will add proper vector, tensor, and complex number support</span></span></td>
 <td>✅ Full</td>
 <td>❌ None</td>
 <td>❌ None</td>
@@ -1396,12 +1484,12 @@ The following table compares safety features across major C++ units libraries:
 </tr>
 <tr>
 <td><strong>Mathematical Space Safety</strong></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Points (<code>quantity_point</code>) and deltas (<code>quantity</code>) are fully distinct; however, absolute amounts (ratio-scale values) share <code>quantity&lt;T&gt;</code> with deltas — no first-class absolute quantity type until V3</span></span></td>
+<td><span class="tooltip">⭐ Strong<span class="tooltiptext">Points (<code>quantity_point</code>) with sophisticated multi-layered origin system (<code>natural_point_origin</code>, <code>absolute_point_origin</code>, <code>relative_point_origin</code> that can be hierarchically stacked) and deltas (<code>quantity</code>) are fully distinct; promoted for widespread use (timestamps, altitudes, odometer readings, etc.). Supports optional runtime bounds checking for points. Key limitation: no first-class absolute quantity type until V3 — absolute amounts (ratio-scale values) share <code>quantity&lt;T&gt;</code> with deltas</span></span></td>
 <td><span class="tooltip">✅ Full<span class="tooltiptext">Three first-class abstractions: absolute quantities (ratio-scale, new default), explicit deltas (<code>quantity&lt;delta&lt;...&gt;&gt;</code>), and points (<code>quantity&lt;point&lt;...&gt;&gt;</code>); covers all mathematical space scenarios</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Generic <code>absolute&lt;&gt;</code> point wrapper provides correct basic semantics: <code>absolute&lt;T&gt; +/- T → absolute&lt;T&gt;</code> and <code>absolute&lt;T&gt; - absolute&lt;T&gt; → T</code>. Key limitation: no typed origins, so two points in different reference frames (e.g., heights above NHN vs. MüM) are the same type and mixing them still silently compiles</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Generic <code>absolute&lt;&gt;</code> wrapper distinguishes points from deltas with correct basic semantics: <code>absolute&lt;T&gt; +/- T → absolute&lt;T&gt;</code> and <code>absolute&lt;T&gt; - absolute&lt;T&gt; → T</code>. Works for temperature and other use cases. Key limitation: no typed origins, so two points in different reference frames (e.g., heights above NHN vs. MüM) are the same type and mixing them still silently compiles</span></span></td>
 <td><span class="tooltip">❌ None<span class="tooltiptext">nholthaus does have offset-aware unit conversions (e.g., <code>celsius_t</code> ↔ <code>kelvin_t</code> applies the +273.15 offset correctly), but this is purely a conversion feature. There is no separate point type: <code>celsius_t</code> and a “temperature delta in °C” are the same type, so adding two temperature points, or scaling one, compiles silently</span></span></td>
 <td>❌ None</td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Custom origins easy to use and compose; elegant <code>QuantityPoint</code> type with typed origins prevents mixing points from different reference frames; maximally efficient common units; supports bidirectional conversions via <code>CorrespondingQuantity</code>. Key gap: no first-class absolute quantity type — ratio-scale amounts (e.g., mass, duration) share the same type as deltas, just as in mp-units V2</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext"><code>QuantityPoint</code> type with typed origins (origins embedded in unit definitions) prevents mixing points from different reference frames; used selectively for temperature and special cases, not promoted as general-purpose tool; supports bidirectional conversions via <code>CorrespondingQuantity</code>. Key gap: no first-class absolute quantity type — ratio-scale amounts (e.g., mass, duration) share the same type as deltas, just as in mp-units V2</span></span></td>
 </tr>
 </tbody>
 </table>
@@ -1410,9 +1498,9 @@ The following table compares safety features across major C++ units libraries:
 **Legend:**
 
 - ✅ **Full**: Comprehensive implementation covering all aspects
-- ✅ **Strong**: Robust implementation with minor limitations
-- ⚠️ **Partial**: Some aspects implemented but not comprehensive
-- ⚠️ **Limited**: Basic support with significant gaps
+- ⭐ **Strong**: Robust implementation with minor limitations
+- 🟡 **Partial**: Some aspects implemented but not comprehensive
+- 🔶 **Limited**: Basic support with significant gaps
 - ❌ **None**: This safety feature is not provided
 
 **Key Observations:**
@@ -1420,15 +1508,24 @@ The following table compares safety features across major C++ units libraries:
 - **Dimension Safety**: All modern C++ units libraries provide this foundational feature
 - **Unit Safety**: mp-units and Au provide complete unit-safe interfaces; other libraries
   allow varying degrees of implicit conversions
-- **Representation Safety**: mp-units and Au lead with strong overflow/truncation protection
+- **Representation Safety**: mp-units and Au both provide strong compile-time overflow/
+  truncation protection; Au uses adaptive "smallest overflowing value" threshold (2'147),
+  mp-units checks scaling factor magnitude; Au provides opt-out mechanisms and runtime
+  helpers; mp-units additionally provides `safe_int<T>` for comprehensive runtime
+  coverage of all arithmetic including common-unit operations
 - **Quantity Kind Safety**: Only mp-units provides full quantity kind safety, distinguishing
   Hz/Bq, rad/sr, Gy/Sv—other libraries either lack this feature or provide partial support
 - **Quantity Safety**: mp-units is unique in providing systematic quantity hierarchies;
   this level of semantic type safety is absent from other C++ libraries
-- **Mathematical Space Safety**: mp-units V2 and Au both provide a solid point/delta distinction;
-  however, neither has a first-class absolute quantity type — that is unique to mp-units V3,
-  which adds ratio-scale absolute quantities as a distinct third abstraction (true
-  physical zero); Boost.Units offers limited support for specific cases
+- **Mathematical Space Safety**: mp-units provides the most sophisticated point/delta
+  system with multi-layered typed origins (natural/absolute/relative, hierarchically
+  stackable) + runtime bounds checking for point conversions, promoted for widespread
+  use; Au offers QuantityPoint with typed origins embedded in units, used selectively for
+  temperature/special cases; Boost.Units provides only basic `absolute<>` wrapper without
+  typed origins (cannot prevent mixing points from different reference frames). None have
+  first-class absolute quantity types — that is unique to mp-units V3, which adds
+  ratio-scale absolute quantities as a distinct third abstraction with optional runtime
+  bounds checking for non-negativity
 - **C++ Standard Requirement**: mp-units requires C++20 — a higher entry bar than Au (C++14)
   or nholthaus/units (C++14), which matters for industrial and embedded projects still on
   legacy toolchains; Au demonstrates that strong safety guarantees are achievable on C++14,
@@ -1497,37 +1594,37 @@ languages:
 <td>✅ Full</td>
 <td>✅ Full</td>
 <td><span class="tooltip">✅ Full<span class="tooltiptext">Automatically converts mixed-unit operations (e.g., <code>meters + feet</code>) through UnitRegistry; however, lacks enforcement against mixing quantities from different registry instances</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Statically typed via Java generics (<code>Quantity&lt;Length&gt;</code>) prevents mixing incompatible dimensions at compile time; mixed-unit operations correctly convert to SI system units first per spec (e.g., <code>4 cm + 1 inch = 0.0654 m</code>); however value extraction via <code>.getValue()</code> returns raw numeric with no required unit specification, and unit tracking is runtime-only with no compile-time unit in the type</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Statically typed via Java generics (<code>Quantity&lt;Length&gt;</code>) prevents mixing incompatible dimensions at compile time; mixed-unit operations correctly convert to SI system units first per spec (e.g., <code>4 cm + 1 inch = 0.0654 m</code>); however value extraction via <code>.getValue()</code> returns raw numeric with no required unit specification, and unit tracking is runtime-only with no compile-time unit in the type</span></span></td>
 <td>✅ Full</td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Automatic conversions between compatible units (e.g., <code>m + ft</code>), but lacks strict enforcement against mixed-unit operations in all runtime contexts</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Automatic conversions between compatible units (e.g., <code>m + ft</code>), but lacks strict enforcement against mixed-unit operations in all runtime contexts</span></span></td>
 <td>✅ Full</td>
 <td>✅ Full</td>
 </tr>
 <tr>
 <td><strong>Representation Safety</strong></td>
-<td>✅ Strong</td>
-<td>✅ Strong</td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">No compile-time representation safety: all checks are runtime-only and manifest as <code>DimensionalityError</code> or silent precision loss. Handles large integers via Python's arbitrary-precision <code>int</code>, but floating-point uses standard IEEE 754 <code>float</code> with potential precision loss; no overflow protection for dimensioned calculations</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Defaults to <code>double</code> for most quantities; supports custom representations via <code>Quantity&lt;Q, N&gt;</code> but lacks automatic precision handling for edge cases like overflow; narrowing conversions between numeric types require explicit casts but are not systematically prevented at the API boundary</span></span></td>
-<td><span class="tooltip">✅ Strong<span class="tooltiptext">Rust's type system prohibits implicit narrowing conversions at the language level (e.g., assigning <code>f64</code> to <code>f32</code> without an explicit cast is a compile error); uom inherits this guarantee — any precision-losing conversion must be explicit and is therefore intentional. uom is also generic over any <code>Num</code>-constrained representation type, giving full control over numeric precision</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Uses <code>QuantityValue</code> to specify numeric types (e.g., <code>double</code>, <code>decimal</code>); supports saturation arithmetic but doesn't enforce representation constraints at type level</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Accepts any Julia numeric type (including custom types with appropriate traits) but doesn't enforce specific types for physical correctness or overflow prevention</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Limited to numeric primitives (<code>int</code>, <code>float</code>, <code>decimal</code>); F# does not permit implicit narrowing between <em>different</em> primitive types, but provides no systematic overflow or precision-loss protection within a single type — inherits standard .NET numeric behavior</span></span></td>
+<td>⭐ Strong</td>
+<td>⭐ Strong</td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">No compile-time representation safety: all checks are runtime-only and manifest as <code>DimensionalityError</code> or silent precision loss. Handles large integers via Python's arbitrary-precision <code>int</code>, but floating-point uses standard IEEE 754 <code>float</code> with potential precision loss; no overflow protection for dimensioned calculations</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Defaults to <code>double</code> for most quantities; supports custom representations via <code>Quantity&lt;Q, N&gt;</code> but lacks automatic precision handling for edge cases like overflow; narrowing conversions between numeric types require explicit casts but are not systematically prevented at the API boundary</span></span></td>
+<td><span class="tooltip">⭐ Strong<span class="tooltiptext">Rust's type system prohibits implicit narrowing conversions at the language level (e.g., assigning <code>f64</code> to <code>f32</code> without an explicit cast is a compile error); uom inherits this guarantee — any precision-losing conversion must be explicit and is therefore intentional. uom is also generic over any <code>Num</code>-constrained representation type, giving full control over numeric precision</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Uses <code>QuantityValue</code> to specify numeric types (e.g., <code>double</code>, <code>decimal</code>); supports saturation arithmetic but doesn't enforce representation constraints at type level</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Accepts any Julia numeric type (including custom types with appropriate traits) but doesn't enforce specific types for physical correctness or overflow prevention</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Limited to numeric primitives (<code>int</code>, <code>float</code>, <code>decimal</code>); F# does not permit implicit narrowing between <em>different</em> primitive types, but provides no systematic overflow or precision-loss protection within a single type — inherits standard .NET numeric behavior</span></span></td>
 </tr>
 <tr>
 <td><strong>Quantity Kind Safety</strong></td>
 <td>✅ Full</td>
 <td>✅ Full</td>
 <td><span class="tooltip">❌ None<span class="tooltiptext">Uses dimensions to categorize quantities but does not systematically distinguish dimensionally equivalent kinds like Torque vs Energy or Gray vs Sievert</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Provides separate interfaces for most quantity kinds including dimensionally equivalent pairs: <code>Frequency</code> vs <code>Radioactivity</code> (both s⁻¹) and <code>RadiationDoseAbsorbed</code> vs <code>RadiationDoseEffective</code> (Gy/Sv); however no separate <code>Torque</code> interface — torque and energy both fall under <code>Energy</code></span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Dimensionally equivalent quantities (e.g., <code>Energy</code> and <code>Torque</code>, both <code>kg·m²·s⁻²</code>; <code>Frequency</code> and <code>Radioactivity</code>, both <code>s⁻¹</code>) map to the same Rust generic type <code>Quantity&lt;ISQ&lt;...&gt;, SI, V&gt;</code> at compile time and are freely interchangeable; the optional <code>Kind</code> trait can differentiate them but is not applied to the built-in SI quantities</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Code-generates a separate, strongly-typed C# struct for each quantity kind (e.g., <code>Energy</code>, <code>Torque</code>, <code>Frequency</code>, <code>Radioactivity</code>, <code>Angle</code>, <code>SolidAngle</code>); mixing incompatible kinds is a compile-time type error; does not formally follow ISO 80000 / ISQ but covers most practically relevant kind distinctions including Hz/Bq and Gy/Sv as separate types</span></span></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Distinguishes quantities by units but not by kind within same dimensions; torque and energy are both <code>Quantity{Float64, 𝐋²𝐌𝐓⁻², ...}</code> without semantic separation</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Does not distinguish dimensionally equivalent quantities at type level (e.g., torque and energy are both represented as <code>float&lt;N·m&gt;</code> with identical type signatures)</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Provides separate interfaces for most quantity kinds including dimensionally equivalent pairs: <code>Frequency</code> vs <code>Radioactivity</code> (both s⁻¹) and <code>RadiationDoseAbsorbed</code> vs <code>RadiationDoseEffective</code> (Gy/Sv); however no separate <code>Torque</code> interface — torque and energy both fall under <code>Energy</code></span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Dimensionally equivalent quantities (e.g., <code>Energy</code> and <code>Torque</code>, both <code>kg·m²·s⁻²</code>; <code>Frequency</code> and <code>Radioactivity</code>, both <code>s⁻¹</code>) map to the same Rust generic type <code>Quantity&lt;ISQ&lt;...&gt;, SI, V&gt;</code> at compile time and are freely interchangeable; the optional <code>Kind</code> trait can differentiate them but is not applied to the built-in SI quantities</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Code-generates a separate, strongly-typed C# struct for each quantity kind (e.g., <code>Energy</code>, <code>Torque</code>, <code>Frequency</code>, <code>Radioactivity</code>, <code>Angle</code>, <code>SolidAngle</code>); mixing incompatible kinds is a compile-time type error; does not formally follow ISO 80000 / ISQ but covers most practically relevant kind distinctions including Hz/Bq and Gy/Sv as separate types</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Distinguishes quantities by units but not by kind within same dimensions; torque and energy are both <code>Quantity{Float64, 𝐋²𝐌𝐓⁻², ...}</code> without semantic separation</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Does not distinguish dimensionally equivalent quantities at type level (e.g., torque and energy are both represented as <code>float&lt;N·m&gt;</code> with identical type signatures)</span></span></td>
 </tr>
 <tr>
 <td><strong>Quantity Safety</strong></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Provides quantity hierarchy with named types; V3 will add proper vector, tensor, and complex number support</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Provides quantity hierarchy with named types; V3 will add proper vector, tensor, and complex number support</span></span></td>
 <td>✅ Full</td>
 <td>❌ None</td>
 <td>❌ None</td>
@@ -1538,13 +1635,13 @@ languages:
 </tr>
 <tr>
 <td><strong>Mathematical Space Safety</strong></td>
-<td><span class="tooltip">⚠️ Partial<span class="tooltiptext">Points (<code>quantity_point</code>) and deltas (<code>quantity</code>) are fully distinct; however, absolute amounts (ratio-scale values) share <code>quantity&lt;T&gt;</code> with deltas — no first-class absolute quantity type until V3</span></span></td>
+<td><span class="tooltip">🟡 Partial<span class="tooltiptext">Points (<code>quantity_point</code>) and deltas (<code>quantity</code>) are fully distinct; however, absolute amounts (ratio-scale values) share <code>quantity&lt;T&gt;</code> with deltas — no first-class absolute quantity type until V3</span></span></td>
 <td><span class="tooltip">✅ Full<span class="tooltiptext">Three first-class abstractions: absolute quantities (ratio-scale, new default), explicit deltas (<code>quantity&lt;delta&lt;...&gt;&gt;</code>), and points (<code>quantity&lt;point&lt;...&gt;&gt;</code>); covers all mathematical space scenarios</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Explicit delta units (<code>delta_degC</code>, <code>delta_degF</code>) and offset-unit semantics for temperature only: subtracting two temperature points yields a delta, adding a point and a delta works correctly; not a general point/delta type system — no typed origins or QuantityPoint abstraction</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext"><code>Quantity.Scale.ABSOLUTE</code> / <code>RELATIVE</code> enum (since v2.0) distinguishes absolute-scale (e.g., Kelvin) from relative-scale (e.g., °C/°F) temperatures; however scale is a runtime property only — no compile-time type-level distinction — and there is no general point/delta abstraction beyond temperature</span></span></td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Separate <code>ThermodynamicTemperature</code> (point) and <code>TemperatureInterval</code> (delta) types enforce correct semantics for temperature: adding two <code>ThermodynamicTemperature</code> values is a compile error, but <code>temperature + interval</code> works; temperature-specific — no general affine space abstraction for arbitrary quantities</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Explicit delta units (<code>delta_degC</code>, <code>delta_degF</code>) and offset-unit semantics for temperature only: subtracting two temperature points yields a delta, adding a point and a delta works correctly; not a general point/delta type system — no typed origins or QuantityPoint abstraction</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext"><code>Quantity.Scale.ABSOLUTE</code> / <code>RELATIVE</code> enum (since v2.0) distinguishes absolute-scale (e.g., Kelvin) from relative-scale (e.g., °C/°F) temperatures; however scale is a runtime property only — no compile-time type-level distinction — and there is no general point/delta abstraction beyond temperature</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Separate <code>ThermodynamicTemperature</code> (point) and <code>TemperatureInterval</code> (delta) types enforce correct semantics for temperature: adding two <code>ThermodynamicTemperature</code> values is a compile error, but <code>temperature + interval</code> works; temperature-specific — no general affine space abstraction for arbitrary quantities</span></span></td>
 <td>❌ None</td>
-<td><span class="tooltip">⚠️ Limited<span class="tooltiptext">Built-in <code>AffineQuantity</code> type for <code>°C</code>/<code>°F</code> (relative-scale temperatures); invalid operations like <code>32°F + 1°F</code> throw <code>AffineError</code>; the <code>@affineunit</code> macro allows defining custom affine units beyond temperature; however no formal three-way point/delta/absolute distinction and no typed origins</span></span></td>
+<td><span class="tooltip">🔶 Limited<span class="tooltiptext">Built-in <code>AffineQuantity</code> type for <code>°C</code>/<code>°F</code> (relative-scale temperatures); invalid operations like <code>32°F + 1°F</code> throw <code>AffineError</code>; the <code>@affineunit</code> macro allows defining custom affine units beyond temperature; however no formal three-way point/delta/absolute distinction and no typed origins</span></span></td>
 <td>❌ None</td>
 </tr>
 <tr>
@@ -1595,8 +1692,9 @@ languages:
   runtime cost; Python (Pint) and Java (JSR-385) enforce safety at *runtime* — violations are
   exceptions or silent errors that only appear during execution; a `DimensionalityError` in Pint
   is a crash, not a compiler diagnostic
-- **Representation Safety**: mp-units V3 will lead with enhanced overflow/underflow
-  detection; UOM benefits from Rust's explicit integer handling
+- **Representation Safety**: mp-units provides strong compile-time overflow/truncation
+  protection; UOM benefits from Rust's explicit integer handling; runtime libraries
+  (Pint, JSR-385) provide no representation safety
 - **Quantity Kind Safety**: mp-units uniquely provides full quantity kind safety based on
   ISO 80000; UnitsNet and JSR-385 cover most practical distinctions (Hz/Bq, Gy/Sv, etc.)
   as separate types but without a formal ISQ basis; UOM's built-in SI quantities make
@@ -1607,9 +1705,11 @@ languages:
   runtime quantity separation but with substantial heap overhead and no ISQ-grounded hierarchy;
   no other library in this comparison provides scalar/vector/tensor character support
 - **Mathematical Space Safety**: mp-units V3 will provide comprehensive abstraction for points,
-  absolute quantities, and deltas; Pint, JSR-385, UOM, and Unitful.jl each offer partial
-  temperature-specific affine support with varying levels of generality and compile-time
-  enforcement; UnitsNet and F# Units provide no mathematical space abstractions
+  absolute quantities (with optional runtime bounds checking for non-negativity), and deltas;
+  mp-units V2 already offers the most sophisticated point/delta system with multi-layered typed
+  origins + runtime bounds checking for point conversions; Pint, JSR-385, UOM, and Unitful.jl
+  each offer partial temperature-specific affine support with varying levels of generality and
+  compile-time enforcement; UnitsNet and F# Units provide no mathematical space abstractions
 - **Language Integration**: F# demonstrates what's possible when units are a first-class
   language feature
 - **Python's Zero-Overhead Path**: While Pint relies on runtime object wrapping,

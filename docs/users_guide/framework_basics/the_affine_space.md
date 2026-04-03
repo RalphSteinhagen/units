@@ -399,7 +399,208 @@ assert(qp2 == qp2A);
     types relate to each other.
 
 
-### Temperature support
+## Range-Validated Quantity Points { #range-validated-quantity-points }
+
+!!! tip "Background reading"
+
+    For a deeper discussion of the motivation, design trade-offs, and open questions,
+    see the blog article
+    [Range-Validated Quantity Points](../../blog/posts/quantity-point-bounds.md).
+
+In many domains, quantity points must stay within specific bounds. For example:
+
+- Geographic coordinates: latitude ∈ [-90°, 90°], longitude ∈ [-180°, 180°)
+- Temperature sensors: operating range [−40°C, 85°C]
+- Control systems: valid input range [0, 100] units
+
+The library provides four overflow policies that can be attached to point origins via the
+`quantity_bounds` customization point. These policies enforce bounds during construction,
+unit conversion, and arithmetic operations.
+
+??? info "Production Use Case: Geographic Coordinate Systems"
+
+    This feature was specifically designed to support production requirements for
+    geographic/navigation systems, where different angle types require different wrapping
+    behaviors:
+
+    - **_Latitude_** (symmetric): reflects at ±90° boundaries (can't go past poles)
+    - **_Longitude_** (mirrored): wraps circularly at -180° to +180°
+    - **_Elevation_** (symmetric): reflects at ±90° like _latitude_
+    - **_Geometric Azimuth_** (mirrored): 0° = East, counter-clockwise, wraps [-180°, 180°)
+    - **_Bearing_** (mirrored): 0° = North, clockwise, wraps [-180°, 180°)
+        - Conversion: `bearing = 90° - geometric_azimuth` (involves negation)
+        - Cannot use `relative_point_origin` (requires separate `absolute_point_origin`)
+    - **_Heading_** (mirrored): 0° = North, counter-clockwise, wraps [-180°, 180°)
+        - Conversion: `heading = geometric_azimuth - 90°` (simple offset)
+        - Uses `relative_point_origin<east + delta<geometric_azimuth[degree]>(-90.)>`
+
+    These requirements came from companies working with coordinate reference systems (CRS),
+    navigation, and geodesy. See the complete discussion in
+    [GitHub #782](https://github.com/mpusz/mp-units/discussions/782).
+
+    **Key Insight**: `relative_point_origin` can only model offset transformations (addition/subtraction).
+    Transformations involving negation or sign flips (like bearing ↔ azimuth) require separate
+    `absolute_point_origin` types with explicit conversion functions. This ensures type safety
+    while allowing the framework to handle appropriate coordinate transformations automatically.
+
+    **Type Safety with `is_kind`**: All geographic quantity specs use `is_kind` to prevent
+    accidental mixing of different angle types (e.g., `latitude + longitude`, `bearing + heading`).
+    This requires explicit conversion when using trigonometric functions:
+
+    ```cpp
+    // Convert to plain angular_measure for trig functions
+    const quantity<angular_measure> lat_angle = isq::angular_measure(lat.quantity_from_unit_zero());
+    const quantity result = sin(lat_angle);  // Works with angular_measure
+    ```
+
+    The current framework handles all wrapping schemes and coordinate transformations expressible
+    as offsets. Advanced geodetic calculations (ellipsoid parameters, distance formulas for WGS84,
+    etc.) require additional domain-specific extensions beyond the core library. For a complete
+    working example, see [`geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h)
+    and the [UAV: Multiple Altitude Reference Systems](../../examples/unmanned_aerial_vehicle.md)
+    example, which demonstrates multiple point origins, bounds checking policies, overflow handling,
+    and coordinate reference conversions.
+
+### Available Overflow Policies
+
+| Policy             | Behavior                                                                   | Error Handling       | Use Case                                                   |
+|--------------------|----------------------------------------------------------------------------|----------------------|------------------------------------------------------------|
+| `check_in_range`   | Reports violation via `constraint_violation_handler` or `MP_UNITS_EXPECTS` | Depends on rep type  | Bounds checking with customizable error behavior           |
+| `clamp_to_range`   | Clamps to nearest boundary: `clamp(value, min, max)`                       | Silent correction    | Saturating arithmetic, sensor limits, UI controls          |
+| `wrap_to_range`    | Wraps circularly to `[min, max)`: modulo arithmetic                        | Value transformation | Periodic quantities (_angles_, _time-of-day_, _longitude_) |
+| `reflect_in_range` | Reflects at boundaries (like a bouncing ball)                              | Value transformation | Geographic _latitude_, physical boundaries                 |
+
+!!! important
+
+    All built-in policies expose public `min` and `max` data members, enabling `std::numeric_limits`
+    specializations to reflect the constrained bounds. See the `std::numeric_limits` note below
+    for details.
+
+!!! info "Error behavior of `check_in_range`"
+
+    `check_in_range` delegates error reporting to the representation type:
+
+    - If the rep has a [`constraint_violation_handler`](representation_types.md#constraint-violation-handler)
+      specialization (e.g. `constrained<double, throw_policy>`), the handler's `on_violation()` is called,
+      providing **guaranteed enforcement** regardless of build mode.
+    - Otherwise, falls back to [`MP_UNITS_EXPECTS`](../../how_to_guides/integration/wide_compatibility.md#contract-checking-macros),
+      which may be disabled in release builds.
+
+    See [How to: Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) for a
+    complete example of combining `check_in_range` with `constrained` rep types.
+
+### Example Usage
+
+```cpp
+// Define quantity specifications and origins
+inline constexpr struct geo_latitude final : quantity_spec<isq::angular_measure> {} geo_latitude;
+inline constexpr struct geo_longitude final : quantity_spec<isq::angular_measure> {} geo_longitude;
+
+inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
+inline constexpr struct prime_meridian final : absolute_point_origin<geo_longitude> {} prime_meridian;
+
+// Attach bounds to origins
+template<>
+inline constexpr auto quantity_bounds<equator> = reflect_in_range{-90 * si::degree, 90 * si::degree};
+
+template<>
+inline constexpr auto quantity_bounds<prime_meridian> = wrap_to_range{-180 * si::degree, 180 * si::degree};
+
+// Define bounded quantity point types
+template<typename T = double> using latitude = quantity_point<si::degree, equator, T>;
+template<typename T = double> using longitude = quantity_point<si::degree, prime_meridian, T>;
+
+void example()
+{
+  latitude lat = equator + 45.0 * deg;           // Valid: within [-90, 90]
+  lat = equator + 95.0 * deg;                    // Reflects to 85° (reflect_in_range mirrors at boundary)
+
+  longitude lon = prime_meridian + 270.0 * deg;  // Wraps to -90° (wrap_to_range treats range as circular)
+  lon += 200.0 * deg;                            // Result wraps: -90 + 200 = 110°
+}
+```
+
+### How It Works?
+
+Bounds are enforced at these points:
+
+1. **Construction** from a quantity: `quantity_point{value * unit, origin}`
+2. **Unit conversion**: `qp.in(other_unit)`, `qp.force_in(other_unit)`
+3. **Arithmetic operations**: `operator+=`, `operator-=`, `operator++`, `operator--`
+4. **Origin conversion**: `qp.point_for(new_origin)`
+
+After each mutation the library transparently applies the policy specified in `quantity_bounds<origin>`.
+
+!!! info "`std::numeric_limits` integration"
+
+    When a `quantity_point` has a `quantity_bounds` policy attached to its origin, the
+    `std::numeric_limits` specialization automatically reflects the constrained bounds:
+
+    ```cpp
+    template<>
+    inline constexpr auto quantity_bounds<prime_meridian> = wrap_to_range{-180 * deg, 180 * deg};
+
+    using longitude = quantity_point<geo_longitude[deg], prime_meridian>;
+
+    quantity lon_min = std::numeric_limits<longitude>::min();  // prime_meridian - 180°
+    quantity lon_max = std::numeric_limits<longitude>::max();  // prime_meridian + 180°
+    ```
+
+    This works because the policy struct exposes public `min` and `max` data members, which
+    `quantity_point::min()` and `max()` access to provide meaningful bounds. Without a
+    `quantity_bounds` policy, `std::numeric_limits` delegates to the representation type's limits.
+
+### Custom Policies (One-Sided Bounds)
+
+You can create custom policies for one-sided constraints like `[min, +∞)` or `(-∞, max]`:
+
+```cpp
+template<Quantity Q>
+struct clamp_bottom {
+  Q min;  // Public member enables std::numeric_limits support
+
+  template<Quantity V>
+  constexpr V operator()(V v) const { return v < min ? min : v; }
+};
+
+// Usage: hydraulic system with minimum operating pressure
+inline constexpr struct atmospheric_pressure final : absolute_point_origin<isq::pressure> {} atmospheric_pressure;
+template<>
+inline constexpr auto quantity_bounds<atmospheric_pressure> = clamp_bottom{1000 * si::kilo<si::pascal>};
+
+using hydraulic_pressure = quantity_point<si::kilo<si::pascal>, atmospheric_pressure>;
+hydraulic_pressure p1 = atmospheric_pressure + 2000 * kPa;  // OK: 2000 kPa
+hydraulic_pressure p2 = atmospheric_pressure + 500 * kPa;   // Clamped to 1000 kPa (min operating pressure)
+```
+
+!!! important "Hierarchical bounds validation"
+
+    When a `relative_point_origin` defines bounds and its parent origin also has bounds, the
+    library enforces at **compile time** that the child's bounds fit within the parent's bounds
+    (after translating to the parent's reference frame).
+
+    This hierarchical validation ensures semantic correctness: if you model origin `B` as
+    relative to origin `A`, and `A` has operational constraints, then `B` inheriting those
+    constraints is physically and logically appropriate (e.g., a room's temperature range
+    shouldn't exceed the building HVAC system's capability, a drone's altitude above launch
+    point shouldn't exceed airspace authorization limits).
+
+    **Absolute origin bounds** represent physical constraints (e.g., temperature can't go below
+    absolute zero) and are always enforced—this is non-negotiable.
+
+    **Relative origin bounds** hierarchical enforcement represents our current design decision
+    based on typical use cases. If you encounter scenarios where nested relative origins need
+    independent bounds (not constrained by their parent), please [share your feedback](https://github.com/mpusz/mp-units/discussions)
+    so we can evaluate adding opt-in flexibility.
+
+??? note "Implementation reference"
+
+    See [`geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h)
+    and [`overflow_policies.h`](https://github.com/mpusz/mp-units/blob/master/src/core/include/mp-units/overflow_policies.h)
+    for complete examples.
+
+
+## Temperature support
 
 Support for temperature quantity points is probably one of the most common examples of relative
 point origins in action that we use in daily life.
@@ -499,16 +700,24 @@ in the following way:
 
 ![affine_space_6](affine_space_6.svg){style="width:80%;display: block;margin: 0 auto;"}
 
+Now that the `Range-Validated Quantity Points` infrastructure is available, we can attach
+a `clamp_to_range` policy so the controller silently enforces the comfort band:
+
 ```cpp
 constexpr struct room_reference_temp final : relative_point_origin<point<deg_C>(21)> {} room_reference_temp;
-using room_temp = quantity_point<isq::Celsius_temperature[deg_C], room_reference_temp>;
+template<>
+inline constexpr auto mp_units::quantity_bounds<room_reference_temp> = clamp_to_range{delta<deg_C>(-3), delta<deg_C>(3)};
+using room_temp = quantity_point<deg_C, room_reference_temp>;
 
-constexpr auto step_delta = delta<isq::Celsius_temperature[deg_C]>(0.5);
+constexpr auto step_delta = delta<deg_C>(0.5);
 constexpr int number_of_steps = 6;
 
 room_temp room_ref{};
-room_temp room_low = room_ref - number_of_steps * step_delta;
-room_temp room_high = room_ref + number_of_steps * step_delta;
+room_temp room_low  = room_ref - number_of_steps * step_delta;  // −3 °C: exactly at lower bound
+room_temp room_high = room_ref + number_of_steps * step_delta;  // +3 °C: exactly at upper bound
+
+// Any attempt to exceed the ±3 °C comfort range is silently clamped
+room_temp clamped = room_ref + delta<deg_C>(10.0);              // → auto-clamped to +3 °C from reference
 
 std::println("Room reference temperature: {} ({}, {::N[.2f]})\n",
              room_ref.quantity_from_unit_zero(),
@@ -527,6 +736,7 @@ auto print_temp = [&](std::string_view label, auto v) {
 print_temp("Lowest", room_low);
 print_temp("Default", room_ref);
 print_temp("Highest", room_high);
+print_temp("Clamped to max", clamped);
 ```
 
 The above prints:
@@ -539,10 +749,11 @@ Room reference temperature: 21 ℃ (69.8 ℉, 294.15 K)
 | Lowest             |       -3 ℃        |       18 ℃        |     291.15 ℃      |
 | Default            |        0 ℃        |       21 ℃        |     294.15 ℃      |
 | Highest            |        3 ℃        |       24 ℃        |     297.15 ℃      |
+| Clamped to max     |        3 ℃        |       24 ℃        |     297.15 ℃      |
 ```
 
 
-### No text output for _Points_
+## No text output for _Points_
 
 The library does not provide a text output for quantity points. The quantity stored inside
 is just an implementation detail of this type. It is a vector from a specific origin.
@@ -559,94 +770,6 @@ things. It may be an offset from the mountain top, sea level, or maybe the cente
 Printing $42\ \mathrm{m}\ \mathrm{AMSL}$ for altitudes above mean sea level is a much
 better solution, but the library does not have enough information to print it that way
 by itself.
-
-
-## Range-Validated Quantity Points { #range-validated-quantity-points }
-
-In many domains, quantity points must stay within specific bounds. For example:
-
-- Geographic coordinates: latitude ∈ [-90°, 90°], longitude ∈ [-180°, 180°)
-- Temperature sensors: operating range [−40°C, 85°C]
-- Control systems: valid input range [0, 100] units
-
-The library provides six overflow policies that can be attached to point origins via the
-`quantity_bounds` customization point. These policies enforce bounds during construction,
-unit conversion, and arithmetic operations.
-
-### Available Overflow Policies
-
-| Policy                  | Availability | Behavior                                                     | Error Handling          | Use Case                                             |
-|-------------------------|--------------|--------------------------------------------------------------|-------------------------|------------------------------------------------------|
-| `assert_in_range`       | Always       | Asserts if out of bounds (may be disabled in release builds) | Contract violation      | Development/debugging, logic error detection         |
-| `throw_on_overflow`     | Hosted only  | Throws `std::overflow_error` when out of bounds              | Exception (recoverable) | Input validation, user-facing APIs                   |
-| `terminate_on_overflow` | Always       | Terminates immediately when out of bounds (always checks)    | Terminate (fatal)       | Safety-critical systems requiring immediate halt     |
-| `clamp_to_range`        | Always       | Clamps to nearest boundary: `clamp(value, min, max)`         | Silent correction       | Saturating arithmetic, sensor limits, UI controls    |
-| `wrap_to_range`         | Always       | Wraps circularly to `[min, max)`: modulo arithmetic          | Value transformation    | Periodic quantities (angles, time-of-day, longitude) |
-| `reflect_in_range`      | Always       | Reflects at boundaries (like a bouncing ball)                | Value transformation    | Geographic latitude, physical boundaries             |
-
-!!! note "Contract Checking vs. Always-On Checking"
-
-    - `assert_in_range` uses `MP_UNITS_EXPECTS` which may be disabled in release builds
-    - `terminate_on_overflow` **always** checks bounds and **always** terminates on violation (freestanding-safe)
-    - `throw_on_overflow` **always** checks bounds and **always** throws on violation (hosted only)
-
-    Use `assert_in_range` for logic errors you expect to never happen in correct code.
-    Use `terminate_on_overflow` or `throw_on_overflow` when you need guaranteed bounds checking.
-
-### Example Usage
-
-```cpp
-#include <mp-units/overflow_policies.h>
-#include <mp-units/framework.h>
-
-using namespace mp_units;
-
-// Define quantity specifications and origins
-inline constexpr struct geo_latitude final : quantity_spec<isq::angular_measure> {} geo_latitude;
-inline constexpr struct geo_longitude final : quantity_spec<isq::angular_measure> {} geo_longitude;
-
-inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
-inline constexpr struct prime_meridian final : absolute_point_origin<geo_longitude> {} prime_meridian;
-
-// Attach bounds to origins
-template<>
-inline constexpr auto quantity_bounds<equator> = reflect_in_range{-90 * si::degree, 90 * si::degree};
-
-template<>
-inline constexpr auto quantity_bounds<prime_meridian> = wrap_to_range{-180 * si::degree, 180 * si::degree};
-
-// Define bounded quantity point types
-template<typename T = double>
-using latitude = quantity_point<geo_latitude[si::degree], equator, T>;
-
-template<typename T = double>
-using longitude = quantity_point<geo_longitude[si::degree], prime_meridian, T>;
-
-void example()
-{
-  latitude lat{45.0 * deg};    // Valid: within [-90, 90]
-  lat = latitude{95.0 * deg};  // Reflects to 85° (reflect_in_range mirrors at boundary)
-
-  longitude lon{270.0 * deg};  // Wraps to -90° (wrap_to_range treats range as circular)
-  lon += 200.0 * deg;          // Result wraps: -90 + 200 = 110°
-}
-```
-
-### How It Works?
-
-Bounds are enforced at these points:
-
-1. **Construction** from a quantity: `quantity_point{value * unit, origin}`
-2. **Unit conversion**: `qp.in(other_unit)`, `qp.force_in(other_unit)`
-3. **Arithmetic operations**: `operator+=`, `operator-=`, `operator++`, `operator--`
-4. **Origin conversion**: `qp.point_for(new_origin)`
-
-The implementation calls `enforce_bounds<origin>()` after each mutation, which applies the
-policy specified in `quantity_bounds<origin>`.
-
-??? note "Implementation reference"
-
-    See [`geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h) for a complete working example, and [`overflow_policies.h`](https://github.com/mpusz/mp-units/blob/master/src/core/include/mp-units/overflow_policies.h) for policy implementations.
 
 
 ## The affine space is about type-safety

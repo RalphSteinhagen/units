@@ -194,6 +194,22 @@ struct mp_units::representation_values<my_scalar_type<T>> {
 };
 ```
 
+If your type will be used with bounds checking or other constraint enforcement mechanisms,
+you may also want to specialize `constraint_violation_handler` to control error reporting:
+
+```cpp
+template<typename T>
+struct mp_units::constraint_violation_handler<my_scalar_type<T>> {
+  static void on_violation(std::string_view msg) {
+    // Custom error handling: throw, log, abort, etc.
+    throw std::runtime_error(std::string(msg));
+  }
+};
+```
+
+See the [Ensure Ultimate Safety](../advanced_usage/ultimate_safety.md) guide for details
+on using bounds checking with quantity points.
+
 ### Step 5: Enable scaling { #scale }
 
 The library applies a unit magnitude to a representation value internally when performing
@@ -453,6 +469,7 @@ quantity<si::metre, int> c = value_cast<si::metre>(a);  // ✅ OK
 This is intentional — the conversion is truncating. Specialize `mp_units::implicitly_scalable`
 only when you are certain your type handles the conversion without data loss.
 
+
 ## Summary
 
 To create a custom representation type:
@@ -462,10 +479,11 @@ To create a custom representation type:
    via member functions or ADL-findable free functions
 3. **Add formatting support** (optional) via `std::formatter`
 4. **Add `value_type`** to help the library determine the scaling factor type
-5. **Specialize `representation_values<Rep>`** (if needed) for custom special values
+5. **Specialize `representation_values<Rep>`** (if needed) for custom special values;
+   optionally specialize `constraint_violation_handler<Rep>` for custom error handling
 6. **Implement `operator*(T, value_type_t<T>)` and `operator/(T, value_type_t<T>)`** so
    that scaling correctly updates all internal fields (e.g. for `with_variance<T>` scale
-   `value` by `k` and `variance` by `k²`).
+   `value` by `k` and `variance` by `k²`)
 7. **Implement `operator*(T, UnitMagnitude)`** (optional) for
    [magnitude-aware scaling](#magnitude-aware-scaling) when bounds or other type-level
    properties must change during unit conversion
@@ -486,6 +504,10 @@ custom types.
 - [Character of a Quantity](../../users_guide/framework_basics/character_of_a_quantity.md) - Understanding quantity characters
 - [Value Conversions](../../users_guide/framework_basics/value_conversions.md) - How `treat_as_floating_point` and `implicitly_scalable` affect conversions
 - [Concepts](../../users_guide/framework_basics/concepts.md#RepresentationOf) - The `RepresentationOf` concept definition
+
+**How-to Guides:**
+
+- [Ensure Ultimate Safety](../advanced_usage/ultimate_safety.md) - Combining `constrained` reps with `check_in_range` for guaranteed bounds enforcement
 
 **Implementation References:**
 

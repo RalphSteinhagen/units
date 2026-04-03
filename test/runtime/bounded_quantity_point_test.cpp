@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 #include <catch2/catch_test_macros.hpp>
+#include <mp-units/constrained.h>
 #include <mp-units/framework.h>
 #include <mp-units/systems/isq/space_and_time.h>
 #include <mp-units/systems/si.h>
@@ -36,109 +37,75 @@ using namespace mp_units::si::unit_symbols;
 #if MP_UNITS_HOSTED
 
 // ============================================================================
-// throw_on_overflow policy tests
+// check_in_range tests — out-of-bounds violations must throw.
+//
+// Using constrained<double, throw_policy> as the rep ensures that
+// constraint_violation_handler is called unconditionally (regardless of
+// MP_UNITS_API_CONTRACTS), and that handler throws std::domain_error.
+// This is the only behaviour that cannot be covered by static_assert tests.
 // ============================================================================
 
 namespace {
 
-QUANTITY_SPEC(test_angle_throw, isq::angular_measure);
+QUANTITY_SPEC(test_angle_check, isq::angular_measure);
 
-inline constexpr struct throw_origin final : absolute_point_origin<test_angle_throw> {
-} throw_origin;
+inline constexpr struct check_origin final : absolute_point_origin<test_angle_check> {
+} check_origin;
 
 }  // namespace
 
 template<>
-inline constexpr auto mp_units::quantity_bounds<throw_origin> = mp_units::throw_on_overflow{-90 * deg, 90 * deg};
+inline constexpr auto mp_units::quantity_bounds<check_origin> = mp_units::check_in_range{-90 * deg, 90 * deg};
 
 namespace {
 
-using qp_throw = quantity_point<test_angle_throw[deg], throw_origin, double>;
+using safe_double = constrained<double, throw_policy>;
+using qp_check = quantity_point<test_angle_check[deg], check_origin, safe_double>;
 
 }  // namespace
 
-TEST_CASE("throw_on_overflow", "[bounded][throw]")
+TEST_CASE("check_in_range throws on construction outside bounds", "[bounded][check]")
 {
-  SECTION("values within bounds do not throw")
+  CHECK_THROWS_AS(qp_check(91.0 * test_angle_check[deg], check_origin), std::domain_error);
+  CHECK_THROWS_AS(qp_check(-91.0 * test_angle_check[deg], check_origin), std::domain_error);
+  CHECK_THROWS_AS(qp_check(180.0 * test_angle_check[deg], check_origin), std::domain_error);
+  CHECK_THROWS_AS(qp_check(-180.0 * test_angle_check[deg], check_origin), std::domain_error);
+}
+
+TEST_CASE("check_in_range does not throw within bounds", "[bounded][check]")
+{
+  CHECK_NOTHROW(qp_check(0.0 * test_angle_check[deg], check_origin));
+  CHECK_NOTHROW(qp_check(45.0 * test_angle_check[deg], check_origin));
+  CHECK_NOTHROW(qp_check(90.0 * test_angle_check[deg], check_origin));
+  CHECK_NOTHROW(qp_check(-90.0 * test_angle_check[deg], check_origin));
+}
+
+TEST_CASE("check_in_range throws on arithmetic that crosses bounds", "[bounded][check]")
+{
+  SECTION("operator+= crosses max")
   {
-    CHECK_NOTHROW(qp_throw(45.0 * deg, throw_origin));
-    CHECK_NOTHROW(qp_throw(0.0 * deg, throw_origin));
-    CHECK_NOTHROW(qp_throw(90.0 * deg, throw_origin));
-    CHECK_NOTHROW(qp_throw(-90.0 * deg, throw_origin));
+    auto pt = qp_check(80.0 * test_angle_check[deg], check_origin);
+    CHECK_THROWS_AS(pt += 20.0 * test_angle_check[deg], std::domain_error);
   }
 
-  SECTION("value above max throws")
+  SECTION("operator-= crosses min")
   {
-    CHECK_THROWS_AS(qp_throw(91.0 * deg, throw_origin), std::overflow_error);
-    CHECK_THROWS_AS(qp_throw(180.0 * deg, throw_origin), std::overflow_error);
+    auto pt = qp_check(-80.0 * test_angle_check[deg], check_origin);
+    CHECK_THROWS_AS(pt -= 20.0 * test_angle_check[deg], std::domain_error);
   }
 
-  SECTION("value below min throws")
+  SECTION("operator++ crosses max")
   {
-    CHECK_THROWS_AS(qp_throw(-91.0 * deg, throw_origin), std::overflow_error);
-    CHECK_THROWS_AS(qp_throw(-180.0 * deg, throw_origin), std::overflow_error);
+    using qp_check_int = quantity_point<test_angle_check[deg], check_origin, constrained<int, throw_policy>>;
+    auto pt = qp_check_int(90 * test_angle_check[deg], check_origin);
+    CHECK_THROWS_AS(++pt, std::domain_error);
   }
 
-  SECTION("arithmetic resulting in out-of-bounds throws")
+  SECTION("operator-- crosses min")
   {
-    auto pt = qp_throw(85.0 * deg, throw_origin);
-    CHECK_THROWS_AS(pt += 10.0 * deg, std::overflow_error);
-
-    auto pt2 = qp_throw(-85.0 * deg, throw_origin);
-    CHECK_THROWS_AS(pt2 -= 10.0 * deg, std::overflow_error);
-  }
-
-  SECTION("arithmetic within bounds does not throw")
-  {
-    auto pt = qp_throw(45.0 * deg, throw_origin);
-    CHECK_NOTHROW(pt += 30.0 * deg);
-    CHECK(pt.quantity_from(throw_origin) == 75.0 * deg);
-
-    auto pt2 = qp_throw(-45.0 * deg, throw_origin);
-    CHECK_NOTHROW(pt2 -= 30.0 * deg);
-    CHECK(pt2.quantity_from(throw_origin) == -75.0 * deg);
-  }
-
-  SECTION("increment out-of-bounds throws")
-  {
-    using qp_throw_int = quantity_point<test_angle_throw[deg], throw_origin, int>;
-    auto pt = qp_throw_int(90 * deg, throw_origin);
-    CHECK_THROWS_AS(++pt, std::overflow_error);
-
-    auto pt2 = qp_throw_int(-90 * deg, throw_origin);
-    CHECK_THROWS_AS(--pt2, std::overflow_error);
-  }
-
-  SECTION("postfix increment out-of-bounds throws")
-  {
-    using qp_throw_int = quantity_point<test_angle_throw[deg], throw_origin, int>;
-    auto pt = qp_throw_int(90 * deg, throw_origin);
-    CHECK_THROWS_AS(pt++, std::overflow_error);
-
-    auto pt2 = qp_throw_int(-90 * deg, throw_origin);
-    CHECK_THROWS_AS(pt2--, std::overflow_error);
-  }
-
-  SECTION("increment within bounds does not throw")
-  {
-    using qp_throw_int = quantity_point<test_angle_throw[deg], throw_origin, int>;
-    auto pt = qp_throw_int(45 * deg, throw_origin);
-    CHECK_NOTHROW(++pt);
-    CHECK(pt.quantity_from(throw_origin) == 46 * deg);
-
-    auto pt2 = qp_throw_int(45 * deg, throw_origin);
-    CHECK_NOTHROW(pt2++);
-    CHECK(pt2.quantity_from(throw_origin) == 46 * deg);
-  }
-
-  SECTION("exception message is meaningful")
-  {
-    try {
-      qp_throw(91.0 * deg, throw_origin);
-      FAIL("Expected std::overflow_error to be thrown");
-    } catch (const std::overflow_error& e) {
-      CHECK(std::string(e.what()).length() > 0);
-    }
+    using qp_check_int = quantity_point<test_angle_check[deg], check_origin, constrained<int, throw_policy>>;
+    auto pt = qp_check_int(-90 * test_angle_check[deg], check_origin);
+    CHECK_THROWS_AS(--pt, std::domain_error);
   }
 }
 

@@ -64,6 +64,9 @@
 #include <random>
 #include <sstream>
 #include <string>
+#if defined(__cpp_lib_expected) && __cpp_lib_expected >= 202211L
+#include <expected>
+#endif
 #endif
 #endif
 
