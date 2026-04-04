@@ -309,21 +309,6 @@ static_assert(unit_for<quantity_point<isq::thermodynamic_temperature[si::kelvin]
 static_assert(reference_for<quantity_point<isq::thermodynamic_temperature[si::kelvin], si::absolute_zero>> ==
               isq::thermodynamic_temperature[si::kelvin]);
 
-static_assert(quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>::reference ==
-              isq::Celsius_temperature[si::kelvin]);
-static_assert(quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>::quantity_spec ==
-              isq::Celsius_temperature);
-static_assert(quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>::dimension ==
-              isq::dim_thermodynamic_temperature);
-static_assert(quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>::unit == si::kelvin);
-static_assert(is_of_type<quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>::point_origin,
-                         struct si::absolute_zero>);
-static_assert(is_of_type<quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>::absolute_point_origin,
-                         struct si::absolute_zero>);
-static_assert(unit_for<quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>> == si::kelvin);
-static_assert(reference_for<quantity_point<isq::Celsius_temperature[si::kelvin], si::absolute_zero>> ==
-              isq::Celsius_temperature[si::kelvin]);
-
 static_assert(quantity_point<si::degree_Celsius, si::ice_point>::reference == si::degree_Celsius);
 static_assert(quantity_point<si::degree_Celsius, si::ice_point>::quantity_spec ==
               kind_of<isq::thermodynamic_temperature>);
@@ -335,22 +320,24 @@ static_assert(
 static_assert(unit_for<quantity_point<si::degree_Celsius, si::ice_point>> == si::degree_Celsius);
 static_assert(reference_for<quantity_point<si::degree_Celsius, si::ice_point>> == si::degree_Celsius);
 
-static_assert(quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::reference ==
-              isq::Celsius_temperature[si::degree_Celsius]);
-static_assert(quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::quantity_spec ==
-              isq::Celsius_temperature);
-static_assert(quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::dimension ==
+static_assert(quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>::reference ==
+              isq::thermodynamic_temperature[si::degree_Celsius]);
+static_assert(quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>::quantity_spec ==
+              isq::thermodynamic_temperature);
+static_assert(quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>::dimension ==
               isq::dim_thermodynamic_temperature);
-static_assert(quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::unit == si::degree_Celsius);
-static_assert(is_of_type<quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::point_origin,
-                         struct si::ice_point>);
-static_assert(
-  is_of_type<quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>::absolute_point_origin,
-             struct si::absolute_zero>);
-static_assert(unit_for<quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>> ==
+static_assert(quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>::unit ==
               si::degree_Celsius);
-static_assert(reference_for<quantity_point<isq::Celsius_temperature[si::degree_Celsius], si::ice_point>> ==
-              isq::Celsius_temperature[si::degree_Celsius]);
+static_assert(
+  is_of_type<quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>::point_origin,
+             struct si::ice_point>);
+static_assert(
+  is_of_type<quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>::absolute_point_origin,
+             struct si::absolute_zero>);
+static_assert(unit_for<quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>> ==
+              si::degree_Celsius);
+static_assert(reference_for<quantity_point<isq::thermodynamic_temperature[si::degree_Celsius], si::ice_point>> ==
+              isq::thermodynamic_temperature[si::degree_Celsius]);
 
 
 //////////////////

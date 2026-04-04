@@ -61,7 +61,7 @@ void print(auto iteration, QP measured, K gain, kalman::system_state_estimate<QP
 int main()
 {
   using namespace mp_units::si::unit_symbols;
-  using qp = quantity_point<isq::Celsius_temperature[deg_C]>;
+  using qp = quantity_point<deg_C>;
   using estimate = kalman::system_state_estimate<qp>;
   using state = estimate::state_type;
 

@@ -378,5 +378,5 @@ For example:
   the previous example:
 
   ```cpp
-  constexpr auto room_reference_temperature = ice_point + delta<isq::Celsius_temperature[deg_C]>(21);
+  constexpr auto room_reference_temperature = ice_point + delta<deg_C>(21);
   ```

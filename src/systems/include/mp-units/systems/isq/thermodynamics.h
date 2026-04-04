@@ -37,7 +37,8 @@
 MP_UNITS_EXPORT
 namespace mp_units::isq {
 
-QUANTITY_SPEC(Celsius_temperature, thermodynamic_temperature);  // TODO should we account for T0 here?
+// Celsius_temperature is defined in ISQ but explicitly not supported (depends on SI units, breaks non-negativity)
+// QUANTITY_SPEC(Celsius_temperature, thermodynamic_temperature);
 QUANTITY_SPEC(linear_expansion_coefficient, inverse(length) * (length / thermodynamic_temperature));
 QUANTITY_SPEC(cubic_expansion_coefficient, inverse(volume) * (volume / thermodynamic_temperature));
 QUANTITY_SPEC(relative_pressure_coefficient, inverse(pressure) * (pressure / thermodynamic_temperature));

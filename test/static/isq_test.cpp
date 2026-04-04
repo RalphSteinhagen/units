@@ -164,7 +164,6 @@ static_assert(verify(isq::action, real_scalar, J* s, kg* m2 / s));
 
 // thermodynamics
 static_assert(verify(isq::thermodynamic_temperature, real_scalar, K));
-static_assert(verify(isq::Celsius_temperature, real_scalar, deg_C));
 static_assert(verify(isq::linear_expansion_coefficient, real_scalar, one / K));
 static_assert(verify(isq::cubic_expansion_coefficient, real_scalar, one / K));
 static_assert(verify(isq::relative_pressure_coefficient, real_scalar, one / K));

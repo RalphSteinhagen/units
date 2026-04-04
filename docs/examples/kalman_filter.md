@@ -335,7 +335,7 @@ Where:
 === "Example 8: Dynamic System"
 
     ```cpp
-    using qp = quantity_point<isq::Celsius_temperature[deg_C]>;
+    using qp = quantity_point<deg_C>;
     using estimate = kalman::system_state_estimate<qp>;
 
     const quantity process_noise_variance = delta<pow<2>(deg_C)>(0.15);
