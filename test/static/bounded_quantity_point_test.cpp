@@ -168,8 +168,9 @@ using qp_wrap = quantity_point<test_angle_wrap[deg], wrap_origin, double>;
 using qp_reflect = quantity_point<test_angle_reflect[deg], reflect_origin, double>;
 using qp_clamp_int = quantity_point<test_angle_clamp[deg], clamp_origin, int>;
 
-// constrained rep: bounds stored as int, incoming value type is constrained<double, ...>
-using safe_double = constrained<double, throw_policy>;
+// constrained rep: bounds stored as int, incoming value type is constrained<double>
+// (uses default policy: throw_policy in hosted, terminate_policy in freestanding)
+using safe_double = constrained<double>;
 using qp_wrap_constrained = quantity_point<test_angle_wrap_constrained[deg], wrap_constrained_origin, safe_double>;
 using qp_reflect_constrained =
   quantity_point<test_angle_reflect_constrained[deg], reflect_constrained_origin, safe_double>;
