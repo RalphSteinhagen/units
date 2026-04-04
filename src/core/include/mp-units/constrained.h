@@ -37,6 +37,7 @@ import std;
 #include <type_traits>
 #if MP_UNITS_HOSTED
 #include <stdexcept>
+#include <string>
 #endif
 #endif
 #endif
