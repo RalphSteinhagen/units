@@ -1113,4 +1113,77 @@ static_assert(std::numeric_limits<qp_hmax>::max().quantity_from(halfbound_max_or
 static_assert(std::numeric_limits<qp_hmax>::lowest().quantity_from(halfbound_max_origin).numerical_value_in(m) ==
               std::numeric_limits<double>::lowest());
 
+// ============================================================================
+// Large-delta tests: deltas much larger than the range width.
+//
+// wrap_to_range and reflect_in_range are total functions — defined for all
+// inputs, not just "one boundary crossing".  These tests verify that adding a
+// delta that covers several full periods still yields the correct result.
+// (clamp_to_range is excluded: it is idempotent past the boundary — any
+// value beyond [min, max] produces the same saturated result regardless of
+// how far it overshoots, so there is nothing new to test for large deltas.)
+// ============================================================================
+
+// ---- wrap_to_range: range [-180°, 180°), period = 360° ---------------------
+
+// 3 full rotations + 45°: same as 45°.
+static_assert(qp_wrap(3 * 360.0 * deg + 45.0 * deg, wrap_origin).quantity_from(wrap_origin) == 45.0 * deg);
+
+// 3 full rotations in the negative direction + 45°: same as 45°.
+static_assert(qp_wrap(-3 * 360.0 * deg + 45.0 * deg, wrap_origin).quantity_from(wrap_origin) == 45.0 * deg);
+
+// 2.5 rotations (= 900°): same as 180° → at upper exclusive boundary → wraps to -180°.
+static_assert(qp_wrap(2.5 * 360.0 * deg, wrap_origin).quantity_from(wrap_origin) == -180.0 * deg);
+
+// operator+=: start at 90°, add 3 full rotations + 30° (= 1110°) → lands at 120°.
+consteval bool wrap_large_delta_assign()
+{
+  auto pt = qp_wrap(90.0 * deg, wrap_origin);
+  pt += 3 * 360.0 * deg + 30.0 * deg;
+  return pt.quantity_from(wrap_origin) == 120.0 * deg;
+}
+static_assert(wrap_large_delta_assign());
+
+// ---- reflect_in_range: range [-90°, 90°], period = 360° -------------------
+// The period of reflect_in_range{[a,b]} is 2*(b−a) = 2*180° = 360°.
+// After an integer number of periods the point returns to the same position.
+
+// Half a period (180°): the "fold-back" point — lands at 0°.
+static_assert(qp_reflect(180.0 * deg, reflect_origin).quantity_from(reflect_origin) == 0.0 * deg);
+
+// 3/4 of a period (270°): bounces off max, then off min → lands at -90°.
+static_assert(qp_reflect(270.0 * deg, reflect_origin).quantity_from(reflect_origin) == -90.0 * deg);
+
+// 3 full periods + 45° (= 1125°): same as 45°.
+static_assert(qp_reflect(3 * 360.0 * deg + 45.0 * deg, reflect_origin).quantity_from(reflect_origin) == 45.0 * deg);
+
+// Negative direction: -(1 full period + 45°) = -405° → same as -45°.
+static_assert(qp_reflect(-1 * 360.0 * deg - 45.0 * deg, reflect_origin).quantity_from(reflect_origin) == -45.0 * deg);
+
+// operator+=: start at 0°, add 1.5 periods (= 540°) → same as adding 180° → 0°.
+consteval bool reflect_large_delta_assign()
+{
+  auto pt = qp_reflect(0.0 * deg, reflect_origin);
+  pt += 1.5 * 360.0 * deg;
+  return pt.quantity_from(reflect_origin) == 0.0 * deg;
+}
+static_assert(reflect_large_delta_assign());
+
+// ---- wrap_to_range: time-of-day [0 s, 86400 s), period = 86400 s ----------
+
+// 3 full days + 1 hour (= 262800 s): wraps to 3600 s = 01:00.
+static_assert(time_of_day(3 * 86400.0 * s + 3600.0 * s, midnight).quantity_from(midnight) == 3600.0 * s);
+
+// Negative: 3 full days before midnight + 1 hour before end = -3*86400+82800 = -176400 s → 82800 s = 23:00.
+static_assert(time_of_day(-3 * 86400.0 * s + 82800.0 * s, midnight).quantity_from(midnight) == 82800.0 * s);
+
+// operator+=: start at 23:00 (82800 s), add 3 days + 2 hours (= 266400 s) → lands at 01:00 (3600 s).
+consteval bool time_of_day_multiday_assign()
+{
+  auto t = time_of_day(82800.0 * s, midnight);  // 23:00
+  t += 3 * 86400.0 * s + 2 * 3600.0 * s;        // +3 days 2 hours
+  return t.quantity_from(midnight) == 3600.0 * s;
+}
+static_assert(time_of_day_multiday_assign());
+
 }  // namespace
