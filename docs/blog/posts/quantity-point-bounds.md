@@ -209,16 +209,16 @@ the enforcement from its nearest ancestor that has bounds:
 ```cpp
 // Absolute origin with physical bounds:
 template<>
-inline constexpr auto mp_units::quantity_bounds<prime_meridian> = mp_units::clamp_to_range{-180.0 * deg, 180.0 * deg};
+inline constexpr auto mp_units::quantity_bounds<prime_meridian> = wrap_to_range{-180.0 * deg, 180.0 * deg};
 
 // Relative origin — no own bounds; inherits from prime_meridian.
 // The +21° offset is transparent to the enforcement.
 inline constexpr struct warsaw_meridian final : mp_units::relative_point_origin<prime_meridian + 21.0 * deg> {
 } warsaw_meridian;
 
-// A value of +200° east of Warsaw = +221° from prime → clamped to +180° → +159° from Warsaw.
+// A value of +200° east of Warsaw = +221° from prime → wraps to -139° from prime → -160° from Warsaw.
 quantity_point qp = warsaw_meridian + 200.0 * deg;
-assert(qp.quantity_from(warsaw_meridian) == 159.0 * deg);
+assert(qp.quantity_from(warsaw_meridian) == -160.0 * deg);
 ```
 
 When a `relative_point_origin` defines **its own** bounds, those bounds are
