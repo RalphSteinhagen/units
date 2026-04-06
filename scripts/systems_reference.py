@@ -3229,11 +3229,11 @@ class DocumentationGenerator:
             origin_line = ""
             if definition:
                 # Check if it's a simple origin identifier (no operators, just a name)
-                # This handles kelvin which becomes just "zeroth_kelvin" after kind extraction
+                # This handles kelvin which becomes an origin reference after kind extraction
                 if (
                     (
-                        "zeroth_" in definition
-                        or definition in ["absolute_zero", "ice_point"]
+                        "zeroth_" in definition  # deprecated names
+                        or definition in ["absolute_zero", "ice_point", "fahrenheit_zero"]  # current names
                     )
                     and not any(
                         op in definition for op in ["*", "/", "+", "-", "(", ")"]
@@ -3251,9 +3251,9 @@ class DocumentationGenerator:
                         origin = parts[1].strip()
                         # Check if origin looks like a point origin (not a regular expression with commas)
                         if (
-                            "zeroth_" in origin
+                            "zeroth_" in origin  # deprecated names
                             or "point<" in origin
-                            or origin in ["absolute_zero", "ice_point"]
+                            or origin in ["absolute_zero", "ice_point", "fahrenheit_zero"]  # current names
                         ) and "<" not in origin.replace("point<", ""):
                             definition = base_def
                             # Store origin without backticks - will be linkified later
@@ -3348,7 +3348,7 @@ class DocumentationGenerator:
 
         # Pattern to match identifiers (including namespace-qualified ones)
         # Matches: word, namespace::word, nested::namespace::word
-        # Allow both lowercase and uppercase letters for names like Julian_year and zeroth_degree_Celsius
+        # Allow both lowercase and uppercase letters for names like Julian_year and fahrenheit_zero
         # Support Unicode identifiers (e.g., π)
         identifier_pattern = (
             r"\b([a-zA-Z_\u0080-\uFFFF][a-zA-Z0-9_\u0080-\uFFFF]*"
