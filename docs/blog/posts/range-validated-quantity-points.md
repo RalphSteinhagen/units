@@ -1,11 +1,10 @@
 ---
-date: 2026-04-03
+date: 2026-04-06
 authors:
  - mpusz
 categories:
  - Metrology
 comments: true
-draft: true
 ---
 
 # Range-Validated Quantity Points
@@ -518,6 +517,7 @@ under _Range-Validated Quantity Points_.
 - [The Affine Space — Range-Validated Quantity Points](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points) — user guide section that documents the feature in full
 - [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) — how-to guide on combining `constrained<T, EP>` with `safe_int` for defence-in-depth
 - [Introducing Absolute Quantities](introducing-absolute-quantities.md) — the companion blog post on ratio-scale non-negativity and `absolute_point_origin`
+- [Preventing Integer Overflow in Physical Computations](preventing-integer-overflow.md) — covers `safe_int<T>` and how it composes with `quantity_bounds`
 - [Understanding Safety Levels](understanding-safety-levels.md) — in-depth survey of all six safety levels; Level 6 covers mathematical space safety
 - [GitHub Discussion #782](https://github.com/mpusz/mp-units/discussions/782) — the original user report on geodetic bounds that triggered this work
 <!-- markdownlint-enable MD013 -->
