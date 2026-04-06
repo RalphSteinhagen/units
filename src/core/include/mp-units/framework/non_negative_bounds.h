@@ -22,31 +22,31 @@
 
 #pragma once
 
-// IWYU pragma: begin_exports
-#include <mp-units/framework/compare.h>
-#include <mp-units/framework/construction_helpers.h>
+// IWYU pragma: private, include <mp-units/framework.h>
 #include <mp-units/framework/customization_points.h>
-#include <mp-units/framework/dimension.h>
-#include <mp-units/framework/dimension_concepts.h>
-#include <mp-units/framework/non_negative_bounds.h>
-#include <mp-units/framework/point_origin_concepts.h>
-#include <mp-units/framework/quantity.h>
-#include <mp-units/framework/quantity_cast.h>
-#include <mp-units/framework/quantity_character.h>
-#include <mp-units/framework/quantity_concepts.h>
 #include <mp-units/framework/quantity_point.h>
-#include <mp-units/framework/quantity_point_concepts.h>
 #include <mp-units/framework/quantity_spec.h>
-#include <mp-units/framework/quantity_spec_concepts.h>
-#include <mp-units/framework/reference.h>
-#include <mp-units/framework/representation_concepts.h>
-#include <mp-units/framework/scaling.h>
-#include <mp-units/framework/symbol_text.h>
-#include <mp-units/framework/symbolic_expression.h>
-#include <mp-units/framework/unit.h>
-#include <mp-units/framework/unit_concepts.h>
-#include <mp-units/framework/unit_magnitude.h>
-#include <mp-units/framework/unit_magnitude_concepts.h>
-#include <mp-units/framework/unit_symbol_formatting.h>
-#include <mp-units/framework/value_cast.h>
-// IWYU pragma: end_exports
+#include <mp-units/overflow_policies.h>
+
+namespace mp_units {
+
+// Partial specialization of `detail::quantity_bounds_for` for every
+// `natural_point_origin_<QS>` whose quantity spec is tagged `non_negative` in the ISQ
+// (e.g. length, mass, duration, thermodynamic_temperature).
+//
+// This file lives in a separate header (included last by <mp-units/framework.h>) because
+// it bridges two headers that cannot include one another:
+//   - natural_point_origin_  is defined in <mp-units/framework/quantity_point.h>
+//   - is_non_negative()      is defined in <mp-units/framework/quantity_spec.h>
+//   - check_non_negative     is defined in <mp-units/overflow_policies.h>
+//
+
+namespace detail {
+
+template<QuantitySpec auto QS>
+  requires(is_non_negative(QS))
+inline constexpr auto quantity_bounds_for<natural_point_origin_<QS>> = check_non_negative{};
+
+}  // namespace detail
+
+}  // namespace mp_units

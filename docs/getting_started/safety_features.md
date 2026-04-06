@@ -147,6 +147,58 @@ latitude lat{95.0 * deg, equator};  // throws std::domain_error (out of [-90, 90
     [Representation Types: `constraint_violation_handler`](../users_guide/framework_basics/representation_types.md#constraint-violation-handler).
 
 
+### Non-Negative Quantities
+
+The library also tracks which physical quantities are inherently non-negative (e.g.,
+_length_, _mass_, _duration_) through the type system. This property propagates through
+derived equations and is automatically inherited by named real-scalar children:
+
+```cpp
+static_assert(is_non_negative(isq::length));      // ✅ Tagged in ISQ definitions
+static_assert(is_non_negative(isq::mass));        // ✅ Tagged in ISQ definitions
+static_assert(is_non_negative(isq::distance));    // ✅ Named real-scalar child of length
+static_assert(is_non_negative(isq::speed));       // ✅ Derived: length / duration
+static_assert(!is_non_negative(isq::velocity));   // ❌ Vector character — excluded from inheritance
+```
+
+!!! question "How is non-negativity enforced?"
+
+    Non-negativity is enforced at **two levels**:
+
+    **Compile time (always)**
+    :   The `non_negative` flag is tracked in the type system and propagated through
+        dimensional equations, so the compiler knows whether any derived quantity is
+        non-negative.
+
+    **Runtime (automatic for `quantity_point` with a natural origin)**
+    :   Every `quantity_point` whose reference is rooted at the natural point origin of a
+        non-negative quantity spec automatically has `check_non_negative` bounds attached.
+        This means construction of, or arithmetic on, such a point checks the value:
+
+        - If the representation type has a
+          [`constraint_violation_handler`](../users_guide/framework_basics/representation_types.md#constraint-violation-handler)
+          specialization (e.g., a `constrained<T, Policy>` rep), the handler is invoked on
+          violation — behaviour is guaranteed regardless of build mode.
+        - For plain types (like `double`) the library falls back to
+          [`MP_UNITS_EXPECTS`](../how_to_guides/integration/wide_compatibility.md#contract-checking-macros),
+          which may be disabled in release builds.
+
+        You can override the default policy for a specific quantity spec by providing a
+        full specialization of `quantity_bounds` before the point type is first used:
+
+        ```cpp
+        // Replace error-on-negative with silent clamp-to-zero (e.g., for FP noise):
+        template<>
+        inline constexpr auto mp_units::quantity_bounds<natural_point_origin<isq::length>> = clamp_non_negative{};
+        ```
+
+        See [Tutorial: Custom Contract Handlers](../tutorials/affine_space/custom_contract_handlers.md)
+        for a step-by-step guide to implementing custom error policies with `constrained<T, ErrorPolicy>`.
+
+    For quantities modeled only as a `quantity` displacement (not as a `quantity_point`),
+    non-negativity remains a compile-time property only.
+
+
 ## Level 4: Quantity Kind Safety
 
 **Quantity kind safety** distinguishes between quantities that share the same dimension but

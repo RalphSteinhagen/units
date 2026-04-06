@@ -68,7 +68,8 @@ QUANTITY_SPEC(rate_of_climb_speed, mp_units::isq::speed, mp_units::isq::height /
 
 // length
 using distance = mp_units::quantity<mp_units::isq::distance[mp_units::si::kilo<mp_units::si::metre>]>;
-using height = mp_units::quantity<mp_units::isq::height[mp_units::si::metre]>;
+// TODO change to isq::height in V3
+using height = mp_units::quantity<mp_units::isq::altitude[mp_units::si::metre]>;
 
 // time
 using duration = mp_units::quantity<mp_units::isq::duration[mp_units::si::second]>;

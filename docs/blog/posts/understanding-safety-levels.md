@@ -460,6 +460,59 @@ delays.emplace_back(42, us);   // ✅ OK
 
 There is no construction path that silently discards unit information.
 
+### Non-Negative Quantity Tracking
+
+Beyond numeric representation, **mp-units** also encodes domain constraints at the quantity
+specification level. Many physical quantities are inherently non-negative: _length_, _mass_,
+_duration_, _thermodynamic temperature_, _amount of substance_, and _luminous intensity_ can
+never be negative. The ISQ base quantity definitions in **mp-units** carry this fact as a
+compile-time property:
+
+```cpp
+static_assert(is_non_negative(isq::length));
+static_assert(is_non_negative(isq::mass));
+static_assert(is_non_negative(isq::duration));
+static_assert(!is_non_negative(isq::electric_current));  // can be negative
+```
+
+This property **propagates through derived equations** and is automatically inherited by
+named real-scalar children — if all factors in a multiplication or division are
+non-negative, the result is too, and any named specialization that does not change the
+quantity character carries the constraint forward:
+
+```cpp
+static_assert(is_non_negative(isq::speed));      // length / duration — both non-negative
+static_assert(is_non_negative(isq::area));       // length * length — both non-negative
+static_assert(is_non_negative(isq::distance));   // named real-scalar child of length
+static_assert(!is_non_negative(isq::velocity));  // vector character — excluded from inheritance
+```
+
+!!! note
+
+    `kind_of<QS>` is **never** non-negative, even when `QS` itself is tagged `non_negative`,
+    because `kind_of<QS>` represents the entire quantity tree including vector quantities
+    and signed coordinates. This matters when using CTAD with bare SI units:
+
+    ```cpp
+    quantity_point generic{5.0 * m};                  // origin uses kind_of<isq::length> — NOT auto-bounded
+    quantity_point dist{distance_traveled(5.0 * m)};  // uses isq::distance — auto-bounded
+    ```
+
+This metadata is automatically enforced at runtime for `quantity_point` types: when a
+`quantity_point` uses a natural origin and the associated quantity spec is non-negative,
+the library automatically attaches a `check_non_negative` policy — no explicit
+`quantity_bounds` specialization is needed. You can still override the default by
+providing a full specialization before the type is first instantiated:
+
+```cpp
+// Replace error-on-negative with silent clamp-to-zero (e.g., for FP rounding noise):
+template<>
+inline constexpr auto mp_units::quantity_bounds<natural_point_origin<isq::length>> = clamp_non_negative{};
+```
+
+The metadata is also available for tooling, documentation, and static analysis — for
+example, to automatically select signed vs. unsigned representations.
+
 ### Bounded Quantity Points
 
 Representation safety also extends to **quantity points** (Level 6). The library's
@@ -479,12 +532,17 @@ using latitude = quantity_point<geo_latitude[deg], equator>;
 latitude lat{95.0 * deg};  // reflects to 85° (boundary mirror)
 ```
 
-The library ships four overflow policies (`check_in_range`, `clamp_to_range`,
-`wrap_to_range`, `reflect_in_range`), and the interface is extensible — you can write
-your own policy (e.g. a `clamp_bottom` for halflines that only enforce a lower bound)
+The library ships six overflow policies (`check_in_range`, `clamp_to_range`,
+`wrap_to_range`, `reflect_in_range`, `check_non_negative`, `clamp_non_negative`),
+and the interface is extensible — you can write your own policy (e.g. a one-sided policy
+for custom bounds that are neither zero-based nor symmetric)
 as long as it provides `V operator()(V)`. Combined with the `constrained<T, ErrorPolicy>`
 wrapper described above, `check_in_range` provides **guaranteed enforcement** in every
 build mode — not just debug builds.
+
+`check_non_negative` and `clamp_non_negative` are specifically designed for halflines
+`[0, +∞)`: the former reports a violation when the value is negative, while the latter
+silently clamps negative values to zero.
 
 For the complete walkthrough, see
 [Range-Validated Quantity Points](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points)

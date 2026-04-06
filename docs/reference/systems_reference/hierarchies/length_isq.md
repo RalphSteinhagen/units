@@ -10,12 +10,14 @@
 ```mermaid
 flowchart LR
     isq_length["<b><a href="../../systems/isq/#length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::length</a></b>"]
+    isq_altitude["<b><a href="../../systems/isq/#altitude" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::altitude</a> | <a href="../../systems/isq/#depth" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::depth</a></b>"]
+    isq_length --- isq_altitude
+    isq_height["<b><a href="../../systems/isq/#height" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::height</a></b>"]
+    isq_altitude --- isq_height
     isq_displacement["<b><a href="../../systems/isq/#displacement" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::displacement</a></b>"]
     isq_length --- isq_displacement
     isq_position_vector["<b><a href="../../systems/isq/#position_vector" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::position_vector</a></b>"]
     isq_displacement --- isq_position_vector
-    isq_height["<b><a href="../../systems/isq/#height" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::height</a> | <a href="../../systems/isq/#altitude" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::altitude</a> | <a href="../../systems/isq/#depth" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::depth</a></b>"]
-    isq_length --- isq_height
     isq_path_length["<b><a href="../../systems/isq/#path_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::path_length</a> | <a href="../../systems/isq/#arc_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::arc_length</a></b>"]
     isq_length --- isq_path_length
     isq_distance["<b><a href="../../systems/isq/#distance" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">isq::distance</a></b>"]

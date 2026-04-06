@@ -29,14 +29,6 @@ polymorphism.
 This article describes the motivation in depth, the design we arrived at, and
 the open questions we would love the community's help to answer.
 
-!!! note "Work in progress"
-
-    This feature is shipping in the current development version of **mp-units**.
-    We are planning a further extension for **non-negative quantity annotations**
-    (quantities that live on a ratio scale and are always ≥ 0, such as _mass_,
-    _duration_, or _electric charge_). That extension will be covered in a
-    follow-up article once the implementation is complete.
-
 <!-- more -->
 
 ## The Problem
@@ -230,7 +222,7 @@ parent's bounds:
 // static_assert fires at compile time if relative bounds exceed parent bounds
 template<>
 inline constexpr auto mp_units::quantity_bounds<ac_setpoint> =
-    mp_units::clamp_to_range{delta<deg_C>(-3), delta<deg_C>(+3)};
+    clamp_to_range{delta<deg_C>(-3), delta<deg_C>(+3)};
     // ❌ compile error if this would violate the parent origin's physical bounds
 ```
 
@@ -245,7 +237,7 @@ instantiated by enforcing the following, in order:
    by the cumulative offset) must nest strictly inside the parent's range.
 
 Both checks are **compile-time** `static_assert`s. They fire exactly once per
-specialisation regardless of how many `quantity_point` variables are constructed.
+specialization regardless of how many `quantity_point` variables are constructed.
 
 ### Full example: geodetic coordinate types
 
@@ -264,7 +256,7 @@ inline constexpr struct equator final : absolute_point_origin<geo_latitude>  {} 
 inline constexpr struct prime_meridian final : absolute_point_origin<geo_longitude> {} prime_meridian;
 ```
 
-Outside the anonymous namespace (so the specialisations have external linkage):
+Outside the anonymous namespace (so the specializations have external linkage):
 
 ```cpp
 template<>
@@ -419,6 +411,47 @@ guarantees described above apply here too: you could use `constrained<float>` or
 `constrained<int>` as the representation without changing the
 `quantity_bounds` specialization.
 
+### Non-negative quantity annotations
+
+[Absolute quantities](introducing-absolute-quantities.md) are quantities that
+live on a ratio scale — always measured from a natural zero — such as _mass_,
+_duration_, or _electric charge magnitude_. Non-negativity is the canonical
+constraint for all of them, and **mp-units** now implements it at the
+quantity-specification level.
+
+The `non_negative` flag can be applied to any real-scalar base or named child
+quantity spec, and the library propagates the flag transitively: a quantity
+derived from two non-negative specs is itself non-negative.
+
+```cpp
+static_assert(is_non_negative(isq::length));     // ✅ tagged in ISQ system definition
+static_assert(is_non_negative(isq::mass));       // ✅ tagged in ISQ system definition
+static_assert(is_non_negative(isq::speed));      // ✅ derived: length / duration
+static_assert(!is_non_negative(isq::velocity));  // ❌ vector character — excluded
+```
+
+!!! note
+
+    `kind_of<QS>` is **never** non-negative, even when `QS` itself is tagged `non_negative`,
+    because `kind_of<QS>` represents the entire quantity tree including vector quantities
+    and signed coordinates. This matters when using CTAD with bare SI units:
+
+    ```cpp
+    quantity_point generic{5.0 * m};  // origin uses kind_of<isq::length> — NOT auto-bounded
+    quantity_point dist{distance_traveled(5.0 * m)};  // uses isq::distance — auto-bounded
+    ```
+
+When a `quantity_point` uses a `natural_point_origin` whose quantity spec is
+non-negative, the library **automatically attaches `check_non_negative`** as the
+bounds policy — no explicit `quantity_bounds` specialization is needed. The
+default can always be overridden:
+
+```cpp
+// Override the auto-applied check_non_negative with a clamping policy instead:
+template<>
+inline constexpr auto mp_units::quantity_bounds<natural_point_origin<isq::length>> = clamp_non_negative{};
+```
+
 ---
 
 ## Design Trade-offs and Open Questions
@@ -432,18 +465,12 @@ misleading (there is no "smallest" longitude on a wrapped circle; they're all
 equivalent modulo 360°). The current implementation does return `min` and `max`
 for all policy types that expose these members.
 
-### Should `quantity_bounds` be supported on absolute quantities?
+### Should `quantity_bounds` be applied to application-level absolute quantity ranges?
 
-[Absolute quantities](introducing-absolute-quantities.md) are quantities that
-live on a ratio scale — always measured from a natural zero — such as _mass_,
-_duration_, or _electric current magnitude_. Non-negativity is the canonical
-constraint for them and will be addressed by a dedicated language-level
-annotation in a future **mp-units** release.
-
-Beyond non-negativity, do you see real use cases for attaching
-_application-specific_ bounds to absolute quantities directly — for example,
-clamping a sensor's mass reading to its physical measurement range, or bounding
-a duration to a maximum scheduling window?
+Beyond the automatic non-negativity enforcement described above, do you see real
+use cases for attaching _application-specific_ range bounds to absolute quantities
+directly — for example, clamping a sensor's _mass_ reading to its physical
+measurement range, or bounding a _duration_ to a maximum scheduling window?
 
 ---
 
@@ -460,7 +487,7 @@ domain, we would love to hear from you:
 - Did the design make your use case straightforward to express?
 - Were there cases where you reached for bounds but the current design would not
   cover them?
-- Do you have strong opinions on the open questions above?
+- Do you have a view on either of the two open questions above?
 
 Please join the conversation in the
 [GitHub Discussions](https://github.com/mpusz/mp-units/discussions) or open a
@@ -470,14 +497,15 @@ Please join the conversation in the
 
 ## Summary
 
-|                                                 | Before                | After                               |
-|-------------------------------------------------|-----------------------|-------------------------------------|
-| Latitude type enforces pole constraint          | ❌ user responsibility | ✅ compile-time, zero-overhead       |
-| Longitude wraps cyclically                      | ❌ manual modulo       | ✅ `wrap_to_range` on origin         |
-| Sensor range clamped at API boundary            | ❌ runtime if-else     | ✅ policy on origin                  |
-| Relative origin inherits parent bounds          | ❌ impossible          | ✅ automatic, static-checked nesting |
-| `min()`/`max()`/`numeric_limits` reflect bounds | ❌ reports type limits | ✅ reports domain limits             |
-| Half-line (non-negative) bounds                 | ❌ impossible          | ✅ custom policy with `.min` only    |
+|                                                 | Before                | After                                                  |
+|-------------------------------------------------|-----------------------|--------------------------------------------------------|
+| Latitude type enforces pole constraint          | ❌ user responsibility | ✅ compile-time, zero-overhead                          |
+| Longitude wraps cyclically                      | ❌ manual modulo       | ✅ `wrap_to_range` on origin                            |
+| Sensor range clamped at API boundary            | ❌ runtime if-else     | ✅ policy on origin                                     |
+| Relative origin inherits parent bounds          | ❌ impossible          | ✅ automatic, static-checked nesting                    |
+| `min()`/`max()`/`numeric_limits` reflect bounds | ❌ reports type limits | ✅ reports domain limits                                |
+| Half-line (non-negative) bounds                 | ❌ impossible          | ✅ `check_non_negative` / `clamp_non_negative` policies |
+| Non-negative QS auto-guards natural origins     | ❌ impossible          | ✅ automatic, no specialization needed                  |
 
 The implementation is already merged and covered by a comprehensive compile-time
 test suite. Documentation lives in the

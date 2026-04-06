@@ -45,7 +45,7 @@ Experience compile-time safety in action:
 - [Quantity Specifications](type_safety/quantity_specifications.md) (~20 min) - Quantity hierarchies and type-safe interfaces
 - [Generic Interfaces](type_safety/generic_interfaces.md) (~15 min) - Flexible functions with QuantityOf
 
-### 4. Affine Space (~55 minutes)
+### 4. Affine Space (~90 minutes)
 
 Understand points vs quantities:
 
@@ -53,11 +53,13 @@ Understand points vs quantities:
 - [Point Origins](affine_space/point_origins.md) (~15 min) - Working with absolute positions
 - [Temperature Handling](affine_space/temperature_handling.md) (~10 min) - Absolute vs relative temperatures
 - [Temperature Applications](affine_space/temperature_applications.md) (~15 min) - Advanced temperature operations
+- [Bounded Quantity Points](affine_space/bounded_quantity_points.md) (~15 min) - Attaching domain constraints to origins
+- [Custom Contract Handlers](affine_space/custom_contract_handlers.md) (~20 min) - Exception handling for production systems
 <!-- markdownlint-enable MD013 -->
 
 !!! success "Total time"
 
-    ~200 minutes to complete all tutorials.
+    ~235 minutes to complete all tutorials.
 
 ## What's Next?
 

@@ -40,7 +40,7 @@ inline constexpr struct dim_traffic_intensity final : base_dimension<"A"> {} dim
 // clang-format on
 
 // quantities
-QUANTITY_SPEC(traffic_intensity, dim_traffic_intensity);
+QUANTITY_SPEC(traffic_intensity, dim_traffic_intensity, non_negative);
 QUANTITY_SPEC(traffic_offered_intensity, traffic_intensity);
 QUANTITY_SPEC(traffic_carried_intensity, traffic_intensity);
 inline constexpr auto traffic_load = traffic_carried_intensity;

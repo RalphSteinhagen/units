@@ -203,7 +203,7 @@ as **denominators** in physics expressions (number of radiation lengths traverse
   energy through Bremsstrahlung — an electromagnetic material property.
 - **`interaction_length` (λ_I)**: mean free path before a hadronic nuclear interaction —
   a nuclear material property.
-- **`nuclear_interaction_length`**: a specialisation of `interaction_length` for nuclear
+- **`nuclear_interaction_length`**: a specialization of `interaction_length` for nuclear
   (as opposed to hadronic-elastic) interactions.
 
 All three are distinct from each other and from geometric lengths:

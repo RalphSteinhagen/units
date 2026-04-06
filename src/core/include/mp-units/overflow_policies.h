@@ -47,14 +47,22 @@ namespace mp_units {
 // Available policies:
 //   1. check_in_range       - Error reporting via constraint_violation_handler or MP_UNITS_EXPECTS
 //   2. clamp_to_range       - Saturate to boundaries (error correction)
-//   3. wrap_to_range         - Modulo wrapping to [min, max)
-//   4. reflect_in_range      - Bounce/fold at boundaries (physics)
+//   3. wrap_to_range        - Modulo wrapping to [min, max)
+//   4. reflect_in_range     - Bounce/fold at boundaries (physics)
+//   5. check_non_negative   - Error reporting for values < 0 (for inherently non-negative quantities)
+//   6. clamp_non_negative   - Saturate to 0 for values < 0 (tolerates floating-point noise)
 //
 // When to use:
 //   - Use check_in_range for bounds-checked points (error behavior depends on the rep type)
 //   - Use clamp_to_range when you want to "correct" out-of-range values
 //   - Use wrap_to_range for periodic/cyclic values (angles, hours)
 //   - Use reflect_in_range for physical boundaries (latitude, bouncing particles)
+//   - Use check_non_negative for quantities that are tagged non_negative in the ISQ
+//     (automatically applied to natural_point_origin<QS> when QS is non_negative)
+//   - Use clamp_non_negative when negative values can legitimately arise from floating-point
+//     rounding in a non-negative domain (e.g., tiny negative energy from numerical noise)
+//   Note: reflect_non_negative and wrap_non_negative are not provided — [0, ∞) has no
+//   upper bound, so neither reflection nor wrapping is physically well-defined.
 // ============================================================================
 
 /**
@@ -190,5 +198,112 @@ template<Quantity Q>
 reflect_in_range(Q, Q) -> reflect_in_range<Q>;
 
 #endif
+
+namespace detail {
+
+/**
+ * @brief Sentinel for the lower domain bound of a half-line [0, ∞) policy.
+ *
+ * Used as the `.min` member of `check_non_negative` and `clamp_non_negative` so that
+ * `quantity_point::min()` and `std::numeric_limits<quantity_point>::lowest()` return
+ * the natural zero of that quantity type.  `quantity_point::min()` detects this type
+ * and uses `quantity_type::zero()` directly — no unit scaling, correct quantity spec
+ * automatically inferred from the `quantity_point` instantiation.
+ *
+ * Two auxiliary operators are provided for the compile-time bounds-nesting check in
+ * `quantity_point.h` (assertions that a relative origin's bounds nest inside its parent's):
+ *   - `zero_quantity_t + q = q` (zero is the additive identity)
+ *   - `q >= zero_quantity_t` ≡ `q >= Q::zero()` (q is non-negative)
+ */
+struct zero_quantity_t {
+  // zero + q = q  (additive identity, for nesting-check arithmetic)
+  template<Quantity Q>
+  [[nodiscard]] friend constexpr Q operator+(zero_quantity_t, Q q) noexcept
+  {
+    return q;
+  }
+
+  template<Quantity Q>
+  [[nodiscard]] friend constexpr Q operator+(Q q, zero_quantity_t) noexcept
+  {
+    return q;
+  }
+
+  template<Quantity Q>
+  [[nodiscard]] friend constexpr Q operator-(zero_quantity_t, Q q) noexcept
+  {
+    return -q;
+  }
+
+  template<Quantity Q>
+  [[nodiscard]] friend constexpr Q operator-(Q q, zero_quantity_t) noexcept
+  {
+    return q;
+  }
+
+  template<Quantity Q>
+  [[nodiscard]] friend constexpr auto operator==(Q q, zero_quantity_t) noexcept
+  {
+    return q == Q::zero();
+  }
+
+  template<Quantity Q>
+  [[nodiscard]] friend constexpr auto operator<=>(Q q, zero_quantity_t) noexcept
+  {
+    return q <=> Q::zero();
+  }
+};
+
+}  // namespace detail
+
+/**
+ * @brief Policy that checks the value is ≥ 0 and reports violations.
+ *
+ * Intended for quantities that are inherently non-negative (e.g., _length_, _mass_,
+ * _duration_). Automatically applied to `natural_point_origin<QS>` when `QS` is tagged
+ * `non_negative` in the ISQ.
+ *
+ * If the quantity's representation type has a `constraint_violation_handler` specialization,
+ * the handler's `on_violation()` is called on negative values (providing guaranteed
+ * enforcement regardless of build mode). Otherwise, falls back to `MP_UNITS_EXPECTS`,
+ * which may be disabled in release builds.
+ */
+MP_UNITS_EXPORT struct check_non_negative {
+  // Lower domain bound: zero in any unit.  Consumed by quantity_point::min() and
+  // std::numeric_limits<quantity_point>::lowest().  The operator() uses V::zero() directly
+  // (no unit scaling needed); this member exists solely for the numeric_limits interface.
+  detail::zero_quantity_t min;
+
+  template<Quantity V>
+  constexpr V operator()(V v) const
+  {
+    const V vzero{V::zero()};
+    if constexpr (detail::HasConstraintViolationHandler<typename V::rep>) {
+      if (v < vzero) constraint_violation_handler<typename V::rep>::on_violation("value must be non-negative");
+    } else {
+      MP_UNITS_EXPECTS(v >= vzero);
+    }
+    return v;
+  }
+};
+
+/**
+ * @brief Policy that clamps the value to [0, ∞).
+ *
+ * Saturates negative values to zero. Use when small negative values can arise from
+ * floating-point rounding in a naturally non-negative domain (e.g., a computed energy
+ * that rounds to −1e−15 J should be treated as 0 J rather than signalling an error).
+ */
+MP_UNITS_EXPORT struct clamp_non_negative {
+  // Lower domain bound: zero in any unit.  See check_non_negative::min for rationale.
+  detail::zero_quantity_t min;
+
+  template<Quantity V>
+  constexpr V operator()(V v) const
+  {
+    const V vzero{V::zero()};
+    return v < vzero ? vzero : v;
+  }
+};
 
 }  // namespace mp_units

@@ -5,7 +5,6 @@
 
 Alphabetical list of all quantities.
 
-- [`Celsius_temperature` (isq)](systems/isq.md#Celsius_temperature)
 - [`Gibbs_energy` (isq)](systems/isq.md#Gibbs_energy)
 - [`Gibbs_function` (isq)](systems/isq.md#Gibbs_function)
 - [`Hamming_distance` (iec)](systems/iec.md#Hamming_distance)
@@ -504,4 +503,4 @@ Alphabetical list of all quantities.
 - [`width` (isq)](systems/isq.md#width)
 - [`work` (isq)](systems/isq.md#work)
 
-**Total quantities:** 498
+**Total quantities:** 497

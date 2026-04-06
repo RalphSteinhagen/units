@@ -40,6 +40,7 @@ class Quantity:
     namespace: str = ""
     file: str = ""
     is_kind: bool = False
+    non_negative: bool = False
     alias_target: Optional[str] = (
         None  # If this is an alias, the name of the original quantity
     )
@@ -659,8 +660,9 @@ class SystemsParser:
             parent = None
             dimension = None
             equation = None
-            # NOTE: is_kind is determined by C++ metadata extraction, not parsing
+            # NOTE: is_kind and non_negative are determined by C++ metadata extraction, not parsing
             is_kind = False
+            non_negative = False
 
             if is_dimension:
                 dimension = second_param
@@ -668,6 +670,7 @@ class SystemsParser:
                 if (
                     third_param
                     and third_param != "is_kind"
+                    and third_param != "non_negative"
                     and not third_param.startswith("quantity_character::")
                 ):
                     equation = third_param
@@ -681,6 +684,7 @@ class SystemsParser:
                 if (
                     third_param
                     and third_param != "is_kind"
+                    and third_param != "non_negative"
                     and not third_param.startswith("quantity_character::")
                 ):
                     equation = third_param
@@ -693,6 +697,7 @@ class SystemsParser:
                 namespace=f"mp_units::{system.namespace}",
                 file=file,
                 is_kind=is_kind,
+                non_negative=non_negative,
             )
             system.quantities.append(quantity)
 
@@ -1398,6 +1403,7 @@ class SystemsParser:
                     namespace=f"mp_units::{system.namespace}",
                     file=file,
                     is_kind=target_quantity.is_kind,
+                    non_negative=target_quantity.non_negative,
                     alias_target=alias_target_display,
                 )
                 system.quantities.append(alias_quantity)
@@ -1732,6 +1738,7 @@ class SystemsParser:
                         namespace=f"mp_units::{system.namespace}",
                         file=file,
                         is_kind=qty.is_kind,
+                        non_negative=qty.non_negative,
                         alias_target=f"{source_ns}::{qty.name}",
                         character=(
                             qty.character if hasattr(qty, "character") else "Real"
@@ -2360,7 +2367,6 @@ class DocumentationGenerator:
                     root_name, qty_children, qualified_quantities
                 )
             )
-            hf.write("\n")
 
     def generate_hierarchies_overview(self):
         """Generate overview page for all quantity hierarchies"""
@@ -2764,11 +2770,12 @@ class DocumentationGenerator:
 
                     # Write table of quantities - reordered columns
                     f.write(
-                        "| Quantity | Character | Dimension | is_kind | "
+                        "| Quantity | Character | Dimension | is_kind | non_negative | "
                         "Kind of | Parent | Equation | Hierarchy |\n"
                     )
                     f.write(
-                        "|----------|:---------:|:---------:|:-------:|:-------:|:------:|----------|:---------:|\n"
+                        "|----------|:---------:|:---------:|:-------:|:------------:"
+                        "|:-------:|:------:|----------|:---------:|\n"
                     )
                     for qty in sorted(system.quantities, key=lambda q: q.name):
                         character = (
@@ -2854,9 +2861,12 @@ class DocumentationGenerator:
                             is_kind_marker = (
                                 "✓" if (target_qty and target_qty.is_kind) else "—"
                             )
+                            non_negative_marker = (
+                                "✓" if (target_qty and target_qty.non_negative) else "—"
+                            )
                             f.write(
                                 f'| <span id="{qty.name}"></span><code>{qty_name_display}</code> | '
-                                f"{character} | {dim_formula} | {is_kind_marker} | {kind_of} | "
+                                f"{character} | {dim_formula} | {is_kind_marker} | {non_negative_marker} | {kind_of} | "
                                 f"{parent_display} | alias to {self._linkify_definition(qty.alias_target, system)} | "
                                 f"{hierarchy_link} |\n"
                             )
@@ -2906,9 +2916,10 @@ class DocumentationGenerator:
                                 equation = "—"
                             qty_name_display = add_word_breaks(qty.name)
                             is_kind_marker = "✓" if qty.is_kind else "—"
+                            non_negative_marker = "✓" if qty.non_negative else "—"
                             f.write(
                                 f'| <span id="{qty.name}"></span><code>{qty_name_display}</code> | '
-                                f"{character} | {dim_formula} | {is_kind_marker} | {kind_of} | "
+                                f"{character} | {dim_formula} | {is_kind_marker} | {non_negative_marker} | {kind_of} | "
                                 f"{parent_display} | {equation} | {hierarchy_link} |\n"
                             )
                     need_separator = True
@@ -3674,8 +3685,9 @@ class DocumentationGenerator:
         """Write quantity hierarchy tree recursively"""
         prefix = "  " * indent + ("├─ " if indent > 0 else "")
         kind_marker = " [kind]" if qty.is_kind else ""
+        nn_marker = " [non_negative]" if qty.non_negative else ""
         equation_info = f" = {qty.equation}" if qty.equation else ""
-        f.write(f"{prefix}{qty.name}{kind_marker}{equation_info}\n")
+        f.write(f"{prefix}{qty.name}{kind_marker}{nn_marker}{equation_info}\n")
 
         children = sorted(qty_children.get(qty.name, []), key=lambda q: q.name)
         for child in children:
@@ -3871,15 +3883,18 @@ class DocumentationGenerator:
 
         lines.append("```")
 
-        # Add legend if there are any non-root kinds in the hierarchy
+        # Add legend if there are any non-root kinds
         result = "\n".join(lines)
         if has_non_root_kinds:
             result += "\n\n**Legend:**\n\n"
             result += (
                 "- 🔒 indicates a root of a sub-kind - quantities that "
                 "cannot be added or compared to other quantities outside "
-                "their hierarchy subtree"
+                "their hierarchy subtree\n"
             )
+        elif not result.endswith("\n"):
+            # Ensure result always ends with exactly one newline
+            result += "\n"
 
         return result
 
@@ -4037,6 +4052,8 @@ class CppMetadataExtractor:
                 '            << detail::type_name<decltype(get_kind(qs))>() << ","'
                 '            << get_parent(qs) << ","'
                 "            << detail::type_name<decltype(detail::get_hierarchy_root(qs))>() "
+                '            << ","'
+                "            << std::boolalpha << is_non_negative(qs)"
                 '            << "\\n";',
                 "}",
                 "",
@@ -4081,9 +4098,10 @@ class CppMetadataExtractor:
             if not line:
                 continue
 
-            # Format: namespace,name,character,dimension_symbol,is_kind,kind_of_type,parent_type,hierarchy_root
-            parts = line.split(",", 7)
-            if len(parts) != 8:
+            # Format: namespace,name,character,dimension_symbol,is_kind,
+            # kind_of_type,parent_type,hierarchy_root,non_negative
+            parts = line.split(",", 8)
+            if len(parts) != 9:
                 continue
 
             (
@@ -4095,10 +4113,12 @@ class CppMetadataExtractor:
                 kind_of,
                 parent,
                 hierarchy_root,
+                non_negative_str,
             ) = parts
 
-            # Parse is_kind boolean
+            # Parse is_kind and non_negative booleans
             is_kind = is_kind_str.strip().lower() == "true"
+            non_negative = non_negative_str.strip().lower() == "true"
 
             # Extract kind_of from: mp_units::kind_of_<mp_units::isq::length>; std::string_view = ...
             # We want: isq::length
@@ -4136,6 +4156,7 @@ class CppMetadataExtractor:
             self.metadata[key] = {
                 "dimension": dim_symbol,
                 "is_kind": is_kind,
+                "non_negative": non_negative,
                 "kind_of": kind_str,
                 "parent": parent_str,
                 "hierarchy_root": hierarchy_root_str,
@@ -4163,8 +4184,9 @@ class CppMetadataExtractor:
                     qty.kind_of = meta["kind_of"]
                     qty.parent_from_cpp = meta["parent"]
                     qty.hierarchy_root = meta["hierarchy_root"]
-                    # Use the is_kind value from C++ (definitive source)
+                    # Use the is_kind and non_negative values from C++ (definitive source)
                     qty.is_kind = meta["is_kind"]
+                    qty.non_negative = meta["non_negative"]
 
 
 def main():

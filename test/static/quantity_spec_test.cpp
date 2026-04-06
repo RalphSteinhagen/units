@@ -41,11 +41,19 @@ inline constexpr struct dim_length_ final : base_dimension<"L"> {} dim_length;
 inline constexpr struct dim_mass_ final : base_dimension<"M"> {} dim_mass;
 inline constexpr struct dim_time_ final : base_dimension<"T"> {} dim_time;
 inline constexpr struct dim_electric_current_ final : base_dimension<"I"> {} dim_electric_current;
+inline constexpr struct dim_thermodynamic_temperature_ final : base_dimension<symbol_text{u8"Θ", "O"}> {} dim_thermodynamic_temperature;
+inline constexpr struct dim_amount_of_substance_ final : base_dimension<"N"> {} dim_amount_of_substance;
+inline constexpr struct dim_luminous_intensity_ final : base_dimension<"J"> {} dim_luminous_intensity;
 
 // quantities specification
-QUANTITY_SPEC_(length, dim_length);
-QUANTITY_SPEC_(mass, dim_mass);
-QUANTITY_SPEC_(time, dim_time);
+QUANTITY_SPEC_(length, dim_length, non_negative);
+QUANTITY_SPEC_(mass, dim_mass, non_negative);
+QUANTITY_SPEC_(time, dim_time, non_negative);
+inline constexpr auto duration = time;
+QUANTITY_SPEC_(thermodynamic_temperature, dim_thermodynamic_temperature, non_negative);
+QUANTITY_SPEC_(amount_of_substance, dim_amount_of_substance, non_negative);
+QUANTITY_SPEC_(luminous_intensity, dim_luminous_intensity, non_negative);
+QUANTITY_SPEC_(electric_current, dim_electric_current);
 
 inline constexpr struct second_ final : named_unit<"s", kind_of<time>> {} second;
 
@@ -98,7 +106,6 @@ QUANTITY_SPEC_(mechanical_energy, mechanical_work, mass* pow<2>(length) / pow<2>
 QUANTITY_SPEC_(potential_energy, mechanical_energy);
 QUANTITY_SPEC_(gravitational_potential_energy, potential_energy, mass * acceleration_of_free_fall * height);
 QUANTITY_SPEC_(kinetic_energy, mechanical_energy, mass* pow<2>(speed));
-QUANTITY_SPEC_(electric_current, dim_electric_current);
 QUANTITY_SPEC_(electric_charge, electric_current* time);
 QUANTITY_SPEC_(electric_field_strength, force / electric_charge);  // vector
 QUANTITY_SPEC_(electric_potential, electric_field_strength* length, quantity_character::real_scalar);
@@ -110,9 +117,15 @@ QUANTITY_SPEC_(active_power, power, inverse(period_duration) * (electromagnetism
 QUANTITY_SPEC_(complex_power, voltage_phasor* electric_current_phasor);  // separate kind
 QUANTITY_SPEC_(apparent_power, complex_power, quantity_character::real_scalar);
 
-// clang-format on
+// V2 workaround: altitude and depth are signed coordinates (can be negative)
+QUANTITY_SPEC_(altitude, length);                    // signed vertical coordinate
+inline constexpr auto depth = altitude;              // signed vertical coordinate
 
-// concepts verification
+// Override is_non_negative() for signed coordinates
+// Even though they inherit from non-negative length, they represent signed positions
+[[nodiscard]] consteval bool is_non_negative(decltype(altitude)) { return false; }
+
+// clang-format on
 static_assert(QuantitySpec<length_>);
 static_assert(detail::NamedQuantitySpec<length_>);
 static_assert(!detail::DerivedQuantitySpec<length_>);
@@ -1076,5 +1089,120 @@ static_assert(no_common_quantity_spec<angular_measure, solid_angular_measure>);
 static_assert(no_common_quantity_spec<kind_of<angular_measure>, solid_angular_measure>);
 static_assert(no_common_quantity_spec<angular_measure, kind_of<solid_angular_measure>>);
 static_assert(no_common_quantity_spec<kind_of<angular_measure>, kind_of<solid_angular_measure>>);
+
+// ============================================================================
+// non_negative property tests
+// ============================================================================
+
+// Base quantity with explicit non_negative
+QUANTITY_SPEC_(nn_length, dim_length, non_negative);
+QUANTITY_SPEC_(nn_mass, dim_mass, non_negative);
+QUANTITY_SPEC_(nn_time, dim_time, non_negative);
+
+// Base quantity without non_negative
+QUANTITY_SPEC_(signed_current, dim_electric_current);
+
+// Derived: all factors non_negative → non_negative
+QUANTITY_SPEC_(nn_area, pow<2>(nn_length));
+QUANTITY_SPEC_(nn_speed, nn_length / nn_time);
+QUANTITY_SPEC_(nn_density, nn_mass / pow<3>(nn_length));
+
+// Derived: some factors not non_negative → not non_negative
+QUANTITY_SPEC_(mixed_quantity, nn_mass* signed_current);
+
+// Named child with equation: inherits from parent (nn_speed is non_negative, character real_scalar)
+QUANTITY_SPEC_(nn_velocity, nn_speed, nn_length / nn_time);
+
+// Named child without equation: inherits non_negative from parent (nn_length is non_negative)
+QUANTITY_SPEC_(nn_child_no_tag, nn_length);
+
+// Named child with explicit non_negative tag
+QUANTITY_SPEC_(nn_child_tagged, nn_length, non_negative);
+
+// Vector child of nn_length: cannot be non_negative (direction-sensitive)
+QUANTITY_SPEC_(nn_displacement, nn_length, quantity_character::vector);
+
+// dimensionless is not non_negative (no explicit tag, empty equation)
+static_assert(!is_non_negative(dimensionless));
+
+// Explicit non_negative on base quantities
+static_assert(is_non_negative(nn_length));
+static_assert(is_non_negative(nn_mass));
+static_assert(is_non_negative(nn_time));
+static_assert(!is_non_negative(signed_current));
+
+// Propagation through derived equations
+static_assert(is_non_negative(nn_area));
+static_assert(is_non_negative(nn_speed));
+static_assert(is_non_negative(nn_density));
+static_assert(!is_non_negative(mixed_quantity));
+
+// Named child with equation inherits from parent
+static_assert(is_non_negative(nn_velocity));
+
+// Named child without equation inherits non_negative from parent
+static_assert(is_non_negative(nn_child_no_tag));
+
+// Named child with explicit tag
+static_assert(is_non_negative(nn_child_tagged));
+
+// Vector child does NOT inherit non_negative (character is not real_scalar)
+static_assert(!is_non_negative(nn_displacement));
+
+// kind_of<QS> is NEVER non_negative even when QS is, because a kind encompasses the whole
+// quantity tree — including vector quantities and signed coordinates like altitude/depth.
+static_assert(!is_non_negative(kind_of<nn_length>));
+static_assert(!is_non_negative(kind_of<nn_mass>));
+
+// Library base quantities now have non_negative tags
+static_assert(is_non_negative(length));
+static_assert(is_non_negative(mass));
+static_assert(is_non_negative(time));
+// area = pow<2>(length): even positive integer power of a real scalar is always non-negative.
+static_assert(is_non_negative(area));
+// Derived quantities without explicit tag: speed has equation length/time, but since both are non_negative, speed is
+// too
+static_assert(is_non_negative(speed));
+// energy = mass * pow<2>(length) / pow<2>(time): all three are non_negative, so energy is inferred as non_negative
+// This is correct for absolute energy (kinetic, rest mass, etc.). Negative energy (relative to reference point)
+// should be modeled using point<energy, custom_origin>.
+static_assert(is_non_negative(energy));
+
+// ISQ base quantities tagged non_negative
+static_assert(is_non_negative(length));
+static_assert(is_non_negative(mass));
+static_assert(is_non_negative(duration));
+static_assert(is_non_negative(thermodynamic_temperature));
+static_assert(is_non_negative(amount_of_substance));
+static_assert(is_non_negative(luminous_intensity));
+static_assert(!is_non_negative(electric_current));  // can be negative
+
+// Inheritance of non_negative through hierarchy
+static_assert(is_non_negative(height));       // inherits from length
+static_assert(is_non_negative(width));        // inherits from length
+static_assert(is_non_negative(path_length));  // inherits from length
+
+// V2 workaround: altitude and depth have specialized overloads returning false (signed coordinates)
+static_assert(!is_non_negative(altitude));  // overload returns false despite inheriting from length
+static_assert(!is_non_negative(depth));     // overload returns false despite inheriting from length
+
+// Derived non-negative quantities
+static_assert(is_non_negative(speed));   // length / duration
+static_assert(is_non_negative(area));    // pow<2>(length)
+static_assert(is_non_negative(volume));  // pow<3>(length)
+
+// Vector quantities are not non-negative (character != real_scalar)
+static_assert(!is_non_negative(displacement));
+static_assert(!is_non_negative(velocity));
+
+// kind_of<QS> is NEVER non-negative, even when QS is (encompasses entire tree including signed variants)
+static_assert(!is_non_negative(kind_of<length>));
+static_assert(!is_non_negative(kind_of<mass>));
+static_assert(!is_non_negative(kind_of<duration>));
+
+// Verify get_kind() for non-root quantities (height, altitude, depth all get kind_of<length>)
+static_assert(!is_non_negative(get_kind(height)));
+static_assert(!is_non_negative(get_kind(altitude)));
+static_assert(!is_non_negative(get_kind(depth)));
 
 }  // namespace

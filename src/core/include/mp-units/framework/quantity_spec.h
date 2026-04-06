@@ -318,10 +318,41 @@ concept QSProperty = (!QuantitySpec<T>);
 
 }  // namespace detail
 
+namespace detail {
+
+// True iff a single factor (bare type or power<>) contributes only non-negative values.
+//  - Bare type:          non-negative iff the base type has _is_non_negative_.
+//  - power<Q, N, Den...>: non-negative iff:
+//      (a) Q::_is_non_negative_  — any positive power of a non-negative quantity is non-negative, or
+//      (b) Q has real-scalar character AND the exponent N/D is an even positive integer
+//          — x^{2k} ≥ 0 for any real x, regardless of sign.
+template<typename Factor>
+inline constexpr bool factor_is_non_negative = expr_type<Factor>::_is_non_negative_;
+
+template<typename Q, int N, int... Den>
+inline constexpr bool factor_is_non_negative<power<Q, N, Den...>> =
+  Q::_is_non_negative_ || (Q::character == quantity_character::real_scalar &&
+                           power<Q, N, Den...>::_exponent_.den == 1 && power<Q, N, Den...>::_exponent_.num % 2 == 0);
+
+// True iff Num and Den together have at least one factor AND every factor is non-negative.
+// sizeof... handles the "both lists empty ⇒ dimensionless ⇒ false" case without needing type_list_size.
+template<typename Num, typename Den>
+inline constexpr bool factors_are_non_negative = false;
+
+template<typename... NumQs, typename... DenQs>
+inline constexpr bool factors_are_non_negative<type_list<NumQs...>, type_list<DenQs...>> =
+  (sizeof...(NumQs) + sizeof...(DenQs) > 0) && (factor_is_non_negative<NumQs> && ...) &&
+  (factor_is_non_negative<DenQs> && ...);
+
+}  // namespace detail
+
 MP_UNITS_EXPORT_BEGIN
 
 inline constexpr struct is_kind {
 } is_kind;
+
+inline constexpr struct non_negative {
+} non_negative;
 
 /**
  * @brief Quantity Specification
@@ -394,6 +425,9 @@ struct quantity_spec<Self, Dim, Args...> : detail::quantity_spec_interface<Self>
   static constexpr detail::BaseDimension auto dimension = Dim;
   static constexpr quantity_character character =
     detail::quantity_character_init<Args...>(quantity_character::real_scalar);
+  static_assert(!mp_units::contains<struct non_negative, Args...>() || character == quantity_character::real_scalar,
+                "non_negative can only be applied to real scalar quantities");
+  static constexpr bool _is_non_negative_ = mp_units::contains<struct non_negative, Args...>();
 };
 
 /**
@@ -435,9 +469,13 @@ struct quantity_spec<Self, Eq, Args...> : detail::quantity_spec_interface<Self> 
   static constexpr auto _equation_ = Eq;
   static constexpr Dimension auto dimension = Eq.dimension;
 
-  // TODO static_assert that character property is not passed in Args
-
   static constexpr quantity_character character = detail::quantity_character_init<Args...>(Eq.character);
+  static_assert(!mp_units::contains<struct non_negative, Args...>() || character == quantity_character::real_scalar,
+                "non_negative can only be applied to real scalar quantities");
+  static constexpr bool _is_non_negative_ =
+    mp_units::contains<struct non_negative, Args...>() ||
+    detail::factors_are_non_negative<typename MP_UNITS_NONCONST_TYPE(Eq)::_num_,
+                                     typename MP_UNITS_NONCONST_TYPE(Eq)::_den_>;
 };
 
 namespace detail {
@@ -493,6 +531,10 @@ struct quantity_spec<Self, QS, Args...> : detail::propagate_equation<QS>, detail
   static constexpr auto _parent_ = QS;
   static constexpr Dimension auto dimension = _parent_.dimension;
   static constexpr quantity_character character = detail::quantity_character_init<Args...>(QS.character);
+  static_assert(!mp_units::contains<struct non_negative, Args...>() || character == quantity_character::real_scalar,
+                "non_negative can only be applied to real scalar quantities");
+  static constexpr bool _is_non_negative_ = mp_units::contains<struct non_negative, Args...>() ||
+                                            (character == quantity_character::real_scalar && QS._is_non_negative_);
 };
 
 // clang-format off
@@ -540,9 +582,11 @@ struct quantity_spec<Self, QS, Eq, Args...> : detail::quantity_spec_interface<Se
   static constexpr auto _equation_ = Eq;
   static constexpr Dimension auto dimension = _parent_.dimension;
 
-  // TODO static_assert that character property is not passed in Args
-
   static constexpr quantity_character character = detail::quantity_character_init<Args...>(Eq.character);
+  static_assert(!mp_units::contains<struct non_negative, Args...>() || character == quantity_character::real_scalar,
+                "non_negative can only be applied to real scalar quantities");
+  static constexpr bool _is_non_negative_ = mp_units::contains<struct non_negative, Args...>() ||
+                                            (character == quantity_character::real_scalar && QS._is_non_negative_);
 };
 
 namespace detail {
@@ -566,6 +610,7 @@ struct derived_quantity_spec_impl :
     detail::expr_map<to_dimension, derived_dimension, struct dimension_one>(_base_{});
   static constexpr quantity_character character =
     detail::derived_quantity_character(typename _base_::_num_{}, typename _base_::_den_{});
+  static constexpr bool _is_non_negative_ = factors_are_non_negative<typename _base_::_num_, typename _base_::_den_>;
 };
 
 }  // namespace detail
@@ -645,6 +690,10 @@ struct kind_of_<Q> final : quantity_spec<kind_of_<Q>, Q{}>::_base_type_ {
 #endif
   using _base_type_ = kind_of_;
   static constexpr auto _quantity_spec_ = Q{};
+  // A kind encompasses the *entire* quantity tree — including vector quantities and signed
+  // coordinates (e.g. displacement, altitude, depth) — so it can never be universally
+  // non-negative, even when the tree root carries a non_negative tag.
+  static constexpr bool _is_non_negative_ = false;
 };
 
 MP_UNITS_EXPORT template<QuantitySpec auto Q>
@@ -1211,6 +1260,12 @@ MP_UNITS_EXPORT template<QuantitySpec Q>
 [[nodiscard]] consteval detail::QuantityKindSpec auto get_kind(Q)
 {
   return kind_of<detail::get_kind_tree_root(Q{})>;
+}
+
+MP_UNITS_EXPORT template<QuantitySpec Q>
+[[nodiscard]] consteval bool is_non_negative(Q)
+{
+  return Q::_is_non_negative_;
 }
 
 namespace detail {

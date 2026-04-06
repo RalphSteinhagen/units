@@ -7,7 +7,7 @@ or compiler optimization level.
 !!! tip "Background reading"
 
     For in-depth background on how `quantity_bounds` and overflow policies work, see
-    [Range-Validated Quantity Points](../../blog/posts/quantity-point-bounds.md).
+    [Range-Validated Quantity Points](../../blog/posts/range-validated-quantity-points.md).
 
 ## The Problem
 
@@ -119,14 +119,12 @@ release-with-debug-info.
 !!! tip "Extensible policy interface"
 
     The `quantity_bounds` customization point accepts any callable policy with the
-    signature `V operator()(V)`. The library ships four built-in policies, but you
-    can write your own — for example a `clamp_bottom` for halflines that only enforce
-    a lower bound, or a domain-specific policy that logs and corrects invalid readings.
-    As long as your policy's `operator()` returns the (possibly adjusted) value,
-    it will integrate seamlessly with the `quantity_point` enforcement machinery.
-
-    See [Custom Policies](../../users_guide/framework_basics/the_affine_space.md#custom-policies-one-sided-bounds)
-    for a complete example of implementing one-sided bound constraints.
+    signature `V operator()(V)`. The library ships six built-in policies — `check_in_range`,
+    `clamp_to_range`, `wrap_to_range`, `reflect_in_range`, `check_non_negative`, and
+    `clamp_non_negative` — and the interface is fully extensible. `check_non_negative` and
+    `clamp_non_negative` cover the common `[0, +∞)` halfline case; they are also applied
+    automatically to natural origins of non-negative ISQ quantity specs. For a fully custom
+    one-sided or asymmetric policy, see [Custom Policies](../../users_guide/framework_basics/the_affine_space.md#custom-policies-one-sided-bounds).
 
 ## How It Works?
 

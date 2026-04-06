@@ -58,6 +58,9 @@ struct undefined_t {};
 
 inline constexpr undefined_t undefined{};
 
+template<PointOrigin PO>
+inline constexpr auto quantity_bounds_for = undefined;
+
 }  // namespace detail
 
 MP_UNITS_EXPORT_BEGIN
@@ -184,7 +187,7 @@ using quantity_values [[deprecated("2.5.0: Use `representation_values` instead")
  */
 template<PointOrigin auto PO>
   requires(PO._quantity_spec_.character == quantity_character::real_scalar)
-inline constexpr auto quantity_bounds = detail::undefined;
+inline constexpr auto quantity_bounds = detail::quantity_bounds_for<MP_UNITS_REMOVE_CONST(decltype(PO))>;
 
 MP_UNITS_EXPORT_END
 

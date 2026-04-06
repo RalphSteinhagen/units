@@ -405,7 +405,7 @@ assert(qp2 == qp2A);
 
     For a deeper discussion of the motivation, design trade-offs, and open questions,
     see the blog article
-    [Range-Validated Quantity Points](../../blog/posts/quantity-point-bounds.md).
+    [Range-Validated Quantity Points](../../blog/posts/range-validated-quantity-points.md).
 
 In many domains, quantity points must stay within specific bounds. For example:
 
@@ -463,18 +463,22 @@ unit conversion, and arithmetic operations.
 
 ### Available Overflow Policies
 
-| Policy             | Behavior                                                                   | Error Handling       | Use Case                                                   |
-|--------------------|----------------------------------------------------------------------------|----------------------|------------------------------------------------------------|
-| `check_in_range`   | Reports violation via `constraint_violation_handler` or `MP_UNITS_EXPECTS` | Depends on rep type  | Bounds checking with customizable error behavior           |
-| `clamp_to_range`   | Clamps to nearest boundary: `clamp(value, min, max)`                       | Silent correction    | Saturating arithmetic, sensor limits, UI controls          |
-| `wrap_to_range`    | Wraps circularly to `[min, max)`: modulo arithmetic                        | Value transformation | Periodic quantities (_angles_, _time-of-day_, _longitude_) |
-| `reflect_in_range` | Reflects at boundaries (like a bouncing ball)                              | Value transformation | Geographic _latitude_, physical boundaries                 |
+| Policy               | Behavior                                                                   | Error Handling       | Use Case                                                   |
+|----------------------|----------------------------------------------------------------------------|----------------------|------------------------------------------------------------|
+| `check_in_range`     | Reports violation via `constraint_violation_handler` or `MP_UNITS_EXPECTS` | Depends on rep type  | Bounds checking with customizable error behavior           |
+| `clamp_to_range`     | Clamps to nearest boundary: `clamp(value, min, max)`                       | Silent correction    | Saturating arithmetic, sensor limits, UI controls          |
+| `wrap_to_range`      | Wraps circularly to `[min, max)`: modulo arithmetic                        | Value transformation | Periodic quantities (_angles_, _time-of-day_, _longitude_) |
+| `reflect_in_range`   | Reflects at boundaries (like a bouncing ball)                              | Value transformation | Geographic _latitude_, physical boundaries                 |
+| `check_non_negative` | Reports violation if `value < 0`                                           | Depends on rep type  | Inherently non-negative quantities (_length_, _mass_)      |
+| `clamp_non_negative` | Clamps negative values to zero                                             | Silent correction    | FP rounding noise in non-negative domains                  |
 
 !!! important
 
-    All built-in policies expose public `min` and `max` data members, enabling `std::numeric_limits`
-    specializations to reflect the constrained bounds. See the `std::numeric_limits` note below
-    for details.
+    The four bounded-range policies (`check_in_range`, `clamp_to_range`, `wrap_to_range`,
+    `reflect_in_range`) expose public `min` and `max` data members, enabling `std::numeric_limits`
+    specializations to reflect the constrained bounds. `check_non_negative` and
+    `clamp_non_negative` are halfline policies with no upper bound and therefore do not
+    expose `max`. See the `std::numeric_limits` note below for details.
 
 !!! info "Error behavior of `check_in_range`"
 
@@ -486,7 +490,9 @@ unit conversion, and arithmetic operations.
     - Otherwise, falls back to [`MP_UNITS_EXPECTS`](../../how_to_guides/integration/wide_compatibility.md#contract-checking-macros),
       which may be disabled in release builds.
 
-    See [How to: Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) for a
+    See [Tutorial: Custom Contract Handlers](../../tutorials/affine_space/custom_contract_handlers.md)
+    for a step-by-step guide to implementing custom error policies, or
+    [How to: Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) for a
     complete example of combining `check_in_range` with `constrained` rep types.
 
 ### Example Usage
@@ -552,7 +558,13 @@ After each mutation the library transparently applies the policy specified in `q
 
 ### Custom Policies (One-Sided Bounds)
 
-You can create custom policies for one-sided constraints like `[min, +∞)` or `(-∞, max]`:
+The library ships two built-in one-sided halfline policies for `[0, +∞)` domains:
+`check_non_negative` (reports a violation when the value is negative) and
+`clamp_non_negative` (silently clamps negative values to zero). These are automatically
+applied to any `quantity_point` whose origin is a `natural_point_origin` of a non-negative
+quantity spec (such as `isq::length`, `isq::mass`, or `isq::duration`).
+
+For other one-sided constraints, you can create a fully custom policy:
 
 ```cpp
 template<Quantity Q>

@@ -37,7 +37,7 @@ namespace mp_units::natural {
 // clang-format off
 // dimension and base quantity for natural units
 inline constexpr struct dim_energy final : base_dimension<"E"> {} dim_energy;
-QUANTITY_SPEC(energy, dim_energy);
+QUANTITY_SPEC(energy, dim_energy, non_negative);
 
 // Specialized quantities of kind energy (all have dimension energy but provide type safety)
 // Functions expecting mass won't accept energy without explicit cast

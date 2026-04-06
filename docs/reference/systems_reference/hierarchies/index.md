@@ -30,7 +30,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 ## Dimension: L
 
 - [`hep::length`](length_hep.md) (16 quantities)
-- [`isq::length`](length_isq.md) (13 quantities)
+- [`isq::length`](length_isq.md) (14 quantities)
 
 ## Dimension: M
 
@@ -53,7 +53,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 ## Dimension: Θ
 
 - [`hep::temperature`](temperature.md) (1 quantity)
-- [`isq::thermodynamic_temperature`](thermodynamic_temperature.md) (3 quantities)
+- [`isq::thermodynamic_temperature`](thermodynamic_temperature.md) (2 quantities)
 
 ## Dimension: α
 

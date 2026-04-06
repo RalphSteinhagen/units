@@ -54,13 +54,13 @@ inline constexpr struct dim_luminous_intensity final : base_dimension<"I"> {} di
 // clang-format on
 
 // base quantities
-QUANTITY_SPEC(length, dim_length);
-QUANTITY_SPEC(duration, dim_time);
+QUANTITY_SPEC(length, dim_length, non_negative);
+QUANTITY_SPEC(duration, dim_time, non_negative);
 QUANTITY_SPEC(electric_charge, dim_electric_charge);
-QUANTITY_SPEC(energy, dim_energy);
-QUANTITY_SPEC(temperature, dim_temperature);
-QUANTITY_SPEC(amount_of_substance, dim_amount_of_substance);
-QUANTITY_SPEC(luminous_intensity, dim_luminous_intensity);
+QUANTITY_SPEC(energy, dim_energy, non_negative);
+QUANTITY_SPEC(temperature, dim_temperature, non_negative);
+QUANTITY_SPEC(amount_of_substance, dim_amount_of_substance, non_negative);
+QUANTITY_SPEC(luminous_intensity, dim_luminous_intensity, non_negative);
 
 // derived quantites
 // space and time

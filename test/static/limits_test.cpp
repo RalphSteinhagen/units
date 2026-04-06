@@ -135,7 +135,7 @@ static_assert(std::numeric_limits<qp_int>::is_integer == true);
 static_assert(std::numeric_limits<qp_double>::has_infinity == true);
 static_assert(std::numeric_limits<qp_int>::has_infinity == false);
 
-// min
+// min — kind_of<isq::length> is not a non-negative domain: falls back to the type's most-negative value
 static_assert(std::numeric_limits<qp_double>::min() == qp_double::min());
 static_assert(std::numeric_limits<qp_int>::min() == qp_int::min());
 
@@ -153,7 +153,7 @@ static_assert(std::numeric_limits<qp_double>::max().quantity_from_unit_zero().nu
 static_assert(std::numeric_limits<qp_int>::max().quantity_from_unit_zero().numerical_value_in(mp_units::si::metre) ==
               std::numeric_limits<int>::max());
 
-// lowest
+// lowest — unbounded: falls back to the type's most-negative value
 static_assert(std::numeric_limits<qp_double>::lowest().quantity_from_unit_zero().numerical_value_in(
                 mp_units::si::metre) == std::numeric_limits<double>::lowest());
 static_assert(std::numeric_limits<qp_int>::lowest().quantity_from_unit_zero().numerical_value_in(mp_units::si::metre) ==

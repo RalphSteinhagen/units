@@ -169,6 +169,8 @@ nav:
           - "Point Origins": tutorials/affine_space/point_origins.md
           - "Temperature Handling": tutorials/affine_space/temperature_handling.md
           - "Temperature Applications": tutorials/affine_space/temperature_applications.md
+          - "Bounded Quantity Points": tutorials/affine_space/bounded_quantity_points.md
+          - "Custom Contract Handlers": tutorials/affine_space/custom_contract_handlers.md
   - User's Guide:
       - User's Guide: users_guide/index.md
       - Terms and Definitions: users_guide/terms_and_definitions.md
@@ -215,6 +217,7 @@ nav:
           - "Custom Base Dimensions": workshops/extensions/custom_base_dimensions.md
           - "Distinct Quantity Kinds": workshops/extensions/distinct_quantity_kinds.md
       - Advanced:
+          - "Bounds Validation": workshops/advanced/bounds_validation.md
           - "Strongly-Typed Counts": workshops/advanced/strongly_typed_counts.md
           - "Faster-than-Lightspeed Constants": workshops/advanced/faster_than_lightspeed_constants.md
           - "Incremental Migration": workshops/advanced/incremental_migration.md
@@ -224,6 +227,7 @@ nav:
           - Advanced Usage Guides: how_to_guides/advanced_usage/index.md
           - Pure Dimensional Analysis: how_to_guides/advanced_usage/pure_dimensional_analysis.md
           - Type-Safe Indices and Offsets: how_to_guides/advanced_usage/typed_indices.md
+          - Ensure Ultimate Safety: how_to_guides/advanced_usage/ultimate_safety.md
       - Integration:
           - Integration Guides: how_to_guides/integration/index.md
           - Working with Legacy Interfaces: how_to_guides/integration/working_with_legacy_interfaces.md

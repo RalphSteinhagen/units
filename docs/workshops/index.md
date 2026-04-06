@@ -47,6 +47,7 @@ Create domain-specific quantity systems:
 
 Master sophisticated patterns:
 
+- [Bounds Validation](advanced/bounds_validation.md)
 - [Strongly-Typed Counts](advanced/strongly_typed_counts.md)
 - [Faster-than-Lightspeed Constants](advanced/faster_than_lightspeed_constants.md)
 - [Incremental Migration from Legacy Code](advanced/incremental_migration.md)

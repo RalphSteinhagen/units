@@ -214,12 +214,15 @@ constexpr bool has_quantity_bounds_v = [] {
         "quantity_bounds object must have at least a 'min' or 'max' member");
       if constexpr (is_derived_from_specialization_of_v<PO, relative_point_origin>) {
         constexpr auto parent_po = PO::_quantity_point_.point_origin;
-        if constexpr (has_quantity_bounds_v<std::remove_cvref_t<decltype(parent_po)>>) {
+        using parent_po_t = std::remove_cvref_t<decltype(parent_po)>;
+        if constexpr (has_quantity_bounds_v<parent_po_t>) {
           constexpr auto offset = offset_from_parent(PO{});
-          static_assert(quantity_bounds<PO{}>.min + offset >= quantity_bounds<parent_po>.min,
-                        "relative origin lower bound violates the parent origin's bounds");
-          static_assert(quantity_bounds<PO{}>.max + offset <= quantity_bounds<parent_po>.max,
-                        "relative origin upper bound violates the parent origin's bounds");
+          if constexpr (requires { quantity_bounds<PO{}>.min; } && requires { quantity_bounds<parent_po_t{}>.min; })
+            static_assert(quantity_bounds<PO{}>.min + offset >= quantity_bounds<parent_po_t{}>.min,
+                          "relative origin lower bound violates the parent origin's bounds");
+          if constexpr (requires { quantity_bounds<PO{}>.max; } && requires { quantity_bounds<parent_po_t{}>.max; })
+            static_assert(quantity_bounds<PO{}>.max + offset <= quantity_bounds<parent_po_t{}>.max,
+                          "relative origin upper bound violates the parent origin's bounds");
         }
       }
       return true;
@@ -328,10 +331,17 @@ public:
   [[nodiscard]] static constexpr quantity_point min() noexcept
     requires requires { mp_units::quantity_bounds<PO>.min; } || requires { quantity_type::min(); }
   {
-    if constexpr (requires { mp_units::quantity_bounds<PO>.min; })
-      return {mp_units::quantity_bounds<PO>.min.force_in(unit), PO};
-    else
+    if constexpr (requires { mp_units::quantity_bounds<PO>.min; }) {
+      // zero_quantity_t signals a [0, ∞) policy: return the natural zero for this
+      // quantity type directly — correct quantity spec, no unit scaling required.
+      if constexpr (std::same_as<std::remove_cvref_t<decltype(mp_units::quantity_bounds<PO>.min)>,
+                                 detail::zero_quantity_t>)
+        return {quantity_type::zero(), PO};
+      else
+        return {mp_units::quantity_bounds<PO>.min.force_in(unit), PO};
+    } else {
       return {quantity_type::min(), PO};
+    }
   }
 
   [[nodiscard]] static constexpr quantity_point max() noexcept

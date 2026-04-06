@@ -7,10 +7,11 @@ Alphabetical list of all point origins.
 
 - [`absolute_zero` (si)](systems/si.md#absolute_zero)
 - [`chrono_point_origin` (si)](systems/si.md#chrono_point_origin)
+- [`fahrenheit_zero` (usc)](systems/usc.md#fahrenheit_zero)
 - [`ice_point` (si)](systems/si.md#ice_point)
 - [`zeroth_degree_Celsius` (si)](systems/si.md#zeroth_degree_Celsius)
 - [`zeroth_degree_Fahrenheit` (usc)](systems/usc.md#zeroth_degree_Fahrenheit)
 - [`zeroth_kelvin` (si)](systems/si.md#zeroth_kelvin)
 - [`zeroth_rankine` (usc)](systems/usc.md#zeroth_rankine)
 
-**Total point origins:** 7
+**Total point origins:** 8

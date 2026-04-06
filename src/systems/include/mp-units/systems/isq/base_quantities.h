@@ -45,13 +45,13 @@ inline constexpr struct dim_luminous_intensity final : base_dimension<"J"> {} di
 // clang-format on
 
 // base quantities
-QUANTITY_SPEC(length, dim_length);
-QUANTITY_SPEC(mass, dim_mass);
-QUANTITY_SPEC(duration, dim_time);
+QUANTITY_SPEC(length, dim_length, non_negative);
+QUANTITY_SPEC(mass, dim_mass, non_negative);
+QUANTITY_SPEC(duration, dim_time, non_negative);
 inline constexpr auto time = duration;
 QUANTITY_SPEC(electric_current, dim_electric_current);
-QUANTITY_SPEC(thermodynamic_temperature, dim_thermodynamic_temperature);
-QUANTITY_SPEC(amount_of_substance, dim_amount_of_substance);
-QUANTITY_SPEC(luminous_intensity, dim_luminous_intensity);
+QUANTITY_SPEC(thermodynamic_temperature, dim_thermodynamic_temperature, non_negative);
+QUANTITY_SPEC(amount_of_substance, dim_amount_of_substance, non_negative);
+QUANTITY_SPEC(luminous_intensity, dim_luminous_intensity, non_negative);
 
 }  // namespace mp_units::isq

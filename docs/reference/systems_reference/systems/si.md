@@ -57,7 +57,7 @@
 | <span id="becquerel"></span><code>becquerel</code> | Bq | `Bq` | <code>[one](core.md#one) / <wbr>[second](#second)<br>kind: [isq::activity](isq.md#activity)</code> |
 | <span id="candela"></span><code>candela</code> | cd | `cd` | <code>kind: [isq::luminous_<wbr>intensity](isq.md#luminous_intensity)</code> |
 | <span id="coulomb"></span><code>coulomb</code> | C | `C` | <code>[ampere](#ampere) * <wbr>[second](#second)</code> |
-| <span id="degree_Celsius"></span><code>degree_<wbr>Celsius</code> | ℃ (\`C) | `deg_C` | <code>[kelvin](#kelvin)<br>origin: [zeroth_<wbr>degree_<wbr>Celsius](#zeroth_degree_Celsius)</code> |
+| <span id="degree_Celsius"></span><code>degree_<wbr>Celsius</code> | ℃ (\`C) | `deg_C` | <code>[kelvin](#kelvin)<br>origin: [ice_<wbr>point](#ice_point)</code> |
 | <span id="farad"></span><code>farad</code> | F | `F` | <code>[coulomb](#coulomb) / <wbr>[volt](#volt)</code> |
 | <span id="gram"></span><code>gram</code> | g | `g` | <code>kind: [isq::mass](isq.md#mass)</code> |
 | <span id="gray"></span><code>gray</code> | Gy | `Gy` | <code>[joule](#joule) / <wbr>[kilogram](#kilogram)<br>kind: [isq::absorbed_<wbr>dose](isq.md#absorbed_dose)</code> |
@@ -65,7 +65,7 @@
 | <span id="hertz"></span><code>hertz</code> | Hz | `Hz` | <code>[one](core.md#one) / <wbr>[second](#second)<br>kind: [isq::frequency](isq.md#frequency)</code> |
 | <span id="joule"></span><code>joule</code> | J | `J` | <code>[newton](#newton) * <wbr>[metre](#metre)</code> |
 | <span id="katal"></span><code>katal</code> | kat | `kat` | <code>[mole](#mole) / <wbr>[second](#second)</code> |
-| <span id="kelvin"></span><code>kelvin</code> | K | `K` | <code>kind: [isq::thermodynamic_<wbr>temperature](isq.md#thermodynamic_temperature)<br>origin: [zeroth_<wbr>kelvin](#zeroth_kelvin)</code> |
+| <span id="kelvin"></span><code>kelvin</code> | K | `K` | <code>kind: [isq::thermodynamic_<wbr>temperature](isq.md#thermodynamic_temperature)<br>origin: [absolute_<wbr>zero](#absolute_zero)</code> |
 | <span id="kilogram"></span><code>kilogram</code> | — | `kg` | <code>[kilo](#kilo)<[gram](#gram)></code> |
 | <span id="lumen"></span><code>lumen</code> | lm | `lm` | <code>[candela](#candela) * <wbr>[steradian](#steradian)</code> |
 | <span id="lux"></span><code>lux</code> | lx | `lx` | <code>[lumen](#lumen) / <wbr>square([metre](#metre))</code> |

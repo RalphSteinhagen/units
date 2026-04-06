@@ -35,9 +35,21 @@
 MP_UNITS_EXPORT
 namespace mp_units::isq {
 
-QUANTITY_SPEC(height, length);
-inline constexpr auto depth = height;
-inline constexpr auto altitude = height;
+// WORKAROUND for V2: altitude and depth are signed vertical coordinates (position above/below
+// a reference plane), while height is the unsigned magnitude. The correct V3 hierarchy would be
+// length -> height -> point_for<height> {altitude, depth}, but V2 lacks point_for<>.
+// To avoid special-case overrides and enable implicit height->altitude conversions in affine
+// space operations, we temporarily reverse the hierarchy: altitude and depth are children of
+// length (signed coordinates), and height is a child of altitude (explicitly non-negative).
+// This will be corrected in V3 when point_for<> becomes available.
+QUANTITY_SPEC(altitude, length);                // signed vertical coordinate (can be negative)
+inline constexpr auto depth = altitude;         // signed vertical coordinate (can be negative, typically <= 0)
+QUANTITY_SPEC(height, altitude, non_negative);  // unsigned magnitude; child of altitude for implicit conversion
+
+// HACK: Override is_non_negative() for signed coordinates.
+// Even though altitude and depth inherit from non-negative length, they represent signed positions.
+[[nodiscard]] consteval bool is_non_negative(decltype(altitude)) { return false; }
+
 QUANTITY_SPEC(thickness, width);
 QUANTITY_SPEC(diameter, width);
 QUANTITY_SPEC(distance, path_length);

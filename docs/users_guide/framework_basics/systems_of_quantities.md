@@ -92,7 +92,8 @@ For example, here are all quantities of the kind length provided in the ISO 8000
 flowchart TD
     length["<b>length</b><br>[m]"]
     length --- width["<b>width</b> | <b>breadth</b>"]
-    length --- height["<b>height</b> | <b>depth</b> | <b>altitude</b>"]
+    length --- altitude["<b>altitude | <b>depth</b></b>†"]
+    altitude --- height["<b>height</b>"]
     width --- thickness["<b>thickness</b>"]
     width --- diameter["<b>diameter</b>"]
     width --- radius["<b>radius</b>"]
@@ -104,6 +105,23 @@ flowchart TD
     displacement --- position_vector["<b>position_vector</b>"]
     radius --- radius_of_curvature["<b>radius_of_curvature</b>"]
 ```
+
+!!! note "V2 Workaround: Reversed Hierarchy for Signed Coordinates"
+
+    † In the ISO 80000 model, `height` is the parent with `altitude` and `depth` as children.
+    However, **mp-units V2** temporarily reverses this: `altitude` and `depth` are children of
+    `length`, while `height` (explicitly tagged `non_negative`) is a child of `altitude`.
+
+    **Rationale**: `altitude` and `depth` represent **signed vertical coordinates** (positions
+    relative to a reference plane), while `height` is an **unsigned magnitude**. The reversed
+    hierarchy enables implicit `height` → `altitude` conversions in affine space operations
+    (e.g., `mean_sea_level + height_value` works without explicit casts).
+
+    This workaround will be removed in **V3** when the `point_for<>` mechanism becomes available,
+    allowing the proper ISO hierarchy with `altitude`/`depth` as `point_for<height>` types.
+
+    Special `is_non_negative()` overloads ensure `altitude` and `depth` remain unbounded despite
+    inheriting from non-negative `length`.
 
 Each quantity above expresses some kind of _length_ and can be measured with `si::metre`.
 Each has different semantics and sometimes a distinct representation (e.g. `position_vector`
@@ -141,9 +159,10 @@ For example, here is how the above quantity kind tree can be modeled in the libr
     inline constexpr struct length final : quantity_spec<dim_length> {} length;
     inline constexpr struct width final : quantity_spec<length> {} width;
     inline constexpr auto breadth = width;
-    inline constexpr struct height final : quantity_spec<length> {} height;
-    inline constexpr auto depth = height;
-    inline constexpr auto altitude = height;
+    // V2 workaround: altitude/depth as children of length, height as child of altitude
+    inline constexpr struct altitude final : quantity_spec<length> {} altitude;
+    inline constexpr auto depth = altitude;
+    inline constexpr struct height final : quantity_spec<altitude, non_negative> {} height;
     inline constexpr struct thickness final : quantity_spec<width> {} thickness;
     inline constexpr struct diameter final : quantity_spec<width> {} diameter;
     inline constexpr struct radius final : quantity_spec<width> {} radius;
@@ -163,9 +182,10 @@ For example, here is how the above quantity kind tree can be modeled in the libr
     inline constexpr struct length final : quantity_spec<length, dim_length> {} length;
     inline constexpr struct width final : quantity_spec<width, length> {} width;
     inline constexpr auto breadth = width;
-    inline constexpr struct height final : quantity_spec<height, length> {} height;
-    inline constexpr auto depth = height;
-    inline constexpr auto altitude = height;
+    // V2 workaround: altitude/depth as children of length, height as child of altitude
+    inline constexpr struct altitude final : quantity_spec<altitude, length> {} altitude;
+    inline constexpr auto depth = altitude;
+    inline constexpr struct height final : quantity_spec<height, altitude, non_negative> {} height;
     inline constexpr struct thickness final : quantity_spec<thickness, width> {} thickness;
     inline constexpr struct diameter final : quantity_spec<diameter, width> {} diameter;
     inline constexpr struct radius final : quantity_spec<radius, width> {} radius;
@@ -185,9 +205,10 @@ For example, here is how the above quantity kind tree can be modeled in the libr
     QUANTITY_SPEC(length, dim_length);
     QUANTITY_SPEC(width, length);
     inline constexpr auto breadth = width;
-    QUANTITY_SPEC(height, length);
-    inline constexpr auto depth = height;
-    inline constexpr auto altitude = height;
+    // V2 workaround: altitude/depth as children of length, height as child of altitude
+    QUANTITY_SPEC(altitude, length);
+    inline constexpr auto depth = altitude;
+    QUANTITY_SPEC(height, altitude, non_negative);
     QUANTITY_SPEC(thickness, width);
     QUANTITY_SPEC(diameter, width);
     QUANTITY_SPEC(radius, width);
@@ -652,3 +673,172 @@ This pattern:
     Special dimensionless quantity kinds like _angular measure_, _solid angular measure_,
     and _storage capacity_ are discussed in detail in the
     [Dimensionless Quantities](dimensionless_quantities.md#nested-quantity-kinds) chapter.
+
+
+## Non-negative quantities
+
+Many physical quantities are inherently non-negative. For example, _length_, _mass_, and
+_thermodynamic temperature_ cannot have negative values in their physical domains. The library
+models this with the `non_negative` property tag:
+
+=== "C++23"
+
+    ```cpp
+    inline constexpr struct length final : quantity_spec<dim_length, non_negative> {} length;
+    inline constexpr struct mass final : quantity_spec<dim_mass, non_negative> {} mass;
+    inline constexpr struct duration final : quantity_spec<dim_time, non_negative> {} duration;
+    // electric_current is NOT non_negative (current can flow in either direction)
+    inline constexpr struct electric_current final : quantity_spec<dim_electric_current> {} electric_current;
+    ```
+
+=== "C++20"
+
+    ```cpp
+    inline constexpr struct length final : quantity_spec<length, dim_length, non_negative> {} length;
+    inline constexpr struct mass final : quantity_spec<mass, dim_mass, non_negative> {} mass;
+    inline constexpr struct duration final : quantity_spec<duration, dim_time, non_negative> {} duration;
+    // electric_current is NOT non_negative (current can flow in either direction)
+    inline constexpr struct electric_current final : quantity_spec<electric_current, dim_electric_current> {} electric_current;
+    ```
+
+=== "Portable"
+
+    ```cpp
+    QUANTITY_SPEC(length, dim_length, non_negative);
+    QUANTITY_SPEC(mass, dim_mass, non_negative);
+    QUANTITY_SPEC(duration, dim_time, non_negative);
+    // electric_current is NOT non_negative (current can flow in either direction)
+    QUANTITY_SPEC(electric_current, dim_electric_current);
+    ```
+
+### Propagation through equations
+
+The `non_negative` property automatically propagates through derived quantity equations.
+A derived quantity is `non_negative` when **all** factors in its defining equation are
+`non_negative`:
+
+```cpp
+// area = length² → non_negative (length is non_negative)
+static_assert(is_non_negative(isq::area));
+
+// speed = length / duration → non_negative (both are non_negative)
+static_assert(is_non_negative(isq::speed));
+
+// energy = mass * length² / duration² → non_negative (all factors are non_negative)
+static_assert(is_non_negative(isq::energy));
+```
+
+When any factor in the equation is **not** `non_negative`, the derived quantity is not
+either:
+
+```cpp
+// electric_current is not non_negative, so:
+// electric_charge = electric_current * duration → not non_negative
+static_assert(!is_non_negative(isq::electric_charge));
+```
+
+### Named real-scalar children inherit from parents
+
+A named child quantity automatically inherits `non_negative` from its parent, as long as the
+child's character is `real_scalar`. This reflects the physical reality: every `height` IS
+a `length`, so if `length` is non-negative then every specific type of _length_ must be too:
+
+=== "C++23"
+
+    ```cpp
+    inline constexpr struct width final : quantity_spec<length> {} width;
+    inline constexpr struct height final : quantity_spec<length> {} height;
+    inline constexpr struct radius final : quantity_spec<width> {} radius;
+    static_assert(is_non_negative(width));
+    static_assert(is_non_negative(height));
+    static_assert(is_non_negative(radius));
+    ```
+
+=== "C++20"
+
+    ```cpp
+    inline constexpr struct width final : quantity_spec<width, length> {} width;
+    inline constexpr struct height final : quantity_spec<height, length> {} height;
+    inline constexpr struct radius final : quantity_spec<radius, width> {} radius;
+    static_assert(is_non_negative(width));
+    static_assert(is_non_negative(height));
+    static_assert(is_non_negative(radius));
+    ```
+
+=== "Portable"
+
+    ```cpp
+    QUANTITY_SPEC(width,  length);  // inherits non_negative from length
+    QUANTITY_SPEC(height, length);  // inherits non_negative from length
+    QUANTITY_SPEC(radius, width);   // inherits non_negative from width → from length
+    static_assert(is_non_negative(width));
+    static_assert(is_non_negative(height));
+    static_assert(is_non_negative(radius));
+    ```
+
+!!! important
+
+    Once `non_negative` is applied to a parent quantity, the constraint propagates
+    **unconditionally and irremovably** to all real-scalar descendants. There is no mechanism
+    for a child to opt out. This is physically sound: a more specific quantity cannot validly
+    produce values outside the domain of its parent. No exception to this rule is known for
+    the real-scalar quantities defined in the ISQ framework — every named child of a
+    non-negative quantity is itself non-negative by physical necessity.
+
+Quantities of `vector`, `complex`, or `tensor` character cannot be non-negative by definition
+(they are direction-sensitive or multi-component). Applying the `non_negative` tag to such
+a quantity produces a **compile-time error**:
+
+=== "C++23"
+
+    ```cpp
+    // displacement is a child of length with vector character — correctly NOT non_negative
+    inline constexpr struct displacement final : quantity_spec<length, quantity_character::vector> {} displacement;
+    static_assert(!is_non_negative(displacement));
+
+    // compile-time error — non_negative is incompatible with vector character:
+    // inline constexpr struct bad final : quantity_spec<length, quantity_character::vector, non_negative> {} bad;  // ← error
+    ```
+
+=== "C++20"
+
+    ```cpp
+    // displacement is a child of length with vector character — correctly NOT non_negative
+    inline constexpr struct displacement final : quantity_spec<displacement, length, quantity_character::vector> {} displacement;
+    static_assert(!is_non_negative(displacement));
+
+    // compile-time error — non_negative is incompatible with vector character:
+    // inline constexpr struct bad final : quantity_spec<bad, length, quantity_character::vector, non_negative> {} bad;  // ← error
+    ```
+
+=== "Portable"
+
+    ```cpp
+    // displacement is a child of length with vector character — correctly NOT non_negative
+    QUANTITY_SPEC(displacement, length, quantity_character::vector);
+    static_assert(!is_non_negative(displacement));
+
+    // compile-time error — non_negative is incompatible with vector character:
+    // QUANTITY_SPEC(bad, length, quantity_character::vector, non_negative);  // ← error
+    ```
+
+!!! warning "Kinds are never non-negative"
+
+    A `kind_of<QS>` represents the **entire quantity tree** rooted at `QS` — including
+    vector quantities (e.g., `displacement`) and signed coordinates (e.g., `altitude`,
+    `depth`). Therefore, `kind_of<QS>` is **never non-negative**, even when `QS` itself
+    is tagged `non_negative`:
+
+    ```cpp
+    static_assert(is_non_negative(isq::length));           // ✓ tagged as non_negative
+    static_assert(!is_non_negative(kind_of<isq::length>)); // ✗ kind encompasses signed subtypes
+    ```
+
+    This matters when using CTAD with bare SI units, as they deduce `kind_of` origins:
+
+    ```cpp
+    quantity_point generic{5.0 * m};  // origin = natural_point_origin<kind_of<isq::length>>
+                                      // NOT auto-bounded (kind is not non-negative)
+    ```
+
+    Always use an explicit quantity specification when you need non-negative guarantees.

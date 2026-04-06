@@ -723,5 +723,6 @@ examples.
 - [Value Conversions](value_conversions.md) - How `treat_as_floating_point` affects conversions
 - [Concepts](concepts.md#RepresentationOf) - The `RepresentationOf` concept definition
 - [Using Custom Representation Types](../../how_to_guides/integration/using_custom_representation_types.md) - Step-by-step guide to creating custom representation types
+- [Tutorial: Custom Contract Handlers](../../tutorials/affine_space/custom_contract_handlers.md) - Implementing custom error policies for `constrained` types
 - [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) - Combining `constrained` reps with bounded quantity points
 <!-- markdownlint-enable MD013 -->

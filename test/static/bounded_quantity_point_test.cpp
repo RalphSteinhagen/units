@@ -89,6 +89,10 @@ inline constexpr struct body_temp_origin final : absolute_point_origin<clinical_
 inline constexpr struct room_temp_origin final : absolute_point_origin<clinical_temperature> {
 } room_temp_origin;  // bounds: [15°C, 30°C]
 
+// Named child of non-negative isq::length — inherits non-negativeness.
+// Used to test user-override of the automatic check_non_negative policy.
+QUANTITY_SPEC(test_override_nn_qs, isq::length);
+
 }  // namespace
 
 // Longitude: [-180°, 180°] physical invariant — MUST be defined before any
@@ -160,6 +164,13 @@ inline constexpr auto mp_units::quantity_bounds<body_temp_origin> = mp_units::cl
 template<>
 inline constexpr auto mp_units::quantity_bounds<room_temp_origin> = mp_units::clamp_to_range{
   delta<clinical_temperature[si::degree_Celsius]>(15.0), delta<clinical_temperature[si::degree_Celsius]>(30.0)};
+
+// User can override the automatic check_non_negative policy for a specific natural origin
+// by providing a full specialization of quantity_bounds. Must be declared before any
+// instantiation of quantity_bounds for this origin (e.g., inside the test namespace).
+template<>
+inline constexpr auto mp_units::quantity_bounds<natural_point_origin_<test_override_nn_qs>{}> =
+  mp_units::clamp_non_negative{};
 
 namespace {
 
@@ -1186,5 +1197,37 @@ consteval bool time_of_day_multiday_assign()
   return t.quantity_from(midnight) == 3600.0 * s;
 }
 static_assert(time_of_day_multiday_assign());
+
+// ============================================================================
+// Automatic non-negative bounds for natural_point_origin<QS>
+// ============================================================================
+// Non-negative base quantities automatically receive check_non_negative bounds
+// via the quantity_bounds_for partial specialization in non_negative_bounds.h.
+
+// isq::length, isq::mass, isq::duration are tagged non_negative → automatic bounds.
+static_assert(mp_units::detail::HasQuantityBounds<mp_units::natural_point_origin_<mp_units::isq::length>>);
+static_assert(mp_units::detail::HasQuantityBounds<mp_units::natural_point_origin_<mp_units::isq::mass>>);
+static_assert(mp_units::detail::HasQuantityBounds<mp_units::natural_point_origin_<mp_units::isq::duration>>);
+
+// isq::angular_measure has no non_negative tag → no automatic bounds.
+static_assert(!mp_units::detail::HasQuantityBounds<mp_units::natural_point_origin_<mp_units::isq::angular_measure>>);
+
+// The automatic policy type is check_non_negative.
+static_assert(
+  std::is_same_v<
+    std::remove_cvref_t<decltype(mp_units::quantity_bounds<mp_units::natural_point_origin_<mp_units::isq::length>{}>)>,
+    mp_units::check_non_negative>);
+
+// A non-negative value passes through the policy unchanged.
+static_assert(mp_units::quantity_bounds<mp_units::natural_point_origin_<mp_units::isq::length>{}>(5.0 * m) == 5.0 * m);
+static_assert(mp_units::quantity_bounds<mp_units::natural_point_origin_<mp_units::isq::length>{}>(0.0 * m) == 0.0 * m);
+
+// Named-child quantity spec of a non-negative parent inherits non-negativeness;
+// the user can override the policy by specializing quantity_bounds early (before use).
+static_assert(mp_units::detail::HasQuantityBounds<mp_units::natural_point_origin_<test_override_nn_qs>>);
+static_assert(
+  std::is_same_v<
+    std::remove_cvref_t<decltype(mp_units::quantity_bounds<mp_units::natural_point_origin_<test_override_nn_qs>{}>)>,
+    mp_units::clamp_non_negative>);
 
 }  // namespace
