@@ -3233,7 +3233,12 @@ class DocumentationGenerator:
                 if (
                     (
                         "zeroth_" in definition  # deprecated names
-                        or definition in ["absolute_zero", "ice_point", "fahrenheit_zero"]  # current names
+                        or definition
+                        in [
+                            "absolute_zero",
+                            "ice_point",
+                            "fahrenheit_zero",
+                        ]  # current names
                     )
                     and not any(
                         op in definition for op in ["*", "/", "+", "-", "(", ")"]
@@ -3253,7 +3258,12 @@ class DocumentationGenerator:
                         if (
                             "zeroth_" in origin  # deprecated names
                             or "point<" in origin
-                            or origin in ["absolute_zero", "ice_point", "fahrenheit_zero"]  # current names
+                            or origin
+                            in [
+                                "absolute_zero",
+                                "ice_point",
+                                "fahrenheit_zero",
+                            ]  # current names
                         ) and "<" not in origin.replace("point<", ""):
                             definition = base_def
                             # Store origin without backticks - will be linkified later
