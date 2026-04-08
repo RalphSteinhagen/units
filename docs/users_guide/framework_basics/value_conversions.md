@@ -222,9 +222,9 @@ that a naive implementation cannot handle correctly:
   (a `double` has only 53 bits of mantissa).
 
 Both challenges are addressed by using **fixed-point arithmetic**: the conversion factor is
-represented at compile time as a double-width integer constant, so the runtime computation
-is a pure integer multiply followed by a right-shift with no risk of intermediate overflow
-and no floating-point operations.
+represented at compile time as a widened integer constant (64-bit for types up to 32 bits,
+128-bit for `int64_t`), so the runtime computation is a pure integer multiply followed by
+a right-shift with no risk of intermediate overflow and no floating-point operations.
 
 ??? info "Implementation details"
 
@@ -238,23 +238,24 @@ and no floating-point operations.
     | Non-integer ratio | otherwise                 | `ft → m` ($\times 0.3048$) | fixed-point multiply |  explicit  |
 
     For the non-integer case the magnitude is converted **at compile time** to a
-    fixed-point constant with double the bit-width of the representation type.  For
-    example, when scaling a 32-bit integer value, a 64-bit fixed-point intermediate is
-    used.  The actual runtime computation is then a pure integer multiply followed by a
-    right-shift:
+    fixed-point constant with widened bit-width. The library uses **`int64_t` for
+    all types up to 32 bits** (`int8_t`, `int16_t`, `int32_t`) and **128-bit arithmetic
+    for `int64_t`**.  The actual runtime computation is then a pure integer multiply
+    followed by a right-shift:
 
     $$
     \text{result} = \left\lfloor \text{value} \times \lfloor M \cdot 2^N \rfloor \right\rfloor \gg N
     $$
 
-    where $N$ equals the bit-width of the source representation type.  On platforms where
-    `__int128` is available (most 64-bit targets), the double-width arithmetic is
+    where $N$ equals 64 for types up to 32 bits, and 128 for `int64_t`.  On platforms
+    where `__int128` is available (most 64-bit targets), the 128-bit arithmetic is
     implemented natively; on others, a portable `double_width_int` emulation is used in
     `constexpr` context.
 
-    Because the intermediate is double-width, it cannot overflow as long as the input
-    value fits in the representation type — a value of `std::int64_t` will never silently
-    overflow during the multiplication step.
+    Because the intermediate is significantly widened (e.g., `int64_t` for types up to
+    32 bits, providing much more than double-width headroom for smaller types), it cannot
+    overflow as long as the input value fits in the representation type — for example,
+    a value of `std::int32_t` computed in `int64_t` has 32 extra bits of safety margin.
 
     For the non-integer ratio path, the result is **truncated toward zero**.  The
     fixed-point constant is rounded *away* from zero at compile time to compensate for

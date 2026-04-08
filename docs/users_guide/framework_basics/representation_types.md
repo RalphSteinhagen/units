@@ -216,7 +216,7 @@ flowchart TD
     FIXED --> G{"magnitude?"}
     EWS --> G
     G -- "integral (e.g. m→mm, ×1000)" --> I["exact integer multiplication"]
-    G -- "rational (e.g. ft→m, ×3048/10000)" --> R["double-width integer arithmetic<br>(avoids overflow &amp; FP rounding)"]
+    G -- "rational (e.g. ft→m, ×3048/10000)" --> R["widened integer arithmetic<br>(int64_t or 128-bit;<br>avoids overflow &amp; FP rounding)"]
     G -- "irrational (e.g. deg→rad, ×π/180)" --> IR["long double fixed-point approximation"]
 ```
 
@@ -256,7 +256,7 @@ as a fallback when this operator is not available.
     The design preference order is therefore:
     **exact integer > exact rational > approximate irrational**.
 
-??? question "Why double-width integers for the rational path?"
+??? question "Why widened integers for the rational path?"
 
     The library computes `value * numerator / denominator` entirely in integer
     arithmetic. Without extra width, the intermediate product
@@ -264,10 +264,17 @@ as a fallback when this operator is not available.
     converting feet to metres multiplies by 3048 before dividing by 10000, which
     overflows a 64-bit integer for values above ~3×10¹⁵.
 
-    Double-width integers (e.g. 128-bit for 64-bit values) absorb that intermediate
-    growth. Using `long double` instead would violate the no-FP principle above and
-    introduce rounding (`0.3048` is not exactly representable in binary floating-point),
-    and on ARM / Apple Silicon `long double == double` anyway, giving no extra range.
+    **mp-units uses widened integers to absorb that intermediate growth:**
+
+    - For types up to 32 bits (`int8_t`, `int16_t`, `int32_t`): widens to `int64_t`
+    - For `int64_t`: widens to 128-bit arithmetic (`__int128` or custom emulation)
+
+    This approach provides maximum safety headroom for smaller types (with no performance
+    cost on modern 64-bit systems), while 128-bit arithmetic handles the vast majority
+    of real-world `int64_t` conversions. Using `long double` instead would violate the
+    no-FP principle above and introduce rounding (`0.3048` is not exactly representable
+    in binary floating-point), and on ARM / Apple Silicon `long double == double` anyway,
+    giving no extra range.
 
 If different internal fields need different scale factors, encode that logic in
 `operator*` and `operator/` — the library routes scaling through them via the

@@ -58,7 +58,7 @@ static_assert(scale<long>(mag<60>, 2l) == 120l);
 static_assert(scale<int>(mag_ratio<1, 1000>, 5000) == 5);
 static_assert(scale<int>(mag_ratio<1, 60>, 120) == 2);
 
-// rational M (3/2 * 4 == 6): exact double-width integer arithmetic
+// rational M (3/2 * 4 == 6): exact widened integer arithmetic (int64_t for int)
 static_assert(scale<int>(mag_ratio<3, 2>, 4) == 6);
 // (1/3 * 9 == 3)
 static_assert(scale<int>(mag_ratio<1, 3>, 9) == 3);

@@ -87,10 +87,13 @@ template<typename common_t, auto M>
     // M is a pure rational p/q (no irrational factors such as π).
     constexpr common_t num = get_value<common_t>(numerator(M));
     constexpr common_t den = get_value<common_t>(denominator(M));
-    if constexpr (sizeof(common_t) < sizeof(int128_t)) {
-      // Use a wider native type to avoid intermediate overflow.
-      using wide_t = double_width_int_for_t<common_t>;
-      return static_cast<common_t>(static_cast<wide_t>(v) * num / den);
+    if constexpr (sizeof(common_t) <= sizeof(std::int32_t)) {
+      // Use int64_t for all types up to int32_t: provides maximum safety headroom
+      // with no performance cost on modern 64-bit systems.
+      return static_cast<common_t>(static_cast<std::int64_t>(v) * num / den);
+    } else if constexpr (sizeof(common_t) < sizeof(int128_t)) {
+      // Use 128-bit arithmetic for int64_t.
+      return static_cast<common_t>(static_cast<int128_t>(v) * num / den);
     } else {
       // At max integer width: no wider type available, compute in common_t directly.
       return v * num / den;
