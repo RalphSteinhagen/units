@@ -36,21 +36,21 @@ using namespace mp_units;
 #if MP_UNITS_HOSTED
 
 // ============================================================================
-// constraint_violation_handler — throw_policy throws std::domain_error.
-// Everything else (arithmetic transparency, concepts, numeric_limits) is
-// covered by static_assert tests in test/static/constrained_test.cpp.
+// Error policies and violation handler
 // ============================================================================
 
-TEST_CASE("throw_policy: on_constraint_violation throws std::domain_error", "[constrained][throw_policy]")
+TEST_CASE("constrained error policies", "[constrained]")
 {
-  CHECK_THROWS_AS(throw_policy::on_constraint_violation("test"), std::domain_error);
-}
+  SECTION("throw_policy throws std::domain_error on violation")
+  {
+    CHECK_THROWS_AS(throw_policy::on_constraint_violation("test"), std::domain_error);
+  }
 
-TEST_CASE("constraint_violation_handler: constrained<double, throw_policy> delegates to throw_policy",
-          "[constrained][handler]")
-{
-  using T = constrained<double, throw_policy>;
-  CHECK_THROWS_AS(constraint_violation_handler<T>::on_violation("test"), std::domain_error);
+  SECTION("constraint_violation_handler delegates to throw_policy")
+  {
+    using T = constrained<double, throw_policy>;
+    CHECK_THROWS_AS(constraint_violation_handler<T>::on_violation("test"), std::domain_error);
+  }
 }
 
 // ============================================================================
@@ -79,21 +79,22 @@ using latitude_qp = quantity_point<geo_latitude_qs[si::unit_symbols::deg], geo_e
 
 }  // namespace
 
-TEST_CASE("constrained<double, throw_policy> as quantity_point rep: out-of-range values throw",
-          "[constrained][quantity_point][check_in_range]")
+TEST_CASE("constrained as quantity_point representation", "[constrained][quantity_point]")
 {
   using namespace si::unit_symbols;
-  CHECK_THROWS_AS(latitude_qp(91.0 * geo_latitude_qs[deg], geo_equator), std::domain_error);
-  CHECK_THROWS_AS(latitude_qp(-91.0 * geo_latitude_qs[deg], geo_equator), std::domain_error);
-  CHECK_THROWS_AS(latitude_qp(180.0 * geo_latitude_qs[deg], geo_equator), std::domain_error);
-}
 
-TEST_CASE("constrained<double, throw_policy> as quantity_point rep: arithmetic throws when result out of range",
-          "[constrained][quantity_point][check_in_range]")
-{
-  using namespace si::unit_symbols;
-  auto pt = latitude_qp(80.0 * geo_latitude_qs[deg], geo_equator);
-  CHECK_THROWS_AS(pt += 20.0 * geo_latitude_qs[deg], std::domain_error);  // 80 + 20 = 100 > 90
+  SECTION("out-of-range construction throws")
+  {
+    CHECK_THROWS_AS(latitude_qp(91.0 * geo_latitude_qs[deg], geo_equator), std::domain_error);
+    CHECK_THROWS_AS(latitude_qp(-91.0 * geo_latitude_qs[deg], geo_equator), std::domain_error);
+    CHECK_THROWS_AS(latitude_qp(180.0 * geo_latitude_qs[deg], geo_equator), std::domain_error);
+  }
+
+  SECTION("arithmetic that moves value out of range throws")
+  {
+    auto pt = latitude_qp(80.0 * geo_latitude_qs[deg], geo_equator);
+    CHECK_THROWS_AS(pt += 20.0 * geo_latitude_qs[deg], std::domain_error);  // 80 + 20 = 100 > 90
+  }
 }
 
 #endif  // MP_UNITS_HOSTED
