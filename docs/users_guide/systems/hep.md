@@ -29,6 +29,17 @@ The **mp-units** HEP system implements:
     hand-maintained unit constants across multiple HEP frameworks while maintaining compatibility
     during migration.
 
+### Historical Context
+
+The need for compile-time dimensional analysis in HEP was recognized early. Walter Brown
+presented ["SI Library of Unit-Based Computation"](https://digital.library.unt.edu/ark:/67531/metadc668099)
+at CHEP '98 (International Conference in High Energy Physics, Chicago, IL, August 31 -
+September 4, 1998) — the first systematic approach to compile-time dimensional analysis
+in C++. Nearly three decades later, most HEP code still uses raw `double` values, making
+dimensional errors invisible to the compiler. The **mp-units** HEP system builds on this
+foundation with modern C++20 features to finally bring compile-time safety to production
+HEP codebases.
+
 
 ## System of Quantities
 
@@ -83,9 +94,6 @@ quantity proton_m = m_p;    // ≈ 938.3 MeV/c²
 // Calculate rest energies from mass (dimension: E)
 quantity electron_rest_energy = m_e * c2;  // E = mc² ≈ 0.511 MeV
 quantity proton_rest_energy = m_p * c2;    // E = mc² ≈ 938.3 MeV
-
-// In natural units where c=1, physicists often say "electron mass = 0.511 MeV"
-// but in HEP system with explicit units, we distinguish mass from rest energy
 ```
 
 **_Electric Charge_ instead of _Electric Current_:**
@@ -119,13 +127,14 @@ analysis:
 This dimensional structure ensures dimensional consistency while using quantities
 natural to particle physics calculations.
 
-## System of Units (Base Units)
+## Commonly Used Units in HEP
 
-The HEP System of Units provides concrete measurement scales for the base
-quantities. Unlike SI (which uses metre, second, kilogram, ampere), the HEP
-system uses units natural to particle physics:
+The HEP system provides units that are conventional in particle physics practice.
+**Unlike some libraries, mp-units does not force conversion to privileged "base units"** —
+quantities can natively store values in any unit without automatic conversion. The units
+listed below simply reflect common HEP conventions for numerical convenience:
 
-| Quantity              | Unit              | Symbol | Why?                                                                              |
+| Quantity              | Typical Unit      | Symbol | Why commonly used?                                                                |
 |-----------------------|-------------------|:------:|-----------------------------------------------------------------------------------|
 | **_Length_**          | millimetre        |   mm   | Detector geometries are typically millimetre-scale; avoids frequent powers of 10³ |
 | **_Time_**            | nanosecond        |   ns   | Particle lifetimes and detector timing naturally in nanoseconds                   |
@@ -136,6 +145,10 @@ system uses units natural to particle physics:
 | **_Luminosity_**      | candela           |   cd   | Same as SI (for detector calibration)                                             |
 | **_Angle_**           | radian            |  rad   | Same as SI (for angular measurements)                                             |
 
+You're free to use any units you prefer — for example, `quantity<hep::length[hep::metre]>`
+and `quantity<hep::length[hep::millimetre]>` are both valid, and conversions happen
+automatically when needed without forcing storage in a particular unit.
+
 ## Specialized Quantities of the Same Kind
 
 Beyond the basic dimensional safety, the HEP system provides **specialized quantities**
@@ -143,10 +156,32 @@ to distinguish physically distinct concepts that share the same dimension. This
 addresses real problems in particle physics code where mixing conceptually different
 values is physically meaningless but dimensionally valid.
 
+### Motivation: The "Argument Soup" Problem
+
+Consider the Geant4 `G4Trap` constructor, which takes 12 `G4double` parameters —
+some _lengths_, some _angles_:
+
+```cpp
+G4Trap(const G4String& name,
+       G4double pDz, G4double pTheta, G4double pPhi,
+       G4double pDy1, G4double pDx1, G4double pDx2, G4double pAlp1,
+       G4double pDy2, G4double pDx3, G4double pDx4, G4double pAlp2);
+```
+
+Swapping `pDx2` (a _length_) with `pAlp1` (an _angle_) compiles without warning because
+both are `G4double`. Even worse, swapping two _length_ parameters that represent
+different geometric axes (e.g., `pDx1` with `pDy1`) also compiles, despite being
+physically meaningless for the geometry.
+
+Specialized quantities solve this by giving each conceptually distinct quantity
+its own type, making such errors impossible.
+
 The HEP system provides specialized quantities for:
 
-- **Energy**: `total_energy`, `kinetic_energy`, `rest_mass_energy`, `binding_energy`,
-  `excitation_energy`, `ionization_energy`, `threshold_energy`, `Q_value`, and more
+- **Energy**: `total_energy`, `kinetic_energy`, `rest_mass_energy`,
+  `center_of_mass_energy`, `binding_energy`, `separation_energy`, `excitation_energy`,
+  `ionization_energy`, `threshold_energy`, `Q_value`, `transverse_energy`,
+  `missing_energy`, and more
 - **Length**: `path_length`, `displacement`, `decay_length`, `radiation_length`,
   `interaction_length`, `impact_parameter`, `wavelength`, `range`, and more
 - **Time**: `proper_time`, `coordinate_time`, `mean_lifetime`, `half_life`,
@@ -162,7 +197,7 @@ For complete hierarchy trees and all available specialized quantities, see the
 
 ## Distinct Quantity Subkinds
 
-Some HEP quantities share the same dimension, unit,  and even the same parent quantity,
+Some HEP quantities share the same dimension, unit, and even the same parent quantity,
 yet represent fundamentally **incompatible physical concepts** that should never be added
 to or compared with each other. The HEP system uses the `is_kind` specifier to enforce
 this at compile time. See
@@ -172,52 +207,56 @@ for the general mechanism.
 ### Relativistic Time: `proper_time` and `coordinate_time`
 
 Both are sub-quantities of `duration`, but they live in different reference frames and
-are related by the Lorentz factor, not by addition:
+are related by the _Lorentz factor_, not by addition:
 
 $$\tau = \frac{t}{\gamma}$$
 
-Adding a proper time to a coordinate time is a classic special-relativity mistake —
+Adding a _proper time_ to a _coordinate time_ is a classic special-relativity mistake —
 one is Lorentz-invariant, the other is frame-dependent:
 
 ```cpp
-quantity tau = 10. * hep::ns * proper_time;  // particle rest frame
-quantity t   = 25. * hep::ns * coordinate_time;  // lab frame
+using namespace mp_units::hep::unit_symbols;
 
-// auto wrong = tau + t;  // Compile error — different kinds ✓
+quantity tau   = hep::proper_time(0.385 * ns);    // B⁰ meson rest-frame lifetime
+quantity t_lab = hep::coordinate_time(4.2 * ns);  // observed lab time of flight
+
+// auto wrong = tau + t_lab;  // Compile error — different kinds ✓
 ```
 
 To convert between them, the Lorentz factor must be applied explicitly:
 
 ```cpp
-quantity gamma = 2.5 * lorentz_factor;
-quantity t_lab = coordinate_time(tau * gamma);  // explicit physics conversion
+quantity gamma = hep::lorentz_factor(t_lab / tau);  // γ ≈ 10.9
+quantity tau_from_t = proper_time(t_lab / gamma);   // explicit physics conversion
 ```
 
 ### Material Characteristic Lengths: `radiation_length` and `interaction_length`
 
-These are properties of a material, not distances travelled by a particle. They appear
+These are properties of a material, not distances traveled by a particle. They appear
 as **denominators** in physics expressions (number of radiation lengths traversed = path
 / X₀), never as addends.
 
-- **`radiation_length` (X₀)**: mean distance over which an electron loses 1/e of its
-  energy through Bremsstrahlung — an electromagnetic material property.
-- **`interaction_length` (λ_I)**: mean free path before a hadronic nuclear interaction —
+- **`radiation_length` (X₀)**: _mean distance_ over which an electron loses 1/e of its
+  _energy_ through Bremsstrahlung — an electromagnetic material property.
+- **`interaction_length` (λ_I)**: _mean free path_ before a hadronic nuclear interaction —
   a nuclear material property.
 - **`nuclear_interaction_length`**: a specialization of `interaction_length` for nuclear
   (as opposed to hadronic-elastic) interactions.
 
-All three are distinct from each other and from geometric lengths:
+All three are distinct from each other and from geometric _lengths_:
 
 ```cpp
-quantity X0      = 88.97 * hep::mm * radiation_length;      // lead X₀
-quantity lambda_I = 194.4 * hep::mm * interaction_length;   // lead λ_I
-quantity path    = 50. * hep::mm * path_length;
+using namespace mp_units::hep::unit_symbols;
 
-// auto wrong1 = X0 + lambda_I;  // Compile error — different kinds ✓
-// auto wrong2 = X0 + path;      // Compile error — different kinds ✓
+quantity X0       = hep::radiation_length(88.97 * mm);  // lead X₀
+quantity lambda_I = hep::interaction_length(194.4 * mm);  // lead λ_I  
+quantity path     = hep::path_length(50. * mm);
+
+// auto bad1 = X0 + lambda_I;  // Compile error — different kinds ✓
+// auto bad2 = X0 + path;      // Compile error — different kinds ✓
 
 // Correct usage: use as a denominator
-quantity n_X0 = path / X0;                             // dimensionless: number of X₀ traversed
+quantity n_X0 = path / X0;  // dimensionless: number of radiation lengths traversed ✓
 ```
 
 ### Dimensionless Relativistic Quantities
@@ -226,24 +265,24 @@ quantity n_X0 = path / X0;                             // dimensionless: number 
 specific physical meaning that must not be mixed with generic dimensionless values or
 with each other:
 
-- **`lorentz_factor` (γ = E/E₀)**: characterises relativistic time dilation and length
-  contraction; ranges from 1 (at rest) to ∞.
-- **`relativistic_beta` (β = v/c)**: velocity expressed as a fraction of the speed of
-  light; ranges from 0 to 1. Related to γ by $\beta = \sqrt{1 - 1/\gamma^2}$.
-- **`phase`**: quantum mechanical phase angle — a cyclic, dimensionless quantity
+- **`lorentz_factor` (γ = E/E₀)**: characterizes _relativistic time dilation_ and
+  _length contraction_; ranges from 1 (at rest) to ∞.
+- **`relativistic_beta` (β = v/c)**: _velocity_ expressed as a fraction of the
+  _speed of light_; ranges from 0 to 1. Related to γ by $\beta = \sqrt{1 - 1/\gamma^2}$.
+- **`phase`**: quantum mechanical _phase angle_ — a cyclic, dimensionless quantity
   incompatible with both γ and β and with the angular `angle` kind.
 
 ```cpp
-quantity gamma  = 10. * lorentz_factor;
-quantity beta   = 0.995 * relativistic_beta;
-quantity phi    = 1.57 * phase;
+quantity gamma = hep::lorentz_factor(10. * one);
+quantity beta  = hep::relativistic_beta(0.995 * one);
+quantity phi   = hep::phase(1.57 * one);
 
-// auto wrong1 = gamma + beta;   // Compile error — different kinds ✓
-// auto wrong2 = gamma + phi;    // Compile error — different kinds ✓
-// auto wrong3 = gamma + 1.;     // Compile error — not a plain dimensionless ✓
+// auto bad1 = gamma + beta;  // Compile error — different kinds ✓
+// auto bad2 = gamma + phi;   // Compile error — different kinds ✓  
+// auto bad3 = gamma + 1.;    // Compile error — not a plain dimensionless ✓
 
-// Physics: recover beta from gamma
-quantity beta_from_gamma = relativistic_beta(sqrt(1. - 1. / pow<2>(gamma / lorentz_factor)));
+// Physics: convert between gamma and beta
+quantity beta_from_gamma = hep::relativistic_beta(sqrt(1. - 1. / pow<2>(gamma / hep::lorentz_factor)));
 ```
 
 
