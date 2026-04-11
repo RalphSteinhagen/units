@@ -34,8 +34,10 @@ import std;
 #include <concepts>
 #include <cstdint>
 #include <limits>
-#include <string>
 #include <type_traits>
+#if MP_UNITS_HOSTED
+#include <string>
+#endif
 #endif
 
 namespace {
@@ -130,8 +132,10 @@ static_assert(is_value_preserving_int_v<constrained<short, test_policy>, safe_in
 static_assert(!is_value_preserving_int_v<constrained<int, test_policy>, safe_int<short>>);
 
 // Types without numeric_limits: always false
+#if MP_UNITS_HOSTED
 static_assert(!is_value_preserving_int_v<std::string, int>);
 static_assert(!is_value_preserving_int_v<int, std::string>);
+#endif
 
 // ============================================================================
 // is_value_preserving_v — generalized: delegates to is_value_preserving_int_v
@@ -149,8 +153,10 @@ static_assert(is_value_preserving_v<safe_int<short>, safe_int<int>>);
 static_assert(!is_value_preserving_v<safe_int<int>, safe_int<short>>);
 
 // Non-numeric_limits types: falls back to is_convertible_v
+#if MP_UNITS_HOSTED
 static_assert(!is_value_preserving_v<std::string, int>);  // not convertible
 static_assert(!is_value_preserving_v<int, std::string>);  // not convertible
+#endif
 
 // ============================================================================
 // treat_as_floating_point: must be false
