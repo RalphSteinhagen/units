@@ -74,17 +74,17 @@ struct zero {
 
 
 template<typename T, typename Arg>
-concept RepConvertibleFrom =
+concept RepConstructibleFrom =
   std::constructible_from<T, Arg> &&
   (treat_as_floating_point<T> || !treat_as_floating_point<std::remove_cvref_t<Arg>> ||
-   unsatisfied<"Implicit conversion from floating-point '{}' to non-floating-point '{}' is truncating">(
+   unsatisfied<"Conversion from floating-point '{}' to non-floating-point '{}' is truncating">(
      type_name<std::remove_cvref_t<Arg>>(), type_name<T>()));
 
 template<typename T, typename Arg>
 concept RepAssignableFrom =
   std::assignable_from<T&, Arg> &&
   (treat_as_floating_point<T> || !treat_as_floating_point<std::remove_cvref_t<Arg>> ||
-   unsatisfied<"Implicit assignment from floating-point '{}' to non-floating-point '{}' is truncating">(
+   unsatisfied<"Assignment from floating-point '{}' to non-floating-point '{}' is truncating">(
      type_name<std::remove_cvref_t<Arg>>(), type_name<T>()));
 
 template<auto FromUnit, auto ToUnit, typename Rep>
@@ -102,7 +102,7 @@ concept ImplicitConversion = ExplicitlyCastable<FromUnit, ToUnit, ToRep> &&
 template<typename QTo, typename QFrom>
 concept QuantityConstructibleFrom =
   Quantity<QTo> && Quantity<QFrom> && mp_units::explicitly_convertible(QFrom::quantity_spec, QTo::quantity_spec) &&
-  RepConvertibleFrom<typename QTo::rep, typename QFrom::rep> &&
+  RepConstructibleFrom<typename QTo::rep, typename QFrom::rep> &&
   ImplicitConversion<QFrom::unit, typename QFrom::rep, QTo::unit, typename QTo::rep>;
 
 template<typename T, typename Rep>
@@ -265,7 +265,7 @@ public:
   }
 
   template<typename Value, Reference R2>
-    requires(equivalent(unit, get_unit(R2{}))) && (!detail::RepConvertibleFrom<rep, Value>)
+    requires(equivalent(unit, get_unit(R2{}))) && (!detail::RepConstructibleFrom<rep, Value>)
   constexpr quantity(Value val, R2)
 #if __cpp_deleted_function
     = delete ("Conversion is truncating");
@@ -287,14 +287,14 @@ public:
   }
 
   template<typename Value>
-    requires detail::ExplicitFromNumber<reference> && detail::RepConvertibleFrom<rep, Value> &&
+    requires detail::ExplicitFromNumber<reference> && detail::RepConstructibleFrom<rep, Value> &&
              (!std::convertible_to<Value, rep>)
   constexpr explicit quantity(Value val) : numerical_value_is_an_implementation_detail_(std::move(val))
   {
   }
 
   template<typename Value>
-    requires detail::ExplicitFromNumber<reference> && (!detail::RepConvertibleFrom<rep, Value>)
+    requires detail::ExplicitFromNumber<reference> && (!detail::RepConstructibleFrom<rep, Value>)
   constexpr explicit(!std::convertible_to<Value, rep> ||
                      !mp_units::implicitly_convertible(quantity_spec, dimensionless)) quantity(Value val)
 #if __cpp_deleted_function
@@ -348,14 +348,14 @@ public:
   }
 
   template<RepresentationOf<quantity_spec> ToRep>
-    requires detail::RepConvertibleFrom<ToRep, rep>
+    requires detail::RepConstructibleFrom<ToRep, rep>
   [[nodiscard]] constexpr QuantityOf<quantity_spec> auto in() const
   {
     return quantity<reference, ToRep>{*this};
   }
 
   template<RepresentationOf<quantity_spec> ToRep, UnitOf<quantity_spec> ToU>
-    requires detail::RepConvertibleFrom<ToRep, rep> && detail::ImplicitConversion<unit, rep, ToU{}, ToRep>
+    requires detail::RepConstructibleFrom<ToRep, rep> && detail::ImplicitConversion<unit, rep, ToU{}, ToRep>
   [[nodiscard]] constexpr QuantityOf<quantity_spec> auto in(ToU) const
   {
     return detail::sudo_cast<quantity<detail::make_reference(quantity_spec, ToU{}), ToRep>>(*this);

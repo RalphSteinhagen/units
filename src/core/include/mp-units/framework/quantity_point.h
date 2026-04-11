@@ -484,14 +484,14 @@ public:
   }
 
   template<RepresentationOf<quantity_spec> ToRep>
-    requires detail::RepConvertibleFrom<ToRep, rep>
+    requires detail::RepConstructibleFrom<ToRep, rep>
   [[nodiscard]] constexpr QuantityPointOf<quantity_spec> auto in() const
   {
     return ::mp_units::quantity_point{quantity_ref_from(point_origin).template in<ToRep>(), point_origin};
   }
 
   template<RepresentationOf<quantity_spec> ToRep, UnitOf<quantity_spec> ToU>
-    requires detail::RepConvertibleFrom<ToRep, rep> && detail::ImplicitConversion<unit, rep, ToU{}, ToRep>
+    requires detail::RepConstructibleFrom<ToRep, rep> && detail::ImplicitConversion<unit, rep, ToU{}, ToRep>
   [[nodiscard]] constexpr QuantityPointOf<quantity_spec> auto in(ToU) const
   {
     return ::mp_units::quantity_point{quantity_ref_from(point_origin).template in<ToRep>(ToU{}), point_origin};
