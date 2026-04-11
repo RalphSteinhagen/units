@@ -25,6 +25,9 @@
 #include <mp-units/bits/hacks.h>
 #include <mp-units/bits/module_macros.h>
 #include <mp-units/framework/customization_points.h>
+#if MP_UNITS_HOSTED
+#include <mp-units/bits/fmt.h>
+#endif
 
 #ifndef MP_UNITS_IN_MODULE_INTERFACE
 #ifdef MP_UNITS_IMPORT_STD
@@ -360,3 +363,14 @@ public:
 };
 
 }  // namespace std
+
+#if MP_UNITS_HOSTED
+template<typename T, typename ErrorPolicy, typename Char>
+struct MP_UNITS_STD_FMT::formatter<mp_units::constrained<T, ErrorPolicy>, Char> : formatter<T, Char> {
+  template<typename FormatContext>
+  auto format(const mp_units::constrained<T, ErrorPolicy>& v, FormatContext& ctx) const
+  {
+    return formatter<T, Char>::format(v.value(), ctx);
+  }
+};
+#endif
