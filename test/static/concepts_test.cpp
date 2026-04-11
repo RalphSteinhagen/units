@@ -528,20 +528,16 @@ static_assert(!detail::Vector<quantity<isq::complex_power[si::volt * si::ampere]
 // Scaling concept classification
 // double: floating-point → UsesFloatingPointScaling only
 static_assert(detail::UsesFloatingPointScaling<double>);
-static_assert(!detail::UsesFixedPointScaling<double>);
-static_assert(!detail::UsesElementWiseScaling<double>);
-// int: integral scalar → UsesFixedPointScaling only
+static_assert(!detail::UsesIntegerScaling<double>);
+// int: integral scalar → UsesIntegerScaling only
 static_assert(!detail::UsesFloatingPointScaling<int>);
-static_assert(detail::UsesFixedPointScaling<int>);
-static_assert(!detail::UsesElementWiseScaling<int>);
-// cartesian_vector<double>: FP element type → UsesFloatingPointScaling (extended concept)
+static_assert(detail::UsesIntegerScaling<int>);
+// cartesian_vector<double>: FP element type → UsesFloatingPointScaling
 static_assert(detail::UsesFloatingPointScaling<cartesian_vector<double>>);
-static_assert(!detail::UsesFixedPointScaling<cartesian_vector<double>>);
-static_assert(!detail::UsesElementWiseScaling<cartesian_vector<double>>);
-// cartesian_vector<int>: integral element, not scalar-convertible → UsesElementWiseScaling
+static_assert(!detail::UsesIntegerScaling<cartesian_vector<double>>);
+// cartesian_vector<int>: integral element → UsesIntegerScaling
 static_assert(!detail::UsesFloatingPointScaling<cartesian_vector<int>>);
-static_assert(!detail::UsesFixedPointScaling<cartesian_vector<int>>);
-static_assert(detail::UsesElementWiseScaling<cartesian_vector<int>>);
+static_assert(detail::UsesIntegerScaling<cartesian_vector<int>>);
 
 #endif
 

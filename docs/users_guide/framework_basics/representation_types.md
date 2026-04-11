@@ -150,7 +150,7 @@ concept, which directly names the three built-in scaling paths:
 ```cpp
 concept MagnitudeScalable =
   WeaklyRegular<T> && (UsesMagnitudeAwareScaling<T> || UsesFloatingPointScaling<T> ||
-                       UsesFixedPointScaling<T> || UsesElementWiseScaling<T>);
+                       UsesIntegerScaling<T>);
 ```
 
 !!! tip "Magnitude-aware scaling"
@@ -162,7 +162,8 @@ concept MagnitudeScalable =
     so that a conversion from degrees to radians adjusts the valid range from
     [-180, 180] to [-π, π]. See [Magnitude-aware scaling](#magnitude-aware-scaling) for details.
 
-The three sub-concepts and their requirements:
+The two **built-in numeric** sub-concepts and their requirements
+(`UsesMagnitudeAwareScaling` is described in the tip box above):
 
 ```cpp
 // Floating-point type, or container whose element type is floating-point
@@ -174,23 +175,17 @@ concept UsesFloatingPointScaling =
     { value / f } -> WeaklyRegular;
   };
 
-// Fundamental integer type, or a wrapper that is implicitly convertible to/from it
-// (e.g. int, long, std::int64_t).  value_type_t<T> must be std::integral (not just
-// an integer-like type) because the implementation uses double_width_int_for_t<>.
-concept UsesFixedPointScaling =
+// Integer type, wrapper, or container whose element type is a fundamental integer
+// (e.g. int, safe_int<int>, cartesian_vector<int>).
+// std::integral<value_type_t<T>> is required (not just treat_as_integral) because
+// the scaling engine uses get_value<element_t> and fixed_point<element_t>.
+// Scaling is applied through the type's own operator* / operator/, so wrappers
+// can check for overflow and containers can scale element-wise.
+concept UsesIntegerScaling =
   std::integral<value_type_t<T>> &&
-  std::is_convertible_v<T, value_type_t<T>> &&
-  std::is_convertible_v<value_type_t<T>, T>;
-
-// Container whose element type is a fundamental integer and which is NOT freely
-// convertible to that type (e.g. cartesian_vector<int>).  Scaling is applied
-// element-wise via operator* / operator/.
-concept UsesElementWiseScaling =
-  std::integral<value_type_t<T>> &&
-  !std::convertible_to<T, value_type_t<T>> &&
   requires(T value, value_type_t<T> f) {
-    { value * f } -> std::common_with<T>;
-    { value / f } -> std::common_with<T>;
+    { value * f };
+    { value / f };
   };
 ```
 
@@ -209,18 +204,15 @@ flowchart TD
     A["scale(M, value)"] --> MA{"provides<br>op*(T, UnitMagnitude)?"}
     MA -- "Yes" --> MAR["<b>Magnitude-aware scaling</b><br>calls value * M{}<br>return type may differ from input<br><br>e.g. custom type<br>with scaled bounds"]
     MA -- "No (fallback)" --> B{"treat_as_floating_point&lt;T&gt;<br>or treat_as_floating_point&lt;value_type_t&lt;T&gt;&gt;<br>?"}
-    B -- True --> FP["<b>UsesFloatingPointScaling</b><br>ratio at common precision<br>of source/target value_type_t<br><br>e.g. double, cartesian_vector&lt;double&gt;"]
-    B -- False --> C{"value_type_t&lt;T&gt; is fundamental integer<br>AND T is convertible to/from it?"}
-    C -- "Yes (e.g. int, long)" --> FIXED["<b>UsesFixedPointScaling</b>"]
-    C -- "No (e.g. cartesian_vector&lt;int&gt;)" --> EWS["<b>UsesElementWiseScaling</b><br>same 3 paths applied element-wise<br>via T::operator* / T::operator/"]
-    FIXED --> G{"magnitude?"}
-    EWS --> G
+    B -- True --> FP["<b>UsesFloatingPointScaling</b><br>ratio at source's value_type_t precision<br><br>e.g. double, cartesian_vector&lt;double&gt;"]
+    B -- False --> INT["<b>UsesIntegerScaling</b><br>e.g. int, safe_int&lt;int&gt;, cartesian_vector&lt;int&gt;"]
+    INT --> G{"magnitude?"}
     G -- "integral (e.g. m→mm, ×1000)" --> I["exact integer multiplication"]
     G -- "rational (e.g. ft→m, ×3048/10000)" --> R["widened integer arithmetic<br>(int64_t or 128-bit;<br>avoids overflow &amp; FP rounding)"]
     G -- "irrational (e.g. deg→rad, ×π/180)" --> IR["long double fixed-point approximation"]
 ```
 
-The integer paths (`UsesFixedPointScaling` / `UsesElementWiseScaling`) never promote
+The integer path (`UsesIntegerScaling`) never promotes
 values to floating-point, even for the rational and irrational sub-paths. This is
 intentional: the user explicitly chose an integer representation type, opting out of
 floating-point arithmetic. Their platform may lack FP hardware (embedded systems, DSPs),
@@ -513,8 +505,10 @@ on how this affects implicit conversions between quantities.
 #### Scaling operators { #scaling-operators }
 
 The library scales a representation value by calling `value * factor` and `value / factor`,
-where `factor` is of type `value_type_t<T>`. These operators must be provided so that the
-built-in scaling paths can apply the unit magnitude ratio during unit conversions.
+where `factor` is of type `value_type_t<T>` (or a wider integer type for the rational
+integer path — see [widened integers](#how-scaling-works) for details).
+These operators must be provided so that the built-in scaling paths can apply the unit
+magnitude ratio during unit conversions.
 
 Alternatively (or additionally), a type may provide `operator*(T, UnitMagnitude)` to
 receive the full compile-time unit magnitude instead of a numeric factor. When present,
@@ -570,9 +564,8 @@ explicit cast via `value_cast`/`force_in`:
 ```cpp
 template<auto FromUnit, typename FromRep, auto ToUnit, typename ToRep>
 constexpr bool mp_units::implicitly_scalable =
-  std::is_convertible_v<FromRep, ToRep> &&
-  (treat_as_floating_point<ToRep> ||
-   (!treat_as_floating_point<FromRep> && is_integral_scaling(FromUnit, ToUnit)));
+  treat_as_floating_point<ToRep> ||
+   (!treat_as_floating_point<FromRep> && is_integral_scaling(FromUnit, ToUnit));
 ```
 
 `mp_units::is_integral_scaling(from, to)` is a `consteval` predicate you can also use

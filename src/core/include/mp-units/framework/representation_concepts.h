@@ -276,24 +276,18 @@ concept UsesFloatingPointScaling =
     { value / f } -> WeaklyRegular;
   };
 
-// std::integral (not just treat_as_integral) is required here because the body arithmetic
-// relies on get_value<common_t>, double_width_int_for_t<common_t>, and fixed_point<common_t>,
-// which are only defined for fundamental integer types.  A user-defined integer-like type
-// whose value_type is not a standard integer is not directly supported by this path.
+// std::integral (not just treat_as_integral) is required because the scaling engine
+// relies on get_value<element_t>, wider_int_for<element_t>, and fixed_point<element_t>,
+// which are only defined for fundamental integer types.  The concept covers both plain
+// arithmetic types (int, long) and wrappers/containers whose element type is a standard
+// integer (safe_int<int>, cartesian_vector<int>): the scaling engine uses the type's
+// own operator* / operator/ so that wrappers can check for overflow, containers can
+// scale element-wise, etc.
 template<typename T>
-concept UsesFixedPointScaling = std::integral<value_type_t<T>> && std::is_convertible_v<T, value_type_t<T>> &&
-                                std::is_convertible_v<value_type_t<T>, T>;
-
-// Container type (e.g. a vector class) whose element type is a fundamental integer and
-// which supports element-wise T * value_type_t<T> and T / value_type_t<T>.  These are
-// not covered by UsesFloatingPointScaling (FP element already handled there) or
-// UsesFixedPointScaling (which requires T to be freely convertible to/from its value_type).
-template<typename T>
-concept UsesElementWiseScaling =
-  std::integral<value_type_t<T>> && !std::convertible_to<T, value_type_t<T>> && requires(T value, value_type_t<T> f) {
-    { value * f } -> std::common_with<T>;
-    { value / f } -> std::common_with<T>;
-  };
+concept UsesIntegerScaling = std::integral<value_type_t<T>> && requires(T value, value_type_t<T> f) {
+  { value * f };
+  { value / f };
+};
 
 // A type that provides its own magnitude-aware operator*(T, UnitMagnitude) customization
 // point.  scale() will prefer this path when available, and the return type may differ
@@ -305,16 +299,15 @@ concept UsesMagnitudeAwareScaling = requires(const T& v) { v * mag<1>; };
  * @brief MagnitudeScalable
  *
  * A type is `MagnitudeScalable` if the library's `scale()` can apply a unit
- * magnitude ratio to it.  The four sub-concepts map to the scaling paths:
+ * magnitude ratio to it.  The three sub-concepts map to the scaling paths:
  *
  *  - `UsesMagnitudeAwareScaling<T>` — type provides `operator*(T, UnitMagnitude)` (preferred)
  *  - `UsesFloatingPointScaling<T>`  — floating-point type or container thereof
- *  - `UsesFixedPointScaling<T>`     — fundamental integer type (or freely convertible wrapper)
- *  - `UsesElementWiseScaling<T>`    — integer container with element-wise operator* / operator/
+ *  - `UsesIntegerScaling<T>`        — integer type, wrapper, or container thereof
  */
 template<typename T>
-concept MagnitudeScalable = WeaklyRegular<T> && (UsesMagnitudeAwareScaling<T> || UsesFloatingPointScaling<T> ||
-                                                 UsesFixedPointScaling<T> || UsesElementWiseScaling<T>);
+concept MagnitudeScalable =
+  WeaklyRegular<T> && (UsesMagnitudeAwareScaling<T> || UsesFloatingPointScaling<T> || UsesIntegerScaling<T>);
 
 template<typename T>
 concept RealScalarRepresentation = NotQuantity<value_type_t<T>> && RealScalar<T> && MagnitudeScalable<T>;

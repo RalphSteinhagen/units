@@ -217,8 +217,9 @@ unit conversions. Three built-in paths handle this automatically — see
 [How Scaling Works](../../users_guide/framework_basics/representation_types.md#how-scaling-works)
 for the full concept definitions and algorithm.
 
-`my_scalar_type<T>` already satisfies the floating-point or element-wise scaling path
-through its existing `operator*(my_scalar_type, T)` and `operator/(my_scalar_type, T)` —
+`my_scalar_type<T>` already satisfies the floating-point or integer scaling path
+(`UsesFloatingPointScaling` or `UsesIntegerScaling`) through its existing
+`operator*(my_scalar_type, T)` and `operator/(my_scalar_type, T)` —
 no further customization is needed.
 
 If your type is not automatically recognized (e.g., a third-party floating-point type with

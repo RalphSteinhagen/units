@@ -61,72 +61,19 @@ MP_UNITS_EXPORT template<typename To, typename From>
 template<typename T>
 inline constexpr bool treat_as_integral = !treat_as_floating_point<T>;
 
-template<typename common_t, auto M, typename T>
-[[nodiscard]] constexpr T scale_fp(T v)
+template<auto M, typename T>
+[[nodiscard]] constexpr auto scale_fp(const T& v)
 {
-  static_assert(treat_as_floating_point<common_t>);
+  using element_t = value_type_t<T>;
+  static_assert(treat_as_floating_point<element_t>);
   if constexpr (is_integral(pow<-1>(M)) && !is_integral(M)) {
     // M has an integral inverse (pure divisor).  Prefer division over multiplication
     // to avoid the rounding errors introduced by 1/x in floating-point.
-    constexpr common_t div = detail::silent_cast<common_t>(get_value<long double>(pow<-1>(M)));
+    constexpr element_t div = detail::silent_cast<element_t>(get_value<long double>(pow<-1>(M)));
     return v / div;
   } else {
-    constexpr common_t ratio = detail::silent_cast<common_t>(get_value<long double>(M));
+    constexpr element_t ratio = detail::silent_cast<element_t>(get_value<long double>(M));
     return v * ratio;
-  }
-}
-
-template<typename common_t, auto M>
-[[nodiscard]] constexpr common_t scale_int_scalar(common_t v)
-{
-  static_assert(treat_as_integral<common_t>);
-  if constexpr (is_integral(M)) {
-    constexpr common_t mul = get_value<common_t>(M);
-    return v * mul;
-  } else if constexpr (is_integral(pow<-1>(M))) {
-    constexpr common_t div = get_value<common_t>(pow<-1>(M));
-    return v / div;
-  } else if constexpr (is_integral(M * (denominator(M) / numerator(M)))) {
-    // M is a pure rational p/q (no irrational factors such as π).
-    constexpr common_t num = get_value<common_t>(numerator(M));
-    constexpr common_t den = get_value<common_t>(denominator(M));
-    if constexpr (sizeof(common_t) <= sizeof(std::int32_t)) {
-      // Use int64_t for all types up to int32_t: provides maximum safety headroom
-      // with no performance cost on modern 64-bit systems.
-      return static_cast<common_t>(static_cast<std::int64_t>(v) * num / den);
-    } else if constexpr (sizeof(common_t) < sizeof(int128_t)) {
-      // Use 128-bit arithmetic for int64_t.
-      return static_cast<common_t>(static_cast<int128_t>(v) * num / den);
-    } else {
-      // At max integer width: no wider type available, compute in common_t directly.
-      return v * num / den;
-    }
-  } else {
-    // M has irrational factors (e.g. π): use long double fixed-point approximation.
-    constexpr auto ratio = fixed_point<common_t>(get_value<long double>(M));
-    return ratio.scale(v);
-  }
-}
-
-template<typename common_t, auto M, typename T>
-[[nodiscard]] constexpr T scale_int_wrapper(const T& v)
-{
-  static_assert(treat_as_integral<common_t>);
-  if constexpr (is_integral(M)) {
-    constexpr common_t mul = get_value<common_t>(M);
-    return v * mul;
-  } else if constexpr (is_integral(pow<-1>(M))) {
-    constexpr common_t div = get_value<common_t>(pow<-1>(M));
-    return v / div;
-  } else if constexpr (is_integral(M * (denominator(M) / numerator(M)))) {
-    constexpr common_t num = get_value<common_t>(numerator(M));
-    constexpr common_t den = get_value<common_t>(denominator(M));
-    return v * num / den;
-  } else {
-    // Wrapping type with irrational magnitude: no fallback without floating-point element type.
-    static_assert(mp_units::treat_as_floating_point<common_t>,
-                  "Scaling an integral-element wrapping type by an irrational magnitude factor "
-                  "is not supported; use a floating-point element type instead");
   }
 }
 
@@ -139,6 +86,44 @@ constexpr decltype(auto) as_element(const T& value)
     return value;
 }
 
+// The wider type used for magnitude constants to prevent overflow.
+template<typename element_t>
+using wider_int_for =
+  std::conditional_t<(sizeof(element_t) <= sizeof(std::int32_t)), std::int64_t,
+                     std::conditional_t<(sizeof(element_t) < sizeof(int128_t)), int128_t, element_t>>;
+
+template<auto M, typename T>
+[[nodiscard]] constexpr auto scale_int(const T& v)
+{
+  using element_t = value_type_t<T>;
+  using wider_t = wider_int_for<element_t>;
+  static_assert(treat_as_integral<element_t>);
+  if constexpr (is_integral(M)) {
+    constexpr wider_t mul = get_value<wider_t>(M);
+    return v * mul;
+  } else if constexpr (is_integral(pow<-1>(M))) {
+    constexpr wider_t div = get_value<wider_t>(pow<-1>(M));
+    return v / div;
+  } else if constexpr (is_integral(M * (denominator(M) / numerator(M)))) {
+    // M is a pure rational p/q (no irrational factors such as π).
+    // Use wider_t for the numerator to prevent intermediate overflow in v * num.
+    // The wider type propagates through the type's own operators:
+    // plain int widens via C++ promotion rules, safe_int widens via its
+    // checked operator* template, cartesian_vector widens element-wise, etc.
+    constexpr wider_t num = get_value<wider_t>(numerator(M));
+    constexpr element_t den = get_value<element_t>(denominator(M));
+    return v * num / den;
+  } else {
+    // M has irrational factors (e.g. π): use long double fixed-point approximation.
+    // fixed_point::scale operates on plain integers, so extract the scalar element.
+    static_assert(std::convertible_to<T, element_t>,
+                  "Scaling an integral-element wrapping type by an irrational magnitude factor "
+                  "is not supported; use a floating-point element type instead");
+    constexpr auto ratio = fixed_point<element_t>(get_value<long double>(M));
+    return ratio.scale(as_element(v));
+  }
+}
+
 }  // namespace detail
 
 /**
@@ -146,7 +131,7 @@ constexpr decltype(auto) as_element(const T& value)
  *
  * When @p From provides a magnitude-aware @c operator*(From,M) customization point, it is
  * used first.  The return type may differ from @c To (e.g. a representation with scaled
- * bounds).  Otherwise, the built-in floating-point, fixed-point, or element-wise path is
+ * bounds).  Otherwise, the built-in floating-point or integer path is
  * used and the result type is @c To.
  *
  * Use this in custom `operator*(T, UnitMagnitude)` implementations to reuse the
@@ -160,30 +145,23 @@ MP_UNITS_EXPORT template<typename To, UnitMagnitude M, typename From>
     // Type provides magnitude-aware scaling via operator*(T, UnitMagnitude).
     return value * m;
   } else if constexpr (detail::UsesFloatingPointScaling<From> || detail::UsesFloatingPointScaling<To>) {
-    // At least one side is floating-point: compute with common_type_t precision.
-    using common_t = std::common_type_t<value_type_t<From>, value_type_t<To>>;
-    static_assert(treat_as_floating_point<common_t>);
-    if constexpr (std::convertible_to<From, common_t>) {
-      // Scalar (includes integer-to-FP): project to common_t so that scale_fp is
-      // instantiated as scale_fp<common_t, M, common_t> and shared across all (From, To)
-      // pairs with the same common_t.
-      return detail::silent_cast<To>(detail::scale_fp<common_t, M{}>(static_cast<common_t>(value)));
-    } else {
-      // FP wrapping type (e.g. cartesian_vector<double>, std::complex<double>): pass as-is;
-      // the wrapping type's own operator* / operator/ scales all elements.
-      return detail::silent_cast<To>(detail::scale_fp<common_t, M{}>(value));
-    }
+    // Floating-point path — handles both plain arithmetic types and wrappers.
+    // Uses the type's own operator* / operator/ (element-wise for wrappers).
+    // When From is integral (e.g. int → double), convert to To first so that
+    // the FP scaling operates on the correct type.
+    if constexpr (detail::treat_as_integral<value_type_t<From>>)
+      return detail::silent_cast<To>(detail::scale_fp<M{}>(static_cast<To>(value)));
+    else
+      return detail::silent_cast<To>(detail::scale_fp<M{}>(value));
   } else {
-    // UsesFixedPointScaling or UsesElementWiseScaling: integer arithmetic.
-    using common_t = std::common_type_t<value_type_t<From>, value_type_t<To>>;
-    static_assert(detail::treat_as_integral<common_t>);
-    if constexpr (detail::UsesFixedPointScaling<From>) {
-      // Scalar: project to common_t and delegate to the shared integer-arithmetic helper.
-      return static_cast<To>(detail::scale_int_scalar<common_t, M{}>(static_cast<common_t>(detail::as_element(value))));
-    } else {
-      // Wrapping type (UsesElementWiseScaling): delegate to the shared integer-wrapper helper.
-      return static_cast<To>(detail::scale_int_wrapper<common_t, M{}>(value));
-    }
+    // Integer arithmetic path (UsesIntegerScaling) — handles plain arithmetic types,
+    // wrappers (safe_int), and containers (cartesian_vector<int>) alike.
+    // For integral/pure-divisor magnitudes, uses the type's own operator* / operator/
+    // (safe_int's overflow checks, cartesian_vector's element-wise operations).
+    // For rational magnitudes, widens the factor to prevent intermediate overflow;
+    // the wider factor propagates through the type's own operators.
+    // static_cast<To> triggers the wrapper's checked narrowing constructor when needed.
+    return static_cast<To>(detail::scale_int<M{}>(value));
   }
 }
 
