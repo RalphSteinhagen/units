@@ -268,6 +268,14 @@ as a fallback when this operator is not available.
     in binary floating-point), and on ARM / Apple Silicon `long double == double` anyway,
     giving no extra range.
 
+    !!! tip "Detecting overflow in the final result"
+
+        While double-width arithmetic avoids UB during the intermediate scaling multiplication,
+        it cannot prevent overflow in the final result when that result doesn't fit in the
+        target type. For runtime overflow detection, use
+        [`safe_int<T>`](safe_int.md), which wraps the representation type and checks all
+        arithmetic operations for overflow.
+
 If different internal fields need different scale factors, encode that logic in
 `operator*` and `operator/` — the library routes scaling through them via the
 appropriate built-in path. For an example of integrating a third-party floating-point

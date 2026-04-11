@@ -28,6 +28,7 @@
 #include <mp-units/constrained.h>
 #include <mp-units/framework.h>
 #include <mp-units/overflow_policies.h>
+#include <mp-units/safe_int.h>
 
 #if MP_UNITS_HOSTED
 #include <mp-units/cartesian_vector.h>

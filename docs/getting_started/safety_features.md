@@ -142,9 +142,16 @@ latitude lat{95.0 * deg, equator};  // throws std::domain_error (out of [-90, 90
 
 !!! tip "Deep Dive"
 
-    For complete coverage, see
-    [Ensure Ultimate Safety](../how_to_guides/advanced_usage/ultimate_safety.md) and
-    [Representation Types: `constraint_violation_handler`](../users_guide/framework_basics/representation_types.md#constraint-violation-handler).
+    For complete coverage, see:
+
+    - [`safe_int<T>`](../users_guide/framework_basics/safe_int.md) —
+      overflow-safe integer arithmetic reference
+    - [Preventing Integer Overflow in Physical Computations](../blog/posts/preventing-integer-overflow.md) —
+      in-depth narrative on automatic scaling overflow and design tradeoffs
+    - [Ensure Ultimate Safety](../how_to_guides/advanced_usage/ultimate_safety.md) —
+      combining `safe_int`, `constrained`, and `quantity_bounds`
+    - [Representation Types: `constraint_violation_handler`](../users_guide/framework_basics/representation_types.md#constraint-violation-handler) —
+      customization point reference
 
 
 ### Non-Negative Quantities

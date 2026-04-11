@@ -174,6 +174,9 @@ quantity distance = safe_int{42} * m;  // arithmetic overflow detected at runtim
 
 // Bounded quantity point with overflow-detecting rep
 using altitude = quantity_point<isq::height[m], msl_origin, safe_int<int>>;
+
+// Convenience aliases are available for common integer types
+quantity speed = safe_i32{100} * (m / s);
 ```
 
 `safe_int` also specializes `constraint_violation_handler`, so `check_in_range` will
@@ -181,6 +184,10 @@ use its error policy for bounds violations.
 
 ## See Also
 
+- [`safe_int<T>`](../../users_guide/framework_basics/safe_int.md) —
+  overflow-safe integer arithmetic reference
+- [Preventing Integer Overflow in Physical Computations](../../blog/posts/preventing-integer-overflow.md) —
+  in-depth narrative on automatic scaling overflow, design tradeoffs, and comparison with Au
 - [Representation Types](../../users_guide/framework_basics/representation_types.md) —
   `constraint_violation_handler` reference
 - [Range-Validated Quantity Points](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points) —

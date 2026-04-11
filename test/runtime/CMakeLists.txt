@@ -28,6 +28,7 @@ add_executable(
     bounded_quantity_point_test.cpp
     cartesian_vector_test.cpp
     constrained_test.cpp
+    safe_int_test.cpp
     distribution_test.cpp
     fixed_point_test.cpp
     fixed_string_test.cpp

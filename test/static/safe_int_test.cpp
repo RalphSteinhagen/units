@@ -1,0 +1,894 @@
+// The MIT License (MIT)
+//
+// Copyright (c) 2018 Mateusz Pusz
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include <mp-units/bits/hacks.h>
+#include <mp-units/constrained.h>
+#include <mp-units/framework/customization_points.h>
+#include <mp-units/framework/quantity.h>
+#include <mp-units/framework/representation_concepts.h>
+#include <mp-units/safe_int.h>
+#include <mp-units/systems/isq.h>
+#include <mp-units/systems/si.h>
+#ifdef MP_UNITS_IMPORT_STD
+import std;
+#else
+#include <concepts>
+#include <cstdint>
+#include <limits>
+#include <string>
+#include <type_traits>
+#endif
+
+namespace {
+
+using namespace mp_units;
+using namespace mp_units::detail;
+
+// ============================================================================
+// A test error policy (mirrors constrained_test.cpp for cross-wrapper tests)
+// ============================================================================
+
+struct test_policy {
+  static constexpr void on_constraint_violation(std::string_view) noexcept {}
+};
+
+// ============================================================================
+// Type traits and value_type
+// ============================================================================
+
+static_assert(std::is_same_v<safe_int<int>::value_type, int>);
+static_assert(std::is_same_v<safe_int<long>::value_type, long>);
+static_assert(std::is_same_v<safe_int<std::uint8_t>::value_type, std::uint8_t>);
+
+static_assert(std::is_same_v<value_type_t<safe_int<int>>, int>);
+static_assert(std::is_same_v<value_type_t<safe_int<long>>, long>);
+static_assert(std::is_same_v<value_type_t<safe_int<unsigned>>, unsigned>);
+
+// ============================================================================
+// is_value_preserving_int_v — range-based check using numeric_limits
+// ============================================================================
+
+// Same type: always value-preserving
+static_assert(is_value_preserving_int_v<int, int>);
+static_assert(is_value_preserving_int_v<unsigned, unsigned>);
+static_assert(is_value_preserving_int_v<short, short>);
+
+// Widening same signedness
+static_assert(is_value_preserving_int_v<short, int>);
+static_assert(is_value_preserving_int_v<std::int8_t, int>);
+static_assert(is_value_preserving_int_v<std::uint8_t, unsigned>);
+static_assert(is_value_preserving_int_v<std::uint8_t, std::uint64_t>);
+
+// Narrowing: not value-preserving
+static_assert(!is_value_preserving_int_v<int, short>);
+static_assert(!is_value_preserving_int_v<int, std::int8_t>);
+static_assert(!is_value_preserving_int_v<unsigned, std::uint8_t>);
+static_assert(!is_value_preserving_int_v<long long, int>);
+
+// Signed → unsigned same size: not value-preserving (negative values don't fit)
+static_assert(!is_value_preserving_int_v<int, unsigned>);
+static_assert(!is_value_preserving_int_v<short, unsigned short>);
+static_assert(!is_value_preserving_int_v<std::int8_t, std::uint8_t>);
+
+// Unsigned → signed same size: not value-preserving (large unsigned doesn't fit)
+static_assert(!is_value_preserving_int_v<unsigned, int>);
+static_assert(!is_value_preserving_int_v<unsigned short, short>);
+
+// Unsigned → signed wider: value-preserving (uint8_t 0..255 fits in int)
+static_assert(is_value_preserving_int_v<std::uint8_t, int>);
+static_assert(is_value_preserving_int_v<std::uint8_t, long long>);
+
+// Signed → unsigned wider: NOT value-preserving (negative values never fit unsigned)
+static_assert(!is_value_preserving_int_v<std::int8_t, unsigned>);
+static_assert(!is_value_preserving_int_v<int, std::uint64_t>);
+
+// Cross-wrapper: safe_int<T> → raw U (safe_int has numeric_limits with same range as T)
+static_assert(is_value_preserving_int_v<safe_int<short>, int>);
+static_assert(!is_value_preserving_int_v<safe_int<int>, short>);
+static_assert(!is_value_preserving_int_v<safe_int<int>, unsigned>);
+
+// Cross-wrapper: raw T → safe_int<U>
+static_assert(is_value_preserving_int_v<short, safe_int<int>>);
+static_assert(!is_value_preserving_int_v<int, safe_int<short>>);
+static_assert(is_value_preserving_int_v<int, safe_int<int>>);
+
+// Cross-wrapper: safe_int<T> → safe_int<U>
+static_assert(is_value_preserving_int_v<safe_int<short>, safe_int<int>>);
+static_assert(!is_value_preserving_int_v<safe_int<int>, safe_int<short>>);
+static_assert(!is_value_preserving_int_v<safe_int<int>, safe_int<unsigned>>);
+static_assert(!is_value_preserving_int_v<safe_int<unsigned>, safe_int<int>>);
+static_assert(is_value_preserving_int_v<safe_int<std::uint8_t>, safe_int<unsigned>>);
+
+// Cross-wrapper: constrained<T> → raw U and vice versa
+static_assert(is_value_preserving_int_v<constrained<short, test_policy>, int>);
+static_assert(!is_value_preserving_int_v<constrained<int, test_policy>, short>);
+static_assert(is_value_preserving_int_v<int, constrained<int, test_policy>>);
+
+// Cross-wrapper: safe_int → constrained and vice versa
+static_assert(is_value_preserving_int_v<safe_int<short>, constrained<int, test_policy>>);
+static_assert(!is_value_preserving_int_v<safe_int<int>, constrained<short, test_policy>>);
+static_assert(is_value_preserving_int_v<constrained<short, test_policy>, safe_int<int>>);
+static_assert(!is_value_preserving_int_v<constrained<int, test_policy>, safe_int<short>>);
+
+// Types without numeric_limits: always false
+static_assert(!is_value_preserving_int_v<std::string, int>);
+static_assert(!is_value_preserving_int_v<int, std::string>);
+
+// ============================================================================
+// is_value_preserving_v — generalized: delegates to is_value_preserving_int_v
+// when both have numeric_limits, otherwise falls back to is_convertible_v
+// ============================================================================
+
+// Integral pairs: delegates to is_value_preserving_int_v
+static_assert(is_value_preserving_v<short, int>);
+static_assert(!is_value_preserving_v<int, short>);
+static_assert(!is_value_preserving_v<int, unsigned>);
+static_assert(is_value_preserving_v<std::uint8_t, int>);
+
+// Wrapper pairs with numeric_limits: delegates to is_value_preserving_int_v
+static_assert(is_value_preserving_v<safe_int<short>, safe_int<int>>);
+static_assert(!is_value_preserving_v<safe_int<int>, safe_int<short>>);
+
+// Non-numeric_limits types: falls back to is_convertible_v
+static_assert(!is_value_preserving_v<std::string, int>);  // not convertible
+static_assert(!is_value_preserving_v<int, std::string>);  // not convertible
+
+// ============================================================================
+// treat_as_floating_point: must be false
+// ============================================================================
+
+static_assert(!treat_as_floating_point<safe_int<int>>);
+static_assert(!treat_as_floating_point<safe_int<long>>);
+static_assert(!treat_as_floating_point<safe_int<std::uint64_t>>);
+
+// ============================================================================
+// Representation concepts
+// ============================================================================
+
+// UsesIntegerScaling: value_type is std::integral and the type supports * / with integers.
+// The scaling engine uses the type's own operators so that safe_int's overflow checks and
+// widening promotions are preserved throughout unit conversion.
+static_assert(std::integral<value_type_t<safe_int<int>>>);
+static_assert(UsesIntegerScaling<safe_int<int>>);
+static_assert(UsesIntegerScaling<safe_int<std::int8_t>>);
+static_assert(UsesIntegerScaling<safe_int<unsigned long>>);
+
+// WeaklyRegular
+static_assert(std::copyable<safe_int<int>>);
+static_assert(std::equality_comparable<safe_int<int>>);
+
+// BaseScalar
+static_assert(BaseScalar<safe_int<int>>);
+static_assert(BaseScalar<safe_int<long long>>);
+
+// totally_ordered
+static_assert(std::totally_ordered<safe_int<int>>);
+static_assert(std::totally_ordered<safe_int<unsigned>>);
+
+// RealScalar
+static_assert(RealScalar<safe_int<int>>);
+static_assert(RealScalar<safe_int<std::int8_t>>);
+static_assert(RealScalar<safe_int<std::uint64_t>>);
+
+// MagnitudeScalable
+static_assert(MagnitudeScalable<safe_int<int>>);
+static_assert(MagnitudeScalable<safe_int<unsigned>>);
+
+// RealScalarRepresentation
+static_assert(RealScalarRepresentation<safe_int<int>>);
+static_assert(RealScalarRepresentation<safe_int<long>>);
+static_assert(RealScalarRepresentation<safe_int<unsigned short>>);
+
+// floating-point types must NOT be accepted
+static_assert(!requires { requires(!treat_as_floating_point<double>) && detail::RealScalar<double>; });
+static_assert(!requires { requires(!treat_as_floating_point<float>) && detail::RealScalar<float>; });
+
+// ============================================================================
+// std::numeric_limits
+// ============================================================================
+
+static_assert(std::numeric_limits<safe_int<int>>::is_specialized);
+static_assert(std::numeric_limits<safe_int<unsigned>>::is_specialized);
+
+static_assert(std::numeric_limits<safe_int<int>>::min() == safe_int<int>{std::numeric_limits<int>::min()});
+static_assert(std::numeric_limits<safe_int<int>>::max() == safe_int<int>{std::numeric_limits<int>::max()});
+static_assert(std::numeric_limits<safe_int<int>>::lowest() == safe_int<int>{std::numeric_limits<int>::lowest()});
+
+static_assert(std::numeric_limits<safe_int<unsigned>>::min() == safe_int<unsigned>{0u});
+
+// ============================================================================
+// representation_values
+// ============================================================================
+
+static_assert(std::constructible_from<safe_int<int>, int>);
+static_assert(representation_values<safe_int<int>>::zero() == safe_int<int>{0});
+static_assert(representation_values<safe_int<int>>::one() == safe_int<int>{1});
+static_assert(representation_values<safe_int<int>>::min() == safe_int<int>{std::numeric_limits<int>::min()});
+static_assert(representation_values<safe_int<int>>::max() == safe_int<int>{std::numeric_limits<int>::max()});
+
+// ============================================================================
+// Construction and conversion
+// ============================================================================
+
+static_assert(safe_int<int>{42}.value() == 42);
+static_assert(static_cast<int>(safe_int<int>{-7}) == -7);
+static_assert(safe_int<int>{0} == safe_int<int>{0});
+static_assert(safe_int<int>{1} != safe_int<int>{2});
+
+// ============================================================================
+// Converting constructors — raw integer types
+// ============================================================================
+
+// Widening: implicit (short → int, is_convertible_v<short, int> is true)
+static_assert(std::is_convertible_v<short, safe_int<int>>);
+static_assert(std::is_constructible_v<safe_int<int>, short>);
+static_assert(safe_int<int>{short{42}}.value() == 42);
+
+// Narrowing: explicit (int range doesn't fit in short)
+static_assert(!std::is_convertible_v<int, safe_int<short>>);
+static_assert(std::is_constructible_v<safe_int<short>, int>);
+static_assert(safe_int<short>{int{100}}.value() == 100);
+
+// Signed↔unsigned same size: explicit (ranges don't fully overlap)
+static_assert(!std::is_convertible_v<unsigned, safe_int<int>>);
+static_assert(std::is_constructible_v<safe_int<int>, unsigned>);
+static_assert(safe_int<int>{42u}.value() == 42);
+
+static_assert(!std::is_convertible_v<int, safe_int<unsigned>>);
+static_assert(std::is_constructible_v<safe_int<unsigned>, int>);
+static_assert(safe_int<unsigned>{42}.value() == 42u);
+
+// Widening unsigned→unsigned: implicit
+static_assert(std::is_convertible_v<std::uint8_t, safe_int<unsigned>>);
+static_assert(safe_int<unsigned>{std::uint8_t{200}}.value() == 200u);
+
+// Widening signed→signed: implicit
+static_assert(std::is_convertible_v<std::int8_t, safe_int<int>>);
+static_assert(safe_int<int>{std::int8_t{42}}.value() == 42);
+
+// ============================================================================
+// Converting constructors — safe_int<U> → safe_int<T>
+// (uses is_value_preserving_int_v for explicit/implicit decision)
+// ============================================================================
+
+// Widening: implicit (safe_int<short> → safe_int<int>)
+static_assert(std::is_convertible_v<safe_int<short>, safe_int<int>>);
+static_assert(std::is_constructible_v<safe_int<int>, safe_int<short>>);
+static_assert(safe_int<int>{safe_int<short>{42}}.value() == 42);
+
+// Narrowing: explicit (safe_int<int> → safe_int<short>)
+static_assert(!std::is_convertible_v<safe_int<int>, safe_int<short>>);
+static_assert(std::is_constructible_v<safe_int<short>, safe_int<int>>);
+static_assert(safe_int<short>{safe_int<int>{100}}.value() == 100);
+
+// Signed→unsigned: explicit (negative values don't fit)
+static_assert(!std::is_convertible_v<safe_int<int>, safe_int<unsigned>>);
+static_assert(std::is_constructible_v<safe_int<unsigned>, safe_int<int>>);
+static_assert(safe_int<unsigned>{safe_int<int>{42}}.value() == 42u);
+
+// Unsigned→signed same size: explicit (large unsigned doesn't fit)
+static_assert(!std::is_convertible_v<safe_int<unsigned>, safe_int<int>>);
+static_assert(std::is_constructible_v<safe_int<int>, safe_int<unsigned>>);
+static_assert(safe_int<int>{safe_int<unsigned>{42u}}.value() == 42);
+
+// Widening unsigned→unsigned: implicit
+static_assert(std::is_convertible_v<safe_int<std::uint8_t>, safe_int<unsigned>>);
+static_assert(safe_int<unsigned>{safe_int<std::uint8_t>{200}}.value() == 200u);
+
+// ============================================================================
+// CTAD (class template argument deduction)
+// ============================================================================
+
+static_assert(std::is_same_v<decltype(safe_int{42}), safe_int<int>>);
+static_assert(std::is_same_v<decltype(safe_int{short{1}}), safe_int<short>>);
+static_assert(std::is_same_v<decltype(safe_int{42u}), safe_int<unsigned>>);
+static_assert(std::is_same_v<decltype(safe_int{42LL}), safe_int<long long>>);
+static_assert(std::is_same_v<decltype(safe_int{std::int8_t{1}}), safe_int<std::int8_t>>);
+static_assert(std::is_same_v<decltype(safe_int{std::uint64_t{1}}), safe_int<std::uint64_t>>);
+static_assert(safe_int{100}.value() == 100);
+static_assert(safe_int{short{42}}.value() == 42);
+
+// ============================================================================
+// common_type deduction (no explicit specialization needed — implicit widening resolves the ternary)
+// ============================================================================
+
+static_assert(
+  std::is_same_v<std::common_type_t<safe_int<short>, safe_int<int>>, safe_int<int, safe_int<short>::error_policy>>);
+static_assert(std::is_same_v<std::common_type_t<safe_int<std::int8_t>, safe_int<int>>,
+                             safe_int<int, safe_int<std::int8_t>::error_policy>>);
+static_assert(std::is_same_v<std::common_type_t<safe_int<std::uint8_t>, safe_int<unsigned>>,
+                             safe_int<unsigned, safe_int<std::uint8_t>::error_policy>>);
+
+// safe_int vs raw integer: wrapper drops off (safe_int<short> → short → int via operator T())
+static_assert(std::is_same_v<std::common_type_t<safe_int<short>, int>, int>);
+static_assert(std::is_same_v<std::common_type_t<int, safe_int<short>>, int>);
+
+// Widening unsigned→signed: uint8_t fits in int, so converting ctor is implicit
+static_assert(std::is_same_v<std::common_type_t<safe_int<std::uint8_t>, safe_int<int>>,
+                             safe_int<int, safe_int<std::uint8_t>::error_policy>>);
+
+// Signed↔unsigned same size: neither converting ctor is implicit (both directions
+// are not value-preserving), so the wrapper drops off and common_type resolves to
+// the underlying common_type (unsigned, via standard integral promotion).
+static_assert(std::is_same_v<std::common_type_t<safe_int<int>, safe_int<unsigned>>, unsigned>);
+static_assert(std::is_same_v<std::common_type_t<safe_int<unsigned>, safe_int<int>>, unsigned>);
+
+// Cross-wrapper: safe_int<T> vs constrained<T, P> — safe_int has an implicit converting
+// constructor from constrained<T> (value-preserving when ranges match), so common_type
+// resolves to safe_int.
+static_assert(std::is_same_v<std::common_type_t<safe_int<int>, constrained<int, test_policy>>, safe_int<int>>);
+static_assert(std::is_same_v<std::common_type_t<constrained<int, test_policy>, safe_int<int>>, safe_int<int>>);
+
+// Cross-wrapper with widening: constrained<short> → safe_int<int> is implicit (range fits)
+static_assert(std::is_same_v<std::common_type_t<constrained<short, test_policy>, safe_int<int>>, safe_int<int>>);
+
+// Cross-wrapper where neither direction is implicit: wrapper drops off
+static_assert(std::is_same_v<std::common_type_t<safe_int<short>, constrained<int, test_policy>>, int>);
+
+// ============================================================================
+// Comparison operators
+// ============================================================================
+
+static_assert(safe_int<int>{1} < safe_int<int>{2});
+static_assert(safe_int<int>{2} > safe_int<int>{1});
+static_assert(safe_int<int>{1} <= safe_int<int>{1});
+static_assert(safe_int<int>{1} >= safe_int<int>{1});
+static_assert((safe_int<int>{1} <=> safe_int<int>{2}) < 0);
+
+// ============================================================================
+// Unary operators
+// ============================================================================
+
+static_assert(+safe_int<int>{5} == safe_int<int>{5});
+static_assert(-safe_int<int>{5} == safe_int<int>{-5});
+static_assert(-safe_int<int>{-3} == safe_int<int>{3});
+
+// Unary +/- model integral promotion: sub-int types promote to int
+static_assert(std::is_same_v<decltype(+safe_int<short>{}), safe_int<int, safe_int<short>::error_policy>>);
+static_assert(std::is_same_v<decltype(-safe_int<short>{}), safe_int<int, safe_int<short>::error_policy>>);
+static_assert(
+  std::is_same_v<decltype(+safe_int<unsigned short>{}), safe_int<int, safe_int<unsigned short>::error_policy>>);
+static_assert(
+  std::is_same_v<decltype(-safe_int<unsigned short>{}), safe_int<int, safe_int<unsigned short>::error_policy>>);
+// int and wider types are unaffected by promotion
+static_assert(std::is_same_v<decltype(+safe_int<int>{}), safe_int<int, safe_int<int>::error_policy>>);
+static_assert(std::is_same_v<decltype(-safe_int<int>{}), safe_int<int, safe_int<int>::error_policy>>);
+static_assert(std::is_same_v<decltype(+safe_int<long>{}), safe_int<long, safe_int<long>::error_policy>>);
+static_assert(std::is_same_v<decltype(-safe_int<long>{}), safe_int<long, safe_int<long>::error_policy>>);
+
+// safe_int<short>: -INT16_MIN promotes to int first, so int(32768) is in range — no overflow
+static_assert(-safe_int<short>{std::numeric_limits<short>::min()} == safe_int<int>{32768});
+
+// ============================================================================
+// Arithmetic (non-overflow paths)
+// ============================================================================
+
+static_assert(safe_int<int>{3} + safe_int<int>{4} == safe_int<int>{7});
+static_assert(safe_int<int>{10} - safe_int<int>{3} == safe_int<int>{7});
+static_assert(safe_int<int>{3} * safe_int<int>{4} == safe_int<int>{12});
+static_assert(safe_int<int>{12} / safe_int<int>{4} == safe_int<int>{3});
+static_assert(safe_int<int>{10} % safe_int<int>{3} == safe_int<int>{1});
+
+// unsigned
+static_assert(safe_int<unsigned>{10u} + safe_int<unsigned>{5u} == safe_int<unsigned>{15u});
+static_assert(safe_int<unsigned>{10u} - safe_int<unsigned>{5u} == safe_int<unsigned>{5u});
+static_assert(safe_int<unsigned>{3u} * safe_int<unsigned>{4u} == safe_int<unsigned>{12u});
+static_assert(safe_int<unsigned>{12u} / safe_int<unsigned>{4u} == safe_int<unsigned>{3u});
+
+// ============================================================================
+// Increment / decrement
+// ============================================================================
+
+static_assert([] {
+  safe_int<int> x{5};
+  ++x;
+  return x == safe_int<int>{6};
+}());
+
+static_assert([] {
+  safe_int<int> x{5};
+  x++;
+  return x == safe_int<int>{6};
+}());
+
+static_assert([] {
+  safe_int<int> x{5};
+  --x;
+  return x == safe_int<int>{4};
+}());
+
+static_assert([] {
+  safe_int<int> x{5};
+  x--;
+  return x == safe_int<int>{4};
+}());
+
+// post-increment / post-decrement return the old value
+static_assert([] {
+  safe_int<int> x{5};
+  auto old = x++;
+  return old == safe_int<int>{5} && x == safe_int<int>{6};
+}());
+
+static_assert([] {
+  safe_int<int> x{5};
+  auto old = x--;
+  return old == safe_int<int>{5} && x == safe_int<int>{4};
+}());
+
+// ============================================================================
+// Compound assignment
+// ============================================================================
+
+static_assert([] {
+  safe_int<int> x{10};
+  x += safe_int<int>{3};
+  return x == safe_int<int>{13};
+}());
+
+static_assert([] {
+  safe_int<int> x{10};
+  x -= safe_int<int>{3};
+  return x == safe_int<int>{7};
+}());
+
+static_assert([] {
+  safe_int<int> x{10};
+  x *= safe_int<int>{3};
+  return x == safe_int<int>{30};
+}());
+
+static_assert([] {
+  safe_int<int> x{10};
+  x /= safe_int<int>{2};
+  return x == safe_int<int>{5};
+}());
+
+static_assert([] {
+  safe_int<int> x{10};
+  x %= safe_int<int>{3};
+  return x == safe_int<int>{1};
+}());
+
+// ============================================================================
+// Overflow detection helpers
+// ============================================================================
+
+// add_overflows
+static_assert(!detail::add_overflows<int>(1, 2));
+static_assert(!detail::add_overflows<int>(std::numeric_limits<int>::max() - 1, 1));
+static_assert(detail::add_overflows<int>(std::numeric_limits<int>::max(), 1));
+static_assert(detail::add_overflows<int>(std::numeric_limits<int>::min(), -1));
+static_assert(!detail::add_overflows<unsigned>(0u, 0u));
+static_assert(detail::add_overflows<unsigned>(std::numeric_limits<unsigned>::max(), 1u));
+
+// sub_overflows
+static_assert(!detail::sub_overflows<int>(5, 3));
+static_assert(detail::sub_overflows<int>(std::numeric_limits<int>::min(), 1));
+static_assert(detail::sub_overflows<int>(std::numeric_limits<int>::max(), -1));
+static_assert(!detail::sub_overflows<unsigned>(5u, 3u));
+static_assert(detail::sub_overflows<unsigned>(0u, 1u));
+
+// mul_overflows
+static_assert(!detail::mul_overflows<int>(2, 3));
+static_assert(!detail::mul_overflows<int>(std::numeric_limits<int>::max(), 1));
+static_assert(detail::mul_overflows<int>(std::numeric_limits<int>::max(), 2));
+static_assert(detail::mul_overflows<int>(std::numeric_limits<int>::min(), -1));
+static_assert(!detail::mul_overflows<unsigned>(0u, std::numeric_limits<unsigned>::max()));
+static_assert(detail::mul_overflows<unsigned>(std::numeric_limits<unsigned>::max(), 2u));
+
+// div_overflows
+static_assert(!detail::div_overflows<int>(10, 2));
+static_assert(detail::div_overflows<int>(10, 0));
+static_assert(detail::div_overflows<int>(std::numeric_limits<int>::min(), -1));
+static_assert(!detail::div_overflows<int>(std::numeric_limits<int>::min(), 2));
+static_assert(detail::div_overflows<unsigned>(5u, 0u));
+
+// neg_overflows
+static_assert(!detail::neg_overflows<int>(5));
+static_assert(!detail::neg_overflows<int>(-5));
+static_assert(!detail::neg_overflows<int>(0));
+static_assert(detail::neg_overflows<int>(std::numeric_limits<int>::min()));
+static_assert(!detail::neg_overflows<unsigned>(0u));
+static_assert(detail::neg_overflows<unsigned>(1u));
+static_assert(detail::neg_overflows<unsigned>(std::numeric_limits<unsigned>::max()));
+
+// ============================================================================
+// Error policy types exist and have on_overflow
+// ============================================================================
+
+static_assert(requires { safe_int_terminate_policy::on_overflow(""); });
+#if MP_UNITS_HOSTED
+static_assert(requires { safe_int_throw_policy::on_overflow(""); });
+#endif
+
+// ============================================================================
+// safe_int<T, ErrorPolicy> default policy selection
+// ============================================================================
+
+#if MP_UNITS_HOSTED
+static_assert(std::is_same_v<safe_int<int>, safe_int<int, safe_int_throw_policy>>);
+#else
+static_assert(std::is_same_v<safe_int<int>, safe_int<int, safe_int_terminate_policy>>);
+#endif
+
+// ============================================================================
+// Mixed-type arithmetic — same value_type (overflow-checked, keeps safe_int<T>)
+// ============================================================================
+
+// safe_int<T> * T / T  →  safe_int<T>
+static_assert(std::is_same_v<decltype(safe_int<int>{} * 2), safe_int<int>>);
+static_assert(std::is_same_v<decltype(2 * safe_int<int>{}), safe_int<int>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} / 2), safe_int<int>>);
+
+static_assert(safe_int<int>{6} * 2 == safe_int<int>{12});
+static_assert(2 * safe_int<int>{6} == safe_int<int>{12});
+static_assert(safe_int<int>{12} / 4 == safe_int<int>{3});
+
+// ============================================================================
+// Scalar addition, subtraction, modulo — integral (overflow-checked, keeps safe_int<T>)
+// ============================================================================
+
+// same-type: result stays safe_int<int>
+static_assert(std::is_same_v<decltype(safe_int<int>{} + 2), safe_int<int>>);
+static_assert(std::is_same_v<decltype(2 + safe_int<int>{}), safe_int<int>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} - 2), safe_int<int>>);
+static_assert(std::is_same_v<decltype(2 - safe_int<int>{}), safe_int<int>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} % 3), safe_int<int>>);
+static_assert(std::is_same_v<decltype(10 % safe_int<int>{}), safe_int<int>>);
+
+// cross-type: int op long long → long long
+static_assert(std::is_same_v<decltype(safe_int<int>{} + 1LL), safe_int<long long>>);
+static_assert(std::is_same_v<decltype(1LL + safe_int<int>{}), safe_int<long long>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} - 1LL), safe_int<long long>>);
+static_assert(std::is_same_v<decltype(1LL - safe_int<int>{}), safe_int<long long>>);
+
+// values
+static_assert(safe_int<int>{3} + 4 == safe_int<int>{7});
+static_assert(4 + safe_int<int>{3} == safe_int<int>{7});
+static_assert(safe_int<int>{10} - 3 == safe_int<int>{7});
+static_assert(10 - safe_int<int>{3} == safe_int<int>{7});
+static_assert(safe_int<int>{10} % 3 == safe_int<int>{1});
+static_assert(10 % safe_int<int>{3} == safe_int<int>{1});
+
+// ============================================================================
+// Cross-type integral (keeps wrapper, promotes to safe_int<R>, overflow-checked)
+// R = decltype(T * U), e.g. int * long long → long long
+// ============================================================================
+
+static_assert(std::is_same_v<decltype(safe_int<int>{} * 1LL), safe_int<long long>>);
+static_assert(std::is_same_v<decltype(1LL * safe_int<int>{}), safe_int<long long>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} / 1LL), safe_int<long long>>);
+
+static_assert(safe_int<int>{6} * 2LL == safe_int<long long>{12});
+static_assert(2LL * safe_int<int>{6} == safe_int<long long>{12});
+static_assert(safe_int<int>{12} / 4LL == safe_int<long long>{3});
+
+// int * unsigned  →  unsigned (standard promotion)
+static_assert(std::is_same_v<decltype(safe_int<int>{} * 2u), safe_int<unsigned>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} / 2u), safe_int<unsigned>>);
+
+// U / safe_int — symmetric with other scalar ops
+static_assert(std::is_same_v<decltype(12 / safe_int<int>{}), safe_int<int>>);
+static_assert(std::is_same_v<decltype(12LL / safe_int<int>{}), safe_int<long long>>);
+static_assert(12 / safe_int<int>{4} == safe_int<int>{3});
+static_assert(10LL / safe_int<int>{3} == safe_int<long long>{3});
+
+// ============================================================================
+// Cross-type floating-point (drops wrapper, returns bare decltype(T * U))
+// ============================================================================
+
+// safe_int<int> + double  →  double (bare, no overflow wrapper)
+static_assert(std::is_same_v<decltype(safe_int<int>{} + 1.0), double>);
+static_assert(std::is_same_v<decltype(1.0 + safe_int<int>{}), double>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} - 1.0), double>);
+static_assert(std::is_same_v<decltype(1.0 - safe_int<int>{}), double>);
+
+// safe_int<int> + float  →  float
+static_assert(std::is_same_v<decltype(safe_int<int>{} + 1.0f), float>);
+static_assert(std::is_same_v<decltype(1.0f + safe_int<int>{}), float>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} - 1.0f), float>);
+static_assert(std::is_same_v<decltype(1.0f - safe_int<int>{}), float>);
+
+// safe_int<int> * double  →  double (bare, no overflow wrapper)
+static_assert(std::is_same_v<decltype(safe_int<int>{} * 1.0), double>);
+static_assert(std::is_same_v<decltype(1.0 * safe_int<int>{}), double>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} / 1.0), double>);
+
+// safe_int<int> * float  →  float
+static_assert(std::is_same_v<decltype(safe_int<int>{} * 1.0f), float>);
+static_assert(std::is_same_v<decltype(1.0f * safe_int<int>{}), float>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} / 1.0f), float>);
+
+// safe_int<long long> * double  →  double
+static_assert(std::is_same_v<decltype(safe_int<long long>{} * 1.0), double>);
+static_assert(std::is_same_v<decltype(safe_int<long long>{} / 1.0), double>);
+
+// FP / safe_int — symmetric with safe_int / FP
+static_assert(std::is_same_v<decltype(1.0 / safe_int<int>{}), double>);
+static_assert(std::is_same_v<decltype(1.0f / safe_int<int>{}), float>);
+
+// values
+static_assert(safe_int<int>{3} + 1.5 == 4.5);
+static_assert(1.5 + safe_int<int>{3} == 4.5);
+static_assert(safe_int<int>{3} - 1.5 == 1.5);
+static_assert(5.0 - safe_int<int>{3} == 2.0);
+static_assert(safe_int<int>{3} * 2.5 == 7.5);
+static_assert(2.5 * safe_int<int>{3} == 7.5);
+static_assert(safe_int<int>{10} / 4.0 == 2.5);
+static_assert(10.0 / safe_int<int>{4} == 2.5);
+static_assert(10.0f / safe_int<int>{4} == 2.5f);
+
+// ============================================================================
+// Heterogeneous wrapper×wrapper arithmetic (safe_int<T,EP> op safe_int<U,EP>, T≠U)
+// Result type is safe_int<decltype(T op U), EP> — same EP, promoted value_type.
+// ============================================================================
+
+// int op long  →  long  (int widens to long on 64-bit platforms)
+static_assert(std::is_same_v<decltype(safe_int<int>{} + safe_int<long>{}), safe_int<long>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} - safe_int<long>{}), safe_int<long>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} * safe_int<long>{}), safe_int<long>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} / safe_int<long>{}), safe_int<long>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} % safe_int<long>{}), safe_int<long>>);
+
+// short op int  →  int  (short promotes to int)
+static_assert(std::is_same_v<decltype(safe_int<short>{} + safe_int<int>{}), safe_int<int>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} + safe_int<short>{}), safe_int<int>>);
+
+// Value correctness (non-overflow paths)
+static_assert(safe_int<int>{3} + safe_int<long>{4L} == safe_int<long>{7L});
+static_assert(safe_int<int>{10} - safe_int<long>{4L} == safe_int<long>{6L});
+static_assert(safe_int<int>{3} * safe_int<long>{4L} == safe_int<long>{12L});
+static_assert(safe_int<int>{12} / safe_int<long>{4L} == safe_int<long>{3L});
+static_assert(safe_int<int>{10} % safe_int<long>{3L} == safe_int<long>{1L});
+
+// Widening prevents overflow: INT_MAX fits in long, so no overflow here
+static_assert(safe_int<int>{std::numeric_limits<int>::max()} + safe_int<long>{1L} ==
+              safe_int<long>{static_cast<long>(std::numeric_limits<int>::max()) + 1L});
+
+// Heterogeneous comparison (operator== and operator<=>)
+static_assert(safe_int<int>{3} == safe_int<long>{3L});
+static_assert(safe_int<int>{2} != safe_int<long>{3L});
+static_assert((safe_int<int>{2} <=> safe_int<long>{3L}) < 0);
+static_assert((safe_int<int>{3} <=> safe_int<long>{3L}) == 0);
+static_assert((safe_int<int>{4} <=> safe_int<long>{3L}) > 0);
+
+// Scalar comparison — integral
+static_assert(safe_int<int>{3} == 3);
+static_assert(3 == safe_int<int>{3});
+static_assert(safe_int<int>{2} != 3);
+static_assert(2 != safe_int<int>{3});
+static_assert(safe_int<int>{2} < 3);
+static_assert(2 < safe_int<int>{3});
+static_assert((safe_int<int>{2} <=> 3) < 0);
+static_assert((2 <=> safe_int<int>{3}) < 0);
+static_assert((safe_int<int>{3} <=> 3) == 0);
+static_assert((safe_int<int>{4} <=> 3) > 0);
+
+// Scalar comparison — floating-point
+static_assert(safe_int<int>{3} == 3.0);
+static_assert(3.0 == safe_int<int>{3});
+static_assert(safe_int<int>{2} < 2.5);
+static_assert(2.5 > safe_int<int>{2});
+static_assert((safe_int<int>{2} <=> 2.5) < 0);
+
+// Mixed signedness comparisons — uses std::cmp_* for correctness
+static_assert(safe_int<int>{-1} < safe_int<unsigned>{0u});
+static_assert(safe_int<int>{-1} != safe_int<unsigned>{0u});
+static_assert(safe_int<unsigned>{0u} > safe_int<int>{-1});
+static_assert((safe_int<int>{-1} <=> safe_int<unsigned>{0u}) < 0);
+static_assert((safe_int<unsigned>{0u} <=> safe_int<int>{-1}) > 0);
+static_assert(safe_int<int>{42} == safe_int<unsigned>{42u});
+static_assert((safe_int<int>{42} <=> safe_int<unsigned>{42u}) == 0);
+
+// Mixed signedness scalar comparisons
+static_assert(safe_int<int>{-1} < 0u);
+static_assert(safe_int<unsigned>{0u} > -1);
+static_assert((safe_int<int>{-1} <=> 0u) < 0);
+static_assert(safe_int<int>{42} == 42u);
+
+// Cross-wrapper comparison — safe_int vs constrained
+static_assert(safe_int<int>{3} == constrained<int>{3});
+static_assert(constrained<int>{3} == safe_int<int>{3});
+static_assert(safe_int<int>{2} < constrained<int>{3});
+static_assert(constrained<int>{2} < safe_int<int>{3});
+static_assert((safe_int<int>{2} <=> constrained<int>{3}) < 0);
+static_assert((constrained<int>{2} <=> safe_int<int>{3}) < 0);
+static_assert((safe_int<int>{3} <=> constrained<long>{3L}) == 0);
+
+// ============================================================================
+// Cross-wrapper arithmetic: constrained op safe_int and safe_int op constrained
+//
+// Rules (regardless of operand order):
+//   - Integral result  → safe_int<R, EP> wins (overflow is the tighter guarantee)
+//   - Non-integral result (FP) → constrained<R, CP> wins (preserves constraint)
+// ============================================================================
+
+using EP = safe_int<int>::error_policy;  // safe_int_throw_policy on hosted
+
+// --- operator+, operator- ---
+static_assert(std::is_same_v<decltype(constrained<int, test_policy>{} + safe_int<int>{}), safe_int<int, EP>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} + constrained<int, test_policy>{}), safe_int<int, EP>>);
+static_assert(std::is_same_v<decltype(constrained<int, test_policy>{} - safe_int<int>{}), safe_int<int, EP>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} - constrained<int, test_policy>{}), safe_int<int, EP>>);
+
+// Non-integral result: constrained wins
+static_assert(
+  std::is_same_v<decltype(constrained<double, test_policy>{} + safe_int<int>{}), constrained<double, test_policy>>);
+static_assert(
+  std::is_same_v<decltype(safe_int<int>{} + constrained<double, test_policy>{}), constrained<double, test_policy>>);
+static_assert(
+  std::is_same_v<decltype(constrained<double, test_policy>{} - safe_int<int>{}), constrained<double, test_policy>>);
+static_assert(
+  std::is_same_v<decltype(safe_int<int>{} - constrained<double, test_policy>{}), constrained<double, test_policy>>);
+
+// --- operator* ---
+// Integral result: safe_int wins, same type both orderings
+static_assert(std::is_same_v<decltype(constrained<int, test_policy>{} * safe_int<int>{}), safe_int<int, EP>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} * constrained<int, test_policy>{}), safe_int<int, EP>>);
+
+// Cross-type integral: result type follows decltype of underlying op
+static_assert(
+  std::is_same_v<decltype(constrained<int, test_policy>{} * safe_int<long long>{}), safe_int<long long, EP>>);
+static_assert(
+  std::is_same_v<decltype(safe_int<int>{} * constrained<long long, test_policy>{}), safe_int<long long, EP>>);
+
+// Non-integral result: constrained wins, same type both orderings
+static_assert(
+  std::is_same_v<decltype(constrained<double, test_policy>{} * safe_int<int>{}), constrained<double, test_policy>>);
+static_assert(
+  std::is_same_v<decltype(safe_int<int>{} * constrained<double, test_policy>{}), constrained<double, test_policy>>);
+
+// --- operator/ ---
+static_assert(std::is_same_v<decltype(constrained<int, test_policy>{} / safe_int<int>{}), safe_int<int, EP>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} / constrained<int, test_policy>{}), safe_int<int, EP>>);
+
+static_assert(
+  std::is_same_v<decltype(constrained<int, test_policy>{} / safe_int<long long>{}), safe_int<long long, EP>>);
+static_assert(
+  std::is_same_v<decltype(safe_int<int>{} / constrained<long long, test_policy>{}), safe_int<long long, EP>>);
+
+static_assert(
+  std::is_same_v<decltype(constrained<double, test_policy>{} / safe_int<int>{}), constrained<double, test_policy>>);
+static_assert(
+  std::is_same_v<decltype(safe_int<int>{} / constrained<double, test_policy>{}), constrained<double, test_policy>>);
+
+// --- operator% ---
+static_assert(std::is_same_v<decltype(constrained<int, test_policy>{} % safe_int<int>{}), safe_int<int, EP>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} % constrained<int, test_policy>{}), safe_int<int, EP>>);
+
+// Value tests for all operators (both orderings)
+static_assert(constrained<int, test_policy>{3} + safe_int<int>{4} == safe_int<int>{7});
+static_assert(safe_int<int>{3} + constrained<int, test_policy>{4} == safe_int<int>{7});
+static_assert(constrained<int, test_policy>{10} - safe_int<int>{3} == safe_int<int>{7});
+static_assert(safe_int<int>{10} - constrained<int, test_policy>{3} == safe_int<int>{7});
+static_assert(constrained<int, test_policy>{3} * safe_int<int>{4} == safe_int<int>{12});
+static_assert(safe_int<int>{3} * constrained<int, test_policy>{4} == safe_int<int>{12});
+static_assert(constrained<int, test_policy>{12} / safe_int<int>{4} == safe_int<int>{3});
+static_assert(safe_int<int>{12} / constrained<int, test_policy>{4} == safe_int<int>{3});
+static_assert(constrained<int, test_policy>{10} % safe_int<int>{3} == safe_int<int>{1});
+static_assert(safe_int<int>{10} % constrained<int, test_policy>{3} == safe_int<int>{1});
+
+// Non-integral cross-wrapper value tests (constrained wins)
+static_assert(constrained<double, test_policy>{3.0} + safe_int<int>{4} == constrained<double, test_policy>{7.0});
+static_assert(safe_int<int>{3} + constrained<double, test_policy>{4.0} == constrained<double, test_policy>{7.0});
+static_assert(constrained<double, test_policy>{10.0} - safe_int<int>{3} == constrained<double, test_policy>{7.0});
+static_assert(safe_int<int>{10} - constrained<double, test_policy>{3.0} == constrained<double, test_policy>{7.0});
+static_assert(constrained<double, test_policy>{3.0} * safe_int<int>{4} == constrained<double, test_policy>{12.0});
+static_assert(safe_int<int>{3} * constrained<double, test_policy>{4.0} == constrained<double, test_policy>{12.0});
+static_assert(constrained<double, test_policy>{12.0} / safe_int<int>{4} == constrained<double, test_policy>{3.0});
+static_assert(safe_int<int>{12} / constrained<double, test_policy>{4.0} == constrained<double, test_policy>{3.0});
+
+// ============================================================================
+// Integer promotion rules
+// safe_int uses decltype of the underlying operation, so homogeneous short×short
+// must promote to safe_int<int> just as raw short+short promotes to int.
+// ============================================================================
+
+// Homogeneous short×short: both operands promote to int before the op.
+static_assert(std::is_same_v<decltype(safe_int<short>{} + safe_int<short>{}), safe_int<decltype(short{} + short{})>>);
+static_assert(std::is_same_v<decltype(safe_int<short>{} * safe_int<short>{}), safe_int<decltype(short{} * short{})>>);
+
+// Scalar path inherits promotion: safe_int<short> * int-literal.
+static_assert(std::is_same_v<decltype(safe_int<short>{} * 2), safe_int<decltype(short{} * 2)>>);
+
+// ============================================================================
+// Using safe_int as a quantity representation type
+// ============================================================================
+
+using namespace mp_units::si::unit_symbols;
+
+// Basic quantity construction and operations
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> dist = safe_int{100} * m;
+  return dist.numerical_value_in(m) == 100;
+}());
+
+// Unit conversion with safe_int
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> distance = safe_int{2} * m;
+  quantity<isq::length[mm], safe_int<int>> distance_mm = distance;
+  return distance_mm.numerical_value_in(mm) == 2000;
+}());
+
+// Arithmetic operations on quantities with safe_int
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> d1 = safe_int{100} * m;
+  quantity<isq::length[m], safe_int<int>> d2 = safe_int{50} * m;
+  auto sum = d1 + d2;
+  return sum.numerical_value_in(m) == 150;
+}());
+
+// Multiplication of quantities
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> length = safe_int{3} * m;
+  quantity<isq::length[m], safe_int<int>> width = safe_int{4} * m;
+  auto area = length * width;
+  return area.numerical_value_in(m2) == 12;
+}());
+
+// Division of quantities
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> distance = safe_int{100} * m;
+  quantity<isq::time[s], safe_int<int>> time = safe_int{10} * s;
+  auto speed = distance / time;
+  return speed.numerical_value_in(m / s) == 10;
+}());
+
+// Scalar multiplication
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> dist = safe_int{5} * m;
+  auto doubled = dist * 2;
+  return doubled.numerical_value_in(m) == 10;
+}());
+
+// Comparison of quantities with safe_int
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> d1 = safe_int{100} * m;
+  quantity<isq::length[m], safe_int<int>> d2 = safe_int{50} * m;
+  return d1 > d2;
+}());
+
+// Same safe_int rep type requirement for quantity arithmetic
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> d1 = safe_int{100} * m;
+  quantity<isq::length[m], safe_int<int>> d2 = safe_int{50} * m;
+  auto sum = d1 + d2;
+  return sum.numerical_value_in(m) == 150;
+}());
+
+// verify safe_int propagates through quantity operations
+static_assert([] {
+  quantity<isq::length[m], safe_int<int>> dist = safe_int{10} * m;
+  auto squared = dist * dist;
+  // Result should still use safe_int
+  using result_rep = decltype(squared)::rep;
+  return std::is_same_v<result_rep, safe_int<int>>;
+}());
+
+// Convenience aliases work with quantities
+static_assert([] {
+  quantity<isq::length[m], safe_i32> dist = safe_i32{100} * m;
+  return dist.numerical_value_in(m) == 100;
+}());
+
+}  // namespace

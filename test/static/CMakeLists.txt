@@ -35,6 +35,7 @@ add_library(
     astronomy_test.cpp
     bounded_quantity_point_test.cpp
     constrained_test.cpp
+    safe_int_test.cpp
     cgs_test.cpp
     concepts_test.cpp
     # custom_rep_test_min_expl.cpp
