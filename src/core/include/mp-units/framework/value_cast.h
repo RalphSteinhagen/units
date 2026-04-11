@@ -105,8 +105,7 @@ concept ExplicitlyCastable = UnitConvertibleTo<MP_UNITS_REMOVE_CONST(decltype(Fr
  */
 template<auto FromUnit, typename FromRep, auto ToUnit, typename ToRep>
 constexpr bool implicitly_scalable =
-  std::is_convertible_v<FromRep, ToRep> &&
-  (treat_as_floating_point<ToRep> || (!treat_as_floating_point<FromRep> && is_integral_scaling(FromUnit, ToUnit)));
+  treat_as_floating_point<ToRep> || (!treat_as_floating_point<FromRep> && is_integral_scaling(FromUnit, ToUnit));
 
 /**
  * @brief Explicit cast of a quantity's unit
