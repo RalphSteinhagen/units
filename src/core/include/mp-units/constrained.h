@@ -45,6 +45,13 @@ import std;
 namespace mp_units {
 
 // ============================================================================
+// Error policy concept
+// ============================================================================
+
+MP_UNITS_EXPORT template<typename EP>
+concept ConstraintPolicy = requires(std::string_view msg) { EP::on_constraint_violation(msg); };
+
+// ============================================================================
 // Base error policies
 //
 // These policies define how domain constraint violations are reported.
@@ -69,7 +76,7 @@ MP_UNITS_EXPORT struct throw_policy {
 
 #endif  // MP_UNITS_HOSTED
 
-MP_UNITS_EXPORT template<typename T, typename ErrorPolicy>
+MP_UNITS_EXPORT template<typename T, ConstraintPolicy ErrorPolicy>
 class constrained;
 
 // ============================================================================
@@ -191,13 +198,14 @@ struct constrained_binary_ops {
  * All arithmetic operations are forwarded to the underlying type T.
  *
  * @tparam T            the underlying representation type
- * @tparam ErrorPolicy  policy type providing static on_constraint_violation(const char*)
+ * @tparam ErrorPolicy  policy type satisfying ConstraintPolicy (provides static
+ * on_constraint_violation(std::string_view))
  */
 MP_UNITS_EXPORT template<typename T,
 #if MP_UNITS_HOSTED
-                         typename ErrorPolicy = throw_policy>
+                         ConstraintPolicy ErrorPolicy = throw_policy>
 #else
-                         typename ErrorPolicy = terminate_policy>
+                         ConstraintPolicy ErrorPolicy = terminate_policy>
 #endif
 class constrained : detail::constrained_binary_ops {
 public:

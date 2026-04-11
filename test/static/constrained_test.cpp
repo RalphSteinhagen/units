@@ -45,7 +45,7 @@ using namespace mp_units::detail;
 // ============================================================================
 
 struct test_policy {
-  static constexpr void on_constraint_violation(const char*) noexcept {}
+  static constexpr void on_constraint_violation(std::string_view) noexcept {}
 };
 
 // ============================================================================
