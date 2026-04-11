@@ -56,8 +56,8 @@ int main()
   std::println("Morning:    {} in {} (avg: {})", morning_distance, morning_time, morning_avg);
   std::println("Afternoon:  {} in {} (avg: {})", afternoon_distance, afternoon_time, afternoon_avg);
   std::println("Evening:    {} in {} (avg: {})", evening_distance, evening_time, evening_avg);
-
-  std::println("\nTotal:      {} in {}", total_distance, total_time);
+  std::println();
+  std::println("Total:      {} in {}", total_distance, total_time);
   std::println("Average:    {}", overall_avg);
 }
 ```
