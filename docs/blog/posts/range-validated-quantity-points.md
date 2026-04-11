@@ -20,10 +20,10 @@ unbounded real number ignores a fundamental property of the domain. A clinical
 body-temperature sensor should reject a reading of $44\ \mathrm{°C}$ at the API
 boundary, not silently pass it downstream.
 
-No units library — before this work — has provided a way to attach this kind of
-constraint to a quantity point at the type level, have it enforced automatically,
-and express different flavours (clamp, wrap, reflect, check) without any runtime
-polymorphism.
+Type-level constraint enforcement for quantity points with this level of
+flexibility is a relatively unexplored area in mainstream physical units libraries.
+The approach we present here is novel and experimental — we are certain there are
+edge cases and design considerations we haven't yet discovered.
 
 This article describes the motivation in depth, the design we arrived at, and
 the open questions we would love the community's help to answer.
@@ -475,9 +475,10 @@ measurement range, or bounding a _duration_ to a maximum scheduling window?
 
 ## We Want Your Feedback
 
-This feature is new in the units-library space. **No prior library that we
-know of provides this capability.** We have tried to make the design principled
-and composable, but there are certainly use cases we have not thought of.
+This feature is novel in the units-library space. No prior mainstream library
+that we know of provides this capability, so the solution is not yet proven in
+production. We have tried to make the design principled and composable, but
+there are certainly use cases we have not thought of.
 
 If you work with geodetic coordinates, sensor data pipelines, game physics,
 audio DSP, or any domain where your quantity points live in a bounded or periodic
