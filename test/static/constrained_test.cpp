@@ -372,4 +372,45 @@ static_assert(std::is_same_v<decltype(constrained<double, test_policy>{} + const
 // FP scalar path: constrained<float> * double-literal → constrained<double>.
 static_assert(std::is_same_v<decltype(constrained<float, test_policy>{} * 1.0), constrained<double, test_policy>>);
 
+// ============================================================================
+// common_type deduction
+// SFINAE-friendly helper (GCC emits hard errors from `requires { typename common_type_t<...>; }`
+// when the ternary inside common_type is ambiguous, so we use void_t instead).
+template<typename, typename, typename = void>
+struct has_common_type : std::false_type {};
+
+template<typename T, typename U>
+struct has_common_type<T, U, std::void_t<std::common_type_t<T, U>>> : std::true_type {};
+
+// ============================================================================
+// common_type deduction
+//
+// constrained<T,EP> has no converting constructor from constrained<U,EP>.
+// When both wrappers have the same underlying type, common_type fails
+// (ambiguous: both constrained→T and T→constrained are one-step implicit).
+// When they have different underlying types, the wrapper drops off and
+// common_type resolves to the underlying common_type.
+// ============================================================================
+
+// Same type: trivially exists
+static_assert(std::is_same_v<std::common_type_t<constrained<int, test_policy>, constrained<int, test_policy>>,
+                             constrained<int, test_policy>>);
+
+// Different underlying types: wrapper drops off, resolves to underlying common_type
+static_assert(std::is_same_v<std::common_type_t<constrained<short, test_policy>, constrained<int, test_policy>>, int>);
+static_assert(std::is_same_v<std::common_type_t<constrained<int, test_policy>, constrained<long, test_policy>>, long>);
+static_assert(
+  std::is_same_v<std::common_type_t<constrained<int, test_policy>, constrained<unsigned, test_policy>>, unsigned>);
+
+// constrained vs raw same type: ambiguous (both wrapper→T and T→wrapper are one-step implicit)
+static_assert(!has_common_type<constrained<int, test_policy>, int>::value);
+static_assert(!has_common_type<int, constrained<int, test_policy>>::value);
+static_assert(!has_common_type<constrained<double, test_policy>, double>::value);
+
+// Different policies: wrapper drops off, resolves to underlying type
+struct other_policy {
+  static constexpr void on_constraint_violation(std::string_view) noexcept {}
+};
+static_assert(std::is_same_v<std::common_type_t<constrained<int, test_policy>, constrained<int, other_policy>>, int>);
+
 }  // namespace
