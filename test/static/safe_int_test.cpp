@@ -240,6 +240,11 @@ static_assert(static_cast<int>(safe_int<int>{-7}) == -7);
 static_assert(safe_int<int>{0} == safe_int<int>{0});
 static_assert(safe_int<int>{1} != safe_int<int>{2});
 
+// operator T() is explicit: safe_int does not silently decay to the raw integer type.
+// Use .value() or static_cast<T>() to extract the underlying value intentionally.
+static_assert(!std::is_convertible_v<safe_int<int>, int>);
+static_assert(std::is_constructible_v<int, safe_int<int>>);  // explicit cast still works
+
 // ============================================================================
 // Converting constructors — raw integer types
 // ============================================================================
@@ -314,9 +319,22 @@ static_assert(safe_int{100}.value() == 100);
 static_assert(safe_int{short{42}}.value() == 42);
 
 // ============================================================================
-// common_type deduction (no explicit specialization needed — implicit widening resolves the ternary)
+// common_type deduction
+//
+// Because operator T() is explicit, the only implicit conversion paths are the
+// value-preserving constructors (widening).  The ternary used by std::common_type
+// therefore has at most one viable implicit direction, so ternary resolution is
+// unambiguous and the wrapper is never silently dropped.
+//
+// Helper: uses a dependent requires-expression so that "no viable conversion"
+// (neither direction is implicit) becomes a clean SFINAE failure rather than a
+// hard error — the dependent T/U defer the check to substitution time.
 // ============================================================================
 
+template<typename T, typename U>
+inline constexpr bool has_common_type = requires(T a, U b) { false ? a : b; };
+
+// Widening between same-sign wrappers: one direction is implicit → resolves correctly.
 static_assert(
   std::is_same_v<std::common_type_t<safe_int<short>, safe_int<int>>, safe_int<int, safe_int<short>::error_policy>>);
 static_assert(std::is_same_v<std::common_type_t<safe_int<std::int8_t>, safe_int<int>>,
@@ -324,31 +342,41 @@ static_assert(std::is_same_v<std::common_type_t<safe_int<std::int8_t>, safe_int<
 static_assert(std::is_same_v<std::common_type_t<safe_int<std::uint8_t>, safe_int<unsigned>>,
                              safe_int<unsigned, safe_int<std::uint8_t>::error_policy>>);
 
-// safe_int vs raw integer: wrapper drops off (safe_int<short> → short → int via operator T())
-static_assert(std::is_same_v<std::common_type_t<safe_int<short>, int>, int>);
-static_assert(std::is_same_v<std::common_type_t<int, safe_int<short>>, int>);
+// safe_int<int> vs raw int: with explicit operator T(), only int→safe_int<int> is
+// implicit (value-preserving ctor).  The wrapper is preserved, not dropped.
+static_assert(std::is_same_v<std::common_type_t<safe_int<int>, int>, safe_int<int>>);
+static_assert(std::is_same_v<std::common_type_t<int, safe_int<int>>, safe_int<int>>);
 
-// Widening unsigned→signed: uint8_t fits in int, so converting ctor is implicit
+// safe_int<short> vs raw int: int→safe_int<short> is explicit (narrowing), and
+// safe_int<short>→int requires explicit operator T().  Neither direction is implicit
+// → no common_type.  This prevents silently mixing safe and unsafe integer types.
+static_assert(!has_common_type<safe_int<short>, int>);
+static_assert(!has_common_type<int, safe_int<short>>);
+
+// Widening unsigned→signed: uint8_t fits in int, so converting ctor is implicit.
 static_assert(std::is_same_v<std::common_type_t<safe_int<std::uint8_t>, safe_int<int>>,
                              safe_int<int, safe_int<std::uint8_t>::error_policy>>);
 
-// Signed↔unsigned same size: neither converting ctor is implicit (both directions
-// are not value-preserving), so the wrapper drops off and common_type resolves to
-// the underlying common_type (unsigned, via standard integral promotion).
-static_assert(std::is_same_v<std::common_type_t<safe_int<int>, safe_int<unsigned>>, unsigned>);
-static_assert(std::is_same_v<std::common_type_t<safe_int<unsigned>, safe_int<int>>, unsigned>);
+// Signed↔unsigned same size: both constructors are explicit (ranges don't overlap)
+// and operator T() is explicit → no common_type.  Mixed-signedness arithmetic
+// must be resolved explicitly by the user.
+static_assert(!has_common_type<safe_int<int>, safe_int<unsigned>>);
+static_assert(!has_common_type<safe_int<unsigned>, safe_int<int>>);
 
-// Cross-wrapper: safe_int<T> vs constrained<T, P> — safe_int has an implicit converting
-// constructor from constrained<T> (value-preserving when ranges match), so common_type
-// resolves to safe_int.
+// Cross-wrapper: safe_int<T> has an implicit constructor from constrained<T, P>
+// (value-preserving), while constrained<T> only constructs from T directly (would
+// need two UDCs via safe_int's operator T() — not allowed).  So only one direction
+// is implicit → common_type resolves to safe_int.
 static_assert(std::is_same_v<std::common_type_t<safe_int<int>, constrained<int, test_policy>>, safe_int<int>>);
 static_assert(std::is_same_v<std::common_type_t<constrained<int, test_policy>, safe_int<int>>, safe_int<int>>);
 
-// Cross-wrapper with widening: constrained<short> → safe_int<int> is implicit (range fits)
+// Cross-wrapper with widening: constrained<short> → safe_int<int> is implicit (range fits).
 static_assert(std::is_same_v<std::common_type_t<constrained<short, test_policy>, safe_int<int>>, safe_int<int>>);
 
-// Cross-wrapper where neither direction is implicit: wrapper drops off
-static_assert(std::is_same_v<std::common_type_t<safe_int<short>, constrained<int, test_policy>>, int>);
+// Cross-wrapper where safe_int<short>→constrained<int> is not implicit (would need
+// operator T() to go short→int then int→constrained<int>: two UDCs), and the
+// reverse is explicit (narrowing) → no common_type.
+static_assert(!has_common_type<safe_int<short>, constrained<int, test_policy>>);
 
 // ============================================================================
 // Comparison operators
@@ -896,5 +924,59 @@ static_assert([] {
   quantity<isq::length[m], safe_i32> dist = safe_i32{100} * m;
   return dist.numerical_value_in(m) == 100;
 }());
+
+// ============================================================================
+// Quantity-level common_type and implicit conversion with safe_int reps
+//
+// The framework's quantity common_type is:
+//   quantity<get_common_reference(R1,R2), common_type_t<Rep1,Rep2>>
+// It uses common_type_t<Rep1,Rep2> directly (not the ternary trick on quantities).
+// This means bidirectional quantity-level implicit constructors (implicitly_scalable
+// is true for same-unit non-FP) do NOT cause ambiguous ternaries — the raw
+// safe_int level (where only widening is implicit) resolves common_type correctly.
+// ============================================================================
+
+using namespace mp_units::si::unit_symbols;
+using qty_m_int = quantity<isq::length[si::metre], int>;
+using qty_m_si = quantity<isq::length[si::metre], safe_int<int>>;
+
+// Widening: safe_int<short> → safe_int<int> is implicit at both rep and quantity level.
+static_assert(std::is_convertible_v<quantity<isq::length[si::metre], safe_int<short>>,
+                                    quantity<isq::length[si::metre], safe_int<int>>>);
+
+// Narrowing: safe_int<int> → safe_int<short> is explicit at both the rep and quantity
+// level: the quantity constructor gates on `std::convertible_to<Rep2, rep>`, which is
+// false when the rep's own constructor is explicit.
+static_assert(!std::is_convertible_v<quantity<isq::length[si::metre], safe_int<int>>,
+                                     quantity<isq::length[si::metre], safe_int<short>>>);
+static_assert(std::is_constructible_v<quantity<isq::length[si::metre], safe_int<short>>,
+                                      quantity<isq::length[si::metre], safe_int<int>>>);
+
+// Common type: quantity<m, safe_int<int>> wins because common_type_t<safe_int<int>, safe_int<short>>
+// = safe_int<int> (widening at the raw safe_int level is one-directional: short→int implicit only).
+static_assert(std::is_same_v<std::common_type_t<quantity<isq::length[si::metre], safe_int<int>>,
+                                                quantity<isq::length[si::metre], safe_int<short>>>,
+                             quantity<isq::length[si::metre], safe_int<int>>>);
+
+static_assert(std::is_same_v<std::common_type_t<quantity<isq::length[si::metre], safe_int<short>>,
+                                                quantity<isq::length[si::metre], safe_int<int>>>,
+                             quantity<isq::length[si::metre], safe_int<int>>>);
+
+// With explicit operator T(), common_type<safe_int<int>, int> = safe_int<int>, so
+// mixing quantity<m, safe_int<int>> with quantity<m, int> is now well-formed and
+// the result preserves the safety wrapper.
+static_assert(std::is_same_v<std::common_type_t<quantity<isq::length[si::metre], safe_int<int>>,
+                                                quantity<isq::length[si::metre], int>>,
+                             quantity<isq::length[si::metre], safe_int<int>>>);
+
+
+
+// unit-conversion implicit: m→mm scales by ×1000 (integral), so implicitly_scalable=true.
+static_assert(std::is_convertible_v<quantity<isq::length[si::metre], safe_int<int>>,
+                                    quantity<isq::length[si::milli<si::metre>], safe_int<int>>>);
+
+// unit-conversion explicit: mm→m scales by ÷1000 (non-integral), so implicitly_scalable=false.
+static_assert(!std::is_convertible_v<quantity<isq::length[si::milli<si::metre>], safe_int<int>>,
+                                     quantity<isq::length[si::metre], safe_int<int>>>);
 
 }  // namespace

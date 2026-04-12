@@ -742,10 +742,24 @@ public:
   {
   }
 
-  // Implicit conversion to the underlying type allows passing safe_int to legacy
-  // interfaces that accept raw integral types without an explicit .value() or cast.
-  [[nodiscard]] constexpr explicit(false) operator T() const noexcept { return value_; }
+  // Explicit conversion to the underlying type: use .value() or static_cast<T>() when
+  // you need a raw integer.  Keeping this explicit prevents safe_int from silently
+  // decaying back to an unprotected T, preserves common_type resolution with raw
+  // integer types (only the T→safe_int<T> direction is then implicit), and avoids
+  // the ternary ambiguity that prevents std::common_type from working.
+  [[nodiscard]] constexpr explicit operator T() const noexcept { return value_; }
   [[nodiscard]] constexpr T value() const noexcept { return value_; }
+
+#if MP_UNITS_HOSTED
+  template<typename CharT, typename Traits>
+  friend std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, const safe_int& v)
+  {
+    if constexpr (sizeof(T) == 1)
+      return os << static_cast<int>(v.value_);  // promote char-width types to int for streaming
+    else
+      return os << v.value_;
+  }
+#endif
 
   // ==========================================================================
   // Unary operators (+, -, ++, --)
