@@ -87,9 +87,9 @@ fixed at compile time and the result definitely doesn't fit.
 The obvious case is plain arithmetic overflow:
 
 ```cpp
-quantity<m, std::int16_t> distance = 300 * m;
-quantity<m, std::int16_t> doubled = distance + distance;            // ⚠️ 600 — fine
-quantity<m, std::int16_t> six_x  = doubled + doubled + doubled;     // ⚠️ 2400 — overflows int16_t!
+quantity<cm, std::int16_t> dist = 100 * m;           // 10'000
+quantity<cm, std::int16_t> dist2 = dist + dist;      // 20'000 — fine
+quantity<cm, std::int16_t> dist4  = dist2 + dist2;   // ⚠️ 40'000 — overflows int16_t!
 ```
 
 The values involved in arithmetic operations are only known at runtime,
