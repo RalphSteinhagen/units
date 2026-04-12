@@ -13,8 +13,8 @@ plain integers.
 using namespace mp_units;
 
 // Just change the representation type — everything else stays the same
-quantity<si::metre, safe_int<std::int32_t>> distance{1'500'000'000 * si::metre};
-quantity<si::metre, safe_int<std::int32_t>> doubled = distance + distance;  // throws — 3×10⁹ > INT32_MAX
+quantity<mm, safe_i32> distance{1'500 * km};
+quantity<mm, safe_i32> doubled = distance + distance;  // throws — 3×10⁹ > INT32_MAX
 ```
 
 !!! info "Motivation"
