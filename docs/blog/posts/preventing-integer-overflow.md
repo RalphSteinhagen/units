@@ -43,13 +43,13 @@ tightly as the language allows.
 
 ### What libraries _can_ catch at compile time?
 
-Most serious units libraries — including **mp-units** and **Au** — will refuse
-to compile conversions where the scaling factor is known to overflow the
-representation type:
+Only a very small number of units libraries — notably **mp-units** and **Au** —
+will refuse to compile conversions where the scaling factor is known to overflow
+the representation type:
 
 ```cpp
 quantity length = std::int8_t{2} * m;
-quantity<mm, std::int8_t> length_mm = length;  // ❌ Compile-time error!
+quantity<mm, std::int8_t> length_mm = length;    // ❌ Compile-time error!
 // 2 m → 2000 mm; ×1000 is guaranteed to overflow int8_t (max 127)
 ```
 
@@ -62,7 +62,7 @@ fixed at compile time and the result definitely doesn't fit.
     Both libraries take different approaches to compile-time overflow protection, each with its own tradeoffs.
     It's difficult to judge which is objectively better — they represent different design philosophies.
 
-    **Au** uses a **conservative compile-time heuristic** with a
+    **Au** uses an **aggressive compile-time heuristic** with a
     [threshold of 2'147](https://aurora-opensource.github.io/au/main/discussion/concepts/overflow/#adapt):
     if a value as small as 2'147 would overflow after scaling, the conversion is rejected at compile time.
     This provides **more aggressive protection** — catching potential overflows earlier — but produces
@@ -81,6 +81,9 @@ fixed at compile time and the result definitely doesn't fit.
     depending on the actual value. This is why **mp-units** provides `safe_int<T>` — a
     representation wrapper that detects all arithmetic overflow at runtime, regardless of
     where it occurs.
+
+    For a comprehensive discussion of overflow risks and approaches, see Au's
+    [Overflow Discussion](https://aurora-opensource.github.io/au/main/discussion/concepts/overflow/).
 
 ### What no library can catch at compile time?
 
@@ -236,9 +239,16 @@ compiler is free to produce literally any result (or crash).
 ## Approach 2: **mp-units 2.5.0** — Two-Layer Protection
 
 **mp-units** (up to version 2.5.0) introduced two separate improvements over Approach 1,
-each addressing different aspects of overflow safety:
+addressing two distinct categories of operations:
 
-### Integral Promotion (Result Types)
+1. **Arithmetic operations** (addition, subtraction, multiplication, division between quantities):
+   the result type follows C++ integral promotion rules
+2. **Unit conversions** (explicit conversions like `.in()`, and implicit conversions during
+   common-unit scaling): intermediate arithmetic is widened to prevent UB
+
+These improvements are independent and address different aspects of overflow safety.
+
+### Integral Promotion for Arithmetic Operations (Result Types)
 
 **mp-units** [correctly respects integral promotion rules](https://en.cppreference.com/w/cpp/language/implicit_conversion#Integral_promotion)
 for the *result type* of arithmetic operations:
@@ -248,21 +258,33 @@ static_assert(std::is_same_v<decltype(total)::rep, int>);
 // Result type is int, not int16_t — consistent with C++!
 ```
 
-It not only improves correctness and behaves like built-in types ("Do as `ints` do") but also,
-such **result type promotion** provides an important safety margin: even before considering
+This behavior is **consistent with Au** and other well-designed units libraries — when you
+perform arithmetic on quantities with small integer types (`int8_t`, `int16_t`), the result
+uses the promoted type (`int`) just like C++ arithmetic. This matches the "Do as `ints` do"
+principle.
+
+Such **result type promotion** provides an important safety margin: even before considering
 intermediate arithmetic, the result is stored in a wider type (`int` instead of `int16_t`).
 This prevents overflow for typical use cases at the `int8_t` and `int16_t` levels. For larger
 types like `int`, users working with extreme values typically scale to appropriate units or
 prefixes first, naturally limiting the scope of overflow issues.
 
-### Widened Intermediate Arithmetic (`intmax_t`)
+### Widened Intermediate Arithmetic for Unit Conversions (`intmax_t`)
 
 However, integral promotion rules provide no help if the source arguments already use `int`
 or larger types — there's no wider result type to promote to. And even for smaller types,
 the result type alone doesn't prevent undefined behavior during the **intermediate** scaling
-arithmetic *within* the conversion. **mp-units** up to the version 2.5.0 addressed this by
-widening intermediate calculations to `std::intmax_t` (typically `int64_t`), even when the
-user is working with smaller types like `int16_t`:
+arithmetic *within* the conversion.
+
+**This is where mp-units and Au differ.** While both libraries use promoted types for
+arithmetic operations, they take different approaches to unit conversion scaling:
+
+- **Au** performs unit conversions in the promoted type (benefiting from integer promotion
+  for the smallest types like `int8_t` and `int16_t`), but doesn't widen beyond that
+- **mp-units 2.5.0** explicitly widens intermediate calculations to `std::intmax_t`
+  (typically `int64_t`), even when working with smaller types like `int16_t`
+
+mp-units' widening approach addresses the intermediate scaling issue:
 
 ```cpp
 // Pseudo-code for mp-units 2.5.0 scaling:
@@ -356,25 +378,36 @@ undefined behavior in 2.5.0, potentially producing incorrect comparison results.
 
 !!! info "Real-World Context"
 
-    These large volumes (trillions of liters, billions of gallons) are realistic in domains
-    that specifically need `int64_t`'s range:
+    While floating-point representations are often more practical for large-scale volumetric
+    calculations, there are legitimate scenarios where `int64_t` is preferred:
+
+    **Exact integer arithmetic requirements**: Systems that need precise, reproducible
+    calculations without floating-point rounding errors (e.g., billing systems, regulatory
+    reporting, distributed consensus algorithms).
+
+    **Domains using `int64_t` for large volumes**:
 
     - **Water resource management**: reservoir systems, lake volumes (Lake Tahoe: ~150 trillion gallons)
     - **Oil & gas industry**: reserves, production volumes, daily global consumption (~35 billion gallons/day)
     - **Environmental modeling**: oceanic or atmospheric volumes, climate simulations
     - **Infrastructure**: municipal water systems, large-scale fluid distribution networks
 
-    If an application uses `int64_t` for volume quantities, it's precisely because it needs
-    to represent values at this scale. The overflow problem is not theoretical — it affects
-    real calculations in these domains.
+    When an application deliberately chooses `int64_t` for volume quantities (rather than
+    `double`), it's precisely because it needs exactness or compatibility with integer-based
+    protocols. The overflow problem in unit conversions is not theoretical — it affects real
+    calculations in these domains when different unit systems are mixed (liters vs gallons,
+    cubic meters vs cubic feet).
 
 ---
 
 ## Approach 3: **mp-units** — widened intermediate arithmetic
 
-**mp-units** improves upon the 2.5.0 approach by using **widened intermediate arithmetic**
-for scaling operations: `int64_t` for all types up to `int32_t`, and 128-bit arithmetic for
-`int64_t`:
+**mp-units** improves upon the 2.5.0 approach by using **widened intermediate arithmetic
+specifically for unit conversion scaling operations**: `int64_t` for all types up to `int32_t`,
+and 128-bit arithmetic for `int64_t`. This widening applies when the library performs
+internal scaling to convert between units (both explicit conversions like `.in()` and
+implicit conversions during common-unit operations like `meters + feet`), but **not** to
+plain arithmetic operations, which follow standard C++ integral promotion rules.
 
 ```cpp
 // Pseudo-code for mp-units scaling with int16_t:
@@ -656,10 +689,19 @@ This is accurate and efficient for the specific case of unit conversions. It
 does not cover arithmetic overflow, and at the time of writing, it also
 [does not yet cover `QuantityPoint`](https://github.com/aurora-opensource/au/issues/352).
 
-Both mechanisms focus on *explicit* conversion calls. Automatic common-unit scaling —
-what happens internally when you write `meters(100) + feet(100)` — is outside their
-scope, since it occurs inside the library's addition operator rather than in a
-user-visible conversion call.
+The two mechanisms have different scopes:
+
+- **The overflow safety surface**: Applies to **all** conversions — both explicit (like
+  `.as(unit)`) and implicit (automatic common-unit scaling inside operations like
+  `meters + feet`). It examines the scaling factor itself, blocking conversions where
+  even a small value like 2'147 would overflow. However, while explicit conversions can
+  be opted out using `ignore(OVERFLOW_RISK)`, **there is no way to specify opt-outs for
+  implicit conversions** — this means false positives in automatic common-unit scaling
+  cannot be bypassed, potentially blocking valid operations.
+  
+- **`is_conversion_lossy` and related checkers**: Focus on **explicit** conversion calls
+  made by the user. They check the actual runtime value to determine if *that specific*
+  conversion would overflow or truncate, allowing precise per-value validation.
 
 ---
 
@@ -686,6 +728,19 @@ requires of a representation type. Every arithmetic operation is checked:
 
 The check uses widened intermediate arithmetic for multiplication (e.g., `int32_t`
 promotes to `int64_t` for the product), so there is no dependency on UB.
+
+!!! warning "Runtime Overhead"
+
+    **`safe_int<T>` adds runtime overhead to every arithmetic operation.** Each addition,
+    subtraction, multiplication, division, and negation includes an overflow check that
+    executes at runtime. For many applications — especially those where correctness is
+    paramount or integer types are subject to promotion (`int8_t`, `int16_t`) — this cost
+    is well worth paying. However, users should be aware of the performance trade-off:
+    safety comes at the cost of additional instructions per operation.
+    
+    The overhead is typically small (a few extra comparisons or branches per operation), but
+    in tight inner loops with millions of iterations, it can be measurable. Profile your
+    specific use case to determine if the safety benefit justifies the performance cost.
 
 ### Policy-based error handling
 
