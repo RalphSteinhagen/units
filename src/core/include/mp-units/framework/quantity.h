@@ -306,7 +306,8 @@ public:
   template<auto R2, typename Rep2>
     requires detail::QuantityConstructibleFrom<quantity, quantity<R2, Rep2>> && (equivalent(unit, get_unit(R2)))
   // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
-  constexpr explicit(!mp_units::implicitly_convertible(get_quantity_spec(R2), quantity_spec) ||
+  constexpr explicit(!std::convertible_to<Rep2, rep> ||
+                     !mp_units::implicitly_convertible(get_quantity_spec(R2), quantity_spec) ||
                      !mp_units::implicitly_scalable<get_unit(R2), Rep2, unit, rep>)
     quantity(const quantity<R2, Rep2>& q) :
       numerical_value_is_an_implementation_detail_(q.numerical_value_in(q.unit))
@@ -316,7 +317,8 @@ public:
   template<auto R2, typename Rep2>
     requires detail::QuantityConstructibleFrom<quantity, quantity<R2, Rep2>> && (!equivalent(unit, get_unit(R2)))
   // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
-  constexpr explicit(!mp_units::implicitly_convertible(get_quantity_spec(R2), quantity_spec) ||
+  constexpr explicit(!std::convertible_to<Rep2, rep> ||
+                     !mp_units::implicitly_convertible(get_quantity_spec(R2), quantity_spec) ||
                      !mp_units::implicitly_scalable<get_unit(R2), Rep2, unit, rep>)
     quantity(const quantity<R2, Rep2>& q) :
       quantity(detail::sudo_cast<quantity>(q))
