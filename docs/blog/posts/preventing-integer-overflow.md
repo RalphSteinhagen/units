@@ -698,7 +698,7 @@ The two mechanisms have different scopes:
   be opted out using `ignore(OVERFLOW_RISK)`, **there is no way to specify opt-outs for
   implicit conversions** — this means false positives in automatic common-unit scaling
   cannot be bypassed, potentially blocking valid operations.
-  
+
 - **`is_conversion_lossy` and related checkers**: Focus on **explicit** conversion calls
   made by the user. They check the actual runtime value to determine if *that specific*
   conversion would overflow or truncate, allowing precise per-value validation.
@@ -737,7 +737,7 @@ promotes to `int64_t` for the product), so there is no dependency on UB.
     paramount or integer types are subject to promotion (`int8_t`, `int16_t`) — this cost
     is well worth paying. However, users should be aware of the performance trade-off:
     safety comes at the cost of additional instructions per operation.
-    
+
     The overhead is typically small (a few extra comparisons or branches per operation), but
     in tight inner loops with millions of iterations, it can be measurable. Profile your
     specific use case to determine if the safety benefit justifies the performance cost.
