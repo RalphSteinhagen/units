@@ -970,7 +970,6 @@ static_assert(std::is_same_v<std::common_type_t<quantity<isq::length[si::metre],
                              quantity<isq::length[si::metre], safe_int<int>>>);
 
 
-
 // unit-conversion implicit: m→mm scales by ×1000 (integral), so implicitly_scalable=true.
 static_assert(std::is_convertible_v<quantity<isq::length[si::metre], safe_int<int>>,
                                     quantity<isq::length[si::milli<si::metre>], safe_int<int>>>);
