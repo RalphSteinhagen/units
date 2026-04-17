@@ -546,10 +546,34 @@ independent. Similarly, polar coordinates in general couple $r \geq 0$ with
 angular constraints such as $0 \leq \theta < 2\pi$ or
 $-\pi < \theta \leq \pi$.
 
-The current per-origin bounds model enforces each axis independently and cannot
-express inter-axis coupling.  A correct geodetic latitude policy would need
-access to the corresponding longitude `quantity_point` — something the
-single-value `operator()` interface does not provide.
+The per-origin bounds model enforces each axis independently and cannot express
+inter-axis coupling through the single-value `operator()` interface alone.
+However, this does not require library-level support — it is naturally handled
+by a **composite type** whose constructor enforces the coupled invariant, much
+like `std::complex` enforces its own invariants across two components:
+
+```cpp
+struct location {
+  quantity_point<si::degree, equator, double> lat;
+  quantity_point<si::degree, prime_meridian, double> lon;
+
+  constexpr location(quantity_point<si::degree, equator, double> lat_in,
+                     quantity_point<si::degree, prime_meridian, double> lon_in)  
+  {
+    auto lat_val = lat_in.quantity_from(equator);
+    auto lon_val = lon_in.quantity_from(prime_meridian);
+    // coupled normalization: reflect latitude, shift longitude at poles
+    // ... normalize lat_val into [-90°, 90°], flipping lon_val by 180° on each reflection ...
+    lat = equator + lat_val;
+    lon = prime_meridian + lon_val;  // wrap_to_range on prime_meridian handles the rest
+  }
+};
+```
+
+In this design, `equator` does **not** use `reflect_in_range` — the coupled
+reflection lives in `location`'s constructor. Longitude's `wrap_to_range` on
+`prime_meridian` still handles the independent cyclic wrapping as usual. The
+single-axis policies and the composite type each do what they are good at.
 
 ### Logarithmic quantities
 
