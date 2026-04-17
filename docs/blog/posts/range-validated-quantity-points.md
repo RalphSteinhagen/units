@@ -52,9 +52,15 @@ In brief, the three families of domain constraint they needed are:
 
 | Domain                                    | Rule                                      | Behavior when violated             |
 |-------------------------------------------|-------------------------------------------|------------------------------------|
-| _Latitude_ / elevation on a sphere        | $[-90°, +90°]$ — _reflected_ at the poles | $91° \to 89°$, $270° \to -90°$     |
+| _Latitude_ / elevation on a sphere        | $[-90°, +90°]$ — _reflected_ at the poles | $91° \to 89°$, $270° \to -90°$ ¹   |
 | Longitude / _azimuth_ (signed convention) | $(-180°, +180°]$ — _wraps_ cyclically     | $200° \to -160°$, $-200° \to 160°$ |
 | _Longitude_ (positive-only convention)    | $[0°, 360°)$ — _wraps_ cyclically         | $370° \to 10°$                     |
+
+¹ **Simplified.** True geodetic latitude reflection also requires shifting
+longitude by 180° (crossing a pole puts you on the opposite side of the globe).
+We discuss this coupled-axis limitation in
+[Polar coordinates and coupled constraints](#polar-coordinates-and-coupled-constraints)
+below.
 
 These are not the same constraint in three spellings. Mixed _azimuth_/_bearing_
 systems additionally require a numeric offset (_heading_ $= 90° -$ _geometric_
@@ -99,9 +105,17 @@ enforce it automatically.
 ### Bounds live on the origin, not on the type
 
 The key design decision is that bounds are a property of the **origin**, not of
-the (quantity, unit, rep) triple. This follows naturally from the affine-space
-model: the numerical displacement from an origin is bounded by the physics of
-that origin's frame, not by the choice of unit or representation.
+the (quantity, unit, rep) triple. This follows from the observation that the
+numerical displacement from an origin is bounded by the physics of that origin's
+frame, not by the choice of unit or representation.
+
+!!! note
+
+    Strictly speaking, a bounded domain is not a true affine space — an affine
+    space has no notion of "out of range."  The `quantity_point` abstraction is
+    still modelled on the affine-space pattern (origin + displacement), but the
+    bounds enforcement is an additional layer on top of it.  Think of it as an
+    affine-space *skeleton* decorated with domain-specific constraints.
 
 Concretely, bounds are expressed as a **variable template specialization**:
 
@@ -168,15 +182,14 @@ seconds apply transparently to a `quantity_point` expressed in hours or
 milliseconds. This means a single `quantity_bounds` specialization does not need
 to be repeated for every unit a user might choose.
 
-### Half-line bounds
+### Custom policies
 
-Not every constraint is a closed interval. A hydraulic system that must maintain
-at least 50 bar above ambient to function correctly needs only a lower bound; a
-sensor with a ceiling and no floor needs only an upper bound.
+The four built-in policies are not a closed set. Because a policy is just a
+callable that takes and returns a `Quantity`, users can write their own.
 
-Both cases are supported by defining a custom policy that has only a `.min` or
-only a `.max` member. The library checks only the bound that is present and
-leaves the other end of the range unconstrained.
+**Half-line bounds.** Not every constraint is a closed interval. A hydraulic
+system that must maintain at least 50 bar above ambient needs only a lower
+bound; a sensor with a ceiling and no floor needs only an upper bound:
 
 ```cpp
 // lower bound only; upper end is unconstrained
@@ -190,6 +203,29 @@ struct clamp_bottom {
 // Hydraulic circuit: minimum operating pressure 50 bar above ambient; no upper cap here.
 template<>
 inline constexpr auto mp_units::quantity_bounds<ambient_pressure> = clamp_bottom{50 * bar};
+```
+
+**Tolerance-aware clamping.** In realistic floating-point calculations a value
+may end up slightly outside the valid range due to accumulated rounding error.
+A user may want to clamp $-10^{-12}\ \mathrm{kg}$ to zero while treating
+$-1\ \mathrm{kg}$ as a genuine error:
+
+```cpp
+template<Quantity Q>
+struct tolerance_clamp {
+  Q min;
+  Q max;
+  Q tolerance;
+  template<Quantity V>
+  constexpr V operator()(V v) const
+  {
+    if (v < V{min} && v >= V{min} - V{tolerance}) return V{min};
+    if (v > V{max} && v <= V{max} + V{tolerance}) return V{max};
+    // outside tolerance — delegate to contract checking
+    MP_UNITS_EXPECTS(v >= V{min} && v <= V{max});
+    return v;
+  }
+};
 ```
 
 ### Origin inheritance
@@ -260,12 +296,21 @@ Outside the anonymous namespace (so the specializations have external linkage):
 ```cpp
 template<>
 inline constexpr auto mp_units::quantity_bounds<equator> =
-    mp_units::reflect_in_range{-90.0 * deg, 90.0 * deg};   // latitude wraps at poles
+    mp_units::reflect_in_range{-90.0 * deg, 90.0 * deg};   // simplified — see note below
 
 template<>
 inline constexpr auto mp_units::quantity_bounds<prime_meridian> =
     mp_units::wrap_to_range{-180.0 * deg, 180.0 * deg};    // longitude wraps cyclically
 ```
+
+!!! warning "Simplification"
+
+    The `reflect_in_range` policy on latitude is a single-axis approximation.
+    In true geodesy, reflecting latitude at a pole also requires shifting
+    longitude by 180° — the two axes are coupled.  The current per-origin
+    bounds model cannot express this; see
+    [Polar coordinates and coupled constraints](#polar-coordinates-and-coupled-constraints)
+    for discussion.
 
 ```cpp
 // Usage — bounds enforced transparently on construction and assignment.
@@ -323,12 +368,19 @@ representation's own `lowest()` when there is no lower bound.
 
 ### Guaranteed enforcement with `constrained<T, ErrorPolicy>`
 
-The `check_in_range` policy is only as strong as the contract-checking mode in
-force at the call site. By default it maps to
+When a representation type does not opt into guaranteed enforcement,
+`check_in_range` falls back to
 [`MP_UNITS_EXPECTS`](../../how_to_guides/integration/wide_compatibility.md#contract-checking-macros),
-which in release builds may be compiled out entirely. For safety-critical code you
-need **guaranteed enforcement** — a violation that always fires, independent of
-build flags.
+which in release builds may be compiled out entirely. In that configuration the
+function has a narrow contract: the caller is responsible for providing in-range
+values, and the library merely helps catch mistakes during development.
+
+For safety-critical code you need **guaranteed enforcement** — a violation that
+always fires, independent of build flags. When a representation type *does*
+provide a `constraint_violation_handler` (see below), the behavior is
+unconditional: the function has a wide contract and always reports
+out-of-range values through the handler. There is no precondition to check
+because the policy itself defines what happens on violation.
 
 The `constrained<T, ErrorPolicy>` wrapper, provided in `<mp-units/constrained.h>`,
 is the answer. It is a thin, transparent value wrapper around `T` that carries
@@ -463,6 +515,50 @@ define the interval, but calling either one for comparison purposes may be
 misleading (there is no "smallest" longitude on a wrapped circle; they're all
 equivalent modulo 360°). The current implementation does return `min` and `max`
 for all policy types that expose these members.
+
+### Why the checking policy is not part of the `quantity_point` type
+
+One might ask: why not make the checking policy a template parameter of
+`quantity_point` itself, so that the same origin can be used with different
+policies in different parts of a program?
+
+The reason is the **container allocator trap**: two `quantity_point` types
+that differ only in their checking policy would be distinct, incompatible types.
+Assigning between them, comparing them, or passing them through generic code
+would require explicit conversions and propagation strategies — the same
+ergonomic burden that `std::vector<T, Allocator>` inflicts when two allocator
+types differ.  The interop machinery needed to make this seamless would add
+substantial complexity with limited benefit.
+
+The current approach — tying enforcement to the representation type
+(`T` vs. `constrained<T>`) — keeps all `quantity_point` values with the same
+origin interoperable regardless of whether they are checked.  A GUI front-end
+that uses `constrained<double>` and a solver back-end that uses plain `double`
+can exchange values through `quantity_point_cast` without any special
+machinery.
+
+### Polar coordinates and coupled constraints
+
+Some domains have constraints that **couple multiple axes**. The most prominent
+example is already in this article: true geodetic latitude reflection at a pole
+also requires shifting longitude by 180° — the two coordinates are not
+independent. Similarly, polar coordinates in general couple $r \geq 0$ with
+angular constraints such as $0 \leq \theta < 2\pi$ or
+$-\pi < \theta \leq \pi$.
+
+The current per-origin bounds model enforces each axis independently and cannot
+express inter-axis coupling.  A correct geodetic latitude policy would need
+access to the corresponding longitude `quantity_point` — something the
+single-value `operator()` interface does not provide.
+
+### Logarithmic quantities
+
+Logarithmic quantities (e.g. power ratios in decibels) present a different
+challenge: the underlying linear quantity lives on a half-line $(0, +\infty)$,
+but the logarithmic representation maps it to the full real line
+$(-\infty, +\infty)$. Bounds need to be expressed in the appropriate
+coordinate system, and it is not yet clear how this interacts with the
+current design.
 
 ### Should `quantity_bounds` be applied to application-level absolute quantity ranges?
 
