@@ -29,7 +29,6 @@
 #ifdef MP_UNITS_IMPORT_STD
 import std;
 #else
-#include <iterator>
 #include <type_traits>
 #include <utility>
 #endif
@@ -100,30 +99,6 @@ constexpr bool is_derived_from_specialization_of = requires(T* t) { detail::to_b
 
 template<typename T, template<auto...> typename Type>
 constexpr bool is_derived_from_specialization_of_v = requires(T* t) { detail::to_base_specialization_of_v<Type>(t); };
-
-template<typename T>
-  requires(!std::is_pointer_v<T> && !std::is_array_v<T>) &&
-            requires { typename std::indirectly_readable_traits<T>::value_type; }
-using wrapped_type_t = std::indirectly_readable_traits<T>::value_type;
-
-namespace detail {
-
-template<typename T>
-struct value_type_impl {
-  using type = T;
-};
-
-template<typename T>
-  requires requires { typename wrapped_type_t<T>; }
-struct value_type_impl<T> {
-  using type = value_type_impl<wrapped_type_t<T>>::type;
-};
-
-}  // namespace detail
-
-template<typename T>
-  requires std::is_object_v<T>
-using value_type_t = detail::value_type_impl<T>::type;
 
 template<typename T, auto... Vs>
 [[nodiscard]] consteval bool contains()

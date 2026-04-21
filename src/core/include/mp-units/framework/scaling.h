@@ -149,7 +149,7 @@ MP_UNITS_EXPORT template<typename To, UnitMagnitude M, typename From>
     // Uses the type's own operator* / operator/ (element-wise for wrappers).
     // When From is integral (e.g. int → double), convert to To first so that
     // the FP scaling operates on the correct type.
-    if constexpr (detail::treat_as_integral<value_type_t<From>>)
+    if constexpr (detail::treat_as_integral<detail::value_type_t<From>>)
       return detail::silent_cast<To>(detail::scale_fp<M{}>(static_cast<To>(value)));
     else
       return detail::silent_cast<To>(detail::scale_fp<M{}>(value));

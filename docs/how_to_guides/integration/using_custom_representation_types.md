@@ -223,13 +223,13 @@ for the full concept definitions and algorithm.
 no further customization is needed.
 
 If your type is not automatically recognized (e.g., a third-party floating-point type with
-no `value_type` member), expose `value_type` via
-[`std::indirectly_readable_traits`](../../users_guide/framework_basics/representation_types.md#value_type-or-element_type) —
+no `value_type` member), expose the underlying type via
+[`representation_underlying_type`](../../users_guide/framework_basics/representation_types.md#representation_underlying_type) —
 `treat_as_floating_point` will then default to `true` automatically, with no further
 specialization needed. The example below shows this typical case.
 Only specialize
 [`treat_as_floating_point`](../../users_guide/framework_basics/representation_types.md#treat_as_floating_point)
-directly when there is genuinely no meaningful `value_type` to expose.
+directly when there is genuinely no meaningful underlying type to expose.
 
 #### Magnitude-aware scaling (optional) { #magnitude-aware-scaling }
 
@@ -290,20 +290,21 @@ in the User's Guide for the complete pattern and design rationale.
 
     `MyFloat` is floating-point in spirit but the library cannot detect this automatically:
 
-    - It has no `value_type` member, so `value_type_t<MyFloat>` falls back to `MyFloat` itself.
+    - It has no `value_type` member, so `representation_underlying_type<MyFloat>` is empty
+      and `MyFloat` is treated as a leaf (its own underlying type).
     - `treat_as_floating_point<MyFloat>` defaults to `std::is_floating_point_v<MyFloat>` = `false`
       (it is a class, not a fundamental type), so `MagnitudeScalable<MyFloat>` is not satisfied.
 
     One specialization fixes this:
 
     ```cpp
-    // Expose the element type so value_type_t<MyFloat> == long double.
+    // Expose the underlying type so representation_underlying_type_t<MyFloat> == long double.
     // treat_as_floating_point<MyFloat> then defaults to
     // std::is_floating_point_v<long double> == true, so no further
     // specialization is needed.
     template<>
-    struct std::indirectly_readable_traits<MyFloat> {
-      using value_type = long double;
+    struct mp_units::representation_underlying_type<MyFloat> {
+      using type = long double;
     };
     ```
 
@@ -482,7 +483,8 @@ To create a custom representation type:
 4. **Add `value_type`** to help the library determine the scaling factor type
 5. **Specialize `representation_values<Rep>`** (if needed) for custom special values;
    optionally specialize `constraint_violation_handler<Rep>` for custom error handling
-6. **Implement `operator*(T, value_type_t<T>)` and `operator/(T, value_type_t<T>)`** so
+6. **Implement `operator*(T, representation_underlying_type_t<T>)` and
+   `operator/(T, representation_underlying_type_t<T>)`** so
    that scaling correctly updates all internal fields (e.g. for `with_variance<T>` scale
    `value` by `k` and `variance` by `k²`)
 7. **Implement `operator*(T, UnitMagnitude)`** (optional) for

@@ -58,8 +58,97 @@ struct undefined_t {};
 
 inline constexpr undefined_t undefined{};
 
-template<PointOrigin PO>
-inline constexpr auto quantity_bounds_for = undefined;
+template<typename>
+struct cond_underlying_type {};
+
+template<typename T>
+  requires std::is_object_v<T>
+struct cond_underlying_type<T> {
+  using type = std::remove_cv_t<T>;
+};
+
+template<typename T>
+concept has_value_type_member = requires { typename T::value_type; };
+
+template<typename T>
+concept has_element_type_member = requires { typename T::element_type; };
+
+}  // namespace detail
+
+/**
+ * @brief Describes the underlying arithmetic/element type of a representation type.
+ *
+ * The library uses this trait to discover the "scalar element" inside a representation
+ * type (e.g. `int` for `safe_int<int>`, `double` for `cartesian_vector<double>`). It is
+ * used to drive classification (integer vs floating-point scaling path, default of
+ * `treat_as_floating_point`, etc.) — it is **not** an indirection/dereference trait.
+ *
+ * The primary template is intentionally empty so that types which do not expose an
+ * underlying type are cleanly recognized as "leaf" representations (the recursive
+ * unwrapping in @c detail::value_type_t stops at them).
+ *
+ * Default detection (via partial specializations below) follows the same shape as the
+ * standard's `std::indirectly_readable_traits` for its `value_type` / `element_type`
+ * cases (see [readable.traits]): nested `::value_type`, else nested `::element_type`;
+ * a top-level `const` is passed through; the detected alias has its cv-qualification
+ * removed; and if a type provides both `::value_type` and `::element_type` whose
+ * underlying types differ after ignoring top-level cv-qualification, the trait is
+ * empty (the user must disambiguate explicitly). Pointer and array specializations
+ * from the standard are intentionally omitted — those are modeled by the standard's
+ * iterator machinery, not by this trait. Additionally, scoped enumeration types are
+ * supported via `std::underlying_type_t` — a representation-model extension not
+ * present in the standard's iterator-oriented trait (unscoped enums are excluded
+ * because they already implicitly convert to their underlying type).
+ *
+ * @tparam T the representation type
+ */
+MP_UNITS_EXPORT template<typename T>
+struct representation_underlying_type {};
+
+template<typename T>
+struct representation_underlying_type<const T> : representation_underlying_type<T> {};
+
+template<typename T>
+  requires std::is_scoped_enum_v<T>
+struct representation_underlying_type<T> {
+  using type = std::underlying_type_t<T>;
+};
+
+template<detail::has_value_type_member T>
+struct representation_underlying_type<T> : detail::cond_underlying_type<typename T::value_type> {};
+
+template<detail::has_element_type_member T>
+struct representation_underlying_type<T> : detail::cond_underlying_type<typename T::element_type> {};
+
+template<detail::has_value_type_member T>
+  requires detail::has_element_type_member<T>
+struct representation_underlying_type<T> {};
+
+template<detail::has_value_type_member T>
+  requires detail::has_element_type_member<T> &&
+           std::same_as<std::remove_cv_t<typename T::value_type>, std::remove_cv_t<typename T::element_type>>
+struct representation_underlying_type<T> : detail::cond_underlying_type<typename T::value_type> {};
+
+MP_UNITS_EXPORT template<typename T>
+  requires requires { typename representation_underlying_type<T>::type; }
+using representation_underlying_type_t = typename representation_underlying_type<T>::type;
+
+namespace detail {
+
+template<typename T>
+struct value_type_impl {
+  using type = T;
+};
+
+template<typename T>
+  requires requires { typename representation_underlying_type_t<T>; }
+struct value_type_impl<T> {
+  using type = value_type_impl<representation_underlying_type_t<T>>::type;
+};
+
+template<typename T>
+  requires std::is_object_v<T>
+using value_type_t = value_type_impl<T>::type;
 
 }  // namespace detail
 
@@ -77,9 +166,9 @@ MP_UNITS_EXPORT_BEGIN
 template<typename Rep>
 constexpr bool treat_as_floating_point =
 #if MP_UNITS_HOSTED
-  std::chrono::treat_as_floating_point_v<value_type_t<Rep>>;
+  std::chrono::treat_as_floating_point_v<detail::value_type_t<Rep>>;
 #else
-  std::is_floating_point_v<value_type_t<Rep>>;
+  std::is_floating_point_v<detail::value_type_t<Rep>>;
 #endif
 
 /**

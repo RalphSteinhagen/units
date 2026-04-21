@@ -432,17 +432,22 @@ arithmetic operations.
 
 #### `value_type` or `element_type`
 
-The library uses `value_type_t<T>` to determine the underlying arithmetic type of your
-representation, which is used for:
+The library uses `representation_underlying_type_t<T>` to determine the underlying
+arithmetic type of your representation, which is used for:
 
 - Determining the scaling factor type (what type to multiply/divide your type by)
 - Checking if the type should be treated as floating-point
 
-How it works:
+!!! info "How it works?"
 
-1. If your type has a `value_type` or `element_type` member type (checked via `std::indirectly_readable_traits`),
-   the library recursively unwraps it until it finds the underlying type
-2. Otherwise, your type itself is used as the value type
+    The underlying type is determined by
+    [`representation_underlying_type`](#representation_underlying_type) as follows:
+
+    1. If your type has a `value_type` or `element_type` member type, that member
+       is used
+    2. Otherwise, if your type is a scoped enumeration, `std::underlying_type_t` is
+       used
+    3. Otherwise, your type itself is treated as the underlying type
 
 **Recommendation:** Provide a `value_type` member type for wrapper types:
 
@@ -456,28 +461,87 @@ public:
 ```
 
 **Third-party types:** If you cannot modify the source of a type (e.g., a third-party
-floating-point or fixed-point class), specialize `std::indirectly_readable_traits` to
-expose its element type:
+floating-point or fixed-point class), specialize
+[`representation_underlying_type`](#representation_underlying_type) to expose its
+element type:
 
 ```cpp
-// Third-party type MyFloat wraps long double internally.
+// Third-party type MyFloat wraps long double internally
 template<>
-struct std::indirectly_readable_traits<MyFloat> {
-  using value_type = long double;
+struct mp_units::representation_underlying_type<MyFloat> {
+  using type = long double;
 };
 ```
 
-This makes `value_type_t<MyFloat>` resolve to `long double`, giving the library the correct
-precision for scaling and ensuring the right `common_type` is used in mixed conversions.
+This makes `representation_underlying_type_t<MyFloat>` resolve to `long double`, giving
+the library the correct precision for scaling and ensuring the right `common_type` is
+used in mixed conversions.
 
 !!! warning "Don't provide both `value_type` and `element_type`"
 
-    If your type provides both `value_type` and `element_type` that refer to **different types**,
-    `std::indirectly_readable_traits<T>::value_type` will be ill-formed (undefined), and your type
-    won't work with the library. If both exist and refer to the **same type**, that type will be used.
+    If your type provides both `value_type` and `element_type` whose underlying
+    types differ after ignoring top-level cv-qualification,
+    [`representation_underlying_type`](#representation_underlying_type) is empty and
+    the library treats the type as a leaf. If both are present and name the same
+    underlying type, that type is used.
 
     **Recommendation:** Provide only `value_type` unless you have a specific reason to provide both
     (e.g., satisfying iterator concepts), in which case ensure they refer to the same type.
+
+---
+
+#### `representation_underlying_type<T>` { #representation_underlying_type }
+
+A specializable class template that describes the underlying arithmetic/element type of
+a representation type. It is **the** extension point for exposing this information to
+the library:
+
+```cpp
+template<typename T>
+struct mp_units::representation_underlying_type;  // primary — empty
+
+template<typename T>
+using mp_units::representation_underlying_type_t = representation_underlying_type<T>::type;
+```
+
+**Default detection** (via partial specializations provided by the library, mirroring
+the shape of `std::indirectly_readable_traits` for its `value_type` / `element_type`
+cases):
+
+- nested `T::value_type`, else
+- nested `T::element_type`;
+- a top-level `const` on `T` is passed through to the unqualified type;
+- the detected alias has its cv-qualification removed;
+- if `T` provides both `value_type` and `element_type` whose underlying types differ
+  after ignoring top-level cv-qualification, the trait is empty — the user must
+  disambiguate explicitly;
+- for scoped enumeration types, the underlying integer type is used (via
+  `std::underlying_type_t`) — a representation-model extension not present in the
+  standard's iterator-oriented trait. Unscoped enumerations are deliberately excluded
+  because they already implicitly convert to their underlying type.
+
+**When to specialize:** for third-party types you cannot modify, or for types whose
+underlying representation cannot be deduced by the defaults above:
+
+```cpp
+template<>
+struct mp_units::representation_underlying_type<MyFloat> {
+  using type = long double;
+};
+```
+
+!!! question "Why not `std::indirectly_readable_traits`?"
+
+    `std::indirectly_readable_traits` answers "what does `*t` yield?" — it is the
+    standard's extension point for iterators, smart pointers, and other
+    indirectly-readable types. Specializing it for a non-iterator representation
+    type is a semantic misuse: it tells every other standard-library component
+    that your type is iterator-like, which it usually is not.
+
+    Pointer and array specializations from `std::indirectly_readable_traits` are
+    intentionally **not** mirrored in `representation_underlying_type` — those are
+    part of the standard's iterator machinery, not of this library's representation
+    model.
 
 ---
 
@@ -493,8 +557,10 @@ constexpr bool mp_units::treat_as_floating_point = /* implementation-defined */;
 
 **Default behavior:**
 
-- In hosted environments: uses `std::chrono::treat_as_floating_point_v<value_type_t<Rep>>`
-- In freestanding: uses `std::is_floating_point_v<value_type_t<Rep>>`
+- In hosted environments: uses `std::chrono::treat_as_floating_point_v` on the
+  (recursively-unwrapped) underlying type of `Rep`
+- In freestanding: uses `std::is_floating_point_v` on the (recursively-unwrapped)
+  underlying type of `Rep`
 
 **When to specialize:** If you have a custom type that wraps a floating-point value but the
 automatic detection doesn't work correctly:
@@ -513,14 +579,14 @@ on how this affects implicit conversions between quantities.
 #### Scaling operators { #scaling-operators }
 
 The library scales a representation value by calling `value * factor` and `value / factor`,
-where `factor` is of type `value_type_t<T>` (or a wider integer type for the rational
-integer path — see [widened integers](#how-scaling-works) for details).
+where `factor` is of type `representation_underlying_type_t<T>` (or a wider integer type
+for the rational integer path — see [widened integers](#how-scaling-works) for details).
 These operators must be provided so that the built-in scaling paths can apply the unit
 magnitude ratio during unit conversions.
 
 Alternatively (or additionally), a type may provide `operator*(T, UnitMagnitude)` to
 receive the full compile-time unit magnitude instead of a numeric factor. When present,
-this operator is called **first** and the `value_type_t<T>`-based operators serve as a
+this operator is called **first** and the underlying-type-based operators serve as a
 fallback. The magnitude-aware operator may return a **different type** — see
 [Magnitude-aware scaling](#magnitude-aware-scaling) for the full pattern.
 
@@ -713,9 +779,9 @@ satisfies the [`RepresentationOf`](concepts.md#RepresentationOf) concept for the
 character. At minimum this means:
 
 - providing `value_type` (or `element_type`) so the library knows the underlying scalar type,
-- providing `operator*` and `operator/` with `value_type_t<T>` so the library can scale it
-  during unit conversions (and optionally `operator*(T, UnitMagnitude)` for
-  [magnitude-aware scaling](#magnitude-aware-scaling)),
+- providing `operator*` and `operator/` with `representation_underlying_type_t<T>` so the
+  library can scale it during unit conversions (and optionally `operator*(T, UnitMagnitude)`
+  for [magnitude-aware scaling](#magnitude-aware-scaling)),
 - satisfying the character-specific requirements from the table above (copyable, equality
   comparable, arithmetic operators, CPOs, etc.).
 
