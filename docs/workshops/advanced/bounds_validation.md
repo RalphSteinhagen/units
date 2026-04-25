@@ -85,15 +85,10 @@ violation_stats stats;
 // TODO: Create type alias for safe representation
 // using safe_double = constrained<double, weather_policy>;
 
-// TODO: Define three absolute point origins:
-// 1. qnh_zero for barometric pressure (isq::pressure)
-// 2. calm_air for wind speed (isq::speed)
-// 3. mean_sea_level for altitude (isq::altitude)
-
-// TODO: Specialize quantity_bounds for all three origins
-// 1. qnh_zero: check_in_range{870 * hPa, 1085 * hPa}
-// 2. calm_air: check_in_range{0 * kt, 150 * kt}
-// 3. mean_sea_level: check_in_range{-500 * m, 9'000 * m}
+// TODO: Define three absolute point origins with bounds as template parameters:
+// 1. qnh_zero for barometric pressure (isq::pressure) with check_in_range{870 * hPa, 1085 * hPa}
+// 2. calm_air for wind speed (isq::speed) with check_in_range{0 * kt, 150 * kt}
+// 3. mean_sea_level for altitude (isq::altitude) with check_in_range{-500 * m, 9'000 * m}
 
 // Type aliases with safe representation
 using safe_pressure = quantity_point<hPa, qnh_zero, safe_double>;
@@ -230,20 +225,15 @@ int main()
     // Safe representation type
     using safe_double = constrained<double, weather_policy>;
 
-    // Define point origins
-    inline constexpr struct qnh_zero final : absolute_point_origin<isq::pressure> {} qnh_zero;
-    inline constexpr struct calm_air final : absolute_point_origin<isq::speed> {} calm_air;
-    inline constexpr struct mean_sea_level final : absolute_point_origin<isq::altitude> {} mean_sea_level;
+    // Define point origins with bounds as template parameters
+    inline constexpr struct qnh_zero final :
+        absolute_point_origin<isq::pressure, check_in_range{870 * hPa, 1085 * hPa}> {} qnh_zero;
 
-    // Specialize quantity_bounds
-    template<>
-    inline constexpr auto mp_units::quantity_bounds<qnh_zero> = check_in_range{870 * hPa, 1085 * hPa};
+    inline constexpr struct calm_air final :
+        absolute_point_origin<isq::speed, check_in_range{0 * kt, 150 * kt}> {} calm_air;
 
-    template<>
-    inline constexpr auto mp_units::quantity_bounds<calm_air> = check_in_range{0 * kt, 150 * kt};
-
-    template<>
-    inline constexpr auto mp_units::quantity_bounds<mean_sea_level> = check_in_range{-500 * m, 9'000 * m};
+    inline constexpr struct mean_sea_level final :
+        absolute_point_origin<isq::altitude, check_in_range{-500 * m, 9'000 * m}> {} mean_sea_level;
 
     // Type aliases with safe representation
     using safe_pressure = quantity_point<hPa, qnh_zero, safe_double>;

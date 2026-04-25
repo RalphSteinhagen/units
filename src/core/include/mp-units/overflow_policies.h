@@ -77,8 +77,8 @@ namespace mp_units {
  * @code{cpp}
  * // With constrained<double, throw_policy> rep → throws std::domain_error on violation
  * // With plain double rep → asserts via MP_UNITS_EXPECTS (may be no-op in release)
- * template<>
- * constexpr auto quantity_bounds<equator> = check_in_range{-90 * deg, 90 * deg};
+ * inline constexpr struct equator final :
+ *     absolute_point_origin<geo_latitude, check_in_range{-90 * deg, 90 * deg}> {} equator;
  * @endcode
  */
 MP_UNITS_EXPORT template<Quantity Q>

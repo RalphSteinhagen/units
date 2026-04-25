@@ -20,13 +20,10 @@ When using `check_in_range` or `check_non_negative` policies with plain represen
 
 ```cpp
 // Define sensor-specific origin (relative to ice_point with 0 offset)
-inline constexpr struct sensor_scale_origin final :
-    relative_point_origin<si::ice_point + delta<deg_C>(0)> {} sensor_scale_origin;
-
 // Typical sensor operating range: -40°C to +85°C
-template<>
-inline constexpr auto mp_units::quantity_bounds<sensor_scale_origin> =
-    check_in_range{delta<deg_C>(-40), delta<deg_C>(85)};
+inline constexpr struct sensor_scale_origin final :
+    relative_point_origin<si::ice_point + delta<deg_C>(0),
+                          check_in_range{delta<deg_C>(-40), delta<deg_C>(85)}> {} sensor_scale_origin;
 
 quantity_point temp = sensor_scale_origin + 150 * deg_C;  // Out of range! (150°C > 85°C)
 ```
@@ -54,7 +51,7 @@ need:
 
 ## Understanding How Bounds Checking Works
 
-When you use `check_in_range` with `quantity_bounds`, the library follows this logic:
+When you use `check_in_range` as a bounds policy on an origin, the library follows this logic:
 
 1. **Check if the representation type has a `constraint_violation_handler`**
     - If yes → Call `handler::on_violation()` with the error message
@@ -131,14 +128,11 @@ using namespace mp_units::si::unit_symbols;
 // Define representation type with exception policy
 using safe_double = constrained<double, throw_policy>;
 
-// Define sensor-specific origin (doesn't affect other ice_point usage)
+// Attach sensor operating range bounds directly to our sensor origin
+// -40°C to +85°C absolute
 inline constexpr struct sensor_scale_origin final :
-    relative_point_origin<si::ice_point + delta<deg_C>(0)> {} sensor_scale_origin;
-
-// Attach sensor operating range bounds to our sensor origin only
-template<>
-inline constexpr auto mp_units::quantity_bounds<sensor_scale_origin> =
-    check_in_range{delta<deg_C>(-40), delta<deg_C>(85)};  // -40°C to +85°C absolute
+    relative_point_origin<si::ice_point + delta<deg_C>(0),
+                          check_in_range{delta<deg_C>(-40), delta<deg_C>(85)}> {} sensor_scale_origin;
 
 // Use safe_double as the representation type
 using safe_temp = quantity_point<deg_C, sensor_scale_origin, safe_double>;
@@ -174,20 +168,16 @@ using namespace mp_units::si::unit_symbols;
 // STEP 1: Define safe representation type
 using safe_double = constrained<double, throw_policy>;
 
-// STEP 2: Define sensor-specific origin (relative to ice_point, 0°C offset)
-inline constexpr struct sensor_scale_origin final :
-    relative_point_origin<si::ice_point + delta<deg_C>(0)> {} sensor_scale_origin;
-
-// STEP 3: Attach sensor bounds to our origin only (doesn't affect other code)
+// STEP 2: Define sensor-specific origin with bounds (relative to ice_point, 0°C offset)
 //         Bounds: -40°C to +85°C (typical sensor operating range)
-template<>
-inline constexpr auto mp_units::quantity_bounds<sensor_scale_origin> =
-    check_in_range{delta<deg_C>(-40), delta<deg_C>(85)};
+inline constexpr struct sensor_scale_origin final :
+    relative_point_origin<si::ice_point + delta<deg_C>(0),
+                          check_in_range{delta<deg_C>(-40), delta<deg_C>(85)}> {} sensor_scale_origin;
 
-// STEP 4: Use safe_double as representation type
+// STEP 3: Use safe_double as representation type
 using safe_temp = quantity_point<deg_C, sensor_scale_origin, safe_double>;
 
-// STEP 5: Safe sensor reading function
+// STEP 4: Safe sensor reading function
 std::optional<safe_temp> read_sensor_safe(double raw_celsius)
 {
   try {

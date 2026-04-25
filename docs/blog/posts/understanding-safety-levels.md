@@ -332,7 +332,7 @@ quantity<mm, std::int16_t> length_mm2 = length2;  // ✅ OK: 2000 fits in int16_
     - **`constrained<T, ErrorPolicy>`** — a transparent wrapper that tags a representation type
       with an error policy, enabling guaranteed bounds enforcement via `constraint_violation_handler`
       (`#include <mp-units/constrained.h>`)
-    - **`quantity_bounds<Origin>`** — a customization point that attaches a validation policy
+    - **Bounds policies on point origins** — a template parameter on the origin that attaches a validation policy
       (e.g. `check_in_range`, `clamp_to_range`, `wrap_to_range`, `reflect_in_range`) to a
       quantity point origin
 
@@ -344,14 +344,13 @@ quantity<mm, std::int16_t> length_mm2 = length2;  // ✅ OK: 2000 fits in int16_
     quantity distance = safe_int{std::int16_t{100}} * m;
     // quantity overflow = distance * std::int16_t{1'000};  // throws std::overflow_error at runtime
 
-    // Bounds-checked quantity points with guaranteed enforcement
-    inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
-    template<>
-    inline constexpr auto mp_units::quantity_bounds<equator> = check_in_range{-90 * deg, 90 * deg};
+    // Cyclic longitude points that wrap at the anti-meridian
+    inline constexpr struct prime_meridian final :
+      absolute_point_origin<geo_longitude, wrap_to_range{-180 * deg, 180 * deg}> {} prime_meridian;
 
     using safe_double = mp_units::constrained<double, mp_units::throw_policy>;
-    using latitude = quantity_point<geo_latitude[deg], equator, safe_double>;
-    latitude lat{95.0 * deg, equator};  // throws std::domain_error (out of [-90, 90])
+    using longitude = quantity_point<geo_longitude[deg], prime_meridian, safe_double>;
+    longitude lon{190.0 * deg, prime_meridian};  // wraps to -170°
     ```
 
     For the full walkthrough, see
@@ -500,14 +499,14 @@ static_assert(!is_non_negative(isq::velocity));  // vector character — exclude
 
 This metadata is automatically enforced at runtime for `quantity_point` types: when a
 `quantity_point` uses a natural origin and the associated quantity spec is non-negative,
-the library automatically attaches a `check_non_negative` policy — no explicit
-`quantity_bounds` specialization is needed. You can still override the default by
-providing a full specialization before the type is first instantiated:
+the library automatically attaches a `check_non_negative` policy through conditional
+inheritance — no explicit bounds definition is needed. You can still override the default
+by defining a custom origin with different bounds:
 
 ```cpp
-// Replace error-on-negative with silent clamp-to-zero (e.g., for FP rounding noise):
-template<>
-inline constexpr auto mp_units::quantity_bounds<natural_point_origin<isq::length>> = clamp_non_negative{};
+// Define a custom origin with clamp_non_negative instead of the automatic check_non_negative:
+inline constexpr struct clamped_length_origin final :
+    absolute_point_origin<isq::length, clamp_non_negative{}> {} clamped_length_origin;
 ```
 
 The metadata is also available for tooling, documentation, and static analysis — for
@@ -515,21 +514,18 @@ example, to automatically select signed vs. unsigned representations.
 
 ### Bounded Quantity Points
 
-Representation safety also extends to **quantity points** (Level 6). The library's
-`quantity_bounds<Origin>` customization point lets you attach a validation policy to
+Representation safety also extends to **quantity points** (Level 6). Bounds policies
+passed as template parameters to point origins let you attach validation to
 any quantity point origin, so geographic coordinates, sensor ranges, and similar
 constrained domains are validated at construction and during arithmetic:
 
 ```cpp
-inline constexpr struct geo_latitude final : quantity_spec<isq::angular_measure> {} geo_latitude;
-inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
+inline constexpr struct geo_longitude final : quantity_spec<isq::angular_measure> {} geo_longitude;
+inline constexpr struct prime_meridian final :
+  absolute_point_origin<geo_longitude, wrap_to_range{-180 * deg, 180 * deg}> {} prime_meridian;
 
-// Latitude must stay within [-90°, 90°] — reflects at boundaries
-template<>
-inline constexpr auto mp_units::quantity_bounds<equator> = reflect_in_range{-90 * deg, 90 * deg};
-
-using latitude = quantity_point<geo_latitude[deg], equator>;
-latitude lat{95.0 * deg};  // reflects to 85° (boundary mirror)
+using longitude = quantity_point<geo_longitude[deg], prime_meridian>;
+longitude lon{190.0 * deg};  // wraps to -170°
 ```
 
 The library ships six overflow policies (`check_in_range`, `clamp_to_range`,
@@ -1310,7 +1306,8 @@ mp-units provides optional runtime bounds checking for mathematical space conver
 - **Point bounds checking**: When constructing a quantity point optional bounds checking
   can verify that the resulting point value stays within valid ranges. This is especially
   useful for physical quantities with natural bounds (e.g., preventing negative absolute
-  _temperatures_ when working with Kelvin, or _longitude_ and _latitude_). Bounds are
+  _temperatures_ when working with Kelvin, or wrapping _longitude_ around a
+  _prime meridian_ origin). Bounds are
   automatically scaled and translated to remain consistent when the unit changes
   (e.g., bounds specified in meters remain correct when converting to kilometers).
   The library supports multiple boundary semantics:
@@ -1515,7 +1512,7 @@ The following table compares safety features across major C++ units libraries:
 </tr>
 <tr>
 <td><strong>Representation Safety</strong></td>
-<td><span class="tooltip">⭐ Strong<span class="tooltiptext">Compile-time: blocks conversions where the scaling factor definitely overflows the representation type; fixed-point arithmetic prevents intermediate overflow during non-integer unit scaling; does not suppress <code>-Wconversion</code> in internal calculations so compiler warnings remain actionable. Runtime: <code>safe_int&lt;T&gt;</code> drop-in wrapper detects arithmetic overflow for all operations including hidden common-unit arithmetic in <code>operator+</code>/<code>operator==</code>; <code>quantity_bounds&lt;Origin&gt;</code> enforces domain range constraints on quantity points.</span></span></td>
+<td><span class="tooltip">⭐ Strong<span class="tooltiptext">Compile-time: blocks conversions where the scaling factor definitely overflows the representation type; fixed-point arithmetic prevents intermediate overflow during non-integer unit scaling; does not suppress <code>-Wconversion</code> in internal calculations so compiler warnings remain actionable. Runtime: <code>safe_int&lt;T&gt;</code> drop-in wrapper detects arithmetic overflow for all operations including hidden common-unit arithmetic in <code>operator+</code>/<code>operator==</code>; origin bounds policies enforce domain range constraints on quantity points.</span></span></td>
 <td><span class="tooltip">⭐ Strong<span class="tooltiptext">Same compile-time and runtime guarantees as current mp-units, extended to cover absolute quantities and delta types introduced in V3.</span></span></td>
 <td><span class="tooltip">🔶 Limited<span class="tooltiptext">No systematic overflow detection; representation is a template parameter (<code>quantity&lt;Unit, Y&gt;</code>), so safety depends entirely on the chosen <code>Y</code> — no defaults, no guidance, and no built-in checks</span></span></td>
 <td><span class="tooltip">🟡 Partial<span class="tooltiptext">Uses floating-point by default, which avoids truncation in practice; no systematic overflow detection. Integer representations silently truncate on unit conversion — no compile-time guard</span></span></td>

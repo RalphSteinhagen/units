@@ -149,7 +149,7 @@ latitude lat{95.0 * deg, equator};  // throws std::domain_error (out of [-90, 90
     - [Preventing Integer Overflow in Physical Computations](../blog/posts/preventing-integer-overflow.md) —
       in-depth narrative on automatic scaling overflow and design tradeoffs
     - [Ensure Ultimate Safety](../how_to_guides/advanced_usage/ultimate_safety.md) —
-      combining `safe_int`, `constrained`, and `quantity_bounds`
+      combining `safe_int`, `constrained`, and origin bounds policies
     - [Representation Types: `constraint_violation_handler`](../users_guide/framework_basics/representation_types.md#constraint-violation-handler) —
       customization point reference
 
@@ -190,13 +190,13 @@ static_assert(!is_non_negative(isq::velocity));   // ❌ Vector character — ex
           [`MP_UNITS_EXPECTS`](../how_to_guides/integration/wide_compatibility.md#contract-checking-macros),
           which may be disabled in release builds.
 
-        You can override the default policy for a specific quantity spec by providing a
-        full specialization of `quantity_bounds` before the point type is first used:
+        You can override the default policy for a specific quantity spec by defining a
+        custom origin with different bounds:
 
         ```cpp
         // Replace error-on-negative with silent clamp-to-zero (e.g., for FP noise):
-        template<>
-        inline constexpr auto mp_units::quantity_bounds<natural_point_origin<isq::length>> = clamp_non_negative{};
+        inline constexpr struct clamped_length_origin final :
+            absolute_point_origin<isq::length, clamp_non_negative{}> {} clamped_length_origin;
         ```
 
         See [Tutorial: Custom Contract Handlers](../tutorials/affine_space/custom_contract_handlers.md)
@@ -329,8 +329,8 @@ no extra effort. From there, two independent opt-in choices extend coverage furt
   two _timestamps_ or two absolute _temperatures_ — they should be modeled as points.
   Additionally, quantity points support
   [range validation](../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points):
-  `quantity_bounds<Origin>` lets you attach overflow policies (`check_in_range`,
-  `clamp_to_range`, `wrap_to_range`, `reflect_in_range`) to point origins, enforcing
+  bounds policies passed as template parameters to point origins (such as `check_in_range`,
+  `clamp_to_range`, `wrap_to_range`, `reflect_in_range`) enforce
   valid ranges for geographic coordinates, sensor operating limits, and similar domains.
 - [**Typed quantities**](../users_guide/framework_basics/simple_and_typed_quantities.md#typed-quantities)
   (`quantity<isq::quantity[unit], Rep>`) add Level 5: full ISQ quantity hierarchy

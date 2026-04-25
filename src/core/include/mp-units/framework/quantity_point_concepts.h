@@ -33,7 +33,7 @@
 
 namespace mp_units {
 
-MP_UNITS_EXPORT template<QuantitySpec auto QS>
+MP_UNITS_EXPORT template<QuantitySpec auto QS, auto... Args>
 struct absolute_point_origin;
 
 namespace detail {
@@ -51,7 +51,7 @@ constexpr bool is_quantity_point = false;
 MP_UNITS_EXPORT template<typename T>
 concept QuantityPoint = detail::is_quantity_point<T>;
 
-MP_UNITS_EXPORT template<QuantityPoint auto QP>
+MP_UNITS_EXPORT template<QuantityPoint auto QP, auto... Args>
 struct relative_point_origin;
 
 /**

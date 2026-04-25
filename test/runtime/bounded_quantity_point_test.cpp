@@ -49,15 +49,9 @@ namespace {
 
 QUANTITY_SPEC(test_angle_check, isq::angular_measure);
 
-inline constexpr struct check_origin final : absolute_point_origin<test_angle_check> {
+inline constexpr struct check_origin final :
+    absolute_point_origin<test_angle_check, check_in_range{-90 * deg, 90 * deg}> {
 } check_origin;
-
-}  // namespace
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<check_origin> = mp_units::check_in_range{-90 * deg, 90 * deg};
-
-namespace {
 
 using safe_double = constrained<double, throw_policy>;
 using qp_check = quantity_point<test_angle_check[deg], check_origin, safe_double>;

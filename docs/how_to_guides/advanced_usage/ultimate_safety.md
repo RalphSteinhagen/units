@@ -6,7 +6,7 @@ or compiler optimization level.
 
 !!! tip "Background reading"
 
-    For in-depth background on how `quantity_bounds` and overflow policies work, see
+    For in-depth background on how bounds policies and overflow handling work, see
     [Range-Validated Quantity Points](../../blog/posts/range-validated-quantity-points.md).
 
 ## The Problem
@@ -24,15 +24,16 @@ during development, but some domains need **guaranteed enforcement**:
 
 The library provides building blocks that work together:
 
-1. [**`quantity_bounds<Origin>`**](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points) —
-   a customization point that attaches a validation policy to a quantity point origin
+1. [**Bounds on point origins**](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points) —
+   a bounds policy passed as a template parameter to a point origin, enforcing validation
+   on every construction and mutation
 2. **`constrained<T, ErrorPolicy>`** — a transparent wrapper that tags a representation
    type with an error policy
 3. [**`constraint_violation_handler<Rep>`**](../../users_guide/framework_basics/representation_types.md#constraint-violation-handler) —
    a customization point that library features query to dispatch errors
 
 The library ships [several overflow policies](../../users_guide/framework_basics/the_affine_space.md#available-overflow-policies)
-to assign to `quantity_bounds`: `check_in_range`, `clamp_to_range`, `wrap_to_range`,
+to pass as bounds template parameters: `check_in_range`, `clamp_to_range`, `wrap_to_range`,
 and `reflect_in_range`. For guaranteed enforcement, this guide uses `check_in_range`,
 which delegates to the `constraint_violation_handler` when one is available for
 the representation type.
@@ -72,9 +73,9 @@ arithmetic. But it carries the error policy as a compile-time tag that the libra
 The library automatically registers a `constraint_violation_handler` for every
 `constrained<T, EP>` instantiation, forwarding violations to `EP::on_constraint_violation()`.
 
-### Step 3: Attach Bounds to Your Origin
+### Step 3: Pass Bounds to Your Origin
 
-Specialize `quantity_bounds` for your origin with an appropriate overflow policy.
+Pass a bounds policy as a template parameter to your origin.
 For guaranteed enforcement, use `check_in_range`:
 
 ```cpp
@@ -86,10 +87,8 @@ using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
 
 inline constexpr struct geo_latitude final : quantity_spec<isq::angular_measure> {} geo_latitude;
-inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<equator> = check_in_range{-90 * deg, 90 * deg};
+inline constexpr struct equator final :
+    absolute_point_origin<geo_latitude, check_in_range{-90 * deg, 90 * deg}> {} equator;
 ```
 
 ### Step 4: Combine Them
@@ -118,7 +117,7 @@ release-with-debug-info.
 
 !!! tip "Extensible policy interface"
 
-    The `quantity_bounds` customization point accepts any callable policy with the
+    The origin bounds template parameter accepts any callable policy with the
     signature `V operator()(V)`. The library ships six built-in policies — `check_in_range`,
     `clamp_to_range`, `wrap_to_range`, `reflect_in_range`, `check_non_negative`, and
     `clamp_non_negative` — and the interface is fully extensible. `check_non_negative` and
@@ -130,7 +129,7 @@ release-with-debug-info.
 
 ```mermaid
 flowchart TB
-    A["quantity_point<br>construction / mutation"] --> B["quantity_bounds&lt;Origin&gt;::operator()"]
+    A["quantity_point<br>construction / mutation"] --> B["bounds policy::operator()"]
     B --> D{"Policy type?"}
     D -- "check_in_range" --> E{"Has constraint_<br>violation_handler<br>for Rep?"}
     E -- "Yes<br>(e.g. constrained&lt;T&gt;)" --> F["handler::on_violation()"]
@@ -157,7 +156,7 @@ struct mp_units::constraint_violation_handler<my_safe_double> {
 };
 ```
 
-Now any `quantity_bounds` policy that queries `constraint_violation_handler`
+Now any bounds policy that queries `constraint_violation_handler`
 (such as `check_in_range`) will use your handler whenever a `quantity_point`
 with `my_safe_double` rep goes out of bounds.
 

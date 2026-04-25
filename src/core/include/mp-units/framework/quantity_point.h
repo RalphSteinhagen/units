@@ -124,13 +124,47 @@ struct point_origin_interface {
 
 }  // namespace detail
 
-MP_UNITS_EXPORT template<QuantitySpec auto QS>
+namespace detail {
+
+template<auto Arg>
+constexpr bool is_bounds_arg = requires { Arg.min; } || requires { Arg.max; };
+
+template<auto... Args>
+consteval int bounds_arg_count()
+{
+  return (0 + ... + (is_bounds_arg<Args> ? 1 : 0));
+}
+
+// Selects the unique bounds policy argument from a variadic NTTP pack,
+// regardless of order. Returns `undefined` when no bounds argument is present.
+template<auto... Args>
+  requires(sizeof...(Args) == 0)
+consteval auto bounds_arg()
+{
+  return undefined;
+}
+
+template<auto First, auto... Rest>
+consteval auto bounds_arg()
+{
+  if constexpr (is_bounds_arg<First>)
+    return First;
+  else
+    return bounds_arg<Rest...>();
+}
+
+}  // namespace detail
+
+MP_UNITS_EXPORT template<QuantitySpec auto QS, auto... Args>
 struct absolute_point_origin : detail::point_origin_interface {
+  static_assert(detail::bounds_arg_count<Args...>() <= 1, "at most one bounds policy may be provided");
   static constexpr QuantitySpec auto _quantity_spec_ = QS;
+  static constexpr auto _bounds_ = detail::bounds_arg<Args...>();
 };
 
-MP_UNITS_EXPORT template<QuantityPoint auto QP>
+MP_UNITS_EXPORT template<QuantityPoint auto QP, auto... Args>
 struct relative_point_origin : detail::point_origin_interface {
+  static_assert(detail::bounds_arg_count<Args...>() <= 1, "at most one bounds policy may be provided");
   static constexpr QuantityPoint auto _quantity_point_ = QP;
   static constexpr QuantitySpec auto _quantity_spec_ = []() {
     // select the strongest of specs
@@ -140,10 +174,30 @@ struct relative_point_origin : detail::point_origin_interface {
       return QP.quantity_spec;
   }();
   static constexpr PointOrigin auto _absolute_point_origin_ = QP.absolute_point_origin;
+  static constexpr auto _bounds_ = detail::bounds_arg<Args...>();
+};
+
+namespace detail {
+
+// Conditional base class for natural_point_origin_: applies check_non_negative bounds
+// when QS is tagged non_negative with real_scalar character, otherwise no bounds.
+template<QuantitySpec auto QS, bool = QS._is_non_negative_>
+struct natural_origin_base {
+  using type = absolute_point_origin<QS>;
 };
 
 template<QuantitySpec auto QS>
-struct natural_point_origin_ final : absolute_point_origin<QS> {};
+struct natural_origin_base<QS, true> {
+  using type = absolute_point_origin<QS, check_non_negative{}>;
+};
+
+template<QuantitySpec auto QS>
+using natural_origin_base_t = natural_origin_base<QS>::type;
+
+}  // namespace detail
+
+template<QuantitySpec auto QS>
+struct natural_point_origin_ final : detail::natural_origin_base_t<QS> {};
 
 MP_UNITS_EXPORT template<QuantitySpec auto QS>
 constexpr natural_point_origin_<QS> natural_point_origin;
@@ -199,7 +253,7 @@ template<PointOrigin PO>
   return PO::_quantity_point_.quantity_from(parent_po);
 }
 
-// Cached boolean: true iff quantity_bounds<PO> is defined (not undefined_t).
+// Cached boolean: true iff PO has a _bounds_ member that is not undefined_t.
 // When PO is a relative_point_origin whose direct parent also has bounds, the
 // lambda also validates at compile time that PO's range nests within the parent's.
 // The result is cached by the compiler as a variable template instantiation, so the
@@ -207,21 +261,21 @@ template<PointOrigin PO>
 template<PointOrigin PO>
 constexpr bool has_quantity_bounds_v = [] {
   if constexpr (PO::_quantity_spec_.character == quantity_character::real_scalar) {
-    if constexpr (requires { quantity_bounds<PO{}>; } &&
-                  !std::is_same_v<std::remove_cvref_t<decltype(quantity_bounds<PO{}>)>, undefined_t>) {
+    if constexpr (requires { PO::_bounds_; } &&
+                  !std::is_same_v<std::remove_cvref_t<decltype(PO::_bounds_)>, undefined_t>) {
       static_assert(
-        requires { quantity_bounds<PO{}>.min; } || requires { quantity_bounds<PO{}>.max; },
-        "quantity_bounds object must have at least a 'min' or 'max' member");
+        requires { PO::_bounds_.min; } || requires { PO::_bounds_.max; },
+        "bounds policy must have at least a 'min' or 'max' member");
       if constexpr (is_derived_from_specialization_of_v<PO, relative_point_origin>) {
         constexpr auto parent_po = PO::_quantity_point_.point_origin;
         using parent_po_t = std::remove_cvref_t<decltype(parent_po)>;
         if constexpr (has_quantity_bounds_v<parent_po_t>) {
           constexpr auto offset = offset_from_parent(PO{});
-          if constexpr (requires { quantity_bounds<PO{}>.min; } && requires { quantity_bounds<parent_po_t{}>.min; })
-            static_assert(quantity_bounds<PO{}>.min + offset >= quantity_bounds<parent_po_t{}>.min,
+          if constexpr (requires { PO::_bounds_.min; } && requires { parent_po_t::_bounds_.min; })
+            static_assert(PO::_bounds_.min + offset >= parent_po_t::_bounds_.min,
                           "relative origin lower bound violates the parent origin's bounds");
-          if constexpr (requires { quantity_bounds<PO{}>.max; } && requires { quantity_bounds<parent_po_t{}>.max; })
-            static_assert(quantity_bounds<PO{}>.max + offset <= quantity_bounds<parent_po_t{}>.max,
+          if constexpr (requires { PO::_bounds_.max; } && requires { parent_po_t::_bounds_.max; })
+            static_assert(PO::_bounds_.max + offset <= parent_po_t::_bounds_.max,
                           "relative origin upper bound violates the parent origin's bounds");
         }
       }
@@ -286,14 +340,14 @@ constexpr quantity<R, Rep> enforce_bounds(quantity<R, Rep> q)
 {
   if constexpr (HasQuantityBounds<std::remove_cvref_t<decltype(PO)>>) {
     // Direct bounds on PO — apply without any translation.
-    return quantity_bounds<PO>(q);
+    return PO._bounds_(q);
   } else if constexpr (any_ancestor_has_bounds(PO)) {
     // No direct bounds — locate the bounds-owning ancestor and its cumulative offset,
     // both resolved entirely at compile time.
     constexpr auto bpo = bounds_po_for(PO);
     constexpr auto off = bounds_offset(PO);
     // Single flat: translate to owner's frame, apply policy, translate back.
-    return quantity_bounds<bpo>(q + off) - off;
+    return bpo._bounds_(q + off) - off;
   }
   return q;
 }
@@ -329,26 +383,25 @@ public:
 
   // static member functions
   [[nodiscard]] static constexpr quantity_point min() noexcept
-    requires requires { mp_units::quantity_bounds<PO>.min; } || requires { quantity_type::min(); }
+    requires requires { PO._bounds_.min; } || requires { quantity_type::min(); }
   {
-    if constexpr (requires { mp_units::quantity_bounds<PO>.min; }) {
+    if constexpr (requires { PO._bounds_.min; }) {
       // zero_quantity_t signals a [0, ∞) policy: return the natural zero for this
       // quantity type directly — correct quantity spec, no unit scaling required.
-      if constexpr (std::same_as<std::remove_cvref_t<decltype(mp_units::quantity_bounds<PO>.min)>,
-                                 detail::zero_quantity_t>)
+      if constexpr (std::same_as<std::remove_cvref_t<decltype(PO._bounds_.min)>, detail::zero_quantity_t>)
         return {quantity_type::zero(), PO};
       else
-        return {mp_units::quantity_bounds<PO>.min.force_in(unit), PO};
+        return {PO._bounds_.min.force_in(unit), PO};
     } else {
       return {quantity_type::min(), PO};
     }
   }
 
   [[nodiscard]] static constexpr quantity_point max() noexcept
-    requires requires { mp_units::quantity_bounds<PO>.max; } || requires { quantity_type::max(); }
+    requires requires { PO._bounds_.max; } || requires { quantity_type::max(); }
   {
-    if constexpr (requires { mp_units::quantity_bounds<PO>.max; })
-      return {mp_units::quantity_bounds<PO>.max.force_in(unit), PO};
+    if constexpr (requires { PO._bounds_.max; })
+      return {PO._bounds_.max.force_in(unit), PO};
     else
       return {quantity_type::max(), PO};
   }
@@ -758,10 +811,9 @@ public:
   }
 
   static constexpr mp_units::quantity_point<R, PO, Rep> lowest() noexcept
-    requires requires { mp_units::quantity_bounds<PO>.min; } ||
-             requires { std::numeric_limits<mp_units::quantity<R, Rep>>::lowest(); }
+    requires requires { PO._bounds_.min; } || requires { std::numeric_limits<mp_units::quantity<R, Rep>>::lowest(); }
   {
-    if constexpr (requires { mp_units::quantity_bounds<PO>.min; })
+    if constexpr (requires { PO._bounds_.min; })
       return min();
     else
       return {std::numeric_limits<mp_units::quantity<R, Rep>>::lowest(), PO};

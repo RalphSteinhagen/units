@@ -786,7 +786,7 @@ All standard fixed-width integer aliases are available: `safe_i8`, `safe_i16`, `
         std::abort();
       }
 
-      // Optional: for quantity point bounds checking (quantity_bounds)
+      // Optional: for quantity point bounds checking (origin bounds policies)
       [[noreturn]] static void on_constraint_violation(std::string_view msg) noexcept
       {
         log_critical_error("Constraint violation", msg);
@@ -799,7 +799,7 @@ All standard fixed-width integer aliases are available: `safe_i8`, `safe_i16`, `
 
     The policy must provide a `static void on_overflow(std::string_view)` method for arithmetic
     overflow. If you also want to use the same policy for quantity point bounds checking
-    ([`quantity_bounds`](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points)),
+    ([origin bounds policies](../../users_guide/framework_basics/the_affine_space.md#range-validated-quantity-points)),
     provide `on_constraint_violation(std::string_view)` as well.
 
     Custom policies are useful for integrating with application-specific error handling:
@@ -1013,7 +1013,7 @@ The combination of **mp-units**' layered approach gives you choices based on you
 | UB during intermediate scaling                 | Greatly reduced (widened arithmetic) ⚠️       | Eliminated (widened + checks) ✓               |
 | **Hidden automatic scaling overflow (result)** | **Silent wrap** ⚠️                            | **Detected and handled** ✓                    |
 | Plain arithmetic overflow                      | Silent wrap ⚠️                                | Detected and handled ✓                        |
-| Values outside physical domain                 | No protection                                 | + `quantity_bounds<Origin>` policy ✓          |
+| Values outside physical domain                 | No protection                                 | + origin bounds policy ✓                      |
 | Divide-before-convert truncation               | (open question; Au's approach is a reference) | (open question; Au's approach is a reference) |
 
 **Key insight**: mp-units' widened intermediate arithmetic (`int64_t` for types up to `int32_t`,
@@ -1024,7 +1024,7 @@ overflow detection in all cases, use `safe_int<T>`.
 
 For the full `safe_int<T>` reference, see the
 [User's Guide](../../users_guide/framework_basics/safe_int.md). For usage patterns
-combining `safe_int` with `quantity_bounds`, see
+combining `safe_int` with origin bounds policies, see
 [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md).
 
 !!! info "Comparing mp-units and Au Approaches"
@@ -1032,7 +1032,7 @@ combining `safe_int` with `quantity_bounds`, see
     Au's compile-time overflow safety surface and `is_conversion_lossy` checker take a
     different approach — see [How Au Addresses the Problem?](#how-au-addresses-the-problem)
     for a detailed comparison and the
-    [summary table](#summary-of-safety-approaches) for a side-by-side overview.
+    [summary table](#summary-of-approaches) for a side-by-side overview.
 
     **Integral division**: [Au rejects integer Quantity/Quantity division](https://aurora-opensource.github.io/au/main/troubleshooting/#integer-division-forbidden)
     whenever the denominator's unit is not quantity-equivalent to the numerator's, protecting

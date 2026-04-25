@@ -103,67 +103,40 @@ QUANTITY_SPEC(geometric_azimuth, mp_units::isq::angular_measure, mp_units::is_ki
 QUANTITY_SPEC(geo_bearing, mp_units::isq::angular_measure, mp_units::is_kind);
 QUANTITY_SPEC(heading_azimuth, mp_units::isq::angular_measure, mp_units::is_kind);
 
-inline constexpr struct equator final : mp_units::absolute_point_origin<geo_latitude> {
+inline constexpr struct equator final :
+    mp_units::absolute_point_origin<geo_latitude,
+                                    mp_units::reflect_in_range{-90 * mp_units::si::degree, 90 * mp_units::si::degree}> {
 } equator;
 
-inline constexpr struct prime_meridian final : mp_units::absolute_point_origin<geo_longitude> {
+inline constexpr struct prime_meridian final :
+    mp_units::absolute_point_origin<geo_longitude,
+                                    mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree}> {
 } prime_meridian;
 
-inline constexpr struct horizon final : mp_units::absolute_point_origin<geo_elevation> {
+inline constexpr struct horizon final :
+    mp_units::absolute_point_origin<geo_elevation,
+                                    mp_units::reflect_in_range{-90 * mp_units::si::degree, 90 * mp_units::si::degree}> {
 } horizon;
 
 // Geometric azimuth: 0° = East, counter-clockwise positive, mirrored wrapping [-180°, 180°)
-inline constexpr struct east final : mp_units::absolute_point_origin<geometric_azimuth> {
+inline constexpr struct east final :
+    mp_units::absolute_point_origin<geometric_azimuth,
+                                    mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree}> {
 } east;
-
-}  // namespace geographic
-
-// Geometric azimuth: mirrored wrapping [-180°, 180°)
-// Note: This must be defined before using 'east' in relative_point_origin
-template<>
-inline constexpr auto mp_units::quantity_bounds<geographic::east> =
-  mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
-
-namespace geographic {
 
 // Bearing: 0° = North, clockwise positive
 // Note: bearing = 90° - geometric_azimuth (involves sign flip - cannot use relative_point_origin)
-inline constexpr struct north_cw final : mp_units::absolute_point_origin<geo_bearing> {
+inline constexpr struct north_cw final :
+    mp_units::absolute_point_origin<geo_bearing,
+                                    mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree}> {
 } north_cw;
 
 // Heading azimuth: 0° = North, counter-clockwise positive (heading = geometric_azimuth - 90°)
 // Implemented as a relative origin: offset -90° from east
-inline constexpr struct north_ccw final : mp_units::relative_point_origin<east - 90.0 * mp_units::si::degree> {
+inline constexpr struct north_ccw final :
+    mp_units::relative_point_origin<east - 90.0 * mp_units::si::degree,
+                                    mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree}> {
 } north_ccw;
-
-}  // namespace geographic
-
-// Latitude: reflects at ±90° (symmetric wrapping - can't go past poles)
-template<>
-inline constexpr auto mp_units::quantity_bounds<geographic::equator> =
-  mp_units::reflect_in_range{-90 * mp_units::si::degree, 90 * mp_units::si::degree};
-
-// Longitude: mirrored wrapping [-180°, 180°)
-template<>
-inline constexpr auto mp_units::quantity_bounds<geographic::prime_meridian> =
-  mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
-
-// Elevation: reflects at ±90° (symmetric wrapping like latitude)
-template<>
-inline constexpr auto mp_units::quantity_bounds<geographic::horizon> =
-  mp_units::reflect_in_range{-90 * mp_units::si::degree, 90 * mp_units::si::degree};
-
-// Bearing: mirrored wrapping [-180°, 180°)
-template<>
-inline constexpr auto mp_units::quantity_bounds<geographic::north_cw> =
-  mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
-
-// Heading azimuth: mirrored wrapping [-180°, 180°)
-template<>
-inline constexpr auto mp_units::quantity_bounds<geographic::north_ccw> =
-  mp_units::wrap_to_range{-180 * mp_units::si::degree, 180 * mp_units::si::degree};
-
-namespace geographic {
 
 template<typename T = double>
 using latitude = mp_units::quantity_point<geo_latitude[mp_units::si::degree], equator, T>;
@@ -249,7 +222,7 @@ constexpr longitude<double> operator""_W(long double v)
 
 // Note: No std::numeric_limits specializations needed!
 // The generic specialization in quantity_point.h automatically handles all bounded quantity_points
-// by querying the quantity_bounds customization point.
+// by querying the bounds from the origin's NTTP parameter.
 
 template<typename T, typename Char>
 struct MP_UNITS_STD_FMT::formatter<geographic::latitude<T>, Char> :

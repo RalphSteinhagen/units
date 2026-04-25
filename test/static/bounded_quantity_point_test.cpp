@@ -41,25 +41,39 @@ QUANTITY_SPEC(test_angle_wrap, isq::angular_measure);
 QUANTITY_SPEC(test_angle_reflect, isq::angular_measure);
 QUANTITY_SPEC(test_angle_wrap_constrained, isq::angular_measure);
 QUANTITY_SPEC(test_angle_reflect_constrained, isq::angular_measure);
+QUANTITY_SPEC(test_angle_unordered_args, isq::angular_measure);
 
-inline constexpr struct clamp_origin final : absolute_point_origin<test_angle_clamp> {
+struct test_origin_tag final {};
+
+inline constexpr struct clamp_origin final :
+    absolute_point_origin<test_angle_clamp, clamp_to_range{-90 * deg, 90 * deg}> {
 } clamp_origin;
-inline constexpr struct wrap_origin final : absolute_point_origin<test_angle_wrap> {
+inline constexpr struct wrap_origin final :
+    absolute_point_origin<test_angle_wrap, wrap_to_range{-180 * deg, 180 * deg}> {
 } wrap_origin;
-inline constexpr struct reflect_origin final : absolute_point_origin<test_angle_reflect> {
+inline constexpr struct reflect_origin final :
+    absolute_point_origin<test_angle_reflect, reflect_in_range{-90 * deg, 90 * deg}> {
 } reflect_origin;
-inline constexpr struct wrap_constrained_origin final : absolute_point_origin<test_angle_wrap_constrained> {
+inline constexpr struct wrap_constrained_origin final :
+    absolute_point_origin<test_angle_wrap_constrained, wrap_to_range{-180 * deg, 180 * deg}> {
 } wrap_constrained_origin;
-inline constexpr struct reflect_constrained_origin final : absolute_point_origin<test_angle_reflect_constrained> {
+inline constexpr struct reflect_constrained_origin final :
+    absolute_point_origin<test_angle_reflect_constrained, reflect_in_range{-90 * deg, 90 * deg}> {
 } reflect_constrained_origin;
+
+inline constexpr struct unordered_args_origin final :
+    absolute_point_origin<test_angle_unordered_args, test_origin_tag{}, clamp_to_range{-45 * deg, 45 * deg}> {
+} unordered_args_origin;
 
 // Separate origins for unit conversion tests (need double bounds)
 QUANTITY_SPEC(test_angle_clamp_convert, isq::angular_measure);
 QUANTITY_SPEC(test_angle_wrap_convert, isq::angular_measure);
 
-inline constexpr struct clamp_convert_origin final : absolute_point_origin<test_angle_clamp_convert> {
+inline constexpr struct clamp_convert_origin final :
+    absolute_point_origin<test_angle_clamp_convert, clamp_to_range{-90.0 * deg, 90.0 * deg}> {
 } clamp_convert_origin;
-inline constexpr struct wrap_convert_origin final : absolute_point_origin<test_angle_wrap_convert> {
+inline constexpr struct wrap_convert_origin final :
+    absolute_point_origin<test_angle_wrap_convert, wrap_to_range{-180.0 * deg, 180.0 * deg}> {
 } wrap_convert_origin;
 
 // Origins for testing point_for() with bounds
@@ -68,40 +82,32 @@ inline constexpr struct wrap_convert_origin final : absolute_point_origin<test_a
 // at compile time as a relative_point_origin offset.
 QUANTITY_SPEC(bounded_altitude, isq::height);
 
-inline constexpr struct altitude_msl final : absolute_point_origin<bounded_altitude> {
+inline constexpr struct altitude_msl final :
+    absolute_point_origin<bounded_altitude, clamp_to_range{-500 * m, 12000 * m}> {
 } altitude_msl;  // Mean Sea Level: physical bounds [-500m, 12000m]
 
-inline constexpr struct altitude_agl final : absolute_point_origin<bounded_altitude> {
+inline constexpr struct altitude_agl final : absolute_point_origin<bounded_altitude, clamp_to_range{0 * m, 500 * m}> {
 } altitude_agl;  // Above Ground Level: operational bounds [0m, 500m] (drone)
 
 // Longitude with absolute origin (prime meridian) and a relative Warsaw origin.
 QUANTITY_SPEC(geo_longitude, isq::angular_measure);
 
-inline constexpr struct prime_meridian final : absolute_point_origin<geo_longitude> {
+inline constexpr struct prime_meridian final :
+    absolute_point_origin<geo_longitude, clamp_to_range{-180.0 * deg, 180.0 * deg}> {
 } prime_meridian;  // bounds: [-180°, 180°]
 
 // Body and room temperature for point_for() cross-origin bounds tests.
 QUANTITY_SPEC(clinical_temperature, isq::thermodynamic_temperature);
 
-inline constexpr struct body_temp_origin final : absolute_point_origin<clinical_temperature> {
+inline constexpr struct body_temp_origin final :
+    absolute_point_origin<clinical_temperature, clamp_to_range{delta<clinical_temperature[si::degree_Celsius]>(35.0),
+                                                               delta<clinical_temperature[si::degree_Celsius]>(42.0)}> {
 } body_temp_origin;  // bounds: [35°C, 42°C] (clinical range)
 
-inline constexpr struct room_temp_origin final : absolute_point_origin<clinical_temperature> {
+inline constexpr struct room_temp_origin final :
+    absolute_point_origin<clinical_temperature, clamp_to_range{delta<clinical_temperature[si::degree_Celsius]>(15.0),
+                                                               delta<clinical_temperature[si::degree_Celsius]>(30.0)}> {
 } room_temp_origin;  // bounds: [15°C, 30°C]
-
-// Named child of non-negative isq::length — inherits non-negativeness.
-// Used to test user-override of the automatic check_non_negative policy.
-QUANTITY_SPEC(test_override_nn_qs, isq::length);
-
-}  // namespace
-
-// Longitude: [-180°, 180°] physical invariant — MUST be defined before any
-// relative_point_origin that references prime_meridian, so that the specialization
-// is visible when warsaw_meridian's QP template argument is evaluated.
-template<>
-inline constexpr auto mp_units::quantity_bounds<prime_meridian> = mp_units::clamp_to_range{-180.0 * deg, 180.0 * deg};
-
-namespace {
 
 // Warsaw meridian: ~21°E of prime meridian.
 // A quantity_point measured from warsaw_meridian represents "degrees east/west of Warsaw".
@@ -117,66 +123,10 @@ inline constexpr struct kyiv_meridian final :
                                                                                                prime_meridian}> {
 } kyiv_meridian;
 
-}  // namespace
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<clamp_origin> = mp_units::clamp_to_range{-90 * deg, 90 * deg};
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<wrap_origin> = mp_units::wrap_to_range{-180 * deg, 180 * deg};
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<reflect_origin> = mp_units::reflect_in_range{-90 * deg, 90 * deg};
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<wrap_constrained_origin> =
-  mp_units::wrap_to_range{-180 * deg, 180 * deg};
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<reflect_constrained_origin> =
-  mp_units::reflect_in_range{-90 * deg, 90 * deg};
-
-// Bounds for unit conversion tests (use double to support degree-to-radian conversions)
-template<>
-inline constexpr auto mp_units::quantity_bounds<clamp_convert_origin> =
-  mp_units::clamp_to_range{-90.0 * deg, 90.0 * deg};
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<wrap_convert_origin> =
-  mp_units::wrap_to_range{-180.0 * deg, 180.0 * deg};
-
-// MSL: physical flight domain.
-template<>
-inline constexpr auto mp_units::quantity_bounds<altitude_msl> = mp_units::clamp_to_range{-500 * m, 12000 * m};
-
-// AGL: operational drone range (independent absolute origin).
-template<>
-inline constexpr auto mp_units::quantity_bounds<altitude_agl> = mp_units::clamp_to_range{0 * m, 500 * m};
-
-// Longitude: [-180°, 180°] physical invariant — already defined above before relative origins.
-
-// Body temperature: [35°C, 42°C] clinical range.
-template<>
-inline constexpr auto mp_units::quantity_bounds<body_temp_origin> = mp_units::clamp_to_range{
-  delta<clinical_temperature[si::degree_Celsius]>(35.0), delta<clinical_temperature[si::degree_Celsius]>(42.0)};
-
-// Room temperature: [15°C, 30°C].
-template<>
-inline constexpr auto mp_units::quantity_bounds<room_temp_origin> = mp_units::clamp_to_range{
-  delta<clinical_temperature[si::degree_Celsius]>(15.0), delta<clinical_temperature[si::degree_Celsius]>(30.0)};
-
-// User can override the automatic check_non_negative policy for a specific natural origin
-// by providing a full specialization of quantity_bounds. Must be declared before any
-// instantiation of quantity_bounds for this origin (e.g., inside the test namespace).
-template<>
-inline constexpr auto mp_units::quantity_bounds<natural_point_origin_<test_override_nn_qs>{}> =
-  mp_units::clamp_non_negative{};
-
-namespace {
-
 using qp_clamp = quantity_point<test_angle_clamp[deg], clamp_origin, double>;
 using qp_wrap = quantity_point<test_angle_wrap[deg], wrap_origin, double>;
 using qp_reflect = quantity_point<test_angle_reflect[deg], reflect_origin, double>;
+using qp_unordered_args = quantity_point<test_angle_unordered_args[deg], unordered_args_origin, double>;
 using qp_clamp_int = quantity_point<test_angle_clamp[deg], clamp_origin, int>;
 
 // constrained rep: bounds stored as int, incoming value type is constrained<double>
@@ -236,6 +186,14 @@ static_assert(qp_wrap(180.0 * deg, wrap_origin).quantity_from(wrap_origin) == -1
 
 static_assert(qp_reflect(45.0 * deg, reflect_origin).quantity_from(reflect_origin) == 45.0 * deg);
 static_assert(qp_reflect(91.0 * deg, reflect_origin).quantity_from(reflect_origin) == 89.0 * deg);
+
+// ============================================================================
+// Bounds argument does not require first position in NTTP pack
+// ============================================================================
+
+static_assert(qp_unordered_args(50.0 * deg, unordered_args_origin).quantity_from(unordered_args_origin) == 45.0 * deg);
+static_assert(qp_unordered_args(-50.0 * deg, unordered_args_origin).quantity_from(unordered_args_origin) ==
+              -45.0 * deg);
 static_assert(qp_reflect(-91.0 * deg, reflect_origin).quantity_from(reflect_origin) == -89.0 * deg);
 static_assert(qp_reflect(90.0 * deg, reflect_origin).quantity_from(reflect_origin) == 90.0 * deg);
 static_assert(qp_reflect(-90.0 * deg, reflect_origin).quantity_from(reflect_origin) == -90.0 * deg);
@@ -374,15 +332,10 @@ static_assert(wrap_with_unit_scaling());
 // Temperature origin with bounds in kelvin
 QUANTITY_SPEC(bounded_temperature, isq::thermodynamic_temperature);
 
-inline constexpr struct temp_origin final : absolute_point_origin<bounded_temperature> {
+inline constexpr struct temp_origin final :
+    absolute_point_origin<bounded_temperature, clamp_to_range{delta<bounded_temperature[si::kelvin]>(200.0),
+                                                              delta<bounded_temperature[si::kelvin]>(400.0)}> {
 } temp_origin;
-
-}  // namespace
-
-// Temperature bounds: [200K, 400K] with clamping
-template<>
-inline constexpr auto mp_units::quantity_bounds<temp_origin> = mp_units::clamp_to_range{
-  delta<bounded_temperature[si::kelvin]>(200.0), delta<bounded_temperature[si::kelvin]>(400.0)};
 
 // Relative origin at +300K above temp_origin (simulates an ice-point-style offset).
 // 300K is within temp_origin's [200K, 400K] range, so the QP constructor does not clamp it.
@@ -392,8 +345,6 @@ inline constexpr struct temp_offset_origin final :
     mp_units::relative_point_origin<mp_units::quantity_point<bounded_temperature[si::kelvin], temp_origin, double>{
       delta<bounded_temperature[si::kelvin]>(300.0), temp_origin}> {
 } temp_offset_origin;
-
-namespace {
 
 using qp_temp = quantity_point<bounded_temperature[si::kelvin], temp_origin, double>;
 
@@ -477,15 +428,10 @@ static_assert(qp_offset(delta<bounded_temperature[si::degree_Celsius]>(200.0), t
 
 QUANTITY_SPEC(celsius_style_temp, isq::thermodynamic_temperature);
 
-inline constexpr struct celsius_style_abs_origin final : absolute_point_origin<celsius_style_temp> {
+inline constexpr struct celsius_style_abs_origin final :
+    absolute_point_origin<celsius_style_temp, clamp_to_range{delta<celsius_style_temp[si::degree_Celsius]>(200.0),
+                                                             delta<celsius_style_temp[si::degree_Celsius]>(350.0)}> {
 } celsius_style_abs_origin;
-
-}  // namespace
-
-// Bounds in °C — numerically equal to K bounds since Δ°C == ΔK.
-template<>
-inline constexpr auto mp_units::quantity_bounds<celsius_style_abs_origin> = mp_units::clamp_to_range{
-  delta<celsius_style_temp[si::degree_Celsius]>(200.0), delta<celsius_style_temp[si::degree_Celsius]>(350.0)};
 
 // Relative origin at +273 K: simulates the ice-point shift with a round number.
 // 273 ∈ [200, 350] so the QP constructor does not clamp it.
@@ -495,8 +441,6 @@ inline constexpr struct celsius_style_ice_origin final :
       mp_units::quantity_point<celsius_style_temp[si::kelvin], celsius_style_abs_origin, double>{
         delta<celsius_style_temp[si::kelvin]>(273.0), celsius_style_abs_origin}> {
 } celsius_style_ice_origin;
-
-namespace {
 
 using qp_abs = quantity_point<celsius_style_temp[si::kelvin], celsius_style_abs_origin, double>;
 using qp_ice = quantity_point<celsius_style_temp[si::kelvin], celsius_style_ice_origin, double>;
@@ -689,15 +633,9 @@ static_assert(qp_room(delta<clinical_temperature[si::degree_Celsius]>(37.0), roo
 // Origin with check_in_range policy
 QUANTITY_SPEC(test_angle_check, isq::angular_measure);
 
-inline constexpr struct check_origin final : absolute_point_origin<test_angle_check> {
+inline constexpr struct check_origin final :
+    absolute_point_origin<test_angle_check, check_in_range{-90 * deg, 90 * deg}> {
 } check_origin;
-
-}  // namespace
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<check_origin> = mp_units::check_in_range{-90 * deg, 90 * deg};
-
-namespace {
 
 using qp_check = quantity_point<test_angle_check[deg], check_origin, double>;
 
@@ -739,19 +677,10 @@ QUANTITY_SPEC(mission_range, isq::length);
 inline constexpr struct home_base final : absolute_point_origin<mission_range> {
 } home_base;  // no bounds — the home base is an unconstrained reference
 
-}  // namespace
-
 // relative origin: at 100m from home_base, with its own [-20m, 20m] operational bounds.
 inline constexpr struct patrol_radius final :
-    mp_units::relative_point_origin<mp_units::quantity_point<mission_range[mp_units::si::metre], home_base, double>{
-      100.0 * mp_units::si::metre, home_base}> {
+    relative_point_origin<home_base + 100.0 * m, clamp_to_range{-20.0 * m, 20.0 * m}> {
 } patrol_radius;
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<patrol_radius> =
-  mp_units::clamp_to_range{-20.0 * mp_units::si::metre, 20.0 * mp_units::si::metre};
-
-namespace {
 
 using qp_patrol = quantity_point<mission_range[m], patrol_radius, double>;
 
@@ -772,25 +701,16 @@ static_assert(qp_patrol(-25.0 * m, patrol_radius).quantity_from(patrol_radius) =
 
 QUANTITY_SPEC(nested_height, isq::height);
 
-inline constexpr struct ground_abs final : absolute_point_origin<nested_height> {
+inline constexpr struct ground_abs final :
+    absolute_point_origin<nested_height,
+                          mp_units::clamp_to_range{-10.0 * mp_units::si::metre, 10.0 * mp_units::si::metre}> {
 } ground_abs;  // bounds: [-10m, 10m]
-
-}  // namespace
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<ground_abs> =
-  mp_units::clamp_to_range{-10.0 * mp_units::si::metre, 10.0 * mp_units::si::metre};
 
 inline constexpr struct platform final :
     mp_units::relative_point_origin<mp_units::quantity_point<nested_height[mp_units::si::metre], ground_abs, double>{
-      0.0 * mp_units::si::metre, ground_abs}> {
+                                      0.0 * mp_units::si::metre, ground_abs},
+                                    mp_units::clamp_to_range{-5.0 * mp_units::si::metre, 5.0 * mp_units::si::metre}> {
 } platform;
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<platform> =
-  mp_units::clamp_to_range{-5.0 * mp_units::si::metre, 5.0 * mp_units::si::metre};
-
-namespace {
 
 using qp_platform = quantity_point<nested_height[m], platform, double>;
 
@@ -817,25 +737,18 @@ QUANTITY_SPEC(chain_length, isq::length);
 inline constexpr struct chain_abs final : absolute_point_origin<chain_length> {
 } chain_abs;  // bounds: not used directly; testing via rel1 bounds
 
-}  // namespace
-
 // chain_rel1: at +5m from chain_abs, with bounds [-3m, +3m].
 inline constexpr struct chain_rel1 final :
     mp_units::relative_point_origin<mp_units::quantity_point<chain_length[mp_units::si::metre], chain_abs, double>{
-      5.0 * mp_units::si::metre, chain_abs}> {
+                                      5.0 * mp_units::si::metre, chain_abs},
+                                    mp_units::clamp_to_range{-3.0 * mp_units::si::metre, 3.0 * mp_units::si::metre}> {
 } chain_rel1;
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<chain_rel1> =
-  mp_units::clamp_to_range{-3.0 * mp_units::si::metre, 3.0 * mp_units::si::metre};
 
 // chain_rel2: at +1m from chain_rel1 (i.e., +6m from chain_abs), with NO bounds.
 inline constexpr struct chain_rel2 final :
     mp_units::relative_point_origin<mp_units::quantity_point<chain_length[mp_units::si::metre], chain_rel1, double>{
       1.0 * mp_units::si::metre, chain_rel1}> {
 } chain_rel2;
-
-namespace {
 
 using qp_chain2 = quantity_point<chain_length[m], chain_rel2, double>;
 
@@ -869,29 +782,19 @@ QUANTITY_SPEC(nested2_length, isq::length);
 inline constexpr struct nested2_abs final : absolute_point_origin<nested2_length> {
 } nested2_abs;  // no bounds
 
-}  // namespace
-
 // nested2_rel1: at +10m from nested2_abs, bounds [-5m, +5m].
 inline constexpr struct nested2_rel1 final :
     mp_units::relative_point_origin<mp_units::quantity_point<nested2_length[mp_units::si::metre], nested2_abs, double>{
-      10.0 * mp_units::si::metre, nested2_abs}> {
+                                      10.0 * mp_units::si::metre, nested2_abs},
+                                    mp_units::clamp_to_range{-5.0 * mp_units::si::metre, 5.0 * mp_units::si::metre}> {
 } nested2_rel1;
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<nested2_rel1> =
-  mp_units::clamp_to_range{-5.0 * mp_units::si::metre, 5.0 * mp_units::si::metre};
 
 // nested2_rel2: at +2m from nested2_rel1, bounds [-1m, +1m].
 inline constexpr struct nested2_rel2 final :
     mp_units::relative_point_origin<mp_units::quantity_point<nested2_length[mp_units::si::metre], nested2_rel1, double>{
-      2.0 * mp_units::si::metre, nested2_rel1}> {
+                                      2.0 * mp_units::si::metre, nested2_rel1},
+                                    mp_units::clamp_to_range{-1.0 * mp_units::si::metre, 1.0 * mp_units::si::metre}> {
 } nested2_rel2;
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<nested2_rel2> =
-  mp_units::clamp_to_range{-1.0 * mp_units::si::metre, 1.0 * mp_units::si::metre};
-
-namespace {
 
 using qp_nested2 = quantity_point<nested2_length[m], nested2_rel2, double>;
 
@@ -913,15 +816,8 @@ static_assert(qp_nested2(-2.0 * m, nested2_rel2).quantity_from(nested2_rel2) == 
 
 QUANTITY_SPEC(time_of_day_qs, isq::duration);
 
-inline constexpr struct midnight final : absolute_point_origin<time_of_day_qs> {
+inline constexpr struct midnight final : absolute_point_origin<time_of_day_qs, wrap_to_range{0 * h, 24 * h}> {
 } midnight;
-
-}  // namespace
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<midnight> = mp_units::wrap_to_range{0 * h, 24 * h};
-
-namespace {
 
 using time_of_day = quantity_point<time_of_day_qs[s], midnight, double>;
 
@@ -1060,22 +956,13 @@ clamp_max_only(Q) -> clamp_max_only<Q>;
 #endif
 
 // min-only origin: value >= 0 m, no upper bound.
-inline constexpr struct halfbound_min_origin final : absolute_point_origin<test_halfbounded> {
+inline constexpr struct halfbound_min_origin final : absolute_point_origin<test_halfbounded, clamp_min_only{0 * m}> {
 } halfbound_min_origin;
 
 // max-only origin: value <= 12000 m, no lower bound.
-inline constexpr struct halfbound_max_origin final : absolute_point_origin<test_halfbounded> {
+inline constexpr struct halfbound_max_origin final :
+    absolute_point_origin<test_halfbounded, clamp_max_only{12000 * m}> {
 } halfbound_max_origin;
-
-}  // namespace
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<halfbound_min_origin> = clamp_min_only{0 * mp_units::si::metre};
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<halfbound_max_origin> = clamp_max_only{12000 * mp_units::si::metre};
-
-namespace {
 
 // ---- Full bounds (clamp_origin: [-90 deg, +90 deg]) ------------------------
 
@@ -1202,7 +1089,7 @@ static_assert(time_of_day_multiday_assign());
 // Automatic non-negative bounds for natural_point_origin<QS>
 // ============================================================================
 // Non-negative base quantities automatically receive check_non_negative bounds
-// via the quantity_bounds_for partial specialization in non_negative_bounds.h.
+// via the natural_origin_base conditional inheritance in quantity_point.h.
 
 // isq::length, isq::mass, isq::duration are tagged non_negative → automatic bounds.
 static_assert(mp_units::detail::HasQuantityBounds<mp_units::natural_point_origin_<mp_units::isq::length>>);
@@ -1214,20 +1101,11 @@ static_assert(!mp_units::detail::HasQuantityBounds<mp_units::natural_point_origi
 
 // The automatic policy type is check_non_negative.
 static_assert(
-  std::is_same_v<
-    std::remove_cvref_t<decltype(mp_units::quantity_bounds<mp_units::natural_point_origin_<mp_units::isq::length>{}>)>,
-    mp_units::check_non_negative>);
+  std::is_same_v<std::remove_cvref_t<decltype(mp_units::natural_point_origin_<mp_units::isq::length>::_bounds_)>,
+                 mp_units::check_non_negative>);
 
 // A non-negative value passes through the policy unchanged.
-static_assert(mp_units::quantity_bounds<mp_units::natural_point_origin_<mp_units::isq::length>{}>(5.0 * m) == 5.0 * m);
-static_assert(mp_units::quantity_bounds<mp_units::natural_point_origin_<mp_units::isq::length>{}>(0.0 * m) == 0.0 * m);
-
-// Named-child quantity spec of a non-negative parent inherits non-negativeness;
-// the user can override the policy by specializing quantity_bounds early (before use).
-static_assert(mp_units::detail::HasQuantityBounds<mp_units::natural_point_origin_<test_override_nn_qs>>);
-static_assert(
-  std::is_same_v<
-    std::remove_cvref_t<decltype(mp_units::quantity_bounds<mp_units::natural_point_origin_<test_override_nn_qs>{}>)>,
-    mp_units::clamp_non_negative>);
+static_assert(mp_units::natural_point_origin_<mp_units::isq::length>::_bounds_(5.0 * m) == 5.0 * m);
+static_assert(mp_units::natural_point_origin_<mp_units::isq::length>::_bounds_(0.0 * m) == 0.0 * m);
 
 }  // namespace

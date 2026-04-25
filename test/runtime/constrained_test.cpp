@@ -63,16 +63,10 @@ namespace {
 
 QUANTITY_SPEC(geo_latitude_qs, isq::angular_measure);
 
-inline constexpr struct geo_equator final : absolute_point_origin<geo_latitude_qs> {
+inline constexpr struct geo_equator final :
+    absolute_point_origin<geo_latitude_qs,
+                          check_in_range{-90 * mp_units::si::unit_symbols::deg, 90 * mp_units::si::unit_symbols::deg}> {
 } geo_equator;
-
-}  // namespace
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<geo_equator> =
-  mp_units::check_in_range{-90 * mp_units::si::unit_symbols::deg, 90 * mp_units::si::unit_symbols::deg};
-
-namespace {
 
 using safe_double = constrained<double, throw_policy>;
 using latitude_qp = quantity_point<geo_latitude_qs[si::unit_symbols::deg], geo_equator, safe_double>;

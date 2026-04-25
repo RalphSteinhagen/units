@@ -111,7 +111,7 @@ The policy must provide a `static void on_overflow(std::string_view)` method.
 !!! tip "Shared policies with `constrained<T>`"
 
     If you also use
-    [`quantity_bounds`](the_affine_space.md#range-validated-quantity-points) for range
+    [origin bounds policies](the_affine_space.md#range-validated-quantity-points) for range
     validation, you can add `on_constraint_violation(std::string_view)` to the same
     policy type — both `safe_int` and `constrained` will use it. See
     [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) for

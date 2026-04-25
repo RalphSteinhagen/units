@@ -2,7 +2,8 @@
 
 Attach domain constraints to point origins so the library enforces valid ranges automatically.
 
-**Goal**: Use `quantity_bounds` to keep `quantity_point` values within physical limits  
+**Goal**: Use bounds policies on point origins to keep `quantity_point` values within
+physical limits  
 **Time**: ~15 minutes
 
 **Prerequisites**: Complete the [Point Origins](point_origins.md) tutorial first
@@ -19,16 +20,16 @@ its own range check — and those checks would inevitably be duplicated, forgott
 bypassed. **mp-units** lets you attach the constraint _once_ to the origin and rely on
 the library to enforce it.
 
-## The `quantity_bounds` Customization Point
+## Passing Bounds to Point Origins
 
-Specialize `quantity_bounds` at namespace scope (outside any function) for your origin
-to attach a **bounds policy**:
+Pass a **bounds policy** as a template parameter to your origin
+to attach range validation:
 
 ```cpp
 #include <mp-units/core.h>
 
-template<>
-inline constexpr auto mp_units::quantity_bounds<your_origin> = mp_units::clamp_to_range{min_val, max_val};
+inline constexpr struct your_origin final :
+    absolute_point_origin<your_quantity_spec, clamp_to_range{min_val, max_val}> {} your_origin;
 ```
 
 The library calls the policy automatically every time a `quantity_point` bound to that
@@ -63,22 +64,17 @@ those bounds instead of the representation type's own extremes.
 ```cpp
 // ce-embed height=880 compiler=clang2110 flags="-std=c++23 -stdlib=libc++ -O3" mp-units=trunk
 #include <mp-units/core.h>
+#include <mp-units/systems/isq.h>
 #include <mp-units/systems/si.h>
 #include <iostream>
 
 using namespace mp_units;
 using namespace mp_units::si::unit_symbols;
 
-inline constexpr struct sea_level final : absolute_point_origin<isq::altitude> {} sea_level;
-inline constexpr struct ground_level final : absolute_point_origin<isq::altitude> {} ground_level;
-
-// MSL: physical world flight level corridor.
-template<>
-inline constexpr auto mp_units::quantity_bounds<sea_level> = clamp_to_range{-500 * m, 12'000 * m};
-
-// AGL: drone operational envelope [0 m, 500 m].
-template<>
-inline constexpr auto mp_units::quantity_bounds<ground_level> = clamp_to_range{0 * m, 500 * m};
+inline constexpr struct sea_level final :
+    absolute_point_origin<isq::altitude, clamp_to_range{-500 * m, 12'000 * m}> {} sea_level;
+inline constexpr struct ground_level final :
+    absolute_point_origin<isq::altitude, clamp_to_range{0 * m, 500 * m}> {} ground_level;
 
 int main()
 {
@@ -142,8 +138,8 @@ static_assert(!is_non_negative(isq::displacement));  // ❌ vector character —
 ```
 
 When a `quantity_point` uses a `natural_point_origin` whose quantity spec is non-negative,
-the library **automatically attaches `check_non_negative`** — no explicit `quantity_bounds`
-specialization is required:
+the library **automatically attaches `check_non_negative`** — no explicit bounds
+definition is required:
 
 ```cpp
 // ce-embed compiler=clang2110 flags="-std=c++23 -stdlib=libc++ -O3" mp-units=trunk
@@ -171,12 +167,12 @@ int main()
 }
 ```
 
-You can override the default with your own specialization. For example, to silently clamp
-rounding-noise negatives in a computed result rather than failing:
+You can override the default by defining a custom origin with different bounds. For example,
+to silently clamp rounding-noise negatives in a computed result rather than failing:
 
 ```cpp
-template<>
-inline constexpr auto mp_units::quantity_bounds<natural_point_origin<distance_traveled>> = clamp_non_negative{};
+inline constexpr struct clamped_distance_origin final :
+    absolute_point_origin<distance_traveled, clamp_non_negative{}> {} clamped_distance_origin;
 ```
 
 ### Kinds are never auto-bounded
@@ -217,14 +213,15 @@ Always use an explicit quantity reference when you need the auto-protection guar
 
 ## What You Learned?
 
-✅ `quantity_bounds<origin>` attaches a validation policy to a point origin once  
+✅ Passing a bounds policy as a template parameter to a point origin attaches validation
+    once  
 ✅ Six built-in policies: `clamp_to_range`, `wrap_to_range`, `reflect_in_range`,
     `check_in_range`, `check_non_negative`, `clamp_non_negative`  
 ✅ Bounds are expressed as quantity displacements — independent of unit or representation  
 ✅ Relative origins inherit bounds from the nearest ancestor that has them  
 ✅ Non-negative ISQ specs automatically guard their natural origins with
     `check_non_negative`  
-✅ Any default can be overridden with a user-supplied `quantity_bounds` specialization  
+✅ You can define custom origins with different bounds to override the defaults  
 
 ## Next Steps
 

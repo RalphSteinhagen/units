@@ -413,9 +413,9 @@ In many domains, quantity points must stay within specific bounds. For example:
 - Temperature sensors: operating range [−40°C, 85°C]
 - Control systems: valid input range [0, 100] units
 
-The library provides four overflow policies that can be attached to point origins via the
-`quantity_bounds` customization point. These policies enforce bounds during construction,
-unit conversion, and arithmetic operations.
+The library provides four overflow policies that can be passed as template parameters to
+point origins. These policies enforce bounds during construction, unit conversion, and
+arithmetic operations.
 
 ??? info "Production Use Case: Geographic Coordinate Systems"
 
@@ -502,15 +502,10 @@ unit conversion, and arithmetic operations.
 inline constexpr struct geo_latitude final : quantity_spec<isq::angular_measure> {} geo_latitude;
 inline constexpr struct geo_longitude final : quantity_spec<isq::angular_measure> {} geo_longitude;
 
-inline constexpr struct equator final : absolute_point_origin<geo_latitude> {} equator;
-inline constexpr struct prime_meridian final : absolute_point_origin<geo_longitude> {} prime_meridian;
-
-// Attach bounds to origins
-template<>
-inline constexpr auto quantity_bounds<equator> = reflect_in_range{-90 * si::degree, 90 * si::degree};
-
-template<>
-inline constexpr auto quantity_bounds<prime_meridian> = wrap_to_range{-180 * si::degree, 180 * si::degree};
+inline constexpr struct equator final :
+    absolute_point_origin<geo_latitude, reflect_in_range{-90 * si::degree, 90 * si::degree}> {} equator;
+inline constexpr struct prime_meridian final :
+    absolute_point_origin<geo_longitude, wrap_to_range{-180 * si::degree, 180 * si::degree}> {} prime_meridian;
 
 // Define bounded quantity point types
 template<typename T = double> using latitude = quantity_point<si::degree, equator, T>;
@@ -535,17 +530,15 @@ Bounds are enforced at these points:
 3. **Arithmetic operations**: `operator+=`, `operator-=`, `operator++`, `operator--`
 4. **Origin conversion**: `qp.point_for(new_origin)`
 
-After each mutation the library transparently applies the policy specified in `quantity_bounds<origin>`.
+After each mutation the library transparently applies the bounds policy specified on the origin.
 
 !!! info "`std::numeric_limits` integration"
 
-    When a `quantity_point` has a `quantity_bounds` policy attached to its origin, the
+    When a `quantity_point` has a bounds policy on its origin, the
     `std::numeric_limits` specialization automatically reflects the constrained bounds:
 
     ```cpp
-    template<>
-    inline constexpr auto quantity_bounds<prime_meridian> = wrap_to_range{-180 * deg, 180 * deg};
-
+    // prime_meridian defined with wrap_to_range{-180 * deg, 180 * deg}
     using longitude = quantity_point<geo_longitude[deg], prime_meridian>;
 
     quantity lon_min = std::numeric_limits<longitude>::min();  // prime_meridian - 180°
@@ -554,7 +547,7 @@ After each mutation the library transparently applies the policy specified in `q
 
     This works because the policy struct exposes public `min` and `max` data members, which
     `quantity_point::min()` and `max()` access to provide meaningful bounds. Without a
-    `quantity_bounds` policy, `std::numeric_limits` delegates to the representation type's limits.
+    bounds policy, `std::numeric_limits` delegates to the representation type's limits.
 
 ### Custom Policies (One-Sided Bounds)
 
@@ -576,9 +569,8 @@ struct clamp_bottom {
 };
 
 // Usage: hydraulic system with minimum operating pressure
-inline constexpr struct atmospheric_pressure final : absolute_point_origin<isq::pressure> {} atmospheric_pressure;
-template<>
-inline constexpr auto quantity_bounds<atmospheric_pressure> = clamp_bottom{1000 * si::kilo<si::pascal>};
+inline constexpr struct atmospheric_pressure final :
+    absolute_point_origin<isq::pressure, clamp_bottom{1000 * si::kilo<si::pascal>}> {} atmospheric_pressure;
 
 using hydraulic_pressure = quantity_point<si::kilo<si::pascal>, atmospheric_pressure>;
 hydraulic_pressure p1 = atmospheric_pressure + 2000 * kPa;  // OK: 2000 kPa
@@ -716,9 +708,8 @@ Now that the `Range-Validated Quantity Points` infrastructure is available, we c
 a `clamp_to_range` policy so the controller silently enforces the comfort band:
 
 ```cpp
-constexpr struct room_reference_temp final : relative_point_origin<point<deg_C>(21)> {} room_reference_temp;
-template<>
-inline constexpr auto mp_units::quantity_bounds<room_reference_temp> = clamp_to_range{delta<deg_C>(-3), delta<deg_C>(3)};
+constexpr struct room_reference_temp final :
+    relative_point_origin<point<deg_C>(21), clamp_to_range{delta<deg_C>(-3), delta<deg_C>(3)}> {} room_reference_temp;
 using room_temp = quantity_point<deg_C, room_reference_temp>;
 
 constexpr auto step_delta = delta<deg_C>(0.5);
