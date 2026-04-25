@@ -163,3 +163,5 @@ This pattern is useful for:
 
 - [The Affine Space](../users_guide/framework_basics/the_affine_space.md) - Detailed explanation
   of quantity points
+- [GitHub Discussion #606](https://github.com/mpusz/mp-units/discussions/606) - Further discussion
+  on hardware register mapping
