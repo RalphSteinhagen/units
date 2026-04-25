@@ -69,6 +69,9 @@ concept Addable = requires(const T a, const T b) {
 };
 
 template<typename T>
+concept WeaklyRegular = std::copyable<T> && std::equality_comparable<T>;
+
+template<typename T>
 concept NumberLike = Addable<T>
 #if MP_UNITS_COMP_GCC != 12 && !defined(MP_UNITS_XCODE15_HACKS)
                      && WeaklyRegular<T>

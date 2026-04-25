@@ -370,9 +370,6 @@ MP_UNITS_EXPORT_END
 namespace detail {
 
 template<typename T>
-concept WeaklyRegular = std::copyable<T> && std::equality_comparable<T>;
-
-template<typename T>
 struct rep_for_impl {};
 
 template<typename T>
