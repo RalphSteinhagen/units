@@ -86,12 +86,6 @@ constexpr decltype(auto) as_element(const T& value)
     return value;
 }
 
-// The wider type used for magnitude constants to prevent overflow.
-template<typename element_t>
-using wider_int_for =
-  std::conditional_t<(sizeof(element_t) <= sizeof(std::int32_t)), std::int64_t,
-                     std::conditional_t<(sizeof(element_t) < sizeof(int128_t)), int128_t, element_t>>;
-
 template<auto M, typename T>
 [[nodiscard]] constexpr auto scale_int(const T& v)
 {
