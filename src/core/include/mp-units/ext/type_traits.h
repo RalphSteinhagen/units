@@ -100,6 +100,35 @@ constexpr bool is_derived_from_specialization_of = requires(T* t) { detail::to_b
 template<typename T, template<auto...> typename Type>
 constexpr bool is_derived_from_specialization_of_v = requires(T* t) { detail::to_base_specialization_of_v<Type>(t); };
 
+
+// is_scoped_enum
+#if __cpp_lib_is_scoped_enum
+
+template<class T>
+constexpr bool is_scoped_enum_v = std::is_scoped_enum_v<T>;
+
+#else
+
+namespace detail
+{
+void test_conversion(...);          // selected when E is complete and scoped
+void test_conversion(int) = delete; // selected when E is complete and unscoped
+
+template<class E>
+concept is_scoped_enum_impl =
+    std::is_enum_v<E> &&                        // checked first
+    requires { detail::test_conversion(E{}); }; // ill-formed before overload resolution
+                                                // when E is incomplete
+} // namespace detail
+
+template<class T>
+struct is_scoped_enum : std::bool_constant<detail::is_scoped_enum_impl<T>> {};
+
+template<class T>
+constexpr bool is_scoped_enum_v = is_scoped_enum<T>::value;
+
+#endif
+
 template<typename T, auto... Vs>
 [[nodiscard]] consteval bool contains()
 {

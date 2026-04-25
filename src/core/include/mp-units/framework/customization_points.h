@@ -106,7 +106,7 @@ template<typename T>
 struct representation_underlying_type<const T> : representation_underlying_type<T> {};
 
 template<typename T>
-  requires std::is_scoped_enum_v<T>
+  requires is_scoped_enum_v<T>
 struct representation_underlying_type<T> {
   using type = std::underlying_type_t<T>;
 };
