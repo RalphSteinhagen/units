@@ -367,51 +367,6 @@ struct quantity_like_traits;
 template<typename T>
 struct quantity_point_like_traits;
 
-template<typename T>
-constexpr auto unit_for = detail::undefined;
-
-template<typename T>
-  requires requires { quantity_like_traits<T>::reference; }
-constexpr auto unit_for<T> = get_unit(quantity_like_traits<T>::reference);  // has to be unqualified for late binding
-
-template<typename T>
-  requires requires { quantity_point_like_traits<T>::reference; }
-constexpr auto unit_for<T> =
-  get_unit(quantity_point_like_traits<T>::reference);  // has to be unqualified for late binding
-
-template<typename T>
-constexpr auto reference_for = detail::undefined;
-
-template<typename T>
-  requires requires { quantity_like_traits<T>::reference; }
-constexpr auto reference_for<T> = quantity_like_traits<T>::reference;
-
-template<typename T>
-  requires requires { quantity_point_like_traits<T>::reference; }
-constexpr auto reference_for<T> = quantity_point_like_traits<T>::reference;
-
 MP_UNITS_EXPORT_END
-
-namespace detail {
-
-template<typename T>
-struct rep_for_impl {};
-
-template<typename T>
-  requires requires { typename quantity_like_traits<T>::rep; }
-struct rep_for_impl<T> {
-  using type = typename quantity_like_traits<T>::rep;
-};
-
-template<typename T>
-  requires requires { typename quantity_point_like_traits<T>::rep; }
-struct rep_for_impl<T> {
-  using type = typename quantity_point_like_traits<T>::rep;
-};
-
-}  // namespace detail
-
-MP_UNITS_EXPORT template<typename T>
-using rep_for = typename detail::rep_for_impl<T>::type;
 
 }  // namespace mp_units

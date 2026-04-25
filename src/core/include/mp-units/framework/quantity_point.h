@@ -737,21 +737,7 @@ quantity_point(QP)
   -> quantity_point<quantity_point_like_traits<QP>::reference, quantity_point_like_traits<QP>::point_origin,
                     typename quantity_point_like_traits<QP>::rep>;
 
-template<auto R, auto PO, typename Rep>
-constexpr auto unit_for<quantity_point<R, PO, Rep>> = quantity_point<R, PO, Rep>::unit;
-
-template<auto R, auto PO, typename Rep>
-constexpr auto reference_for<quantity_point<R, PO, Rep>> = R;
 MP_UNITS_EXPORT_END
-
-namespace detail {
-
-template<auto R, auto PO, typename Rep>
-struct rep_for_impl<quantity_point<R, PO, Rep>> {
-  using type = Rep;
-};
-
-}  // namespace detail
 
 }  // namespace mp_units
 
