@@ -42,8 +42,24 @@ namespace mp_units::isq {
 // space operations, we temporarily reverse the hierarchy: altitude and depth are children of
 // length (signed coordinates), and height is a child of altitude (explicitly non-negative).
 // This will be corrected in V3 when point_for<> becomes available.
-QUANTITY_SPEC(altitude, length);                // signed vertical coordinate (can be negative)
-inline constexpr auto depth = altitude;         // signed vertical coordinate (can be negative, typically <= 0)
+QUANTITY_SPEC(altitude, length);  // signed vertical coordinate (can be negative)
+// depth is defined in ISQ but explicitly not supported
+// (it should not be a distinct quantity, it just needs a dedicated origin with projection)
+
+// Note that `depth` intentionally does not appear here as a `quantity_spec`. Depth represents a
+// vertical position measured *downward* from the ocean surface — an axis-inverted form of altitude.
+// Axis direction is a property of the coordinate system, not of the physical quantity: a vertical
+// position is a vertical position regardless of which way the axis points. Modeling `depth` as a
+// sibling `quantity_spec` of `altitude` would allow `point<depth> - point<altitude>` to silently
+// yield a wrong-signed result, because both specs share the same delta type (`height`) yet measure
+// in opposite directions. The correct model is to define `ocean_surface` as an
+// `absolute_point_origin<isq::altitude>` whose `frame_projection` negates the value (see
+// [Runtime frame projections](#frame-proj)). No `depth` quantity spec is needed — axis direction
+// belongs in the frame, not in the quantity. For the full argument against encoding axis direction
+// as a distinct quantity type, see [Why not model bounded variants as distinct quantities in the
+// hierarchy?](#bounds-no-hierarchy).
+
+// inline constexpr auto depth = altitude;
 QUANTITY_SPEC(height, altitude, non_negative);  // unsigned magnitude; child of altitude for implicit conversion
 
 // HACK: Override is_non_negative() for signed coordinates.

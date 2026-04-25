@@ -113,7 +113,6 @@ Alphabetical list of all quantities.
 - [`decision_content` (isq)](systems/isq.md#decision_content)
 - [`density` (isq)](systems/isq.md#density)
 - [`density_of_heat_flow_rate` (isq)](systems/isq.md#density_of_heat_flow_rate)
-- [`depth` (isq)](systems/isq.md#depth)
 - [`dew_point_temperature` (isq)](systems/isq.md#dew_point_temperature)
 - [`diameter` (isq)](systems/isq.md#diameter)
 - [`dimensionless` (mp_units)](systems/core.md#dimensionless)
@@ -503,4 +502,4 @@ Alphabetical list of all quantities.
 - [`width` (isq)](systems/isq.md#width)
 - [`work` (isq)](systems/isq.md#work)
 
-**Total quantities:** 497
+**Total quantities:** 496

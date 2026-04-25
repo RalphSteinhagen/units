@@ -42,7 +42,6 @@ static_assert(verify(isq::length, real_scalar, m));
 static_assert(verify(isq::width, real_scalar, m));
 static_assert(verify(isq::breadth, real_scalar, m));
 static_assert(verify(isq::height, real_scalar, m));
-static_assert(verify(isq::depth, real_scalar, m));
 static_assert(verify(isq::altitude, real_scalar, m));
 static_assert(verify(isq::thickness, real_scalar, m));
 static_assert(verify(isq::diameter, real_scalar, m));

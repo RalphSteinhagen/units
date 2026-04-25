@@ -27,7 +27,7 @@ Automatically generated reference documentation for all **mp-units** systems.
 | [IAU](systems/iau.md) | — | — | — | 5 | 12 | — |
 | [IEC](systems/iec.md) | — | 31 | 8 | 6 | — | — |
 | [Imperial](systems/imperial.md) | — | — | — | 22 | — | — |
-| [ISQ](systems/isq.md) | 8 | 351 | — | — | — | — |
+| [ISQ](systems/isq.md) | 8 | 350 | — | — | — | — |
 | [ISQ Angle](systems/isq_angle.md) | — | 20 | — | — | — | — |
 | [Natural](systems/natural.md) | 1 | 13 | — | 3 | — | — |
 | [SI](systems/si.md) | — | — | 24 | 43 | 9 | 5 |
