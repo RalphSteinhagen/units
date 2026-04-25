@@ -35,6 +35,7 @@ import std;
 #else
 #include <compare>
 #include <concepts>
+#include <cstdlib>
 #include <limits>
 #include <string_view>
 #include <type_traits>
