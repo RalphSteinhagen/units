@@ -23,6 +23,7 @@
 #pragma once
 
 // IWYU pragma: private, include <mp-units/framework.h>
+#include <mp-units/bits/fixed_point.h>
 #include <mp-units/bits/module_macros.h>
 #include <mp-units/framework/customization_points.h>
 #include <mp-units/framework/quantity_character.h>
@@ -34,6 +35,7 @@
 import std;
 #else
 #include <concepts>
+#include <cstdint>
 #include <cstdlib>
 #include <functional>
 #include <type_traits>
@@ -43,6 +45,14 @@ import std;
 namespace mp_units {
 
 namespace detail {
+
+// The wider integer type used for magnitude constants to prevent overflow when
+// scaling by a rational magnitude (v * num / den).  For elements up to 32 bits
+// we widen to int64_t; for 64-bit elements we widen to int128_t; otherwise the
+// element type itself is wide enough.
+template<typename element_t>
+using wider_int_for = std::conditional_t<(sizeof(element_t) <= sizeof(std::int32_t)), std::int64_t,
+                                         conditional<(sizeof(element_t) < sizeof(int128_t)), int128_t, element_t>>;
 
 template<typename T, typename S>
 concept ScalableWith = requires(const T v, const S s) {
@@ -283,10 +293,15 @@ concept UsesFloatingPointScaling =
 // integer (safe_int<int>, cartesian_vector<int>): the scaling engine uses the type's
 // own operator* / operator/ so that wrappers can check for overflow, containers can
 // scale element-wise, etc.
+//
+// The rational-magnitude path in detail::scale_int multiplies by a factor of type
+// wider_int_for<element_t> (e.g. int64_t for element_t == int16_t) to avoid
+// overflowing the intermediate. The concept therefore requires `value * WF` and
+// `value / WF` for the wider factor.
 template<typename T>
-concept UsesIntegerScaling = std::integral<value_type_t<T>> && requires(T value, value_type_t<T> f) {
-  { value * f };
-  { value / f };
+concept UsesIntegerScaling = std::integral<value_type_t<T>> && requires(T value, wider_int_for<value_type_t<T>> wf) {
+  { value * wf };
+  { value / wf };
 };
 
 // A type that provides its own magnitude-aware operator*(T, UnitMagnitude) customization

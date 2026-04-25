@@ -166,8 +166,6 @@ The two **built-in numeric** sub-concepts and their requirements
 (`UsesMagnitudeAwareScaling` is described in the tip box above):
 
 ```cpp
-// Floating-point type, or container whose element type is floating-point
-// (e.g. double, cartesian_vector<double>).
 concept UsesFloatingPointScaling =
   (treat_as_floating_point<T> || treat_as_floating_point<value_type_t<T>>) &&
   requires(T value, value_type_t<T> f) {
@@ -175,19 +173,32 @@ concept UsesFloatingPointScaling =
     { value / f } -> WeaklyRegular;
   };
 
-// Integer type, wrapper, or container whose element type is a fundamental integer
-// (e.g. int, safe_int<int>, cartesian_vector<int>).
-// std::integral<value_type_t<T>> is required (not just treat_as_integral) because
-// the scaling engine uses get_value<element_t> and fixed_point<element_t>.
-// Scaling is applied through the type's own operator* / operator/, so wrappers
-// can check for overflow and containers can scale element-wise.
 concept UsesIntegerScaling =
   std::integral<value_type_t<T>> &&
-  requires(T value, value_type_t<T> f) {
-    { value * f };
-    { value / f };
+  requires(T value, wider_int_for<value_type_t<T>> wf) {
+    { value * wf };
+    { value / wf };
   };
 ```
+
+`UsesFloatingPointScaling` covers floating-point types and any wrapper or container
+whose element type is floating-point (e.g. `double`, `cartesian_vector<double>`).
+`treat_as_floating_point` (rather than `std::floating_point`) is the extensibility
+point for user-defined floating-point-like types — the body of the scaling engine
+only needs `T * value_type_t<T>` arithmetic, which works for any such type.
+
+`UsesIntegerScaling` covers integer types and any wrapper or container whose element
+type is a fundamental integer (e.g. `int`, `safe_int<int>`, `cartesian_vector<int>`).
+`std::integral<value_type_t<T>>` (rather than `treat_as_integral`) is required because
+the scaling engine relies on `get_value<element_t>` and `fixed_point<element_t>`,
+which are only defined for fundamental integer types. Scaling is applied through
+the type's own `operator*` / `operator/`, so wrappers can check for overflow and
+containers can scale element-wise.
+
+The factor type is `wider_int_for<value_type_t<T>>` (e.g. `int64_t` for `int16_t`)
+rather than the element type itself, to avoid overflowing the intermediate product
+on the rational path (see [Why widened integers for the rational path?](#why-widened-integers-for-the-rational-path)
+below).
 
 Most standard types satisfy `MagnitudeScalable` automatically. See
 [Scaling operators](#scaling-operators) in the Customization Points section for how to
@@ -329,7 +340,7 @@ the new representation type through `sudo_cast`, and the resulting `quantity` (o
 !!! note "Bounded Quantity Points"
 
     For bounded `quantity_point` types, the library provides a different mechanism:
-    overflow policies can be attached directly to point origins via `quantity_bounds`.
+    overflow policies can be passed directly as template parameters to point origins.
     See [Range-Validated Quantity Points](the_affine_space.md#range-validated-quantity-points).
 
 
