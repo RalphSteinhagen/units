@@ -109,17 +109,15 @@ constexpr bool is_scoped_enum_v = std::is_scoped_enum_v<T>;
 
 #else
 
-namespace detail
-{
-void test_conversion(...);          // selected when E is complete and scoped
-void test_conversion(int) = delete; // selected when E is complete and unscoped
+namespace detail {
+void test_conversion(...);           // selected when E is complete and scoped
+void test_conversion(int) = delete;  // selected when E is complete and unscoped
 
 template<class E>
-concept is_scoped_enum_impl =
-    std::is_enum_v<E> &&                        // checked first
-    requires { detail::test_conversion(E{}); }; // ill-formed before overload resolution
-                                                // when E is incomplete
-} // namespace detail
+concept is_scoped_enum_impl = std::is_enum_v<E> &&                         // checked first
+                              requires { detail::test_conversion(E{}); };  // ill-formed before overload resolution
+                                                                           // when E is incomplete
+}  // namespace detail
 
 template<class T>
 struct is_scoped_enum : std::bool_constant<detail::is_scoped_enum_impl<T>> {};
