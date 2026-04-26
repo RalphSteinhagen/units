@@ -20,8 +20,9 @@ quantity<mm, safe_i32> doubled = distance + distance;  // throws — 3×10⁹ > 
 !!! info "Motivation"
 
     **mp-units**' [built-in scaling algorithm](representation_types.md#built-in-scaling-algorithm)
-    uses widened intermediate arithmetic (`int64_t` for types up to `int32_t`, 128-bit for
-    `int64_t`) to avoid undefined behavior during unit conversions. This handles the vast
+    uses widened intermediate arithmetic (e.g. `int64_t`/`uint64_t` for types up to
+    `int32_t`/`uint32_t`, 128-bit for 64-bit types) to avoid undefined behavior during
+    unit conversions. This handles the vast
     majority of real-world scenarios, but the **final result** must still fit in the target
     type — and that narrowing can overflow silently.
 
@@ -120,15 +121,19 @@ The policy must provide a `static void on_overflow(std::string_view)` method.
 
 ## Integral promotion rules
 
-`safe_int<T>` preserves C++ integral promotion behavior — adding two `safe_int<int16_t>`
-values produces `safe_int<int>`, exactly matching what happens with the underlying types:
+`safe_int<T>` preserves C++ integral promotion behavior — this applies to both the
+homogeneous case (two `safe_int<T>` operands) and the scalar case (one `safe_int<T>` and
+one plain integral):
 
 ```cpp
 // Underlying types: int16_t + int16_t → int (integral promotion)
 static_assert(std::is_same_v<decltype(std::int16_t{1} + std::int16_t{1}), int>);
 
-// safe_int preserves this: safe_int<int16_t> + safe_int<int16_t> → safe_int<int>
+// Homogeneous: safe_int<int16_t> + safe_int<int16_t> → safe_int<int>
 static_assert(std::is_same_v<decltype(safe_i16{1} + safe_i16{1}), safe_int<int>>);
+
+// Scalar path: safe_int<int16_t> + int16_t → safe_int<int>  (same promotion)
+static_assert(std::is_same_v<decltype(safe_i16{1} + std::int16_t{1}), safe_int<int>>);
 
 // This propagates through quantity arithmetic:
 static_assert(std::is_same_v<decltype(safe_i16{1} * si::metre + safe_i16{1} * si::metre),
@@ -137,6 +142,44 @@ static_assert(std::is_same_v<decltype(safe_i16{1} * si::metre + safe_i16{1} * si
 
 This ensures that `safe_int` acts as a **transparent wrapper** — it adds overflow detection
 without changing the fundamental arithmetic behavior.
+
+### Mixed-signedness arithmetic
+
+Arithmetic between opposite signedness is **intentionally ill-formed** — a compile-time
+error. This applies to **both** `safe_int×safe_int` and `safe_int×scalar` combinations.
+The rationale is the same in both cases: mixed-signedness arithmetic under C++ usual
+arithmetic conversions reinterprets the signed value as unsigned before operating, silently
+producing counterintuitive results (e.g., `safe_int<int>{-1} * 2u` → `UINT_MAX - 1`).
+`safe_int` rejects these outright rather than hiding the problem behind an overflow check.
+
+Comparisons between `safe_int<signed>` and unsigned scalars remain allowed — the
+comparison operators use `std::cmp_equal` / `std::cmp_less` etc., which correctly handle
+mixed-signedness without reinterpretation.
+
+Same-signedness, different-width combinations (e.g., `safe_int<short>` + `safe_int<int>`)
+continue to work: the narrower type widens implicitly to the broader one, and then the
+homogeneous operator runs with overflow checking.
+
+```cpp
+safe_int<int>      si{1};
+safe_int<unsigned> su{2u};
+
+// Compile-time error — two safe_int of opposite signedness:
+// auto x = si + su;
+
+// Compile-time error — safe_int<signed> × unsigned scalar:
+// auto y = si * 2u;
+
+// Explicit mixed-signedness arithmetic — use .value() and cast deliberately:
+auto x = safe_int<unsigned>{static_cast<unsigned>(si.value())} + su;  // explicit and auditable
+
+// Same-signedness widening works transparently:
+safe_int<short> ss{1};
+auto y = ss + si;  // OK — safe_int<int>
+
+// Comparison with unsigned scalar is allowed (uses std::cmp_less, not sign-reinterpret):
+bool b = si < 0u;  // OK — true (std::cmp_less(-1, 0u) is correct)
+```
 
 
 ## Drop-in replacement
@@ -220,14 +263,37 @@ is checked — regardless of context:
 
 Comparison operators (`==`, `<`, `>`, etc.) are structurally safer than arithmetic: they
 return only `bool`, so the widened intermediate values are used to produce the boolean
-result and then discarded. **mp-units** widens the intermediate freely (to `int64_t` or
-128-bit), so for the vast majority of practical scenarios comparisons are correct with
+result and then discarded. **mp-units** widens the intermediate freely (to `int64_t`/`uint64_t`
+or 128-bit), so for the vast majority of practical scenarios comparisons are correct with
 plain integer types — `safe_int` adds no extra benefit here.
 
 For extreme corner cases where even 128-bit intermediates overflow, see the `static_assert`
 examples in the
 [Preventing Integer Overflow](../../blog/posts/preventing-integer-overflow.md#approach-3-mp-units-widened-intermediate-arithmetic)
 blog post.
+
+### Mixed-signedness comparisons
+
+Comparing `safe_int<signed>` with `safe_int<unsigned>` (or vice versa) is **intentionally
+ill-formed** — a compile-time error. This is a deliberate divergence from raw C++ integers,
+where such comparisons are well-formed but silently produce counterintuitive results due to
+the usual arithmetic conversions (e.g., `-1 < 0u` evaluates to `false`). Because
+`has_common_type` is `false` for mixed-signedness `safe_int` pairs, the compiler rejects
+these comparisons outright rather than silently computing the wrong answer.
+
+When you genuinely need to compare a signed and an unsigned value, use `.value()` together
+with the standard comparison utilities that explicitly handle mixed-signedness:
+
+```cpp
+safe_int<int>      si{-1};
+safe_int<unsigned> su{0u};
+
+// Compile-time error — intentionally ill-formed:
+// bool b = si < su;
+
+// Explicit cross-signedness comparison:
+bool b = std::cmp_less(si.value(), su.value());  // true
+```
 
 
 ## `constexpr` support

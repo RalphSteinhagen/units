@@ -617,9 +617,20 @@ static_assert(safe_int<int>{6} * 2LL == safe_int<long long>{12});
 static_assert(2LL * safe_int<int>{6} == safe_int<long long>{12});
 static_assert(safe_int<int>{12} / 4LL == safe_int<long long>{3});
 
-// int * unsigned  →  unsigned (standard promotion)
-static_assert(std::is_same_v<decltype(safe_int<int>{} * 2u), safe_int<unsigned>>);
-static_assert(std::is_same_v<decltype(safe_int<int>{} / 2u), safe_int<unsigned>>);
+// int × unsigned scalar arithmetic is intentionally ill-formed — same rationale as
+// safe_int<int> + safe_int<unsigned>: sign-mismatch conversions produce counterintuitive
+// results (e.g. safe_int<int>{-1} * 2u → UINT_MAX-1 via reinterpretation).
+// Comparisons remain allowed because they use std::cmp_* which is correct for mixed-sign.
+static_assert(!std::is_invocable_v<std::plus<>, safe_int<int>, unsigned>);
+static_assert(!std::is_invocable_v<std::minus<>, safe_int<int>, unsigned>);
+static_assert(!std::is_invocable_v<std::multiplies<>, safe_int<int>, unsigned>);
+static_assert(!std::is_invocable_v<std::divides<>, safe_int<int>, unsigned>);
+static_assert(!std::is_invocable_v<std::modulus<>, safe_int<int>, unsigned>);
+static_assert(!std::is_invocable_v<std::plus<>, unsigned, safe_int<int>>);
+static_assert(!std::is_invocable_v<std::minus<>, unsigned, safe_int<int>>);
+static_assert(!std::is_invocable_v<std::multiplies<>, unsigned, safe_int<int>>);
+static_assert(!std::is_invocable_v<std::divides<>, unsigned, safe_int<int>>);
+static_assert(!std::is_invocable_v<std::modulus<>, unsigned, safe_int<int>>);
 
 // U / safe_int — symmetric with other scalar ops
 static_assert(std::is_same_v<decltype(12 / safe_int<int>{}), safe_int<int>>);
@@ -725,14 +736,13 @@ static_assert(safe_int<int>{2} < 2.5);
 static_assert(2.5 > safe_int<int>{2});
 static_assert((safe_int<int>{2} <=> 2.5) < 0);
 
-// Mixed signedness comparisons — uses std::cmp_* for correctness
-static_assert(safe_int<int>{-1} < safe_int<unsigned>{0u});
-static_assert(safe_int<int>{-1} != safe_int<unsigned>{0u});
-static_assert(safe_int<unsigned>{0u} > safe_int<int>{-1});
-static_assert((safe_int<int>{-1} <=> safe_int<unsigned>{0u}) < 0);
-static_assert((safe_int<unsigned>{0u} <=> safe_int<int>{-1}) > 0);
-static_assert(safe_int<int>{42} == safe_int<unsigned>{42u});
-static_assert((safe_int<int>{42} <=> safe_int<unsigned>{42u}) == 0);
+// Mixed-signedness safe_int × safe_int comparisons are intentionally ill-formed.
+// Unlike raw int/unsigned (which compare but silently produce counterintuitive results,
+// e.g. -1 < 0u is false), safe_int rejects such comparisons at compile time because
+// has_common_type is false for mixed-signedness pairs.
+// Use .value() and std::cmp_* for explicit cross-signedness comparison when needed.
+static_assert(!std::equality_comparable_with<safe_int<int>, safe_int<unsigned>>);
+static_assert(!std::three_way_comparable_with<safe_int<int>, safe_int<unsigned>>);
 
 // Mixed signedness scalar comparisons
 static_assert(safe_int<int>{-1} < 0u);
@@ -844,6 +854,37 @@ static_assert(std::is_same_v<decltype(safe_int<short>{} * safe_int<short>{}), sa
 
 // Scalar path inherits promotion: safe_int<short> * int-literal.
 static_assert(std::is_same_v<decltype(safe_int<short>{} * 2), safe_int<decltype(short{} * 2)>>);
+
+// Same-signedness widening (safe_int<short> + safe_int<int>) → safe_int<int>.
+// The narrower type converts implicitly to safe_int<int> (value-preserving), and
+// the homogeneous operator runs.
+static_assert(std::is_same_v<decltype(safe_int<short>{} + safe_int<int>{}), safe_int<int>>);
+static_assert(std::is_same_v<decltype(safe_int<int>{} + safe_int<short>{}), safe_int<int>>);
+
+// Mixed-signedness safe_int×safe_int arithmetic is intentionally ill-formed.
+// (has_common_type is false for int/unsigned pairs — explicit conversion required.)
+static_assert(!std::is_invocable_v<std::plus<>, safe_int<int>, safe_int<unsigned>>);
+static_assert(!std::is_invocable_v<std::minus<>, safe_int<int>, safe_int<unsigned>>);
+static_assert(!std::is_invocable_v<std::multiplies<>, safe_int<int>, safe_int<unsigned>>);
+static_assert(!std::is_invocable_v<std::divides<>, safe_int<int>, safe_int<unsigned>>);
+static_assert(!std::is_invocable_v<std::plus<>, safe_int<unsigned>, safe_int<int>>);
+static_assert(!std::is_invocable_v<std::minus<>, safe_int<unsigned>, safe_int<int>>);
+static_assert(!std::is_invocable_v<std::multiplies<>, safe_int<unsigned>, safe_int<int>>);
+static_assert(!std::is_invocable_v<std::divides<>, safe_int<unsigned>, safe_int<int>>);
+
+// Scalar path with matching sub-int type must also promote.
+// std::common_type_t<short, short> = short, but decltype(short{} op short{}) = int.
+// Each operator below must return safe_int<int>, not safe_int<short>.
+static_assert(std::is_same_v<decltype(safe_int<short>{} + short{}), safe_int<decltype(short{} + short{})>>);
+static_assert(std::is_same_v<decltype(short{} + safe_int<short>{}), safe_int<decltype(short{} + short{})>>);
+static_assert(std::is_same_v<decltype(safe_int<short>{} - short{}), safe_int<decltype(short{} - short{})>>);
+static_assert(std::is_same_v<decltype(short{} - safe_int<short>{}), safe_int<decltype(short{} - short{})>>);
+static_assert(std::is_same_v<decltype(safe_int<short>{} * short{}), safe_int<decltype(short{} * short{})>>);
+static_assert(std::is_same_v<decltype(short{} * safe_int<short>{}), safe_int<decltype(short{} * short{})>>);
+static_assert(std::is_same_v<decltype(safe_int<short>{} / short{}), safe_int<decltype(short{} / short{})>>);
+static_assert(std::is_same_v<decltype(short{} / safe_int<short>{}), safe_int<decltype(short{} / short{})>>);
+static_assert(std::is_same_v<decltype(safe_int<short>{} % short{}), safe_int<decltype(short{} % short{})>>);
+static_assert(std::is_same_v<decltype(short{} % safe_int<short>{}), safe_int<decltype(short{} % short{})>>);
 
 // ============================================================================
 // Using safe_int as a quantity representation type

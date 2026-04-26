@@ -208,7 +208,7 @@ flowchart TD
     B -- False --> INT["<b>UsesIntegerScaling</b><br>e.g. int, safe_int&lt;int&gt;, cartesian_vector&lt;int&gt;"]
     INT --> G{"magnitude?"}
     G -- "integral (e.g. m→mm, ×1000)" --> I["exact integer multiplication"]
-    G -- "rational (e.g. ft→m, ×3048/10000)" --> R["widened integer arithmetic<br>(int64_t or 128-bit;<br>avoids overflow &amp; FP rounding)"]
+    G -- "rational (e.g. ft→m, ×3048/10000)" --> R["widened integer arithmetic<br>(int64_t/uint64_t or 128-bit;<br>signedness-preserving;<br>avoids overflow &amp; FP rounding)"]
     G -- "irrational (e.g. deg→rad, ×π/180)" --> IR["long double fixed-point approximation"]
 ```
 
@@ -258,8 +258,10 @@ as a fallback when this operator is not available.
 
     **mp-units uses widened integers to absorb that intermediate growth:**
 
-    - For types up to 32 bits (`int8_t`, `int16_t`, `int32_t`): widens to `int64_t`
-    - For `int64_t`: widens to 128-bit arithmetic (`__int128` or custom emulation)
+    - For signed types up to 32 bits (`int8_t`, `int16_t`, `int32_t`): widens to `int64_t`
+    - For unsigned types up to 32 bits (`uint8_t`, `uint16_t`, `uint32_t`): widens to `uint64_t`
+    - For `int64_t`: widens to signed 128-bit arithmetic (`__int128` or custom emulation)
+    - For `uint64_t`: widens to unsigned 128-bit arithmetic (`unsigned __int128` or custom emulation)
 
     This approach provides maximum safety headroom for smaller types (with no performance
     cost on modern 64-bit systems), while 128-bit arithmetic handles the vast majority

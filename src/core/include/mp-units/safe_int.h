@@ -40,8 +40,6 @@ import std;
 #include <compare>
 #include <concepts>
 #include <cstdlib>
-#include <cstdlib>
-#include <cstdlib>
 #include <limits>
 #include <string_view>
 #include <type_traits>
@@ -139,9 +137,7 @@ template<std::integral T>
 [[nodiscard]] constexpr bool div_overflows(T lhs, T rhs) noexcept
 {
   if (rhs == 0) return true;
-  if constexpr (std::is_signed_v<T>) {
-    return lhs == std::numeric_limits<T>::min() && rhs == T{-1};
-  }
+  if constexpr (std::is_signed_v<T>) return lhs == std::numeric_limits<T>::min() && rhs == T{-1};
   return false;
 }
 
@@ -149,9 +145,7 @@ template<std::integral T>
 template<std::integral T>
 [[nodiscard]] constexpr bool neg_overflows(T v) noexcept
 {
-  if constexpr (std::is_signed_v<T>) {
-    return v == std::numeric_limits<T>::min();
-  }
+  if constexpr (std::is_signed_v<T>) return v == std::numeric_limits<T>::min();
   return v != T{0};  // negation of any non-zero unsigned overflows
 }
 
@@ -170,12 +164,14 @@ template<typename T>
 struct underlying_int_type_helper {
   using type = T;
 };
+
 template<typename T>
   requires requires { typename T::value_type; } && std::integral<typename T::value_type> &&
            std::numeric_limits<T>::is_specialized
 struct underlying_int_type_helper<T> {
   using type = typename T::value_type;
 };
+
 template<typename T>
 using underlying_int_type_t = typename underlying_int_type_helper<T>::type;
 
@@ -193,504 +189,42 @@ inline constexpr bool is_value_preserving_int_v = [] {
 }();
 
 // Generalized: uses integer range check when both types have integral underlying types,
-// otherwise falls back to is_convertible.
+// otherwise returns false (non-integral types cannot be statically guaranteed value-preserving).
 template<typename From, typename To>
 inline constexpr bool is_value_preserving_v = [] {
   if constexpr (std::integral<underlying_int_type_t<From>> && std::integral<underlying_int_type_t<To>>)
     return is_value_preserving_int_v<From, To>;
   else
-    return std::is_convertible_v<From, To>;
+    return false;
 }();
 
 // Overflow-checked cast: raises via EP if integral value doesn't fit in To, then silently converts.
+// The range check is skipped when From is value-preserving into To (T is at least as wide as U),
+// because every possible From value is guaranteed to fit.
 template<std::integral To, typename EP, typename From>
   requires std::is_constructible_v<To, const From&>
 [[nodiscard]] constexpr To checked_int_cast(const From& v)
 {
-  if constexpr (std::integral<std::remove_cvref_t<From>>) {
+  if constexpr (std::integral<std::remove_cvref_t<From>> && !is_value_preserving_int_v<std::remove_cvref_t<From>, To>)
     if (!std::in_range<To>(v)) EP::on_overflow("safe_int: narrowing conversion overflow");
-  }
   return silent_cast<To>(v);
 }
 
 }  // namespace detail
 
-// Forward declaration — needed by safe_int_binary_ops below.
 MP_UNITS_EXPORT template<std::integral T, OverflowPolicy EP>
 class safe_int;
 
-// ============================================================================
-// detail::safe_int_binary_ops — heterogeneous binary operators base class
-//
-// All binary operators are defined here as hidden friends using the Hidden Friend
-// Injection Idiom (see constrained.h for rationale). This base class is inherited
-// by safe_int<T,EP> to inject operators into the surrounding namespace.
-//
-// OPERATOR CATEGORIES (for each operator +, -, *, /, %):
-//   1. safe_int × safe_int      → safe_int<promoted, EP>
-//   2. safe_int × scalar:
-//      a. Integral scalar       → safe_int<promoted, EP>     (overflow checks, wrapper preserved)
-//      b. Non-integral scalar   → bare result type           (wrapper dropped)
-//   3. safe_int × constrained:
-//      a. Integral result       → safe_int<promoted, EP>     (overflow is tighter, safe_int wins)
-//      b. Non-integral result   → constrained<promoted, CP>  (constraint wins, no overflow risk)
-//   4. Comparisons              → all combinations (safe_int, scalar, constrained)
-//
-// DISPATCH MECHANISM:
-//   - Partial constraint ordering: `requires std::integral<U>` overloads win when U is integral
-//   - Unconstrained fallbacks handle non-integral types (FP, custom numeric types)
-//
-// WHY THIS DESIGN?
-//   - Integral operations can overflow → safe_int provides overflow detection
-//   - FP operations don't overflow in the same sense → wrapper can be safely dropped
-//   - For cross-wrapper: integral results need overflow checks, non-integral preserve constraints
-// ============================================================================
-
 namespace detail {
 
-struct safe_int_binary_ops {
-  // ========================================================================
-  // operator+ (addition)
-  // ========================================================================
+template<typename T>
+inline constexpr bool is_safe_int_v = is_specialization_of<T, safe_int>;
 
-  // 1. safe_int × safe_int
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator+(const safe_int<T, EP>& lhs, const safe_int<U, EP>& rhs)
-    -> safe_int<decltype(lhs.value() + rhs.value()), EP>
-  {
-    using R = decltype(lhs.value() + rhs.value());
-    if (detail::add_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: addition overflow");
-    return lhs.value() + rhs.value();
-  }
+template<std::integral A, std::integral B>
+using integral_op_result_t = decltype(A{} + B{});
 
-  // 2a. safe_int × integral scalar (wrapper preserved)
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator+(const safe_int<T, EP>& lhs, const U& rhs)
-    -> safe_int<decltype(lhs.value() + rhs), EP>
-  {
-    using R = decltype(lhs.value() + rhs);
-    if (detail::add_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs)))
-      EP::on_overflow("safe_int: addition overflow");
-    return lhs.value() + rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator+(const U& lhs, const safe_int<T, EP>& rhs)
-    -> safe_int<decltype(lhs + rhs.value()), EP>
-  {
-    using R = decltype(lhs + rhs.value());
-    if (detail::add_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: addition overflow");
-    return lhs + rhs.value();
-  }
-
-  // 2b. safe_int × non-integral scalar (wrapper dropped)
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator+(const safe_int<T, EP>& lhs, const U& rhs) -> decltype(lhs.value() + rhs)
-  {
-    return lhs.value() + rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator+(const U& lhs, const safe_int<T, EP>& rhs) -> decltype(lhs + rhs.value())
-  {
-    return lhs + rhs.value();
-  }
-
-  // 3a. safe_int × constrained (integral result → safe_int wins)
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator+(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> safe_int<decltype(lhs.value() + rhs.value()), EP>
-  {
-    return lhs.value() + rhs;
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator+(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value() + rhs.value()), EP>
-  {
-    return lhs + rhs.value();
-  }
-
-  // 3b. safe_int × constrained (non-integral result → constrained wins)
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator+(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> constrained<decltype(lhs.value() + rhs.value()), CP>
-  {
-    return lhs + rhs.value();
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator+(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> constrained<decltype(lhs.value() + rhs.value()), CP>
-  {
-    return lhs.value() + rhs;
-  }
-
-  // ========================================================================
-  // operator- (subtraction)
-  // ========================================================================
-
-  // 1. safe_int × safe_int
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator-(const safe_int<T, EP>& lhs, const safe_int<U, EP>& rhs)
-    -> safe_int<decltype(lhs.value() - rhs.value()), EP>
-  {
-    using R = decltype(lhs.value() - rhs.value());
-    if (detail::sub_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: subtraction overflow");
-    return lhs.value() - rhs.value();
-  }
-
-  // 2a. safe_int × integral scalar (wrapper preserved)
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator-(const safe_int<T, EP>& lhs, const U& rhs)
-    -> safe_int<decltype(lhs.value() - rhs), EP>
-  {
-    using R = decltype(lhs.value() - rhs);
-    if (detail::sub_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs)))
-      EP::on_overflow("safe_int: subtraction overflow");
-    return lhs.value() - rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator-(const U& lhs, const safe_int<T, EP>& rhs)
-    -> safe_int<decltype(lhs - rhs.value()), EP>
-  {
-    using R = decltype(lhs - rhs.value());
-    if (detail::sub_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: subtraction overflow");
-    return lhs - rhs.value();
-  }
-
-  // 2b. safe_int × non-integral scalar (wrapper dropped)
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator-(const safe_int<T, EP>& lhs, const U& rhs) -> decltype(lhs.value() - rhs)
-  {
-    return lhs.value() - rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator-(const U& lhs, const safe_int<T, EP>& rhs) -> decltype(lhs - rhs.value())
-  {
-    return lhs - rhs.value();
-  }
-
-  // 3a. safe_int × constrained (integral result → safe_int wins)
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator-(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> safe_int<decltype(lhs.value() - rhs.value()), EP>
-  {
-    return lhs.value() - rhs;
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator-(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value() - rhs.value()), EP>
-  {
-    return lhs - rhs.value();
-  }
-
-  // 3b. safe_int × constrained (non-integral result → constrained wins)
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator-(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> constrained<decltype(lhs.value() - rhs.value()), CP>
-  {
-    return lhs - rhs.value();
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator-(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> constrained<decltype(lhs.value() - rhs.value()), CP>
-  {
-    return lhs.value() - rhs;
-  }
-
-  // ========================================================================
-  // operator* (multiplication)
-  // ========================================================================
-
-  // 1. safe_int × safe_int
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator*(const safe_int<T, EP>& lhs, const safe_int<U, EP>& rhs)
-    -> safe_int<decltype(lhs.value() * rhs.value()), EP>
-  {
-    using R = decltype(lhs.value() * rhs.value());
-    if (detail::mul_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: multiplication overflow");
-    return lhs.value() * rhs.value();
-  }
-
-  // 2a. safe_int × integral scalar (wrapper preserved)
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator*(const safe_int<T, EP>& lhs, const U& rhs)
-    -> safe_int<decltype(lhs.value() * rhs), EP>
-  {
-    using R = decltype(lhs.value() * rhs);
-    if (detail::mul_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs)))
-      EP::on_overflow("safe_int: multiplication overflow");
-    return lhs.value() * rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator*(const U& lhs, const safe_int<T, EP>& rhs)
-    -> safe_int<decltype(lhs * rhs.value()), EP>
-  {
-    using R = decltype(lhs * rhs.value());
-    if (detail::mul_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: multiplication overflow");
-    return lhs * rhs.value();
-  }
-
-  // 2b. safe_int × non-integral scalar (wrapper dropped)
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator*(const safe_int<T, EP>& lhs, const U& rhs) -> decltype(lhs.value() * rhs)
-  {
-    return lhs.value() * rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator*(const U& lhs, const safe_int<T, EP>& rhs) -> decltype(lhs * rhs.value())
-  {
-    return lhs * rhs.value();
-  }
-
-  // 3a. safe_int × constrained (integral result → safe_int wins)
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator*(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> safe_int<decltype(lhs.value() * rhs.value()), EP>
-  {
-    return lhs.value() * rhs;
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator*(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value() * rhs.value()), EP>
-  {
-    return lhs * rhs.value();
-  }
-
-  // 3b. safe_int × constrained (non-integral result → constrained wins)
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator*(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> constrained<decltype(lhs.value() * rhs.value()), CP>
-  {
-    return lhs * rhs.value();
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator*(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> constrained<decltype(lhs.value() * rhs.value()), CP>
-  {
-    return lhs.value() * rhs;
-  }
-
-  // ========================================================================
-  // operator/ (division)
-  // ========================================================================
-
-  // 1. safe_int × safe_int
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator/(const safe_int<T, EP>& lhs, const safe_int<U, EP>& rhs)
-    -> safe_int<decltype(lhs.value() / rhs.value()), EP>
-  {
-    using R = decltype(lhs.value() / rhs.value());
-    if (detail::div_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: division overflow");
-    return lhs.value() / rhs.value();
-  }
-
-  // 2a. safe_int × integral scalar (wrapper preserved)
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator/(const safe_int<T, EP>& lhs, const U& rhs)
-    -> safe_int<decltype(lhs.value() / rhs), EP>
-  {
-    using R = decltype(lhs.value() / rhs);
-    if (detail::div_overflows<R>(static_cast<R>(lhs.value()), static_cast<R>(rhs)))
-      EP::on_overflow("safe_int: division overflow");
-    return lhs.value() / rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator/(const U& lhs, const safe_int<T, EP>& rhs)
-    -> safe_int<decltype(lhs / rhs.value()), EP>
-  {
-    using R = decltype(lhs / rhs.value());
-    if (detail::div_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value())))
-      EP::on_overflow("safe_int: division overflow");
-    return static_cast<R>(lhs) / static_cast<R>(rhs.value());
-  }
-
-  // 2b. safe_int × non-integral scalar (wrapper dropped)
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator/(const safe_int<T, EP>& lhs, const U& rhs) -> decltype(lhs.value() / rhs)
-  {
-    return lhs.value() / rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator/(const U& lhs, const safe_int<T, EP>& rhs) -> decltype(lhs / rhs.value())
-  {
-    return lhs / static_cast<decltype(lhs / rhs.value())>(rhs.value());
-  }
-
-  // 3a. safe_int × constrained (integral result → safe_int wins)
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator/(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> safe_int<decltype(lhs.value() / rhs.value()), EP>
-  {
-    return lhs.value() / rhs;
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator/(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value() / rhs.value()), EP>
-  {
-    return lhs / rhs.value();
-  }
-
-  // 3b. safe_int × constrained (non-integral result → constrained wins)
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator/(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> constrained<decltype(lhs.value() / rhs.value()), CP>
-  {
-    return lhs / rhs.value();
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator/(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> constrained<decltype(lhs.value() / rhs.value()), CP>
-  {
-    return lhs.value() / rhs;
-  }
-
-  // ========================================================================
-  // operator% (modulo) — integral only (% undefined for non-integral)
-  // ========================================================================
-
-  // 1. safe_int × safe_int
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator%(const safe_int<T, EP>& lhs, const safe_int<U, EP>& rhs)
-    -> safe_int<decltype(lhs.value() % rhs.value()), EP>
-  {
-    if (rhs.value() == U{0}) EP::on_overflow("safe_int: modulo by zero");
-    return lhs.value() % rhs.value();
-  }
-
-  // 2a. safe_int × integral scalar (wrapper preserved)
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator%(const safe_int<T, EP>& lhs, const U& rhs)
-    -> safe_int<decltype(lhs.value() % rhs), EP>
-  {
-    if (rhs == U{0}) EP::on_overflow("safe_int: modulo by zero");
-    return lhs.value() % rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator%(const U& lhs, const safe_int<T, EP>& rhs)
-    -> safe_int<decltype(lhs % rhs.value()), EP>
-  {
-    if (rhs.value() == T{0}) EP::on_overflow("safe_int: modulo by zero");
-    return lhs % rhs.value();
-  }
-
-  // 3a. safe_int × constrained (integral only → safe_int wins)
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator%(constrained<U, CP> lhs, safe_int<T, EP> rhs)
-    -> safe_int<decltype(lhs.value() % rhs.value()), EP>
-  {
-    return lhs.value() % rhs;
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-    requires std::integral<U>
-  [[nodiscard]] friend constexpr auto operator%(safe_int<T, EP> lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value() % rhs.value()), EP>
-  {
-    return lhs % rhs.value();
-  }
-
-  // ========================================================================
-  // Comparison operators (== and <=>)
-  // C++20's rewrite rules provide all relational operators (<, <=, >, >=, !=)
-  // from these two. All combinations of safe_int, scalar, and constrained.
-  // ========================================================================
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr bool operator==(const safe_int<T, EP>& lhs, const safe_int<U, EP>& rhs)
-  {
-    return std::cmp_equal(lhs.value(), rhs.value());
-  }
-
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr std::strong_ordering operator<=>(const safe_int<T, EP>& lhs,
-                                                                  const safe_int<U, EP>& rhs)
-  {
-    if (std::cmp_less(lhs.value(), rhs.value())) return std::strong_ordering::less;
-    if (std::cmp_greater(lhs.value(), rhs.value())) return std::strong_ordering::greater;
-    return std::strong_ordering::equal;
-  }
-
-  // safe_int vs scalar (integral — uses std::cmp_* for signed/unsigned safety)
-  template<typename T, typename EP, std::integral U>
-  [[nodiscard]] friend constexpr bool operator==(const safe_int<T, EP>& lhs, const U& rhs)
-  {
-    return std::cmp_equal(lhs.value(), rhs);
-  }
-
-  template<typename T, typename EP, std::integral U>
-  [[nodiscard]] friend constexpr std::strong_ordering operator<=>(const safe_int<T, EP>& lhs, const U& rhs)
-  {
-    if (std::cmp_less(lhs.value(), rhs)) return std::strong_ordering::less;
-    if (std::cmp_greater(lhs.value(), rhs)) return std::strong_ordering::greater;
-    return std::strong_ordering::equal;
-  }
-
-  // safe_int vs scalar (non-integral fallback)
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr bool operator==(const safe_int<T, EP>& lhs, const U& rhs)
-  {
-    return lhs.value() == rhs;
-  }
-
-  template<typename T, typename EP, typename U>
-  [[nodiscard]] friend constexpr auto operator<=>(const safe_int<T, EP>& lhs, const U& rhs)
-  {
-    return lhs.value() <=> rhs;
-  }
-
-  // safe_int vs constrained
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr bool operator==(const safe_int<T, EP>& lhs, const constrained<U, CP>& rhs)
-  {
-    return lhs.value() == rhs.value();
-  }
-
-  template<typename T, typename EP, typename U, typename CP>
-  [[nodiscard]] friend constexpr auto operator<=>(const safe_int<T, EP>& lhs, const constrained<U, CP>& rhs)
-  {
-    return lhs.value() <=> rhs.value();
-  }
-};
+template<std::integral A, std::integral B>
+inline constexpr bool same_sign_v = std::is_signed_v<A> == std::is_signed_v<B>;
 
 }  // namespace detail
 
@@ -716,7 +250,7 @@ MP_UNITS_EXPORT template<std::integral T,
 #else
                          OverflowPolicy ErrorPolicy = safe_int_terminate_policy>
 #endif
-class safe_int : detail::safe_int_binary_ops {
+class safe_int {
   // Invoke ErrorPolicy and return a safe default (for use from noexcept compound-assign paths).
   static constexpr void handle_overflow(std::string_view msg) { ErrorPolicy::on_overflow(msg); }
 public:
@@ -727,42 +261,22 @@ public:
 
   safe_int() = default;
 
-  // Converting constructor from any non-floating-point, non-safe_int type constructible as T
-  // Explicit when the source type cannot represent all values of T (narrowing)
   template<typename U>
     requires(!treat_as_floating_point<std::remove_cvref_t<U>>) && std::is_constructible_v<T, U>
-  constexpr explicit(!detail::is_value_preserving_v<std::remove_cvref_t<U>, T>) safe_int(const U& v) :
+  constexpr explicit(!detail::is_value_preserving_v<std::remove_cvref_t<U>, T> || !std::convertible_to<U, T>)
+    safe_int(const U& v) :
       value_(detail::checked_int_cast<T, ErrorPolicy>(v))
   {
   }
 
-  // Converting constructor from safe_int<U> with matching error policy
-  // Implicit when U→T is value-preserving (every U value fits in T), explicit otherwise
   template<std::integral U>
-    requires(!std::is_same_v<T, U>) && std::is_constructible_v<T, U>
-  constexpr explicit(!detail::is_value_preserving_int_v<U, T>) safe_int(const safe_int<U, ErrorPolicy>& other) :
+  constexpr explicit(!detail::is_value_preserving_int_v<U, T>) safe_int(safe_int<U, ErrorPolicy> other) :
       value_(detail::checked_int_cast<T, ErrorPolicy>(other.value()))
   {
   }
 
-  // Explicit conversion to the underlying type: use .value() or static_cast<T>() when
-  // you need a raw integer.  Keeping this explicit prevents safe_int from silently
-  // decaying back to an unprotected T, preserves common_type resolution with raw
-  // integer types (only the T→safe_int<T> direction is then implicit), and avoids
-  // the ternary ambiguity that prevents std::common_type from working.
   [[nodiscard]] constexpr explicit operator T() const noexcept { return value_; }
   [[nodiscard]] constexpr T value() const noexcept { return value_; }
-
-#if MP_UNITS_HOSTED
-  template<typename CharT, typename Traits>
-  friend std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, const safe_int& v)
-  {
-    if constexpr (sizeof(T) == 1)
-      return os << static_cast<int>(v.value_);  // promote char-width types to int for streaming
-    else
-      return os << v.value_;
-  }
-#endif
 
   // ==========================================================================
   // Unary operators (+, -, ++, --)
@@ -813,40 +327,500 @@ public:
   // ==========================================================================
 
   // -- Compound assignment --
-  constexpr safe_int& operator+=(const safe_int& rhs)
+  constexpr safe_int& operator+=(safe_int rhs)
   {
     if (detail::add_overflows(value_, rhs.value_)) handle_overflow("safe_int: addition overflow");
     value_ += rhs.value_;
     return *this;
   }
 
-  constexpr safe_int& operator-=(const safe_int& rhs)
+  constexpr safe_int& operator-=(safe_int rhs)
   {
     if (detail::sub_overflows(value_, rhs.value_)) handle_overflow("safe_int: subtraction overflow");
     value_ -= rhs.value_;
     return *this;
   }
 
-  constexpr safe_int& operator*=(const safe_int& rhs)
+  constexpr safe_int& operator*=(safe_int rhs)
   {
     if (detail::mul_overflows(value_, rhs.value_)) handle_overflow("safe_int: multiplication overflow");
     value_ *= rhs.value_;
     return *this;
   }
 
-  constexpr safe_int& operator/=(const safe_int& rhs)
+  constexpr safe_int& operator/=(safe_int rhs)
   {
     if (detail::div_overflows(value_, rhs.value_)) handle_overflow("safe_int: division overflow");
     value_ /= rhs.value_;
     return *this;
   }
 
-  constexpr safe_int& operator%=(const safe_int& rhs)
+  constexpr safe_int& operator%=(safe_int rhs)
   {
     if (rhs.value_ == T{0}) handle_overflow("safe_int: modulo by zero");
     value_ %= rhs.value_;
     return *this;
   }
+
+  // ========================================================================
+  // Binary operators
+  // ========================================================================
+
+  // ========================================================================
+  // HOMOGENEOUS (safe_int × safe_int, same T and EP)
+  //
+  // Models integral promotion: sub-int types (char, short) promote to int.
+  // ========================================================================
+
+  [[nodiscard]] friend constexpr auto operator+(safe_int lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ + rhs.value_), ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ + rhs.value_);
+    if (detail::add_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: addition overflow");
+    return lhs.value_ + rhs.value_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator-(safe_int lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ - rhs.value_), ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ - rhs.value_);
+    if (detail::sub_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: subtraction overflow");
+    return lhs.value_ - rhs.value_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator*(safe_int lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ * rhs.value_), ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ * rhs.value_);
+    if (detail::mul_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: multiplication overflow");
+    return lhs.value_ * rhs.value_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator/(safe_int lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ / rhs.value_), ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ / rhs.value_);
+    if (detail::div_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: division overflow");
+    return lhs.value_ / rhs.value_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator%(safe_int lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ % rhs.value_), ErrorPolicy>
+  {
+    if (rhs.value_ == T{0}) ErrorPolicy::on_overflow("safe_int: modulo by zero");
+    return lhs.value_ % rhs.value_;
+  }
+
+  [[nodiscard]] friend constexpr auto operator<=>(safe_int lhs, safe_int rhs) = default;
+
+  // ========================================================================
+  // INTEGRAL SCALAR: safe_int × integral scalar (wrapper preserved, overflow-checked).
+  //
+  // Handles heterogeneous integral cases that cannot go through the implicit
+  // converting constructor — e.g. safe_int<unsigned long> * __int128 where
+  // __int128 is wider than unsigned long (explicit-only narrowing ctor).
+  // Same-type cases (e.g. safe_int<int> + int) also resolve here (exact match
+  // beats the homogeneous operator's implicit-conversion path).
+  // ========================================================================
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<T, U>)
+  [[nodiscard]] friend constexpr auto operator+(safe_int lhs, U rhs)
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ + rhs);
+    if (detail::add_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs)))
+      ErrorPolicy::on_overflow("safe_int: addition overflow");
+    return lhs.value_ + rhs;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<U, T>)
+  [[nodiscard]] friend constexpr auto operator+(U lhs, safe_int rhs)
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
+  {
+    using R = decltype(lhs + rhs.value_);
+    if (detail::add_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: addition overflow");
+    return lhs + rhs.value_;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<T, U>)
+  [[nodiscard]] friend constexpr auto operator-(safe_int lhs, U rhs)
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ - rhs);
+    if (detail::sub_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs)))
+      ErrorPolicy::on_overflow("safe_int: subtraction overflow");
+    return lhs.value_ - rhs;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<U, T>)
+  [[nodiscard]] friend constexpr auto operator-(U lhs, safe_int rhs)
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
+  {
+    using R = decltype(lhs - rhs.value_);
+    if (detail::sub_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: subtraction overflow");
+    return lhs - rhs.value_;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<T, U>)
+  [[nodiscard]] friend constexpr auto operator*(safe_int lhs, U rhs)
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ * rhs);
+    if (detail::mul_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs)))
+      ErrorPolicy::on_overflow("safe_int: multiplication overflow");
+    return lhs.value_ * rhs;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<U, T>)
+  [[nodiscard]] friend constexpr auto operator*(U lhs, safe_int rhs)
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
+  {
+    using R = decltype(lhs * rhs.value_);
+    if (detail::mul_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: multiplication overflow");
+    return lhs * rhs.value_;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<T, U>)
+  [[nodiscard]] friend constexpr auto operator/(safe_int lhs, U rhs)
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
+  {
+    using R = decltype(lhs.value_ / rhs);
+    if (detail::div_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs)))
+      ErrorPolicy::on_overflow("safe_int: division overflow");
+    return lhs.value_ / rhs;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<U, T>)
+  [[nodiscard]] friend constexpr auto operator/(U lhs, safe_int rhs)
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
+  {
+    using R = decltype(lhs / rhs.value_);
+    if (detail::div_overflows<R>(static_cast<R>(lhs), static_cast<R>(rhs.value_)))
+      ErrorPolicy::on_overflow("safe_int: division overflow");
+    return static_cast<R>(lhs) / static_cast<R>(rhs.value_);
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<T, U>)
+  [[nodiscard]] friend constexpr auto operator%(safe_int lhs, U rhs)
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
+  {
+    if (rhs == U{0}) ErrorPolicy::on_overflow("safe_int: modulo by zero");
+    return lhs.value_ % rhs;
+  }
+
+  template<typename U>
+    requires(std::integral<U> && detail::same_sign_v<U, T>)
+  [[nodiscard]] friend constexpr auto operator%(U lhs, safe_int rhs)
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
+  {
+    if (rhs.value_ == T{0}) ErrorPolicy::on_overflow("safe_int: modulo by zero");
+    return lhs % rhs.value_;
+  }
+
+  template<typename U>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr bool operator==(safe_int lhs, U rhs)
+  {
+    return std::cmp_equal(lhs.value_, rhs);
+  }
+
+  template<typename U>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr std::strong_ordering operator<=>(safe_int lhs, U rhs)
+  {
+    if (std::cmp_less(lhs.value_, rhs)) return std::strong_ordering::less;
+    if (std::cmp_greater(lhs.value_, rhs)) return std::strong_ordering::greater;
+    return std::strong_ordering::equal;
+  }
+
+  // ========================================================================
+  // FLOATING-POINT SCALAR: safe_int × treat_as_floating_point<U> (float, double,
+  //   long double, or any user-defined type with treat_as_floating_point = true)
+  //
+  // Return type is auto (deduced from body) so that the return type is NOT
+  // evaluated during overload-candidate enumeration — this avoids infinite
+  // template recursion that would occur with decltype(T op U) in the trailing
+  // return when U = safe_int<T> is speculatively substituted.
+  // treat_as_floating_point<safe_int<T>> = false ensures such candidates are
+  // dropped before the body is instantiated.
+  // The trailing requires-expression gates on the actual operations for SFINAE.
+  // ========================================================================
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator+(safe_int lhs, U rhs)
+    requires requires { static_cast<U>(lhs.value_) + rhs; }
+  {
+    return static_cast<U>(lhs.value_) + rhs;
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator+(U lhs, safe_int rhs)
+    requires requires { lhs + static_cast<U>(rhs.value_); }
+  {
+    return lhs + static_cast<U>(rhs.value_);
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator-(safe_int lhs, U rhs)
+    requires requires { static_cast<U>(lhs.value_) - rhs; }
+  {
+    return static_cast<U>(lhs.value_) - rhs;
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator-(U lhs, safe_int rhs)
+    requires requires { lhs - static_cast<U>(rhs.value_); }
+  {
+    return lhs - static_cast<U>(rhs.value_);
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator*(safe_int lhs, U rhs)
+    requires requires { static_cast<U>(lhs.value_) * rhs; }
+  {
+    return static_cast<U>(lhs.value_) * rhs;
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator*(U lhs, safe_int rhs)
+    requires requires { lhs * static_cast<U>(rhs.value_); }
+  {
+    return lhs * static_cast<U>(rhs.value_);
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator/(safe_int lhs, U rhs)
+    requires requires { static_cast<U>(lhs.value_) / rhs; }
+  {
+    return static_cast<U>(lhs.value_) / rhs;
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator/(U lhs, safe_int rhs)
+    requires requires { lhs / static_cast<U>(rhs.value_); }
+  {
+    return lhs / static_cast<U>(rhs.value_);
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr bool operator==(safe_int lhs, U rhs)
+  {
+    return lhs.value_ == rhs;
+  }
+
+  template<typename U>
+    requires treat_as_floating_point<U>
+  [[nodiscard]] friend constexpr auto operator<=>(safe_int lhs, U rhs)
+  {
+    return lhs.value_ <=> rhs;
+  }
+
+  // ========================================================================
+  // CONSTRAINED
+  //
+  // constrained<U,CP> has no implicit conversion to/from safe_int, so these
+  // must be explicit operators.
+  // ========================================================================
+
+  // ========================================================================
+  // integral → safe_int wins
+  // ========================================================================
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator+(constrained<U, CP> lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ + rhs.value_), ErrorPolicy>
+  {
+    return lhs.value() + rhs;
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator+(safe_int lhs, constrained<U, CP> rhs)
+    -> safe_int<decltype(lhs.value_ + rhs.value_), ErrorPolicy>
+  {
+    return lhs + rhs.value();
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator-(constrained<U, CP> lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ - rhs.value_), ErrorPolicy>
+  {
+    return lhs.value() - rhs;
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator-(safe_int lhs, constrained<U, CP> rhs)
+    -> safe_int<decltype(lhs.value_ - rhs.value_), ErrorPolicy>
+  {
+    return lhs - rhs.value();
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator*(constrained<U, CP> lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ * rhs.value_), ErrorPolicy>
+  {
+    return lhs.value() * rhs;
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator*(safe_int lhs, constrained<U, CP> rhs)
+    -> safe_int<decltype(lhs.value_ * rhs.value_), ErrorPolicy>
+  {
+    return lhs * rhs.value();
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator/(constrained<U, CP> lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ / rhs.value_), ErrorPolicy>
+  {
+    return lhs.value() / rhs;
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator/(safe_int lhs, constrained<U, CP> rhs)
+    -> safe_int<decltype(lhs.value_ / rhs.value_), ErrorPolicy>
+  {
+    return lhs / rhs.value();
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator%(constrained<U, CP> lhs, safe_int rhs)
+    -> safe_int<decltype(lhs.value_ % rhs.value_), ErrorPolicy>
+  {
+    return lhs.value() % rhs;
+  }
+
+  template<typename U, typename CP>
+    requires std::integral<U>
+  [[nodiscard]] friend constexpr auto operator%(safe_int lhs, constrained<U, CP> rhs)
+    -> safe_int<decltype(lhs.value_ % rhs.value_), ErrorPolicy>
+  {
+    return lhs % rhs.value();
+  }
+
+  // ========================================================================
+  // non-integral → constrained wins
+  // ========================================================================
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator+(const constrained<U, CP>& lhs, safe_int rhs)
+    -> constrained<decltype(lhs.value_ + rhs.value_), CP>
+  {
+    return lhs + rhs.value_;
+  }
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator+(safe_int lhs, const constrained<U, CP>& rhs)
+    -> constrained<decltype(lhs.value_ + rhs.value_), CP>
+  {
+    return lhs.value_ + rhs;
+  }
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator-(const constrained<U, CP>& lhs, safe_int rhs)
+    -> constrained<decltype(lhs.value_ - rhs.value_), CP>
+  {
+    return lhs - rhs.value_;
+  }
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator-(safe_int lhs, const constrained<U, CP>& rhs)
+    -> constrained<decltype(lhs.value_ - rhs.value_), CP>
+  {
+    return lhs.value_ - rhs;
+  }
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator*(const constrained<U, CP>& lhs, safe_int rhs)
+    -> constrained<decltype(lhs.value_ * rhs.value_), CP>
+  {
+    return lhs * rhs.value_;
+  }
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator*(safe_int lhs, const constrained<U, CP>& rhs)
+    -> constrained<decltype(lhs.value_ * rhs.value_), CP>
+  {
+    return lhs.value_ * rhs;
+  }
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator/(const constrained<U, CP>& lhs, safe_int rhs)
+    -> constrained<decltype(lhs.value_ / rhs.value_), CP>
+  {
+    return lhs / rhs.value_;
+  }
+
+  template<typename U, typename CP>
+    requires(!std::integral<U>)
+  [[nodiscard]] friend constexpr auto operator/(safe_int lhs, const constrained<U, CP>& rhs)
+    -> constrained<decltype(lhs.value_ / rhs.value_), CP>
+  {
+    return lhs.value_ / rhs;
+  }
+
+  template<typename U, typename CP>
+  [[nodiscard]] friend constexpr bool operator==(safe_int lhs, const constrained<U, CP>& rhs)
+  {
+    return lhs.value_ == rhs.value();
+  }
+
+  template<typename U, typename CP>
+  [[nodiscard]] friend constexpr auto operator<=>(safe_int lhs, const constrained<U, CP>& rhs)
+  {
+    return lhs.value_ <=> rhs.value();
+  }
+
+#if MP_UNITS_HOSTED
+  template<typename CharT, typename Traits>
+  friend std::basic_ostream<CharT, Traits>& operator<<(std::basic_ostream<CharT, Traits>& os, safe_int v)
+  {
+    if constexpr (sizeof(T) == 1)
+      return os << static_cast<int>(v.value_);  // promote char-width types to int for streaming
+    else
+      return os << v.value_;
+  }
+#endif
 };
 
 template<std::integral T>
@@ -861,29 +835,15 @@ struct constraint_violation_handler<safe_int<T, ErrorPolicy>> {
 // Convenience type aliases
 // ============================================================================
 
-#if MP_UNITS_HOSTED
-// Hosted environment: default to throw_policy
-MP_UNITS_EXPORT using safe_i8 = safe_int<std::int8_t, safe_int_throw_policy>;
-MP_UNITS_EXPORT using safe_i16 = safe_int<std::int16_t, safe_int_throw_policy>;
-MP_UNITS_EXPORT using safe_i32 = safe_int<std::int32_t, safe_int_throw_policy>;
-MP_UNITS_EXPORT using safe_i64 = safe_int<std::int64_t, safe_int_throw_policy>;
+MP_UNITS_EXPORT using safe_i8 = safe_int<std::int8_t>;
+MP_UNITS_EXPORT using safe_i16 = safe_int<std::int16_t>;
+MP_UNITS_EXPORT using safe_i32 = safe_int<std::int32_t>;
+MP_UNITS_EXPORT using safe_i64 = safe_int<std::int64_t>;
 
-MP_UNITS_EXPORT using safe_u8 = safe_int<std::uint8_t, safe_int_throw_policy>;
-MP_UNITS_EXPORT using safe_u16 = safe_int<std::uint16_t, safe_int_throw_policy>;
-MP_UNITS_EXPORT using safe_u32 = safe_int<std::uint32_t, safe_int_throw_policy>;
-MP_UNITS_EXPORT using safe_u64 = safe_int<std::uint64_t, safe_int_throw_policy>;
-#else
-// Freestanding environment: default to terminate_policy
-MP_UNITS_EXPORT using safe_i8 = safe_int<std::int8_t, safe_int_terminate_policy>;
-MP_UNITS_EXPORT using safe_i16 = safe_int<std::int16_t, safe_int_terminate_policy>;
-MP_UNITS_EXPORT using safe_i32 = safe_int<std::int32_t, safe_int_terminate_policy>;
-MP_UNITS_EXPORT using safe_i64 = safe_int<std::int64_t, safe_int_terminate_policy>;
-
-MP_UNITS_EXPORT using safe_u8 = safe_int<std::uint8_t, safe_int_terminate_policy>;
-MP_UNITS_EXPORT using safe_u16 = safe_int<std::uint16_t, safe_int_terminate_policy>;
-MP_UNITS_EXPORT using safe_u32 = safe_int<std::uint32_t, safe_int_terminate_policy>;
-MP_UNITS_EXPORT using safe_u64 = safe_int<std::uint64_t, safe_int_terminate_policy>;
-#endif
+MP_UNITS_EXPORT using safe_u8 = safe_int<std::uint8_t>;
+MP_UNITS_EXPORT using safe_u16 = safe_int<std::uint16_t>;
+MP_UNITS_EXPORT using safe_u32 = safe_int<std::uint32_t>;
+MP_UNITS_EXPORT using safe_u64 = safe_int<std::uint64_t>;
 
 }  // namespace mp_units
 
@@ -893,7 +853,6 @@ namespace std {
 template<typename T, typename ErrorPolicy>
 class numeric_limits<mp_units::safe_int<T, ErrorPolicy>> : public numeric_limits<T> {
   using S = mp_units::safe_int<T, ErrorPolicy>;
-
 public:
   [[nodiscard]] static constexpr S lowest() noexcept { return numeric_limits<T>::lowest(); }
   [[nodiscard]] static constexpr S min() noexcept { return numeric_limits<T>::min(); }

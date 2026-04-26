@@ -48,11 +48,16 @@ namespace detail {
 
 // The wider integer type used for magnitude constants to prevent overflow when
 // scaling by a rational magnitude (v * num / den).  For elements up to 32 bits
-// we widen to int64_t; for 64-bit elements we widen to int128_t; otherwise the
-// element type itself is wide enough.
+// we widen to (u)int64_t; for 64-bit elements we widen to (u)int128_t; otherwise the
+// element type itself is wide enough. Signedness is preserved so that safe_int<unsigned>
+// can multiply by a wider factor without crossing the mixed-signedness boundary.
 template<typename element_t>
-using wider_int_for = std::conditional_t<(sizeof(element_t) <= sizeof(std::int32_t)), std::int64_t,
-                                         conditional<(sizeof(element_t) < sizeof(int128_t)), int128_t, element_t>>;
+using wider_int_for =
+  std::conditional_t<std::is_signed_v<element_t>,
+                     std::conditional_t<(sizeof(element_t) <= sizeof(std::int32_t)), std::int64_t,
+                                        conditional<(sizeof(element_t) < sizeof(int128_t)), int128_t, element_t>>,
+                     std::conditional_t<(sizeof(element_t) <= sizeof(std::uint32_t)), std::uint64_t,
+                                        conditional<(sizeof(element_t) < sizeof(uint128_t)), uint128_t, element_t>>>;
 
 template<typename T, typename S>
 concept ScalableWith = requires(const T v, const S s) {
@@ -298,8 +303,8 @@ concept UsesFloatingPointScaling =
 // scale element-wise, etc.
 //
 // The rational-magnitude path in detail::scale_int multiplies by a factor of type
-// wider_int_for<element_t> (e.g. int64_t for element_t == int16_t) to avoid
-// overflowing the intermediate. The concept therefore requires `value * WF` and
+// wider_int_for<element_t> (e.g. int64_t for signed int16_t, uint64_t for uint16_t) to
+// avoid overflowing the intermediate. The concept therefore requires `value * WF` and
 // `value / WF` for the wider factor.
 template<typename T>
 concept UsesIntegerScaling = std::integral<value_type_t<T>> && requires(T value, wider_int_for<value_type_t<T>> wf) {
