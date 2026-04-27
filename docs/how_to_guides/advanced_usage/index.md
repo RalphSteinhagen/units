@@ -9,6 +9,7 @@ quantity calculations.
 - [Pure Dimensional Analysis](pure_dimensional_analysis.md) - Use dimensions without specific units for symbolic computation, compile-time validation, and custom arithmetic types
 - [Type-Safe Indices and Offsets](typed_indices.md) - Model container indices and offsets as quantities with point origins, covering 0-based vs 1-based indexing, SI vs IEC element prefixes, and stride arithmetic
 - [Ensure Ultimate Safety](ultimate_safety.md) - Combine `constrained` reps, `constraint_violation_handler`, and `check_in_range` for guaranteed bounds enforcement
+- [Working With Nondimensionalized Physics](nondimensionalization.md) - Use mp-units alongside natural units and dimensionless quantities, covering the complete scale-in/scale-out workflow and tradeoffs
 <!-- markdownlint-enable MD013 -->
 
 ## When to Use These Guides?
@@ -20,3 +21,4 @@ Use these advanced techniques when you:
 - Validate dimensional consistency at compile-time
 - Work with template metaprogramming involving dimensions
 - Implement custom arithmetic types with dimensional correctness
+- Work in nondimensionalized or natural-unit systems and want to retain strong typing
