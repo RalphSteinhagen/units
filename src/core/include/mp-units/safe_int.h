@@ -82,7 +82,36 @@ MP_UNITS_EXPORT struct safe_int_throw_policy : throw_policy {
 #endif  // MP_UNITS_HOSTED
 
 // ============================================================================
-// Overflow detection helpers (only for std::integral T)
+// detail::integral: extends std::integral to include __int128 / unsigned __int128.
+//
+// On GCC (all supported versions), std::integral<__int128> = false even though
+// __int128 is a fully usable integer type.  This concept corrects that gap so
+// safe_int<T> and its mixed-type operators work uniformly on both GCC and Clang.
+//
+// IMPORTANT: use int128_t / uint128_t (type aliases from fixed_point.h) rather
+// than the raw keywords __int128 / unsigned __int128.  GCC's -Wpedantic fires
+// whenever those keywords appear in source text — including inside a concept
+// body at the point of evaluation, which is outside any DIAGNOSTIC_IGNORE_PEDANTIC
+// scope.  Using the aliases suppresses the warning because the keyword no longer
+// appears literally at the instantiation site.
+// ============================================================================
+
+namespace detail {
+
+#if defined(__SIZEOF_INT128__)
+// int128_t and uint128_t are defined in <mp-units/bits/fixed_point.h> (included above).
+template<typename T>
+concept integral =
+  std::integral<T> || std::same_as<std::remove_cv_t<T>, int128_t> || std::same_as<std::remove_cv_t<T>, uint128_t>;
+#else
+template<typename T>
+concept integral = std::integral<T>;
+#endif
+
+}  // namespace detail
+
+// ============================================================================
+// Overflow detection helpers (for detail::integral T)
 //
 // NOTE: These helpers work on a SINGLE type T, not heterogeneous types.
 // The calling code (in safe_int_binary_ops) handles integral promotion
@@ -95,25 +124,28 @@ MP_UNITS_EXPORT struct safe_int_throw_policy : throw_policy {
 namespace detail {
 
 // Returns true if lhs + rhs overflows for signed/unsigned T.
-template<std::integral T>
+// Uses ~T{0} instead of std::numeric_limits<T>::max() for the unsigned case so that
+// the check is correct even for types (e.g. uint128_t on GCC in strict mode) for which
+// std::numeric_limits is not specialized.
+template<integral T>
 [[nodiscard]] constexpr bool add_overflows(T lhs, T rhs) noexcept
 {
-  if constexpr (std::is_signed_v<T>) {
+  if constexpr (is_signed_v<T>) {
     // positive overflow: both positive and sum negative
     if (rhs > 0 && lhs > std::numeric_limits<T>::max() - rhs) return true;
     // negative overflow: both negative and sum positive
     if (rhs < 0 && lhs < std::numeric_limits<T>::min() - rhs) return true;
     return false;
   } else {
-    return lhs > std::numeric_limits<T>::max() - rhs;
+    return lhs > ~T{0} - rhs;  // ~T{0} = unsigned maximum without numeric_limits
   }
 }
 
 // Returns true if lhs - rhs overflows.
-template<std::integral T>
+template<integral T>
 [[nodiscard]] constexpr bool sub_overflows(T lhs, T rhs) noexcept
 {
-  if constexpr (std::is_signed_v<T>) {
+  if constexpr (is_signed_v<T>) {
     if (rhs < 0 && lhs > std::numeric_limits<T>::max() + rhs) return true;
     if (rhs > 0 && lhs < std::numeric_limits<T>::min() + rhs) return true;
     return false;
@@ -122,30 +154,60 @@ template<std::integral T>
   }
 }
 
-// Returns true if lhs * rhs overflows using double-width arithmetic.
-template<std::integral T>
+// Returns true if lhs * rhs overflows.
+// For types narrower than the widest native integer, uses double-width arithmetic.
+// For the widest native integer (e.g. uint128_t on platforms with __SIZEOF_INT128__)
+// where no wider native type exists, uses a division-based check.
+//
+// The division-based path avoids std::numeric_limits<T>::max/min because on GCC in
+// strict mode (-std=c++20) std::numeric_limits is not specialized for __int128 types.
+// Instead it derives max/min directly from the binary representation:
+//   unsigned max = ~T{0}
+//   signed max  = static_cast<signed>(unsigned_max >> 1)
+//   signed min  = -signed_max - 1
+template<integral T>
 [[nodiscard]] constexpr bool mul_overflows(T lhs, T rhs) noexcept
 {
-  using wide = double_width_int_for_t<T>;
-  const wide product = static_cast<wide>(lhs) * static_cast<wide>(rhs);
-  return product > static_cast<wide>(std::numeric_limits<T>::max()) ||
-         product < static_cast<wide>(std::numeric_limits<T>::min());
+  if constexpr (integer_rep_width_v<T> < max_native_width) {
+    using wide = double_width_int_for_t<T>;
+    const wide product = static_cast<wide>(lhs) * static_cast<wide>(rhs);
+    return product > static_cast<wide>(std::numeric_limits<T>::max()) ||
+           product < static_cast<wide>(std::numeric_limits<T>::min());
+  } else {
+    // No wider native type available; use a division-based overflow check.
+    if (lhs == T{0} || rhs == T{0}) return false;
+    if constexpr (!is_signed_v<T>) {
+      const T max = ~T{0};  // all bits set = unsigned maximum; no numeric_limits needed
+      return lhs > max / rhs;
+    } else {
+      // Compute signed max/min without std::numeric_limits (not specialized for __int128
+      // in GCC strict mode) and without std::make_unsigned_t (same issue).
+      // T is the widest signed type; uint128_t is its unsigned counterpart.
+      const uint128_t umax = ~uint128_t{0};
+      const T max = static_cast<T>(umax >> 1);  // INT128_MAX (or equiv.) without numeric_limits
+      const T min = -max - T{1};                // INT128_MIN (or equiv.) without numeric_limits
+      if (lhs > T{0} && rhs > T{0}) return lhs > max / rhs;
+      if (lhs < T{0} && rhs < T{0}) return lhs < max / rhs;
+      if (lhs > T{0} && rhs < T{0}) return rhs < min / lhs;
+      /* lhs < T{0} && rhs > T{0} */ return lhs < min / rhs;
+    }
+  }
 }
 
 // Returns true if lhs / rhs overflows (only INT_MIN / -1 for signed, or divide-by-zero).
-template<std::integral T>
+template<integral T>
 [[nodiscard]] constexpr bool div_overflows(T lhs, T rhs) noexcept
 {
   if (rhs == 0) return true;
-  if constexpr (std::is_signed_v<T>) return lhs == std::numeric_limits<T>::min() && rhs == T{-1};
+  if constexpr (is_signed_v<T>) return lhs == std::numeric_limits<T>::min() && rhs == T{-1};
   return false;
 }
 
 // Returns true if -lhs overflows (only INT_MIN for signed).
-template<std::integral T>
+template<integral T>
 [[nodiscard]] constexpr bool neg_overflows(T v) noexcept
 {
-  if constexpr (std::is_signed_v<T>) return v == std::numeric_limits<T>::min();
+  if constexpr (is_signed_v<T>) return v == std::numeric_limits<T>::min();
   return v != T{0};  // negation of any non-zero unsigned overflows
 }
 
@@ -166,7 +228,7 @@ struct underlying_int_type_helper {
 };
 
 template<typename T>
-  requires requires { typename T::value_type; } && std::integral<typename T::value_type> &&
+  requires requires { typename T::value_type; } && integral<typename T::value_type> &&
            std::numeric_limits<T>::is_specialized
 struct underlying_int_type_helper<T> {
   using type = typename T::value_type;
@@ -175,15 +237,49 @@ struct underlying_int_type_helper<T> {
 template<typename T>
 using underlying_int_type_t = typename underlying_int_type_helper<T>::type;
 
+// Returns true if v is representable as type To.
+// Avoids std::in_range<To> and std::cmp_* because those require std::integral<To>,
+// which is false for __int128 / unsigned __int128 on GCC.
+// Uses widened comparisons against std::numeric_limits<To>::min/max instead.
+template<integral To, integral From>
+[[nodiscard]] constexpr bool int_in_range(From v) noexcept
+{
+  if constexpr (sizeof(From) < sizeof(To)) {
+    // Strictly narrower source: fits unless signed-to-unsigned (negatives don't fit).
+    if constexpr (is_signed_v<From> && !is_signed_v<To>) return v >= From{0};
+    return true;
+  } else if constexpr (sizeof(From) == sizeof(To)) {
+    if constexpr (is_signed_v<From> == is_signed_v<To>) return true;  // same sign, same width
+    if constexpr (!is_signed_v<From>)                                 // unsigned From -> signed To, same width
+      return v <= static_cast<From>(std::numeric_limits<To>::max());
+    else  // signed From -> unsigned To, same width
+      return v >= From{0};
+  } else {
+    // From is wider: do runtime range check using From as the comparison type.
+    if constexpr (!is_signed_v<From>) {
+      // unsigned From, narrower To: upper-bound check only (From is always >= 0)
+      return v <= static_cast<From>(std::numeric_limits<To>::max());
+    } else {
+      if (v < From{0}) {
+        if constexpr (!is_signed_v<To>) return false;  // negative -> unsigned: never
+        return v >= static_cast<From>(std::numeric_limits<To>::min());
+      }
+      return v <= static_cast<From>(std::numeric_limits<To>::max());
+    }
+  }
+}
+
 // True iff every value of From is exactly representable in To.
 // Works for plain integrals and integral-valued wrappers with `value_type` (e.g. safe_int<T>).
+// Uses int_in_range on the extremes of From rather than std::in_range, so it works for
+// __int128 / unsigned __int128 on GCC where std::integral<__int128> = false.
 template<typename From, typename To>
 inline constexpr bool is_value_preserving_int_v = [] {
   using from_raw_t = underlying_int_type_t<From>;
   using to_raw_t = underlying_int_type_t<To>;
-  if constexpr (std::integral<from_raw_t> && std::integral<to_raw_t>)
-    return std::in_range<to_raw_t>(std::numeric_limits<from_raw_t>::min()) &&
-           std::in_range<to_raw_t>(std::numeric_limits<from_raw_t>::max());
+  if constexpr (integral<from_raw_t> && integral<to_raw_t>)
+    return int_in_range<to_raw_t>(std::numeric_limits<from_raw_t>::min()) &&
+           int_in_range<to_raw_t>(std::numeric_limits<from_raw_t>::max());
   else
     return false;
 }();
@@ -192,7 +288,7 @@ inline constexpr bool is_value_preserving_int_v = [] {
 // otherwise returns false (non-integral types cannot be statically guaranteed value-preserving).
 template<typename From, typename To>
 inline constexpr bool is_value_preserving_v = [] {
-  if constexpr (std::integral<underlying_int_type_t<From>> && std::integral<underlying_int_type_t<To>>)
+  if constexpr (integral<underlying_int_type_t<From>> && integral<underlying_int_type_t<To>>)
     return is_value_preserving_int_v<From, To>;
   else
     return false;
@@ -201,18 +297,18 @@ inline constexpr bool is_value_preserving_v = [] {
 // Overflow-checked cast: raises via EP if integral value doesn't fit in To, then silently converts.
 // The range check is skipped when From is value-preserving into To (T is at least as wide as U),
 // because every possible From value is guaranteed to fit.
-template<std::integral To, typename EP, typename From>
+template<integral To, typename EP, typename From>
   requires std::is_constructible_v<To, const From&>
 [[nodiscard]] constexpr To checked_int_cast(const From& v)
 {
-  if constexpr (std::integral<std::remove_cvref_t<From>> && !is_value_preserving_int_v<std::remove_cvref_t<From>, To>)
-    if (!std::in_range<To>(v)) EP::on_overflow("safe_int: narrowing conversion overflow");
+  if constexpr (integral<std::remove_cvref_t<From>> && !is_value_preserving_int_v<std::remove_cvref_t<From>, To>)
+    if (!int_in_range<To>(v)) EP::on_overflow("safe_int: narrowing conversion overflow");
   return silent_cast<To>(v);
 }
 
 }  // namespace detail
 
-MP_UNITS_EXPORT template<std::integral T, OverflowPolicy EP>
+MP_UNITS_EXPORT template<detail::integral T, OverflowPolicy EP>
 class safe_int;
 
 namespace detail {
@@ -220,11 +316,15 @@ namespace detail {
 template<typename T>
 inline constexpr bool is_safe_int_v = is_specialization_of<T, safe_int>;
 
-template<std::integral A, std::integral B>
+template<integral A, integral B>
 using integral_op_result_t = decltype(A{} + B{});
 
-template<std::integral A, std::integral B>
-inline constexpr bool same_sign_v = std::is_signed_v<A> == std::is_signed_v<B>;
+// Use detail::is_signed_v (from fixed_point.h) rather than std::is_signed_v so that
+// __int128 and unsigned __int128 are treated correctly on GCC in strict mode
+// (-std=c++20): std::is_signed<__int128> = false there (not specialized), but
+// __int128 is a signed type.  detail::is_signed_v has explicit specializations.
+template<integral A, integral B>
+inline constexpr bool same_sign_v = is_signed_v<A> == is_signed_v<B>;
 
 }  // namespace detail
 
@@ -244,7 +344,7 @@ inline constexpr bool same_sign_v = std::is_signed_v<A> == std::is_signed_v<B>;
  * @tparam ErrorPolicy  how to react to overflow — default: safe_int_throw_policy on hosted,
  *                      safe_int_terminate_policy on freestanding
  */
-MP_UNITS_EXPORT template<std::integral T,
+MP_UNITS_EXPORT template<detail::integral T,
 #if MP_UNITS_HOSTED
                          OverflowPolicy ErrorPolicy = safe_int_throw_policy>
 #else
@@ -269,7 +369,7 @@ public:
   {
   }
 
-  template<std::integral U>
+  template<detail::integral U>
   constexpr explicit(!detail::is_value_preserving_int_v<U, T>) safe_int(safe_int<U, ErrorPolicy> other) :
       value_(detail::checked_int_cast<T, ErrorPolicy>(other.value()))
   {
@@ -373,49 +473,57 @@ public:
   // ========================================================================
 
   [[nodiscard]] friend constexpr auto operator+(safe_int lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ + rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, T>, ErrorPolicy>
   {
-    using R = decltype(lhs.value_ + rhs.value_);
+    using R = detail::integral_op_result_t<T, T>;
     if (detail::add_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
       ErrorPolicy::on_overflow("safe_int: addition overflow");
     return lhs.value_ + rhs.value_;
   }
 
   [[nodiscard]] friend constexpr auto operator-(safe_int lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ - rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, T>, ErrorPolicy>
   {
-    using R = decltype(lhs.value_ - rhs.value_);
+    using R = detail::integral_op_result_t<T, T>;
     if (detail::sub_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
       ErrorPolicy::on_overflow("safe_int: subtraction overflow");
     return lhs.value_ - rhs.value_;
   }
 
   [[nodiscard]] friend constexpr auto operator*(safe_int lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ * rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, T>, ErrorPolicy>
   {
-    using R = decltype(lhs.value_ * rhs.value_);
+    using R = detail::integral_op_result_t<T, T>;
     if (detail::mul_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
       ErrorPolicy::on_overflow("safe_int: multiplication overflow");
     return lhs.value_ * rhs.value_;
   }
 
   [[nodiscard]] friend constexpr auto operator/(safe_int lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ / rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, T>, ErrorPolicy>
   {
-    using R = decltype(lhs.value_ / rhs.value_);
+    using R = detail::integral_op_result_t<T, T>;
     if (detail::div_overflows<R>(static_cast<R>(lhs.value_), static_cast<R>(rhs.value_)))
       ErrorPolicy::on_overflow("safe_int: division overflow");
     return lhs.value_ / rhs.value_;
   }
 
   [[nodiscard]] friend constexpr auto operator%(safe_int lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ % rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, T>, ErrorPolicy>
   {
     if (rhs.value_ == T{0}) ErrorPolicy::on_overflow("safe_int: modulo by zero");
     return lhs.value_ % rhs.value_;
   }
 
-  [[nodiscard]] friend constexpr auto operator<=>(safe_int lhs, safe_int rhs) = default;
+  [[nodiscard]] friend constexpr bool operator==(safe_int lhs, safe_int rhs) noexcept
+  {
+    return lhs.value_ == rhs.value_;
+  }
+
+  [[nodiscard]] friend constexpr std::strong_ordering operator<=>(safe_int lhs, safe_int rhs) noexcept
+  {
+    return lhs.value_ <=> rhs.value_;
+  }
 
   // ========================================================================
   // INTEGRAL SCALAR: safe_int × integral scalar (wrapper preserved, overflow-checked).
@@ -428,7 +536,7 @@ public:
   // ========================================================================
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<T, U>)
+    requires(detail::integral<U> && detail::same_sign_v<T, U>)
   [[nodiscard]] friend constexpr auto operator+(safe_int lhs, U rhs)
     -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
@@ -439,7 +547,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<U, T>)
+    requires(detail::integral<U> && detail::same_sign_v<U, T>)
   [[nodiscard]] friend constexpr auto operator+(U lhs, safe_int rhs)
     -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
@@ -450,7 +558,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<T, U>)
+    requires(detail::integral<U> && detail::same_sign_v<T, U>)
   [[nodiscard]] friend constexpr auto operator-(safe_int lhs, U rhs)
     -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
@@ -461,7 +569,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<U, T>)
+    requires(detail::integral<U> && detail::same_sign_v<U, T>)
   [[nodiscard]] friend constexpr auto operator-(U lhs, safe_int rhs)
     -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
@@ -472,7 +580,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<T, U>)
+    requires(detail::integral<U> && detail::same_sign_v<T, U>)
   [[nodiscard]] friend constexpr auto operator*(safe_int lhs, U rhs)
     -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
@@ -483,7 +591,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<U, T>)
+    requires(detail::integral<U> && detail::same_sign_v<U, T>)
   [[nodiscard]] friend constexpr auto operator*(U lhs, safe_int rhs)
     -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
@@ -494,7 +602,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<T, U>)
+    requires(detail::integral<U> && detail::same_sign_v<T, U>)
   [[nodiscard]] friend constexpr auto operator/(safe_int lhs, U rhs)
     -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
@@ -505,7 +613,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<U, T>)
+    requires(detail::integral<U> && detail::same_sign_v<U, T>)
   [[nodiscard]] friend constexpr auto operator/(U lhs, safe_int rhs)
     -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
@@ -516,7 +624,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<T, U>)
+    requires(detail::integral<U> && detail::same_sign_v<T, U>)
   [[nodiscard]] friend constexpr auto operator%(safe_int lhs, U rhs)
     -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
@@ -525,7 +633,7 @@ public:
   }
 
   template<typename U>
-    requires(std::integral<U> && detail::same_sign_v<U, T>)
+    requires(detail::integral<U> && detail::same_sign_v<U, T>)
   [[nodiscard]] friend constexpr auto operator%(U lhs, safe_int rhs)
     -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
@@ -534,14 +642,14 @@ public:
   }
 
   template<typename U>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr bool operator==(safe_int lhs, U rhs)
   {
     return std::cmp_equal(lhs.value_, rhs);
   }
 
   template<typename U>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr std::strong_ordering operator<=>(safe_int lhs, U rhs)
   {
     if (std::cmp_less(lhs.value_, rhs)) return std::strong_ordering::less;
@@ -652,81 +760,81 @@ public:
   // ========================================================================
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator+(constrained<U, CP> lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ + rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
     return lhs.value() + rhs;
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator+(safe_int lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value_ + rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
     return lhs + rhs.value();
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator-(constrained<U, CP> lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ - rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
     return lhs.value() - rhs;
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator-(safe_int lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value_ - rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
     return lhs - rhs.value();
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator*(constrained<U, CP> lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ * rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
     return lhs.value() * rhs;
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator*(safe_int lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value_ * rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
     return lhs * rhs.value();
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator/(constrained<U, CP> lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ / rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
     return lhs.value() / rhs;
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator/(safe_int lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value_ / rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
     return lhs / rhs.value();
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator%(constrained<U, CP> lhs, safe_int rhs)
-    -> safe_int<decltype(lhs.value_ % rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<U, T>, ErrorPolicy>
   {
     return lhs.value() % rhs;
   }
 
   template<typename U, typename CP>
-    requires std::integral<U>
+    requires detail::integral<U>
   [[nodiscard]] friend constexpr auto operator%(safe_int lhs, constrained<U, CP> rhs)
-    -> safe_int<decltype(lhs.value_ % rhs.value_), ErrorPolicy>
+    -> safe_int<detail::integral_op_result_t<T, U>, ErrorPolicy>
   {
     return lhs % rhs.value();
   }
@@ -738,7 +846,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator+(const constrained<U, CP>& lhs, safe_int rhs)
-    -> constrained<decltype(lhs.value_ + rhs.value_), CP>
+    -> constrained<decltype(std::declval<U>() + std::declval<T>()), CP>
   {
     return lhs + rhs.value_;
   }
@@ -746,7 +854,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator+(safe_int lhs, const constrained<U, CP>& rhs)
-    -> constrained<decltype(lhs.value_ + rhs.value_), CP>
+    -> constrained<decltype(std::declval<T>() + std::declval<U>()), CP>
   {
     return lhs.value_ + rhs;
   }
@@ -754,7 +862,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator-(const constrained<U, CP>& lhs, safe_int rhs)
-    -> constrained<decltype(lhs.value_ - rhs.value_), CP>
+    -> constrained<decltype(std::declval<U>() - std::declval<T>()), CP>
   {
     return lhs - rhs.value_;
   }
@@ -762,7 +870,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator-(safe_int lhs, const constrained<U, CP>& rhs)
-    -> constrained<decltype(lhs.value_ - rhs.value_), CP>
+    -> constrained<decltype(std::declval<T>() - std::declval<U>()), CP>
   {
     return lhs.value_ - rhs;
   }
@@ -770,7 +878,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator*(const constrained<U, CP>& lhs, safe_int rhs)
-    -> constrained<decltype(lhs.value_ * rhs.value_), CP>
+    -> constrained<decltype(std::declval<U>() * std::declval<T>()), CP>
   {
     return lhs * rhs.value_;
   }
@@ -778,7 +886,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator*(safe_int lhs, const constrained<U, CP>& rhs)
-    -> constrained<decltype(lhs.value_ * rhs.value_), CP>
+    -> constrained<decltype(std::declval<T>() * std::declval<U>()), CP>
   {
     return lhs.value_ * rhs;
   }
@@ -786,7 +894,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator/(const constrained<U, CP>& lhs, safe_int rhs)
-    -> constrained<decltype(lhs.value_ / rhs.value_), CP>
+    -> constrained<decltype(std::declval<U>() / std::declval<T>()), CP>
   {
     return lhs / rhs.value_;
   }
@@ -794,7 +902,7 @@ public:
   template<typename U, typename CP>
     requires(!std::integral<U>)
   [[nodiscard]] friend constexpr auto operator/(safe_int lhs, const constrained<U, CP>& rhs)
-    -> constrained<decltype(lhs.value_ / rhs.value_), CP>
+    -> constrained<decltype(std::declval<T>() / std::declval<U>()), CP>
   {
     return lhs.value_ / rhs;
   }
@@ -823,7 +931,7 @@ public:
 #endif
 };
 
-template<std::integral T>
+template<detail::integral T>
 safe_int(T) -> safe_int<T>;
 
 template<typename T, typename ErrorPolicy>

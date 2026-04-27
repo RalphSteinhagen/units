@@ -639,6 +639,63 @@ static_assert(12 / safe_int<int>{4} == safe_int<int>{3});
 static_assert(10LL / safe_int<int>{3} == safe_int<long long>{3});
 
 // ============================================================================
+// 128-bit integer scalar (detail::integral extension for __int128 / unsigned __int128)
+//
+// On GCC std::integral<__int128> = false, so these operators previously fell
+// through to the (now-removed) non-integral fallback and returned the raw type,
+// not safe_int.  After the detail::integral fix they are handled by the typed
+// integral operators and return safe_int<R> with overflow checking.
+// ============================================================================
+
+#if defined(__SIZEOF_INT128__)
+// detail::integral must recognise both 128-bit types
+static_assert(detail::integral<int128_t>);
+static_assert(detail::integral<uint128_t>);
+
+// detail::is_signed_v must reflect the true signedness even on GCC strict mode
+static_assert(detail::is_signed_v<int128_t>);
+static_assert(!detail::is_signed_v<uint128_t>);
+
+// same_sign_v must work for mixed width/128-bit pairings
+static_assert(detail::same_sign_v<long, int128_t>);
+static_assert(detail::same_sign_v<int128_t, long>);
+static_assert(detail::same_sign_v<unsigned long, uint128_t>);
+static_assert(detail::same_sign_v<uint128_t, unsigned long>);
+static_assert(!detail::same_sign_v<long, uint128_t>);
+static_assert(!detail::same_sign_v<unsigned long, int128_t>);
+
+// safe_int<signed> × int128_t → safe_int<int128_t> (wrapper preserved)
+static_assert(std::is_same_v<decltype(safe_int<long>{} * int128_t{1}), safe_int<int128_t>>);
+static_assert(std::is_same_v<decltype(int128_t{1} * safe_int<long>{}), safe_int<int128_t>>);
+static_assert(std::is_same_v<decltype(safe_int<long>{} / int128_t{1}), safe_int<int128_t>>);
+static_assert(std::is_same_v<decltype(int128_t{1} / safe_int<long>{}), safe_int<int128_t>>);
+
+// safe_int<unsigned> × uint128_t → safe_int<uint128_t> (wrapper preserved)
+static_assert(std::is_same_v<decltype(safe_int<unsigned long>{} * uint128_t{1}), safe_int<uint128_t>>);
+static_assert(std::is_same_v<decltype(uint128_t{1} * safe_int<unsigned long>{}), safe_int<uint128_t>>);
+static_assert(std::is_same_v<decltype(safe_int<unsigned long>{} / uint128_t{1}), safe_int<uint128_t>>);
+static_assert(std::is_same_v<decltype(uint128_t{1} / safe_int<unsigned long>{}), safe_int<uint128_t>>);
+
+// sign mismatch with 128-bit is ill-formed (same policy as other mixed-sign operations)
+static_assert(!std::is_invocable_v<std::multiplies<>, safe_int<long>, uint128_t>);
+static_assert(!std::is_invocable_v<std::multiplies<>, safe_int<unsigned long>, int128_t>);
+static_assert(!std::is_invocable_v<std::divides<>, safe_int<long>, uint128_t>);
+static_assert(!std::is_invocable_v<std::divides<>, safe_int<unsigned long>, int128_t>);
+
+// values
+static_assert(safe_int<long>{6} * int128_t{2} == safe_int<int128_t>{12});
+static_assert(int128_t{2} * safe_int<long>{6} == safe_int<int128_t>{12});
+static_assert(safe_int<long>{12} / int128_t{4} == safe_int<int128_t>{3});
+static_assert(int128_t{12} / safe_int<long>{4} == safe_int<int128_t>{3});
+
+static_assert(safe_int<unsigned long>{6u} * uint128_t{2} == safe_int<uint128_t>{12u});
+static_assert(uint128_t{2} * safe_int<unsigned long>{6u} == safe_int<uint128_t>{12u});
+static_assert(safe_int<unsigned long>{12u} / uint128_t{4} == safe_int<uint128_t>{3u});
+static_assert(uint128_t{12} / safe_int<unsigned long>{4u} == safe_int<uint128_t>{3u});
+
+#endif
+
+// ============================================================================
 // Cross-type floating-point (drops wrapper, returns bare decltype(T * U))
 // ============================================================================
 

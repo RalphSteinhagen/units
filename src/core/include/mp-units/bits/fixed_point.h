@@ -303,6 +303,13 @@ MP_UNITS_DIAGNOSTIC_PUSH
 MP_UNITS_DIAGNOSTIC_IGNORE_PEDANTIC
 using int128_t = __int128;
 using uint128_t = unsigned __int128;
+// Specialize integer_rep_width_v for __int128 types.
+// std::numeric_limits<__int128> is NOT available in strict mode (-std=c++20 on GCC
+// without -std=gnu++20) so we cannot rely on ::digits there.
+template<>
+inline constexpr std::size_t integer_rep_width_v<__int128> = 128;
+template<>
+inline constexpr std::size_t integer_rep_width_v<unsigned __int128> = 128;
 MP_UNITS_DIAGNOSTIC_POP
 inline constexpr std::size_t max_native_width = 128;
 #else
@@ -318,6 +325,21 @@ template<typename T>
 constexpr bool is_signed_v = std::is_signed_v<T>;
 template<typename T>
 constexpr bool is_signed_v<double_width_int<T>> = double_width_int<T>::is_signed;
+
+#if defined(__SIZEOF_INT128__)
+MP_UNITS_DIAGNOSTIC_PUSH
+MP_UNITS_DIAGNOSTIC_IGNORE_PEDANTIC
+// Specialize is_signed_v for __int128 types.
+// std::is_signed<__int128> = false in GCC strict mode (-std=c++20) because
+// std::is_signed requires std::is_arithmetic, which is not specialized for __int128
+// in strict mode.  Hard-code the known signedness instead.
+// These specializations must come after the primary is_signed_v template above.
+template<>
+inline constexpr bool is_signed_v<__int128> = true;
+template<>
+inline constexpr bool is_signed_v<unsigned __int128> = false;
+MP_UNITS_DIAGNOSTIC_POP
+#endif
 
 template<typename T>
 using make_signed_t = conditional<!is_same_v<T, uint128_t>, std::make_signed<T>, std::type_identity<int128_t>>::type;
