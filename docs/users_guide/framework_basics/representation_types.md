@@ -169,21 +169,21 @@ The two **built-in numeric** sub-concepts and their requirements
 // Floating-point type, or container whose element type is floating-point
 // (e.g. double, cartesian_vector<double>).
 concept UsesFloatingPointScaling =
-  (treat_as_floating_point<T> || treat_as_floating_point<value_type_t<T>>) &&
-  requires(T value, value_type_t<T> f) {
+  (treat_as_floating_point<T> || treat_as_floating_point<representation_underlying_type_t<T>>) &&
+  requires(T value, representation_underlying_type_t<T> f) {
     { value * f } -> WeaklyRegular;
     { value / f } -> WeaklyRegular;
   };
 
 // Integer type, wrapper, or container whose element type is a fundamental integer
 // (e.g. int, safe_int<int>, cartesian_vector<int>).
-// std::integral<value_type_t<T>> is required (not just treat_as_integral) because
+// std::integral<representation_underlying_type_t<T>> is required (not just treat_as_integral) because
 // the scaling engine uses get_value<element_t> and fixed_point<element_t>.
 // Scaling is applied through the type's own operator* / operator/, so wrappers
 // can check for overflow and containers can scale element-wise.
 concept UsesIntegerScaling =
-  std::integral<value_type_t<T>> &&
-  requires(T value, value_type_t<T> f) {
+  std::integral<representation_underlying_type_t<T>> &&
+  requires(T value, representation_underlying_type_t<T> f) {
     { value * f };
     { value / f };
   };
@@ -203,8 +203,8 @@ built-in decision tree is:
 flowchart TD
     A["scale(M, value)"] --> MA{"provides<br>op*(T, UnitMagnitude)?"}
     MA -- "Yes" --> MAR["<b>Magnitude-aware scaling</b><br>calls value * M{}<br>return type may differ from input<br><br>e.g. custom type<br>with scaled bounds"]
-    MA -- "No (fallback)" --> B{"treat_as_floating_point&lt;T&gt;<br>or treat_as_floating_point&lt;value_type_t&lt;T&gt;&gt;<br>?"}
-    B -- True --> FP["<b>UsesFloatingPointScaling</b><br>ratio at source's value_type_t precision<br><br>e.g. double, cartesian_vector&lt;double&gt;"]
+    MA -- "No (fallback)" --> B{"treat_as_floating_point&lt;T&gt;<br>or treat_as_floating_point&lt;representation_underlying_type_t&lt;T&gt;&gt;<br>?"}
+    B -- True --> FP["<b>UsesFloatingPointScaling</b><br>ratio at source's representation_underlying_type_t precision<br><br>e.g. double, cartesian_vector&lt;double&gt;"]
     B -- False --> INT["<b>UsesIntegerScaling</b><br>e.g. int, safe_int&lt;int&gt;, cartesian_vector&lt;int&gt;"]
     INT --> G{"magnitude?"}
     G -- "integral (e.g. m→mm, ×1000)" --> I["exact integer multiplication"]
@@ -247,6 +247,8 @@ as a fallback when this operator is not available.
 
     The design preference order is therefore:
     **exact integer > exact rational > approximate irrational**.
+
+[](){ #why-widened-integers-for-the-rational-path }
 
 ??? question "Why widened integers for the rational path?"
 
@@ -434,17 +436,22 @@ arithmetic operations.
 
 #### `value_type` or `element_type`
 
-The library uses `value_type_t<T>` to determine the underlying arithmetic type of your
-representation, which is used for:
+The library uses `representation_underlying_type_t<T>` to determine the underlying
+arithmetic type of your representation, which is used for:
 
 - Determining the scaling factor type (what type to multiply/divide your type by)
 - Checking if the type should be treated as floating-point
 
-How it works:
+!!! info "How it works?"
 
-1. If your type has a `value_type` or `element_type` member type (checked via `std::indirectly_readable_traits`),
-   the library recursively unwraps it until it finds the underlying type
-2. Otherwise, your type itself is used as the value type
+    The underlying type is determined by
+    [`representation_underlying_type`](#representation_underlying_type) as follows:
+
+    1. If your type has a `value_type` or `element_type` member type, that member
+       is used
+    2. Otherwise, if your type is a scoped enumeration, `std::underlying_type_t` is
+       used
+    3. Otherwise, your type itself is treated as the underlying type
 
 **Recommendation:** Provide a `value_type` member type for wrapper types:
 
@@ -458,28 +465,87 @@ public:
 ```
 
 **Third-party types:** If you cannot modify the source of a type (e.g., a third-party
-floating-point or fixed-point class), specialize `std::indirectly_readable_traits` to
-expose its element type:
+floating-point or fixed-point class), specialize
+[`representation_underlying_type`](#representation_underlying_type) to expose its
+element type:
 
 ```cpp
-// Third-party type MyFloat wraps long double internally.
+// Third-party type MyFloat wraps long double internally
 template<>
-struct std::indirectly_readable_traits<MyFloat> {
-  using value_type = long double;
+struct mp_units::representation_underlying_type<MyFloat> {
+  using type = long double;
 };
 ```
 
-This makes `value_type_t<MyFloat>` resolve to `long double`, giving the library the correct
-precision for scaling and ensuring the right `common_type` is used in mixed conversions.
+This makes `representation_underlying_type_t<MyFloat>` resolve to `long double`, giving
+the library the correct precision for scaling and ensuring the right `common_type` is
+used in mixed conversions.
 
 !!! warning "Don't provide both `value_type` and `element_type`"
 
-    If your type provides both `value_type` and `element_type` that refer to **different types**,
-    `std::indirectly_readable_traits<T>::value_type` will be ill-formed (undefined), and your type
-    won't work with the library. If both exist and refer to the **same type**, that type will be used.
+    If your type provides both `value_type` and `element_type` whose underlying
+    types differ after ignoring top-level cv-qualification,
+    [`representation_underlying_type`](#representation_underlying_type) is empty and
+    the library treats the type as a leaf. If both are present and name the same
+    underlying type, that type is used.
 
     **Recommendation:** Provide only `value_type` unless you have a specific reason to provide both
     (e.g., satisfying iterator concepts), in which case ensure they refer to the same type.
+
+---
+
+#### `representation_underlying_type<T>` { #representation_underlying_type }
+
+A specializable class template that describes the underlying arithmetic/element type of
+a representation type. It is **the** extension point for exposing this information to
+the library:
+
+```cpp
+template<typename T>
+struct mp_units::representation_underlying_type;  // primary — empty
+
+template<typename T>
+using mp_units::representation_underlying_type_t = representation_underlying_type<T>::type;
+```
+
+**Default detection** (via partial specializations provided by the library, mirroring
+the shape of `std::indirectly_readable_traits` for its `value_type` / `element_type`
+cases):
+
+- nested `T::value_type`, else
+- nested `T::element_type`;
+- a top-level `const` on `T` is passed through to the unqualified type;
+- the detected alias has its cv-qualification removed;
+- if `T` provides both `value_type` and `element_type` whose underlying types differ
+  after ignoring top-level cv-qualification, the trait is empty — the user must
+  disambiguate explicitly;
+- for scoped enumeration types, the underlying integer type is used (via
+  `std::underlying_type_t`) — a representation-model extension not present in the
+  standard's iterator-oriented trait. Unscoped enumerations are deliberately excluded
+  because they already implicitly convert to their underlying type.
+
+**When to specialize:** for third-party types you cannot modify, or for types whose
+underlying representation cannot be deduced by the defaults above:
+
+```cpp
+template<>
+struct mp_units::representation_underlying_type<MyFloat> {
+  using type = long double;
+};
+```
+
+!!! question "Why not `std::indirectly_readable_traits`?"
+
+    `std::indirectly_readable_traits` answers "what does `*t` yield?" — it is the
+    standard's extension point for iterators, smart pointers, and other
+    indirectly-readable types. Specializing it for a non-iterator representation
+    type is a semantic misuse: it tells every other standard-library component
+    that your type is iterator-like, which it usually is not.
+
+    Pointer and array specializations from `std::indirectly_readable_traits` are
+    intentionally **not** mirrored in `representation_underlying_type` — those are
+    part of the standard's iterator machinery, not of this library's representation
+    model.
 
 ---
 
@@ -495,8 +561,10 @@ constexpr bool mp_units::treat_as_floating_point = /* implementation-defined */;
 
 **Default behavior:**
 
-- In hosted environments: uses `std::chrono::treat_as_floating_point_v<value_type_t<Rep>>`
-- In freestanding: uses `std::is_floating_point_v<value_type_t<Rep>>`
+- In hosted environments: uses `std::chrono::treat_as_floating_point_v` on the
+  (recursively-unwrapped) underlying type of `Rep`
+- In freestanding: uses `std::is_floating_point_v` on the (recursively-unwrapped)
+  underlying type of `Rep`
 
 **When to specialize:** If you have a custom type that wraps a floating-point value but the
 automatic detection doesn't work correctly:
@@ -515,14 +583,14 @@ on how this affects implicit conversions between quantities.
 #### Scaling operators { #scaling-operators }
 
 The library scales a representation value by calling `value * factor` and `value / factor`,
-where `factor` is of type `value_type_t<T>` (or a wider integer type for the rational
-integer path — see [widened integers](#how-scaling-works) for details).
+where `factor` is of type `representation_underlying_type_t<T>` (or a wider integer type
+for the rational integer path — see [widened integers](#how-scaling-works) for details).
 These operators must be provided so that the built-in scaling paths can apply the unit
 magnitude ratio during unit conversions.
 
 Alternatively (or additionally), a type may provide `operator*(T, UnitMagnitude)` to
 receive the full compile-time unit magnitude instead of a numeric factor. When present,
-this operator is called **first** and the `value_type_t<T>`-based operators serve as a
+this operator is called **first** and the underlying-type-based operators serve as a
 fallback. The magnitude-aware operator may return a **different type** — see
 [Magnitude-aware scaling](#magnitude-aware-scaling) for the full pattern.
 
@@ -567,9 +635,18 @@ definitions, and design rationale.
 
 #### `implicitly_scalable<FromUnit, FromRep, ToUnit, ToRep>` { #implicitly_scalable }
 
-A specializable variable template that controls whether a conversion from
+!!! note "Advanced use case"
+
+    Most users will never need to specialize `implicitly_scalable`. The defaults handle
+    all standard numeric types correctly. Only specialize when you have a custom
+    representation type with non-standard implicit-conversion semantics.
+
+A specializable variable template that controls **whether** a conversion from
 `quantity<FromUnit, FromRep>` to `quantity<ToUnit, ToRep>` is implicit or requires an
-explicit cast via `value_cast`/`force_in`:
+explicit cast via `value_cast`/`force_in`. This is orthogonal to — and independent of —
+the customization points that control **how** scaling is performed
+(`representation_underlying_type`, `treat_as_floating_point`, the
+[scaling operators](#scaling-operators), and the magnitude-aware `operator*(T, UnitMagnitude)`).
 
 ```cpp
 template<auto FromUnit, typename FromRep, auto ToUnit, typename ToRep>
@@ -582,26 +659,67 @@ constexpr bool mp_units::implicitly_scalable =
 in your own specializations to distinguish the integral-factor case (e.g. `m → mm` (×1000))
 from fractional ones (e.g. `mm → m` (÷1000), `ft → m`, `deg → rad`).
 
-Conversions with a fractional factor are always explicit for integer reps.
+The default rules are:
 
-!!! info
+- `ToRep` is floating-point → always implicit (floating-point absorbs any ratio without truncation)
+- Both are integer-like and the unit ratio is an integer multiplier → implicit
+  (exact, no information loss)
+- Everything else (fractional or irrational ratio with an integer rep) → explicit
+  (truncation possible)
 
-    The customization points above (`value_type`, `treat_as_floating_point`, `operator*`,
-    `operator/`, and the optional magnitude-aware `operator*(T, UnitMagnitude)`) all control
-    **how** the library scales a value during unit conversion.
-    `implicitly_scalable` is a separate, orthogonal control that decides **whether** a
-    particular conversion is implicit or requires an explicit cast.
+**When to specialize:** Consider two scenarios where the defaults are wrong for your type:
 
-**When to specialize:** If your custom type has different implicit-conversion semantics:
+**Scenario 1 — A decimal type that represents fractions exactly**
+
+Suppose you have a fixed-point decimal type `safe_decimal` that can represent any rational
+scaling factor (e.g. ×1/1000 for mm→m) without truncation. The default rejects this
+implicitly because the ratio is fractional and `safe_decimal` is not a floating-point type.
+You can opt in:
 
 ```cpp
-// my_decimal is safe to receive from double implicitly, but double cannot losslessly
-// represent my_decimal (more precision), so that direction stays explicit.
+// safe_decimal handles fractional ratios exactly — allow all unit conversions implicitly.
+template<auto FromUnit, auto ToUnit>
+constexpr bool mp_units::implicitly_scalable<FromUnit, safe_decimal, ToUnit, safe_decimal> =
+  true;
+
+// Before specialization:
+quantity<si::millimetre, safe_decimal> a = safe_decimal{500} * mm;
+// quantity<si::metre, safe_decimal> b = a;  // ❌ Error without specialization
+quantity<si::metre, safe_decimal> b = a;     // ✅ Implicit after specialization
+```
+
+**Scenario 2 — Asymmetric precision between two types**
+
+Suppose `my_decimal` has higher precision than `double`, so a `double` value can always be
+represented in `my_decimal` without loss, but not vice versa:
+
+```cpp
+// double → my_decimal is always lossless: allow it implicitly.
 template<auto FromUnit, auto ToUnit>
 constexpr bool mp_units::implicitly_scalable<FromUnit, double, ToUnit, my_decimal> = true;
 
+// my_decimal → double may lose precision: keep it explicit (this is also the default,
+// shown here for clarity).
 template<auto FromUnit, auto ToUnit>
 constexpr bool mp_units::implicitly_scalable<FromUnit, my_decimal, ToUnit, double> = false;
+
+// Usage:
+quantity<si::metre, double>     qd  = 1.5 * m;
+quantity<si::metre, my_decimal> qdm = qd;       // ✅ Implicit (double fits in my_decimal)
+
+quantity<si::metre, my_decimal> qm  = my_decimal{1.5} * m;
+// quantity<si::metre, double> qdb = qm;        // ❌ Error — requires value_cast
+quantity<si::metre, double>     qdb = value_cast<double>(qm);  // ✅ Explicit
+```
+
+You can also reuse the library's own predicate in your specialization:
+
+```cpp
+// Permit implicit conversion only when the unit ratio is an integer multiplier.
+// This mirrors the default for integer types but opts my_special_int in explicitly.
+template<auto FromUnit, auto ToUnit>
+constexpr bool mp_units::implicitly_scalable<FromUnit, my_special_int, ToUnit, my_special_int> =
+  mp_units::is_integral_scaling(FromUnit, ToUnit);
 ```
 
 **Impact:** Controls whether conversions between quantity types are implicit or require
@@ -715,8 +833,8 @@ satisfies the [`RepresentationOf`](concepts.md#RepresentationOf) concept for the
 character. At minimum this means:
 
 - providing `value_type` (or `element_type`) so the library knows the underlying scalar type,
-- providing `operator*` and `operator/` with `value_type_t<T>` so the library can scale it
-  during unit conversions (and optionally `operator*(T, UnitMagnitude)` for
+- providing `operator*` and `operator/` with `representation_underlying_type_t<T>` so the
+  library can scale it during unit conversions (and optionally `operator*(T, UnitMagnitude)` for
   [magnitude-aware scaling](#magnitude-aware-scaling)),
 - satisfying the character-specific requirements from the table above (copyable, equality
   comparable, arithmetic operators, CPOs, etc.).
