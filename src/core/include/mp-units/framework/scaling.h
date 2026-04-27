@@ -66,9 +66,19 @@ template<auto M, typename T>
 {
   using element_t = value_type_t<T>;
   static_assert(treat_as_floating_point<element_t>);
-  if constexpr (is_integral(pow<-1>(M)) && !is_integral(M)) {
-    // M has an integral inverse (pure divisor).  Prefer division over multiplication
-    // to avoid the rounding errors introduced by 1/x in floating-point.
+  if constexpr (is_integral(pow<-1>(M)) && !is_integral(M) && std::floating_point<element_t>) {
+    // M has an integral inverse (pure divisor).  For built-in floating-point element
+    // types prefer division over multiplication to avoid the rounding errors introduced
+    // by 1/x in floating-point.
+    //
+    // This optimization is restricted to std::floating_point because user-defined
+    // floating-point-like representation types (treat_as_floating_point but not
+    // std::floating_point, e.g. cnl::scaled_integer used as a fixed-point real) may
+    // have a representable range much smaller than the divisor itself (e.g. converting
+    // 100 into scaled_integer<int, power<-25>> would shift it left by 25 bits and
+    // overflow int, breaking constexpr evaluation).  For such types the multiplier
+    // path below is safer: the reciprocal is a small fraction that fits comfortably
+    // in the wrapper's representable range.
     constexpr element_t div = detail::silent_cast<element_t>(get_value<long double>(pow<-1>(M)));
     return v / div;
   } else {
@@ -141,9 +151,16 @@ MP_UNITS_EXPORT template<typename To, UnitMagnitude M, typename From>
   } else if constexpr (detail::UsesFloatingPointScaling<From> || detail::UsesFloatingPointScaling<To>) {
     // Floating-point path — handles both plain arithmetic types and wrappers.
     // Uses the type's own operator* / operator/ (element-wise for wrappers).
-    // When From is integral (e.g. int → double), convert to To first so that
-    // the FP scaling operates on the correct type.
-    if constexpr (detail::treat_as_integral<detail::value_type_t<From>>)
+    // Convert to To first when:
+    //  - From is integral (e.g. int → double): scaling must happen in FP space; or
+    //  - the FP element type is not std::floating_point (e.g. a fixed-point wrapper
+    //    like cnl::scaled_integer used as a real number): the wrapper's own
+    //    operator* may produce a different, more-precise type whose conversion to
+    //    To could overflow the wrapper's narrow rep (e.g. scaled_integer<int,P<-25>>
+    //    times itself yields P<-50>, which cannot be downshifted to P<-15> within
+    //    a 32-bit int).  Converting to To first keeps all arithmetic in To's type.
+    if constexpr (detail::treat_as_integral<detail::value_type_t<From>> ||
+                  !std::floating_point<detail::value_type_t<From>>)
       return detail::silent_cast<To>(detail::scale_fp<M{}>(static_cast<To>(value)));
     else
       return detail::silent_cast<To>(detail::scale_fp<M{}>(value));
