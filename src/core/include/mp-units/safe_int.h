@@ -326,6 +326,40 @@ using integral_op_result_t = decltype(A{} + B{});
 template<integral A, integral B>
 inline constexpr bool same_sign_v = is_signed_v<A> == is_signed_v<B>;
 
+// ============================================================================
+// safe_int_binary_ops: Hidden Friend Injection base
+//
+// This non-template base struct injects heterogeneous safe_int comparison
+// operators as hidden friends with ALL four template parameters free.
+// Because safe_int<T,EP> inherits from this struct, it becomes an associated
+// class of every safe_int<T,EP> specialization; ADL finds these friends
+// whenever either argument is any safe_int<*,*>, giving full symmetry.
+//
+// These friends handle every heterogeneous combination (different T, different
+// EP, or both). The homogeneous case (same T, same EP) is handled by the
+// non-template hidden friends inside safe_int itself — in overload resolution
+// a non-template beats a template, so there is no ambiguity.
+//
+// std::cmp_* is used throughout; it is correct for both same-sign and
+// cross-sign integer comparisons.
+// ============================================================================
+
+struct safe_int_binary_ops {
+  template<typename T, typename EP1, typename U, typename EP2>
+  [[nodiscard]] friend constexpr bool operator==(safe_int<T, EP1> lhs, safe_int<U, EP2> rhs) noexcept
+  {
+    return std::cmp_equal(lhs.value_, rhs.value_);
+  }
+
+  template<typename T, typename EP1, typename U, typename EP2>
+  [[nodiscard]] friend constexpr std::strong_ordering operator<=>(safe_int<T, EP1> lhs, safe_int<U, EP2> rhs) noexcept
+  {
+    if (std::cmp_less(lhs.value_, rhs.value_)) return std::strong_ordering::less;
+    if (std::cmp_greater(lhs.value_, rhs.value_)) return std::strong_ordering::greater;
+    return std::strong_ordering::equal;
+  }
+};
+
 }  // namespace detail
 
 // ============================================================================
@@ -350,7 +384,7 @@ MP_UNITS_EXPORT template<detail::integral T,
 #else
                          OverflowPolicy ErrorPolicy = safe_int_terminate_policy>
 #endif
-class safe_int {
+class safe_int : detail::safe_int_binary_ops {
   // Invoke ErrorPolicy and return a safe default (for use from noexcept compound-assign paths).
   static constexpr void handle_overflow(std::string_view msg) { ErrorPolicy::on_overflow(msg); }
 public:

@@ -793,13 +793,22 @@ static_assert(safe_int<int>{2} < 2.5);
 static_assert(2.5 > safe_int<int>{2});
 static_assert((safe_int<int>{2} <=> 2.5) < 0);
 
-// Mixed-signedness safe_int × safe_int comparisons are intentionally ill-formed.
-// Unlike raw int/unsigned (which compare but silently produce counterintuitive results,
-// e.g. -1 < 0u is false), safe_int rejects such comparisons at compile time because
-// has_common_type is false for mixed-signedness pairs.
-// Use .value() and std::cmp_* for explicit cross-signedness comparison when needed.
-static_assert(!std::equality_comparable_with<safe_int<int>, safe_int<unsigned>>);
-static_assert(!std::three_way_comparable_with<safe_int<int>, safe_int<unsigned>>);
+// Mixed-signedness safe_int × safe_int comparisons use std::cmp_* — correct and allowed.
+static_assert(safe_int<int>{-1} < safe_int<unsigned>{0u});
+static_assert(!(safe_int<int>{-1} == safe_int<unsigned>{0u}));
+static_assert(safe_int<int>{-1} != safe_int<unsigned>{0u});
+static_assert((safe_int<int>{-1} <=> safe_int<unsigned>{0u}) < 0);
+static_assert(safe_int<unsigned>{0u} > safe_int<int>{-1});
+static_assert((safe_int<unsigned>{0u} <=> safe_int<int>{-1}) > 0);
+static_assert(safe_int<int>{42} == safe_int<unsigned>{42u});
+static_assert((safe_int<int>{42} <=> safe_int<unsigned>{42u}) == 0);
+// Different EP is also fine for cross-sign comparisons:
+static_assert(safe_int<int, safe_int_terminate_policy>{-1} < safe_int<unsigned>{0u});
+// Same-sign, different EP comparisons are also allowed — bool result needs no policy:
+static_assert(safe_int<int, safe_int_terminate_policy>{1} == safe_int<int>{1});
+static_assert(safe_int<int, safe_int_terminate_policy>{1} < safe_int<int>{2});
+static_assert((safe_int<int, safe_int_terminate_policy>{1} <=> safe_int<int>{2}) < 0);
+static_assert(safe_int<int, safe_int_terminate_policy>{-1} < safe_int<long>{0});
 
 // Mixed signedness scalar comparisons
 static_assert(safe_int<int>{-1} < 0u);
