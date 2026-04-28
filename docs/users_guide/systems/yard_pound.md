@@ -1,7 +1,5 @@
 # Yard-Pound Systems
 
-## Overview
-
 The **Yard-Pound** systems encompass a family of related measurement systems primarily used
 in the United States and, historically, throughout the British Commonwealth. Unlike the
 coherent SI system, these systems evolved organically over centuries, leading to regional

@@ -1,7 +1,5 @@
 # Centimetre-Gram-Second (CGS) System
 
-## Overview
-
 The **Centimetre-Gram-Second (CGS)** system is a metric system of physical units based on
 the centimetre, gram, and second as base units. It was widely used before the adoption of
 the SI system and is still employed in certain scientific fields, particularly in theoretical

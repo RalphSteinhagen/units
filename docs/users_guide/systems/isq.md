@@ -1,7 +1,5 @@
 # International System of Quantities (ISQ)
 
-## Overview
-
 The **International System of Quantities (ISQ)** is the system of quantities used as the basis
 for the International System of Units (SI) and other systems of units.
 

@@ -1,7 +1,5 @@
 # The International System of Units (SI)
 
-## Overview
-
 The **International System of Units** (SI) is the modern form of the metric system and
 the most widely used system of measurement worldwide. As defined by the SI Brochure:
 

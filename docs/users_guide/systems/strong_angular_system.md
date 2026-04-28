@@ -1,7 +1,5 @@
 # Strong Angular System
 
-## Some background information
-
 As per today's SI, both radian and steradian are dimensionless. This forces the convention
 to set the angle `1 radian` equal to the number `1` within equations (similar to what
 natural units system does for `c` constant).

@@ -1,7 +1,5 @@
 # IAU Astronomical Units
 
-## Overview
-
 The **International Astronomical Union (IAU)** has established standardized conversion constants
 for astronomical measurements through formal resolutions. These provide consistent, well-defined
 values for solar and planetary parameters used across astronomy and astrophysics.

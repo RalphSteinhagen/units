@@ -1,7 +1,5 @@
 # High Energy Physics (HEP) System
 
-## Overview
-
 The **High Energy Physics (HEP)** system provides a complete **System of
 Quantities** and **System of Units**, along with physical constants, tailored for
 particle physics, nuclear physics, and high-energy experiments. It was designed
