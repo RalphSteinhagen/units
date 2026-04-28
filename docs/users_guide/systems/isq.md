@@ -65,13 +65,13 @@ For each base dimension, the ISQ defines corresponding base quantities:
 ```cpp
 namespace mp_units::isq {
 
-inline constexpr struct length final : quantity_spec<dim_length> {} length;
-inline constexpr struct mass final : quantity_spec<dim_mass> {} mass;
-inline constexpr struct time final : quantity_spec<dim_time> {} time;
+inline constexpr struct length final : quantity_spec<dim_length, non_negative> {} length;
+inline constexpr struct mass final : quantity_spec<dim_mass, non_negative> {} mass;
+inline constexpr struct time final : quantity_spec<dim_time, non_negative> {} time;
 inline constexpr struct electric_current final : quantity_spec<dim_electric_current> {} electric_current;
-inline constexpr struct thermodynamic_temperature final : quantity_spec<dim_thermodynamic_temperature> {} thermodynamic_temperature;
-inline constexpr struct amount_of_substance final : quantity_spec<dim_amount_of_substance> {} amount_of_substance;
-inline constexpr struct luminous_intensity final : quantity_spec<dim_luminous_intensity> {} luminous_intensity;
+inline constexpr struct thermodynamic_temperature final : quantity_spec<dim_thermodynamic_temperature, non_negative> {} thermodynamic_temperature;
+inline constexpr struct amount_of_substance final : quantity_spec<dim_amount_of_substance, non_negative> {} amount_of_substance;
+inline constexpr struct luminous_intensity final : quantity_spec<dim_luminous_intensity, non_negative> {} luminous_intensity;
 
 }
 ```
@@ -151,7 +151,7 @@ flowchart TD
 In code:
 
 ```cpp
-inline constexpr struct length final : quantity_spec<dim_length> {} length;
+inline constexpr struct length final : quantity_spec<dim_length, non_negative> {} length;
 inline constexpr struct width final : quantity_spec<length> {} width;
 inline constexpr auto breadth = width;
 inline constexpr struct height final : quantity_spec<length> {} height;

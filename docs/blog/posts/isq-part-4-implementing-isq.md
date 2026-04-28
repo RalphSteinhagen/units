@@ -63,7 +63,7 @@ This is how we can model it in C++:
 ```cpp
 inline constexpr struct dim_length final          : base_dimension<"L"> {} dim_length;
 
-inline constexpr struct length final              : quantity_spec<dim_length> {} length;
+inline constexpr struct length final              : quantity_spec<dim_length, non_negative> {} length;
 inline constexpr struct width final               : quantity_spec<length> {} width;
 inline constexpr auto breadth = width;
 inline constexpr struct height final              : quantity_spec<length> {} height;

@@ -156,7 +156,7 @@ For example, here is how the above quantity kind tree can be modeled in the libr
 === "C++23"
 
     ```cpp
-    inline constexpr struct length final : quantity_spec<dim_length> {} length;
+    inline constexpr struct length final : quantity_spec<dim_length, non_negative> {} length;
     inline constexpr struct width final : quantity_spec<length> {} width;
     inline constexpr auto breadth = width;
     // V2 workaround: altitude/depth as children of length, height as child of altitude
@@ -179,7 +179,7 @@ For example, here is how the above quantity kind tree can be modeled in the libr
 === "C++20"
 
     ```cpp
-    inline constexpr struct length final : quantity_spec<length, dim_length> {} length;
+    inline constexpr struct length final : quantity_spec<length, dim_length, non_negative> {} length;
     inline constexpr struct width final : quantity_spec<width, length> {} width;
     inline constexpr auto breadth = width;
     // V2 workaround: altitude/depth as children of length, height as child of altitude
@@ -202,7 +202,7 @@ For example, here is how the above quantity kind tree can be modeled in the libr
 === "Portable"
 
     ```cpp
-    QUANTITY_SPEC(length, dim_length);
+    QUANTITY_SPEC(length, dim_length, non_negative);
     QUANTITY_SPEC(width, length);
     inline constexpr auto breadth = width;
     // V2 workaround: altitude/depth as children of length, height as child of altitude

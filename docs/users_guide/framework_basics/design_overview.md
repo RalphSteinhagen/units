@@ -74,8 +74,8 @@ provided in the [quantity specification](../../reference/glossary.md#quantity_sp
 === "C++23"
 
     ```cpp
-    inline constexpr struct length final : quantity_spec<dim_length> {} length;
-    inline constexpr struct time final : quantity_spec<dim_time> {} time;
+    inline constexpr struct length final : quantity_spec<dim_length, non_negative> {} length;
+    inline constexpr struct time final : quantity_spec<dim_time, non_negative> {} time;
     inline constexpr struct speed final : quantity_spec<length / time> {} speed;
 
     static_assert(speed.dimension == dim_length / dim_time);
@@ -84,8 +84,8 @@ provided in the [quantity specification](../../reference/glossary.md#quantity_sp
 === "C++20"
 
     ```cpp
-    inline constexpr struct length final : quantity_spec<length, dim_length> {} length;
-    inline constexpr struct time final : quantity_spec<time, dim_time> {} time;
+    inline constexpr struct length final : quantity_spec<length, dim_length, non_negative> {} length;
+    inline constexpr struct time final : quantity_spec<time, dim_time, non_negative> {} time;
     inline constexpr struct speed final : quantity_spec<speed, length / time> {} speed;
 
     static_assert(speed.dimension == dim_length / dim_time);
@@ -94,8 +94,8 @@ provided in the [quantity specification](../../reference/glossary.md#quantity_sp
 === "Portable"
 
     ```cpp
-    QUANTITY_SPEC(length, dim_length);
-    QUANTITY_SPEC(time, dim_time);
+    QUANTITY_SPEC(length, dim_length, non_negative);
+    QUANTITY_SPEC(time, dim_time, non_negative);
     QUANTITY_SPEC(speed, length / time);
 
     static_assert(speed.dimension == dim_length / dim_time);
