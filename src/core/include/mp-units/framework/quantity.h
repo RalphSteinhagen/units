@@ -211,6 +211,191 @@ template<typename Q1, typename Q2, typename Cmp>
 template<typename T>
 using quantity_like_type = quantity<quantity_like_traits<T>::reference, typename quantity_like_traits<T>::rep>;
 
+// Hidden-friend interface for `quantity`. Provides heterogeneous binary and comparison
+// operators between any two `quantity<R1, Rep1>` and `quantity<R2, Rep2>` specializations
+// (and between a `quantity` and a raw representation value). Made findable only via ADL.
+struct quantity_iface {
+  // operator+
+  template<auto R1, typename Rep1, auto R2, typename Rep2>
+    requires CommonlyInvocableQuantities<std::plus<>, quantity<R1, Rep1>, quantity<R2, Rep2>>
+  [[nodiscard]] friend constexpr Quantity auto operator+(const quantity<R1, Rep1>& lhs, const quantity<R2, Rep2>& rhs)
+  {
+    using ret = common_quantity_for<std::plus<>, quantity<R1, Rep1>, quantity<R2, Rep2>>;
+    const ret ret_lhs(lhs);
+    const ret ret_rhs(rhs);
+    return quantity{ret_lhs.numerical_value_ref_in(ret::unit) + ret_rhs.numerical_value_ref_in(ret::unit),
+                    ret::reference};
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && InvokeResultOf<get_quantity_spec(R1), std::plus<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr Quantity auto operator+(const quantity<R1, Rep1>& lhs, const Value& rhs)
+  {
+    return lhs + quantity{rhs};
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && InvokeResultOf<get_quantity_spec(R1), std::plus<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr Quantity auto operator+(const Value& lhs, const quantity<R1, Rep1>& rhs)
+  {
+    return quantity{lhs} + rhs;
+  }
+
+  // operator-
+  template<auto R1, typename Rep1, auto R2, typename Rep2>
+    requires CommonlyInvocableQuantities<std::minus<>, quantity<R1, Rep1>, quantity<R2, Rep2>>
+  [[nodiscard]] friend constexpr Quantity auto operator-(const quantity<R1, Rep1>& lhs, const quantity<R2, Rep2>& rhs)
+  {
+    using ret = common_quantity_for<std::minus<>, quantity<R1, Rep1>, quantity<R2, Rep2>>;
+    const ret ret_lhs(lhs);
+    const ret ret_rhs(rhs);
+    return quantity{ret_lhs.numerical_value_ref_in(ret::unit) - ret_rhs.numerical_value_ref_in(ret::unit),
+                    ret::reference};
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && InvokeResultOf<get_quantity_spec(R1), std::minus<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr Quantity auto operator-(const quantity<R1, Rep1>& lhs, const Value& rhs)
+  {
+    return lhs - quantity{rhs};
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && InvokeResultOf<get_quantity_spec(R1), std::minus<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr Quantity auto operator-(const Value& lhs, const quantity<R1, Rep1>& rhs)
+  {
+    return quantity{lhs} - rhs;
+  }
+
+  // operator%
+  template<auto R1, typename Rep1, auto R2, typename Rep2>
+    requires(!treat_as_floating_point<Rep1>) && (!treat_as_floating_point<Rep2>) &&
+            CommonlyInvocableQuantities<std::modulus<>, quantity<R1, Rep1>, quantity<R2, Rep2>>
+  [[nodiscard]] friend constexpr Quantity auto operator%(const quantity<R1, Rep1>& lhs, const quantity<R2, Rep2>& rhs)
+  {
+    MP_UNITS_EXPECTS_DEBUG(rhs != 0);
+    using ret = common_quantity_for<std::modulus<>, quantity<R1, Rep1>, quantity<R2, Rep2>>;
+    const ret ret_lhs(lhs);
+    const ret ret_rhs(rhs);
+    return quantity{ret_lhs.numerical_value_ref_in(ret::unit) % ret_rhs.numerical_value_ref_in(ret::unit),
+                    ret::reference};
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && InvokeResultOf<get_quantity_spec(R1), std::modulus<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr Quantity auto operator%(const quantity<R1, Rep1>& lhs, const Value& rhs)
+  {
+    return lhs % quantity{rhs};
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && InvokeResultOf<get_quantity_spec(R1), std::modulus<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr Quantity auto operator%(const Value& lhs, const quantity<R1, Rep1>& rhs)
+  {
+    return quantity{lhs} % rhs;
+  }
+
+  // operator*
+  template<auto R1, typename Rep1, auto R2, typename Rep2>
+    requires InvocableQuantities<std::multiplies<>, quantity<R1, Rep1>, quantity<R2, Rep2>>
+  [[nodiscard]] friend constexpr Quantity auto operator*(const quantity<R1, Rep1>& lhs, const quantity<R2, Rep2>& rhs)
+  {
+    return quantity{lhs.numerical_value_ref_in(get_unit(R1)) * rhs.numerical_value_ref_in(get_unit(R2)), R1 * R2};
+  }
+
+  template<auto R1, typename Rep1, typename Value>
+    requires(!Quantity<Value>) && (!Reference<Value>) &&
+            InvokeResultOf<get_quantity_spec(R1), std::multiplies<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr QuantityOf<get_quantity_spec(R1)> auto operator*(const quantity<R1, Rep1>& q,
+                                                                                  const Value& val)
+  {
+    return quantity{q.numerical_value_ref_in(get_unit(R1)) * val, R1};
+  }
+
+  template<typename Value, auto R1, typename Rep1>
+    requires(!Quantity<Value>) && (!Reference<Value>) &&
+            InvokeResultOf<get_quantity_spec(R1), std::multiplies<>, const Value&, Rep1>
+  [[nodiscard]] friend constexpr QuantityOf<get_quantity_spec(R1)> auto operator*(const Value& val,
+                                                                                  const quantity<R1, Rep1>& q)
+  {
+    return quantity{val * q.numerical_value_ref_in(get_unit(R1)), R1};
+  }
+
+  // operator/
+  template<auto R1, typename Rep1, auto R2, typename Rep2>
+    requires InvocableQuantities<std::divides<>, quantity<R1, Rep1>, quantity<R2, Rep2>>
+  [[nodiscard]] friend constexpr Quantity auto operator/(const quantity<R1, Rep1>& lhs, const quantity<R2, Rep2>& rhs)
+  {
+    MP_UNITS_EXPECTS_DEBUG(rhs != 0);
+    return quantity{lhs.numerical_value_ref_in(get_unit(R1)) / rhs.numerical_value_ref_in(get_unit(R2)), R1 / R2};
+  }
+
+  template<auto R1, typename Rep1, typename Value>
+    requires(!Quantity<Value>) && (!Reference<Value>) &&
+            InvokeResultOf<get_quantity_spec(R1), std::divides<>, Rep1, const Value&>
+  [[nodiscard]] friend constexpr QuantityOf<get_quantity_spec(R1)> auto operator/(const quantity<R1, Rep1>& q,
+                                                                                  const Value& val)
+  {
+    MP_UNITS_EXPECTS_DEBUG(val != representation_values<Value>::zero());
+    return quantity{q.numerical_value_ref_in(get_unit(R1)) / val, R1};
+  }
+
+  template<typename Value, auto R1, typename Rep1>
+    requires(!Quantity<Value>) && (!Reference<Value>) &&
+            InvokeResultOf<get_quantity_spec(R1), std::divides<>, const Value&, Rep1>
+  [[nodiscard]] friend constexpr Quantity auto operator/(const Value& val, const quantity<R1, Rep1>& q)
+  {
+    MP_UNITS_EXPECTS_DEBUG(q != 0);
+    return quantity{val / q.numerical_value_ref_in(get_unit(R1)), one / R1};
+  }
+
+  // operator==
+  template<auto R1, typename Rep1, auto R2, typename Rep2>
+    requires CommonlyComparableQuantities<quantity<R1, Rep1>, quantity<R2, Rep2>> &&
+             std::equality_comparable<typename std::common_type_t<quantity<R1, Rep1>, quantity<R2, Rep2>>::rep>
+  [[nodiscard]] friend constexpr bool operator==(const quantity<R1, Rep1>& lhs, const quantity<R2, Rep2>& rhs)
+  {
+    return compare_quantities(lhs, rhs, std::equal_to{});
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && std::equality_comparable_with<Rep1, Value>
+  [[nodiscard]] friend constexpr bool operator==(const quantity<R1, Rep1>& lhs, const Value& rhs)
+  {
+    return lhs.numerical_value_ref_in(get_unit(R1)) == rhs;
+  }
+
+  template<auto R1, typename Rep1>
+    requires std::equality_comparable<Rep1> && requires { representation_values<Rep1>::zero(); }
+  [[nodiscard]] friend constexpr bool operator==(const quantity<R1, Rep1>& lhs, zero)
+  {
+    return lhs.numerical_value_ref_in(get_unit(R1)) == representation_values<Rep1>::zero();
+  }
+
+  // operator<=>
+  template<auto R1, typename Rep1, auto R2, typename Rep2>
+    requires CommonlyComparableQuantities<quantity<R1, Rep1>, quantity<R2, Rep2>> &&
+             std::three_way_comparable<typename std::common_type_t<quantity<R1, Rep1>, quantity<R2, Rep2>>::rep>
+  [[nodiscard]] friend constexpr auto operator<=>(const quantity<R1, Rep1>& lhs, const quantity<R2, Rep2>& rhs)
+  {
+    return compare_quantities(lhs, rhs, std::compare_three_way{});
+  }
+
+  template<auto R1, typename Rep1, RepresentationOf<get_quantity_spec(R1)> Value>
+    requires ImplicitFromNumber<R1> && std::three_way_comparable_with<Rep1, Value>
+  [[nodiscard]] friend constexpr auto operator<=>(const quantity<R1, Rep1>& lhs, const Value& rhs)
+  {
+    return lhs.numerical_value_ref_in(get_unit(R1)) <=> rhs;
+  }
+
+  template<auto R1, typename Rep1>
+    requires std::three_way_comparable<Rep1> && requires { representation_values<Rep1>::zero(); }
+  [[nodiscard]] friend constexpr auto operator<=>(const quantity<R1, Rep1>& lhs, zero)
+  {
+    return lhs.numerical_value_ref_in(get_unit(R1)) <=> representation_values<Rep1>::zero();
+  }
+};
+
 }  // namespace detail
 
 MP_UNITS_EXPORT_BEGIN
@@ -225,7 +410,7 @@ MP_UNITS_EXPORT_BEGIN
  * @tparam Rep a type to be used to represent values of a quantity
  */
 template<Reference auto R, RepresentationOf<get_quantity_spec(R)> Rep = double>
-class quantity {
+class quantity : public detail::quantity_iface {
 public:
   Rep numerical_value_is_an_implementation_detail_;  ///< needs to be public for a structural type
 
@@ -576,183 +761,6 @@ public:
   constexpr quantity& operator/=(const Q2& rhs) &
   {
     return *this /= rhs.numerical_value_is_an_implementation_detail_;
-  }
-
-  // binary operators on quantities
-  template<std::derived_from<quantity> Q, auto R2, typename Rep2>
-    requires detail::CommonlyInvocableQuantities<std::plus<>, quantity, quantity<R2, Rep2>>
-  [[nodiscard]] friend constexpr Quantity auto operator+(const Q& lhs, const quantity<R2, Rep2>& rhs)
-  {
-    using ret = detail::common_quantity_for<std::plus<>, quantity, quantity<R2, Rep2>>;
-    const ret ret_lhs(lhs);
-    const ret ret_rhs(rhs);
-    return ::mp_units::quantity{ret_lhs.numerical_value_ref_in(ret::unit) + ret_rhs.numerical_value_ref_in(ret::unit),
-                                ret::reference};
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> &&
-             detail::InvokeResultOf<quantity_spec, std::plus<>, Rep, const Value&>
-  [[nodiscard]] friend constexpr Quantity auto operator+(const Q& lhs, const Value& rhs)
-  {
-    return lhs + ::mp_units::quantity{rhs};
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> &&
-             detail::InvokeResultOf<quantity_spec, std::plus<>, Rep, const Value&>
-  [[nodiscard]] friend constexpr Quantity auto operator+(const Value& lhs, const Q& rhs)
-  {
-    return ::mp_units::quantity{lhs} + rhs;
-  }
-
-  template<std::derived_from<quantity> Q, auto R2, typename Rep2>
-    requires detail::CommonlyInvocableQuantities<std::minus<>, quantity, quantity<R2, Rep2>>
-  [[nodiscard]] friend constexpr Quantity auto operator-(const Q& lhs, const quantity<R2, Rep2>& rhs)
-  {
-    using ret = detail::common_quantity_for<std::minus<>, quantity, quantity<R2, Rep2>>;
-    const ret ret_lhs(lhs);
-    const ret ret_rhs(rhs);
-    return ::mp_units::quantity{ret_lhs.numerical_value_ref_in(ret::unit) - ret_rhs.numerical_value_ref_in(ret::unit),
-                                ret::reference};
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> &&
-             detail::InvokeResultOf<quantity_spec, std::minus<>, Rep, const Value&>
-  [[nodiscard]] friend constexpr Quantity auto operator-(const Q& lhs, const Value& rhs)
-  {
-    return lhs - ::mp_units::quantity{rhs};
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> &&
-             detail::InvokeResultOf<quantity_spec, std::minus<>, Rep, const Value&>
-  [[nodiscard]] friend constexpr Quantity auto operator-(const Value& lhs, const Q& rhs)
-  {
-    return ::mp_units::quantity{lhs} - rhs;
-  }
-
-  template<std::derived_from<quantity> Q, auto R2, typename Rep2>
-    requires(!treat_as_floating_point<Rep>) && (!treat_as_floating_point<Rep2>) &&
-            detail::CommonlyInvocableQuantities<std::modulus<>, quantity, quantity<R2, Rep2>>
-  [[nodiscard]] friend constexpr Quantity auto operator%(const Q& lhs, const quantity<R2, Rep2>& rhs)
-  {
-    MP_UNITS_EXPECTS_DEBUG(rhs != 0);
-    using ret = detail::common_quantity_for<std::modulus<>, quantity, quantity<R2, Rep2>>;
-    const ret ret_lhs(lhs);
-    const ret ret_rhs(rhs);
-    return ::mp_units::quantity{ret_lhs.numerical_value_ref_in(ret::unit) % ret_rhs.numerical_value_ref_in(ret::unit),
-                                ret::reference};
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> &&
-             detail::InvokeResultOf<quantity_spec, std::modulus<>, Rep, const Value&>
-  [[nodiscard]] friend constexpr Quantity auto operator%(const Q& lhs, const Value& rhs)
-  {
-    return lhs % ::mp_units::quantity{rhs};
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> &&
-             detail::InvokeResultOf<quantity_spec, std::modulus<>, Rep, const Value&>
-  [[nodiscard]] friend constexpr Quantity auto operator%(const Value& lhs, const Q& rhs)
-  {
-    return ::mp_units::quantity{lhs} % rhs;
-  }
-
-  template<std::derived_from<quantity> Q, auto R2, typename Rep2>
-    requires detail::InvocableQuantities<std::multiplies<>, quantity, quantity<R2, Rep2>>
-  [[nodiscard]] friend constexpr Quantity auto operator*(const Q& lhs, const quantity<R2, Rep2>& rhs)
-  {
-    return ::mp_units::quantity{lhs.numerical_value_ref_in(unit) * rhs.numerical_value_ref_in(rhs.unit), R * R2};
-  }
-
-  template<std::derived_from<quantity> Q, typename Value>
-    requires(!Quantity<Value>) && (!Reference<Value>) &&
-            detail::InvokeResultOf<quantity_spec, std::multiplies<>, rep, const Value&>
-  [[nodiscard]] friend constexpr QuantityOf<quantity_spec> auto operator*(const Q& q, const Value& val)
-  {
-    return ::mp_units::quantity{q.numerical_value_ref_in(unit) * val, R};
-  }
-
-  template<typename Value, std::derived_from<quantity> Q>
-    requires(!Quantity<Value>) && (!Reference<Value>) &&
-            detail::InvokeResultOf<quantity_spec, std::multiplies<>, const Value&, rep>
-  [[nodiscard]] friend constexpr QuantityOf<quantity_spec> auto operator*(const Value& val, const Q& q)
-  {
-    return ::mp_units::quantity{val * q.numerical_value_ref_in(unit), R};
-  }
-
-  template<std::derived_from<quantity> Q, auto R2, typename Rep2>
-    requires detail::InvocableQuantities<std::divides<>, quantity, quantity<R2, Rep2>>
-  [[nodiscard]] friend constexpr Quantity auto operator/(const Q& lhs, const quantity<R2, Rep2>& rhs)
-  {
-    MP_UNITS_EXPECTS_DEBUG(rhs != 0);
-    return ::mp_units::quantity{lhs.numerical_value_ref_in(unit) / rhs.numerical_value_ref_in(rhs.unit), R / R2};
-  }
-
-  template<std::derived_from<quantity> Q, typename Value>
-    requires(!Quantity<Value>) && (!Reference<Value>) &&
-            detail::InvokeResultOf<quantity_spec, std::divides<>, rep, const Value&>
-  [[nodiscard]] friend constexpr QuantityOf<quantity_spec> auto operator/(const Q& q, const Value& val)
-  {
-    MP_UNITS_EXPECTS_DEBUG(val != representation_values<Value>::zero());
-    return ::mp_units::quantity{q.numerical_value_ref_in(unit) / val, R};
-  }
-
-  template<typename Value, std::derived_from<quantity> Q>
-    requires(!Quantity<Value>) && (!Reference<Value>) &&
-            detail::InvokeResultOf<quantity_spec, std::divides<>, const Value&, rep>
-  [[nodiscard]] friend constexpr Quantity auto operator/(const Value& val, const Q& q)
-  {
-    MP_UNITS_EXPECTS_DEBUG(q != 0);
-    return ::mp_units::quantity{val / q.numerical_value_ref_in(unit), one / R};
-  }
-
-  template<std::derived_from<quantity> Q, auto R2, typename Rep2>
-    requires detail::CommonlyComparableQuantities<Q, quantity<R2, Rep2>> &&
-             std::equality_comparable<typename std::common_type_t<quantity, quantity<R2, Rep2>>::rep>
-  [[nodiscard]] friend constexpr bool operator==(const Q& lhs, const quantity<R2, Rep2>& rhs)
-  {
-    return detail::compare_quantities(lhs, rhs, std::equal_to{});
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> && std::equality_comparable_with<rep, Value>
-  [[nodiscard]] friend constexpr bool operator==(const Q& lhs, const Value& rhs)
-  {
-    return lhs.numerical_value_ref_in(unit) == rhs;
-  }
-
-  template<std::derived_from<quantity> Q>
-    requires std::equality_comparable<rep> && requires { representation_values<rep>::zero(); }
-  [[nodiscard]] friend constexpr bool operator==(const Q& lhs, detail::zero)
-  {
-    return lhs.numerical_value_ref_in(unit) == representation_values<rep>::zero();
-  }
-
-  template<std::derived_from<quantity> Q, auto R2, typename Rep2>
-    requires detail::CommonlyComparableQuantities<Q, quantity<R2, Rep2>> &&
-             std::three_way_comparable<typename std::common_type_t<quantity, quantity<R2, Rep2>>::rep>
-  [[nodiscard]] friend constexpr auto operator<=>(const Q& lhs, const quantity<R2, Rep2>& rhs)
-  {
-    return detail::compare_quantities(lhs, rhs, std::compare_three_way{});
-  }
-
-  template<std::derived_from<quantity> Q, RepresentationOf<quantity_spec> Value>
-    requires detail::ImplicitFromNumber<Q::reference> && std::three_way_comparable_with<rep, Value>
-  [[nodiscard]] friend constexpr auto operator<=>(const Q& lhs, const Value& rhs)
-  {
-    return lhs.numerical_value_ref_in(unit) <=> rhs;
-  }
-
-  template<std::derived_from<quantity> Q>
-    requires std::three_way_comparable<rep> && requires { representation_values<rep>::zero(); }
-  [[nodiscard]] friend constexpr auto operator<=>(const Q& lhs, detail::zero)
-  {
-    return lhs.numerical_value_ref_in(unit) <=> representation_values<rep>::zero();
   }
 };
 
