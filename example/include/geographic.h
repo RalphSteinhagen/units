@@ -36,6 +36,7 @@ import std;
 import mp_units;
 #else
 #include <mp-units/framework.h>
+#include <mp-units/math.h>
 #include <mp-units/systems/isq/space_and_time.h>
 #include <mp-units/systems/si.h>
 #endif
@@ -103,9 +104,10 @@ QUANTITY_SPEC(geometric_azimuth, mp_units::isq::angular_measure, mp_units::is_ki
 QUANTITY_SPEC(geo_bearing, mp_units::isq::angular_measure, mp_units::is_kind);
 QUANTITY_SPEC(heading_azimuth, mp_units::isq::angular_measure, mp_units::is_kind);
 
-inline constexpr struct equator final :
-    mp_units::absolute_point_origin<geo_latitude,
-                                    mp_units::reflect_in_range{-90 * mp_units::si::degree, 90 * mp_units::si::degree}> {
+// Note: equator carries no `reflect_in_range` bounds. Latitude reflection at the
+// poles is coupled with a 180° longitude shift, which a single-axis policy
+// cannot express. The coupled normalization lives in `position`'s constructor.
+inline constexpr struct equator final : mp_units::absolute_point_origin<geo_latitude> {
 } equator;
 
 inline constexpr struct prime_meridian final :
@@ -299,43 +301,81 @@ namespace geographic {
 
 using distance = mp_units::quantity<mp_units::isq::distance[mp_units::si::kilo<mp_units::si::metre>]>;
 
+// A geographic position couples latitude and longitude: reflecting latitude at a
+// pole requires shifting longitude by 180°. Because this constraint spans both
+// axes, it cannot be expressed by a single-axis policy on `equator`; instead the
+// constructor performs the coupled normalization, leaving `prime_meridian`'s
+// `wrap_to_range` to handle the resulting longitude wrap.
 template<typename T>
-struct position {
+class position {
+public:
   latitude<T> lat;
   longitude<T> lon;
-};
 
-template<typename T>
-// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-distance spherical_distance(position<T> from, position<T> to)
-{
-  using namespace mp_units;
-  constexpr quantity earth_radius = 6'371 * isq::radius[si::kilo<si::metre>];
+  // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+  constexpr position(latitude<T> lat_in, longitude<T> lon_in) noexcept : lon(lon_in)
+  {
+    using mp_units::quantity;
+    using mp_units::si::degree;
 
-  using si::sin, si::cos, si::asin, si::acos;
+    constexpr quantity half_turn = T{180} * degree;
+    constexpr quantity full_turn = T{360} * degree;
+    constexpr quantity quarter_turn = T{90} * degree;
 
-  const quantity from_lat = isq::angular_measure(from.lat.quantity_from_unit_zero());
-  const quantity from_lon = isq::angular_measure(from.lon.quantity_from_unit_zero());
-  const quantity to_lat = isq::angular_measure(to.lat.quantity_from_unit_zero());
-  const quantity to_lon = isq::angular_measure(to.lon.quantity_from_unit_zero());
+    // Latitude reflection (`half_turn - lat_q`) is not defined on points, so the
+    // normalization is done in displacement space relative to the equator.
+    quantity lat_q = lat_in.quantity_from(equator);
 
-  // https://en.wikipedia.org/wiki/Great-circle_distance#Formulae
-  if constexpr (sizeof(T) >= 8) {
-    // spherical law of cosines
-    const quantity central_angle =
-      acos(sin(from_lat) * sin(to_lat) + cos(from_lat) * cos(to_lat) * cos(to_lon - from_lon));
-    // const auto central_angle = 2 * asin(sqrt(0.5 - cos(to_lat - from_lat) / 2 + cos(from_lat) * cos(to_lat) * (1
-    // - cos(lon2_rad - from_lon)) / 2));
+    // Fold latitude into [-180°, 180°] first.
+    lat_q = fmod(lat_q + half_turn, full_turn);
+    if (lat_q < lat_q.zero()) lat_q += full_turn;
+    lat_q -= half_turn;
 
-    return quantity_cast<isq::distance>((earth_radius * central_angle).in(earth_radius.unit));
-  } else {
-    // the haversine formula
-    const quantity sin_lat = sin((to_lat - from_lat) / 2);
-    const quantity sin_lon = sin((to_lon - from_lon) / 2);
-    const quantity central_angle = 2 * asin(sqrt(sin_lat * sin_lat + cos(from_lat) * cos(to_lat) * sin_lon * sin_lon));
+    // Reflect at the poles, shifting longitude by 180°; wrap_to_range on
+    // prime_meridian normalizes the longitude back into (-180°, 180°].
+    if (lat_q > quarter_turn) {
+      lat_q = half_turn - lat_q;
+      lon += half_turn;
+    } else if (lat_q < -quarter_turn) {
+      lat_q = -half_turn - lat_q;
+      lon += half_turn;
+    }
 
-    return quantity_cast<isq::distance>((earth_radius * central_angle).in(earth_radius.unit));
+    lat = equator + lat_q;
   }
-}
+
+  // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+  friend distance spherical_distance(position from, position to)
+  {
+    using namespace mp_units;
+    constexpr quantity earth_radius = 6'371 * isq::radius[si::kilo<si::metre>];
+
+    using si::sin, si::cos, si::asin, si::acos;
+
+    const quantity from_lat = isq::angular_measure(from.lat.quantity_from_unit_zero());
+    const quantity from_lon = isq::angular_measure(from.lon.quantity_from_unit_zero());
+    const quantity to_lat = isq::angular_measure(to.lat.quantity_from_unit_zero());
+    const quantity to_lon = isq::angular_measure(to.lon.quantity_from_unit_zero());
+
+    // https://en.wikipedia.org/wiki/Great-circle_distance#Formulae
+    if constexpr (sizeof(T) >= 8) {
+      // spherical law of cosines
+      const quantity central_angle =
+        acos(sin(from_lat) * sin(to_lat) + cos(from_lat) * cos(to_lat) * cos(to_lon - from_lon));
+      // const auto central_angle = 2 * asin(sqrt(0.5 - cos(to_lat - from_lat) / 2 + cos(from_lat) * cos(to_lat) * (1
+      // - cos(lon2_rad - from_lon)) / 2));
+
+      return quantity_cast<isq::distance>((earth_radius * central_angle).in(earth_radius.unit));
+    } else {
+      // the haversine formula
+      const quantity sin_lat = sin((to_lat - from_lat) / 2);
+      const quantity sin_lon = sin((to_lon - from_lon) / 2);
+      const quantity central_angle =
+        2 * asin(sqrt(sin_lat * sin_lat + cos(from_lat) * cos(to_lat) * sin_lon * sin_lon));
+
+      return quantity_cast<isq::distance>((earth_radius * central_angle).in(earth_radius.unit));
+    }
+  }
+};
 
 }  // namespace geographic

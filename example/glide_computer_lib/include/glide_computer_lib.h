@@ -114,7 +114,7 @@ public:
   class leg {
     const waypoint* begin_;
     const waypoint* end_;
-    distance length_ = geographic::spherical_distance(begin().pos, end().pos);
+    distance length_ = spherical_distance(begin().pos, end().pos);
   public:
     // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
     leg(const waypoint& b, const waypoint& e) noexcept : begin_(&b), end_(&e) {}
