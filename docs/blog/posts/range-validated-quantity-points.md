@@ -50,11 +50,11 @@ different wrapping disciplines that coordinate angles require.
 
 In brief, the three families of domain constraint they needed are:
 
-| Domain                                    | Rule                                      | Behavior when violated             |
-|-------------------------------------------|-------------------------------------------|------------------------------------|
-| _Latitude_ / elevation on a sphere        | $[-90°, +90°]$ — _reflected_ at the poles | $91° \to 89°$, $270° \to -90°$ ¹   |
-| Longitude / _azimuth_ (signed convention) | $(-180°, +180°]$ — _wraps_ cyclically     | $200° \to -160°$, $-200° \to 160°$ |
-| _Longitude_ (positive-only convention)    | $[0°, 360°)$ — _wraps_ cyclically         | $370° \to 10°$                     |
+| Domain                                      | Rule                                      | Behavior when violated             |
+|---------------------------------------------|-------------------------------------------|------------------------------------|
+| _Latitude_ / _elevation_ on a sphere        | $[-90°, +90°]$ — _reflected_ at the poles | $91° \to 89°$, $270° \to -90°$ ¹   |
+| _Longitude_ / _azimuth_ (signed convention) | $(-180°, +180°]$ — _wraps_ cyclically     | $200° \to -160°$, $-200° \to 160°$ |
+| _Longitude_ (positive-only convention)      | $[0°, 360°)$ — _wraps_ cyclically         | $370° \to 10°$                     |
 
 ¹ **Simplified.** True geodetic latitude reflection also requires shifting
 longitude by 180° (crossing a pole puts you on the opposite side of the globe).
@@ -62,12 +62,13 @@ We discuss this coupled-axis limitation in
 [Polar coordinates and coupled constraints](#polar-coordinates-and-coupled-constraints)
 below.
 
-These are not the same constraint in three spellings. Mixed _azimuth_/_bearing_
-systems additionally require a numeric offset (_heading_ $= 90° -$ _geometric_
-_azimuth_), which is handled by `relative_point_origin`, but the _range
-enforcement_ on each origin is independent. Encoding all of this without leaking
-raw-integer boilerplate into application code requires first-class support in the
-library.
+These three rows are genuinely distinct behaviors — reflect, wrap with a signed
+interval, wrap with an unsigned interval — not the same rule in different units.
+On top of that, mixed _azimuth_/_bearing_ systems require a numeric offset
+between reference frames (_heading_ $= 90° -$ _geometric azimuth_), which is
+handled by `relative_point_origin`, while the _range enforcement_ on each origin
+remains independent. Encoding all of this without leaking raw-integer boilerplate
+into application code requires first-class support in the library.
 
 ### Domains that need this pattern
 
@@ -117,17 +118,15 @@ frame, not by the choice of unit or representation.
     bounds enforcement is an additional layer on top of it.  Think of it as an
     affine-space *skeleton* decorated with domain-specific constraints.
 
-Concretely, bounds are expressed as a **variable template specialization**:
+Concretely, bounds are passed as a **template parameter** to the origin:
 
 ```cpp
-template<>
-inline constexpr auto mp_units::quantity_bounds<equator> = mp_units::reflect_in_range{-90 * deg, 90 * deg};
+inline constexpr struct horizon final :
+    absolute_point_origin<geo_elevation, reflect_in_range{-90 * deg, 90 * deg}> {} horizon;
 ```
 
-This pattern mirrors how [other customization points in the affine-space
-API](../../users_guide/framework_basics/the_affine_space.md) (such as
-`quantity_values`) work. It is zero-overhead at the type level and has no
-overhead at the value level beyond the enforcement call itself.
+Because the bounds are a non-type template parameter, they add no runtime
+storage — the only runtime cost is the enforcement call itself.
 
 ### Bounds values are deltas, not points
 
@@ -144,10 +143,12 @@ They are displacements. The reason is architectural:
   displacements naturally — there is no notion of "absolute position" in a frame
   that is defined by its offset from a parent.
 
-### Four policies
+### Six policies
 
-Four concrete policies ship out of the box; all live in
-`<mp-units/overflow_policies.h>`:
+Six concrete policies ship out of the box; all live in
+`<mp-units/overflow_policies.h>`.
+
+Four two-sided policies operate on a closed interval `[min, max]`:
 
 ```cpp
 // 1. Saturate at the boundaries — silently corrects the value.
@@ -167,24 +168,41 @@ template<Quantity Q>
 struct check_in_range { Q min; Q max; };
 ```
 
-The first three are _error-correcting_ policies: they silently adjust the value.
-`check_in_range` is the _error-reporting_ policy: it either calls
+Two one-sided policies cover the half-line $[0, +\infty)$ for inherently
+non-negative quantities:
+
+```cpp
+// 5. Report violations if value < 0.
+struct check_non_negative { /* zero_quantity_t min; */ };
+
+// 6. Clamp negative values to zero — tolerates floating-point rounding noise.
+struct clamp_non_negative { /* zero_quantity_t min; */ };
+```
+
+`check_non_negative` and `clamp_non_negative` are **automatically attached** to
+any `quantity_point` whose origin is a `natural_point_origin<QS>` for a
+non-negative quantity spec (e.g., `isq::length`, `isq::mass`, `isq::duration`).
+No explicit bounds definition is required in the typical case.
+
+The first three two-sided policies and `clamp_non_negative` are _error-correcting_:
+they silently adjust the value. `check_in_range` and `check_non_negative` are
+_error-reporting_ policies: each either calls
 `constraint_violation_handler<Rep>::on_violation()` (when the representation type
 opts into guaranteed enforcement by specializing that trait) or falls back to
 [`MP_UNITS_EXPECTS`](../../how_to_guides/integration/wide_compatibility.md#contract-checking-macros)
 otherwise.
 
-All four policies are **class templates**; their `operator()` is a function
+All six policies are **function objects**: their `operator()` is a function
 template that accepts any compatible `Quantity`, so a bounds object defined with
 one unit and representation works equally well regardless of the unit or
 representation used by the `quantity_point`. For example, bounds expressed in
 seconds apply transparently to a `quantity_point` expressed in hours or
-milliseconds. This means a single `quantity_bounds` specialization does not need
+milliseconds. This means a single bounds definition on an origin does not need
 to be repeated for every unit a user might choose.
 
 ### Custom policies
 
-The four built-in policies are not a closed set. Because a policy is just a
+The six built-in policies are not a closed set. Because a policy is just a
 callable that takes and returns a `Quantity`, users can write their own.
 
 **Half-line bounds.** Not every constraint is a closed interval. A hydraulic
@@ -201,8 +219,8 @@ struct clamp_bottom {
 };
 
 // Hydraulic circuit: minimum operating pressure 50 bar above ambient; no upper cap here.
-template<>
-inline constexpr auto mp_units::quantity_bounds<ambient_pressure> = clamp_bottom{50 * bar};
+inline constexpr struct ambient_pressure final :
+    absolute_point_origin<isq::pressure, clamp_bottom{50 * bar}> {} ambient_pressure;
 ```
 
 **Tolerance-aware clamping.** In realistic floating-point calculations a value
@@ -235,8 +253,8 @@ the enforcement from its nearest ancestor that has bounds:
 
 ```cpp
 // Absolute origin with physical bounds:
-template<>
-inline constexpr auto mp_units::quantity_bounds<prime_meridian> = wrap_to_range{-180.0 * deg, 180.0 * deg};
+inline constexpr struct prime_meridian final :
+    absolute_point_origin<geo_longitude, wrap_to_range{-180.0 * deg, 180.0 * deg}> {} prime_meridian;
 
 // Relative origin — no own bounds; inherits from prime_meridian.
 // The +21° offset is transparent to the enforcement.
@@ -255,24 +273,24 @@ parent's bounds:
 
 ```cpp
 // static_assert fires at compile time if relative bounds exceed parent bounds
-template<>
-inline constexpr auto mp_units::quantity_bounds<ac_setpoint> =
-    clamp_to_range{delta<deg_C>(-3), delta<deg_C>(+3)};
+inline constexpr struct ac_setpoint final :
+    relative_point_origin<reference_temp + 0 * deg_C,
+                          clamp_to_range{delta<deg_C>(-3), delta<deg_C>(+3)}> {} ac_setpoint;
     // ❌ compile error if this would violate the parent origin's physical bounds
 ```
 
 ### The `static_assert` at definition time
 
-The library validates bounds at the point where `quantity_bounds<PO>` is first
+The library validates bounds at the point where the origin is first
 instantiated by enforcing the following, in order:
 
 1. The bounds object has at least one of `.min` or `.max` — a bare `{}` is
    rejected.
 2. For relative origins, if the parent has bounds: the relative bounds (translated
-   by the cumulative offset) must nest strictly inside the parent's range.
+   by the cumulative offset) must nest strictly inside the parent’s range.
 
 Both checks are **compile-time** `static_assert`s. They fire exactly once per
-specialization regardless of how many `quantity_point` variables are constructed.
+origin definition regardless of how many `quantity_point` variables are constructed.
 
 ### Full example: geodetic coordinate types
 
@@ -305,9 +323,9 @@ inline constexpr auto mp_units::quantity_bounds<prime_meridian> =
 
 !!! warning "Simplification"
 
-    The `reflect_in_range` policy on latitude is a single-axis approximation.
-    In true geodesy, reflecting latitude at a pole also requires shifting
-    longitude by 180° — the two axes are coupled.  The current per-origin
+    The `reflect_in_range` policy on _latitude_ is a single-axis approximation.
+    In true geodesy, reflecting _latitude_ at a pole also requires shifting
+    _longitude_ by 180° — the two axes are coupled.  The current per-origin
     bounds model cannot express this; see
     [Polar coordinates and coupled constraints](#polar-coordinates-and-coupled-constraints)
     for discussion.
@@ -327,18 +345,13 @@ static_assert(lon.quantity_from(prime_meridian) == -160.0 * deg);
 ### Full example: bounded-altitude drone types
 
 ```cpp
-inline constexpr struct sea_level final : absolute_point_origin<isq::altitude> {} sea_level;
-inline constexpr struct ground_level final : absolute_point_origin<isq::altitude> {} ground_level;
-```
-
-```cpp
 // MSL: physical world — flight level corridor.
-template<>
-inline constexpr auto mp_units::quantity_bounds<sea_level> = mp_units::clamp_to_range{-500 * m, 12'000 * m};
+inline constexpr struct sea_level final :
+    absolute_point_origin<isq::altitude, clamp_to_range{-500 * m, 12'000 * m}> {} sea_level;
 
 // AGL: operational drone envelope (non-negative).
-template<>
-inline constexpr auto mp_units::quantity_bounds<ground_level> = mp_units::clamp_to_range{0 * m, 500 * m};
+inline constexpr struct ground_level final :
+    absolute_point_origin<isq::altitude, clamp_to_range{0 * m, 500 * m}> {} ground_level;
 ```
 
 ```cpp
@@ -356,9 +369,9 @@ When bounds are defined on the origin, the `quantity_point` static member
 functions and the `std::numeric_limits` specialization reflect those bounds:
 
 ```cpp
-static_assert(latitude::min().quantity_from(equator) == -90.0 * deg);
-static_assert(latitude::max().quantity_from(equator) ==  90.0 * deg);
-static_assert(std::numeric_limits<latitude>::lowest().quantity_from(equator) == -90.0 * deg);
+static_assert(longitude::min().quantity_from(prime_meridian) == -180.0 * deg);
+static_assert(longitude::max().quantity_from(prime_meridian) ==  180.0 * deg);
+static_assert(std::numeric_limits<longitude>::lowest().quantity_from(prime_meridian) == -180.0 * deg);
 ```
 
 For unbounded `quantity_point` types the functions are conditionally present:
@@ -436,13 +449,10 @@ using namespace mp_units::si::unit_symbols;
 inline constexpr struct body_temp final : quantity_spec<isq::thermodynamic_temperature> {} body_temp;
 
 // Anchored to ice_point at 0 °C — shares the Celsius/Kelvin hierarchy,
-// so quantity_point_cast to K or deg_F still works.
+// so unit conversion to K or deg_F still works.
 inline constexpr struct clinical_zero final :
-            relative_point_origin<point<body_temp[deg_C]>(0)> {} clinical_zero;
-
-template<>
-inline constexpr auto mp_units::quantity_bounds<clinical_zero> =
-    mp_units::check_in_range{delta<deg_C>(35.), delta<deg_C>(42.0)};
+            relative_point_origin<point<body_temp[deg_C]>(0),
+                                  check_in_range{delta<deg_C>(35.), delta<deg_C>(42.0)}> {} clinical_zero;
 
 // Rep is constrained<double> — violations always throw std::domain_error.
 using safe_temp = quantity_point<deg_C, clinical_zero, constrained<double>>;
@@ -460,7 +470,7 @@ Because the bounds object carries `double`-backed quantities and `constrained<do
 satisfies the same `Quantity` concept requirements, the unit-flexibility
 guarantees described above apply here too: you could use `constrained<float>` or
 `constrained<int>` as the representation without changing the
-`quantity_bounds` specialization.
+bounds definition on the origin.
 
 ### Non-negative quantity annotations
 
@@ -494,13 +504,13 @@ static_assert(!is_non_negative(isq::velocity));  // ❌ vector character — exc
 
 When a `quantity_point` uses a `natural_point_origin` whose quantity spec is
 non-negative, the library **automatically attaches `check_non_negative`** as the
-bounds policy — no explicit `quantity_bounds` specialization is needed. The
-default can always be overridden:
+bounds policy — no explicit bounds definition is needed. The
+default can always be overridden by defining a custom origin with different bounds:
 
 ```cpp
-// Override the auto-applied check_non_negative with a clamping policy instead:
-template<>
-inline constexpr auto mp_units::quantity_bounds<natural_point_origin<isq::length>> = clamp_non_negative{};
+// Define a custom origin with clamp_non_negative instead of the automatic check_non_negative:
+inline constexpr struct clamped_length_origin final :
+    absolute_point_origin<isq::length, clamp_non_negative{}> {} clamped_length_origin;
 ```
 
 ---
@@ -516,7 +526,7 @@ misleading (there is no "smallest" longitude on a wrapped circle; they're all
 equivalent modulo 360°). The current implementation does return `min` and `max`
 for all policy types that expose these members.
 
-### Why the checking policy is not part of the `quantity_point` type
+### Why the checking policy is not part of the `quantity_point` type?
 
 One might ask: why not make the checking policy a template parameter of
 `quantity_point` itself, so that the same origin can be used with different
@@ -534,15 +544,16 @@ The current approach — tying enforcement to the representation type
 (`T` vs. `constrained<T>`) — keeps all `quantity_point` values with the same
 origin interoperable regardless of whether they are checked.  A GUI front-end
 that uses `constrained<double>` and a solver back-end that uses plain `double`
-can exchange values through `quantity_point_cast` without any special
-machinery.
+can exchange values through `constrained<double>` conversion operators without
+any special machinery.
 
 ### Polar coordinates and coupled constraints
 
-Some domains have constraints that **couple multiple axes**. The most prominent
-example is already in this article: true geodetic latitude reflection at a pole
-also requires shifting longitude by 180° — the two coordinates are not
-independent. Similarly, polar coordinates in general couple $r \geq 0$ with
+Some domains have constraints that **couple multiple axes**. A prominent
+example is geodetic latitude: reflecting at a pole also requires shifting
+longitude by 180° — the two coordinates are not independent, and a naive
+single-axis `reflect_in_range` on an `equator` origin would be incorrect.
+Similarly, polar coordinates in general couple $r \geq 0$ with
 angular constraints such as $0 \leq \theta < 2\pi$ or
 $-\pi < \theta \leq \pi$.
 
@@ -553,38 +564,43 @@ by a **composite type** whose constructor enforces the coupled invariant, much
 like `std::complex` enforces its own invariants across two components:
 
 ```cpp
-struct location {
+class position {
+public:
   quantity_point<si::degree, equator, double> lat;
   quantity_point<si::degree, prime_meridian, double> lon;
 
-  constexpr location(quantity_point<si::degree, equator, double> lat_in,
-                     quantity_point<si::degree, prime_meridian, double> lon_in)  
+  constexpr position(quantity_point<si::degree, equator, double> lat_in,
+                     quantity_point<si::degree, prime_meridian, double> lon_in) noexcept :
+      lon(lon_in)
   {
-    auto lat_val = lat_in.quantity_from(equator);
-    auto lon_val = lon_in.quantity_from(prime_meridian);
-    // coupled normalization: reflect latitude, shift longitude at poles
-    // ... normalize lat_val into [-90°, 90°], flipping lon_val by 180° on each reflection ...
-    lat = equator + lat_val;
-    lon = prime_meridian + lon_val;  // wrap_to_range on prime_meridian handles the rest
+    quantity lat_q = lat_in.quantity_from(equator);
+    // fold lat_q into [-180°, 180°] using fmod, then reflect at the poles
+    // (|lat_q| > 90° → lat_q := ±180° - lat_q; lon += 180°).
+    // wrap_to_range on prime_meridian normalizes the longitude back into (-180°, 180°].
+    // ...
+    lat = equator + lat_q;
   }
 };
 ```
 
 In this design, `equator` does **not** use `reflect_in_range` — the coupled
-reflection lives in `location`'s constructor. Longitude's `wrap_to_range` on
+reflection lives in `position`'s constructor. Longitude's `wrap_to_range` on
 `prime_meridian` still handles the independent cyclic wrapping as usual. The
 single-axis policies and the composite type each do what they are good at.
 
+A complete, working implementation ships with the **mp-units** examples in
+[`example/include/geographic.h`](https://github.com/mpusz/mp-units/blob/master/example/include/geographic.h).
+
 ### Logarithmic quantities
 
-Logarithmic quantities (e.g. power ratios in decibels) present a different
+Logarithmic quantities (e.g. _power ratios_ in decibels) present a different
 challenge: the underlying linear quantity lives on a half-line $(0, +\infty)$,
 but the logarithmic representation maps it to the full real line
 $(-\infty, +\infty)$. Bounds need to be expressed in the appropriate
 coordinate system, and it is not yet clear how this interacts with the
 current design.
 
-### Should `quantity_bounds` be applied to application-level absolute quantity ranges?
+### Should bounds be applied to application-level absolute quantity ranges?
 
 Beyond the automatic non-negativity enforcement described above, do you see real
 use cases for attaching _application-specific_ range bounds to absolute quantities
@@ -639,7 +655,7 @@ under _Range-Validated Quantity Points_.
 - [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.md) — how-to guide on combining `constrained<T, EP>` with `safe_int` for defence-in-depth
 - [Introducing Absolute Quantities](introducing-absolute-quantities.md) — the companion blog post on ratio-scale non-negativity and `absolute_point_origin`
 - [`safe_int<T>`](../../users_guide/framework_basics/safe_int.md) — overflow-safe integer arithmetic reference
-- [Preventing Integer Overflow in Physical Computations](preventing-integer-overflow.md) — in-depth narrative on automatic scaling overflow and how `safe_int<T>` composes with `quantity_bounds`
+- [Preventing Integer Overflow in Physical Computations](preventing-integer-overflow.md) — in-depth narrative on automatic scaling overflow and how `safe_int<T>` composes with origin bounds policies
 - [Understanding Safety Levels](understanding-safety-levels.md) — in-depth survey of all six safety levels; Level 6 covers mathematical space safety
 - [GitHub Discussion #782](https://github.com/mpusz/mp-units/discussions/782) — the original user report on geodetic bounds that triggered this work
 <!-- markdownlint-enable MD013 -->

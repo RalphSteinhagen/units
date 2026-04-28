@@ -427,12 +427,12 @@ arithmetic operations.
     - **_Longitude_** (mirrored): wraps circularly at -180° to +180°
     - **_Elevation_** (symmetric): reflects at ±90° like _latitude_
     - **_Geometric Azimuth_** (mirrored): 0° = East, counter-clockwise, wraps [-180°, 180°)
-    - **_Bearing_** (mirrored): 0° = North, clockwise, wraps [-180°, 180°)
-        - Conversion: `bearing = 90° - geometric_azimuth` (involves negation)
-        - Cannot use `relative_point_origin` (requires separate `absolute_point_origin`)
     - **_Heading_** (mirrored): 0° = North, counter-clockwise, wraps [-180°, 180°)
         - Conversion: `heading = geometric_azimuth - 90°` (simple offset)
         - Uses `relative_point_origin<east + delta<geometric_azimuth[degree]>(-90.)>`
+    - **_Bearing_** (mirrored): 0° = North, clockwise, wraps [-180°, 180°)
+        - Conversion: `bearing = 90° - geometric_azimuth` (involves negation)
+        - Cannot use `relative_point_origin` (requires separate `absolute_point_origin`)
 
     These requirements came from companies working with coordinate reference systems (CRS),
     navigation, and geodesy. See the complete discussion in
@@ -468,7 +468,7 @@ arithmetic operations.
 | `check_in_range`     | Reports violation via `constraint_violation_handler` or `MP_UNITS_EXPECTS` | Depends on rep type  | Bounds checking with customizable error behavior           |
 | `clamp_to_range`     | Clamps to nearest boundary: `clamp(value, min, max)`                       | Silent correction    | Saturating arithmetic, sensor limits, UI controls          |
 | `wrap_to_range`      | Wraps circularly to `[min, max)`: modulo arithmetic                        | Value transformation | Periodic quantities (_angles_, _time-of-day_, _longitude_) |
-| `reflect_in_range`   | Reflects at boundaries (like a bouncing ball)                              | Value transformation | Geographic _latitude_, physical boundaries                 |
+| `reflect_in_range`   | Reflects at boundaries (like a bouncing ball)                              | Value transformation | Geographic _elevation angle_, physical boundaries          |
 | `check_non_negative` | Reports violation if `value < 0`                                           | Depends on rep type  | Inherently non-negative quantities (_length_, _mass_)      |
 | `clamp_non_negative` | Clamps negative values to zero                                             | Silent correction    | FP rounding noise in non-negative domains                  |
 
@@ -520,6 +520,12 @@ void example()
   lon += 200.0 * deg;                            // Result wraps: -90 + 200 = 110°
 }
 ```
+
+!!! tip "Simplified"
+
+    True geodetic _latitude_ reflection also requires shifting _longitude_ by 180° (crossing a pole puts
+    you on the opposite side of the globe).
+
 
 ### How It Works?
 
