@@ -56,6 +56,8 @@ inline constexpr struct luminous_efficacy final :
 // clang-format off
 inline constexpr struct standard_gravity final :
   named_constant<symbol_text{u8"g₀", "g_0"}, mag_ratio<980'665, 100'000> * metre / square(second)> {} standard_gravity;
+inline constexpr struct reduced_planck_constant final :
+  named_constant<symbol_text{u8"\u210f", "hbar"}, si2019::planck_constant / (mag<2> * π)> {} reduced_planck_constant;
 inline constexpr struct magnetic_constant final :
   named_constant<symbol_text{u8"μ₀", "u_0"}, mag<4> * mag_power<10, -7> * π * henry / metre> {} magnetic_constant;
 // clang-format on
