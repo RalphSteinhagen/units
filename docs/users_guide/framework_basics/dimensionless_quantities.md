@@ -270,16 +270,24 @@ one [quantity kind](../../reference/glossary.md#kind) and more than one unit in 
 
 ```mermaid
 flowchart TD
+    subgraph kind_angular[" "]
+        angular_measure["<b>angular_measure</b><br><i>(arc_length / radius)</i><br>[rad]"]
+        angular_measure --- rotational_displacement["<b>rotational_displacement</b><br><i>(path_length / radius)</i>"]
+        angular_measure --- phase_angle["<b>phase_angle</b>"]
+    end
+    subgraph kind_solid_angular[" "]
+        solid_angular_measure["<b>solid_angular_measure</b><br><i>(area / radius<sup>2</sup>)</i><br>[sr]"]
+    end
+    subgraph kind_storage[" "]
+        storage_capacity["<b>storage_capacity</b><br>[bit]"]
+        storage_capacity --- equivalent_binary_storage_capacity["<b>equivalent_binary_storage_capacity</b>"]
+    end
     dimensionless["<b>dimensionless</b><br>[one]"]
     dimensionless --- rotation["<b>rotation</b>"]
     dimensionless --- thermodynamic_efficiency["<b>thermodynamic_efficiency</b><br><i>(work / heat)</i>"]
-    dimensionless --- angular_measure["<b>angular_measure</b>🔒<br><i>(arc_length / radius)</i><br>[rad]"]
-    angular_measure --- rotational_displacement["<b>rotational_displacement</b><br><i>(path_length / radius)</i>"]
-    angular_measure --- phase_angle["<b>phase_angle</b>"]
-    dimensionless --- solid_angular_measure["<b>solid_angular_measure</b>🔒<br><i>(area / radius<sup>2</sup>)</i><br>[sr]"]
-    dimensionless --- drag_factor["<b>drag_factor</b><br><i>(drag_force / (mass_density * speed<sup>2</sup> * area))</i>"]
-    dimensionless --- storage_capacity["<b>storage_capacity</b>🔒<br>[bit]"] --- equivalent_binary_storage_capacity["<b>equivalent_binary_storage_capacity</b>"]
-    dimensionless --- ...
+    dimensionless -.- angular_measure
+    dimensionless -.- solid_angular_measure
+    dimensionless -.- storage_capacity
 ```
 
 To provide such support in the library, we use the `is_kind` specifier in the quantity

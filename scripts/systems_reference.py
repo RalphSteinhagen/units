@@ -3768,10 +3768,12 @@ class DocumentationGenerator:
     ) -> str:
         """Build Mermaid flowchart for quantity hierarchy using qualified names
 
-        Returns a string containing the mermaid diagram and optional legend.
+        Returns a string containing the mermaid diagram.
+        is_kind quantities (below the root) are wrapped in subgraph boxes
+        connected to their parent with dotted lines.
         """
-        lines = ["```mermaid", "flowchart LR"]
-        has_non_root_kinds = False  # Track if we need to show legend
+        main_lines: list[str] = []  # regular node defs and edges
+        subgraph_lines: list[str] = []  # subgraph blocks for is_kind subtrees
 
         # Build a map of qualified_name -> quantity
         qty_map = {qname: qty for qname, qty in qualified_quantities}
@@ -3788,19 +3790,11 @@ class DocumentationGenerator:
                     target_qname = f"{sys_ns}::{qty.alias_target}"
                 aliases_map[target_qname].append(qname)
 
-        def add_node(qualified_name: str, parent_id: str = None):
-            nonlocal has_non_root_kinds
-
+        def build_label(qualified_name: str) -> str:
+            """Build the Mermaid node label (with hyperlink) for a quantity."""
             qty = qty_map.get(qualified_name)
             if not qty:
-                return
-
-            # Skip if this is an alias (will be included in target's box)
-            if qty.alias_target:
-                return
-
-            # Create node ID from qualified name (sanitized for Mermaid)
-            node_id = qualified_name.replace("::", "_").replace("-", "_")
+                return qualified_name
 
             # Extract system namespace and quantity name for URL generation
             if qualified_name == "dimensionless":
@@ -3812,12 +3806,8 @@ class DocumentationGenerator:
                 qty_name = parts[-1] if len(parts) > 1 else qualified_name
 
             # Generate relative URL to the quantity in the system page
-            # From hierarchies/*.md (served as hierarchies/*/index.html) we need to go up 2 levels
-            # Use served URL format (no .md extension) since these are HTML links, not markdown links
             base_url = f"../../systems/{system_key}/"
 
-            # Build node label with HTML links
-            # Link the primary quantity name
             name_display = (
                 f'<a href="{base_url}#{qty_name}" '
                 f'style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">'
@@ -3828,7 +3818,6 @@ class DocumentationGenerator:
             if qualified_name in aliases_map:
                 alias_parts = []
                 for alias_qname in sorted(aliases_map[qualified_name]):
-                    # Extract alias system and name
                     alias_parts_split = alias_qname.split("::")
                     alias_system = (
                         alias_parts_split[0] if len(alias_parts_split) > 0 else ""
@@ -3850,33 +3839,65 @@ class DocumentationGenerator:
             equation = ""
             if qty.equation:
                 normalized_eq = self._normalize_equation(qty.equation)
-                # Linkify identifiers in the equation
                 linkified_eq = self._linkify_equation_for_hierarchy(
                     normalized_eq, qty_map
                 )
                 equation = f"<br><i>({linkified_eq})</i>"
 
-            # Add is_kind indicator (lock icon) only for non-root kinds
-            # Root is always a kind by definition, so no need to mark it
-            is_root = parent_id is None
-            kind_indicator = ""
-            if qty.is_kind and not is_root:
-                kind_indicator = " 🔒"
-                has_non_root_kinds = True
+            return f"<b>{name_display}</b>{equation}"
 
-            label = f"<b>{name_display}{kind_indicator}</b>{equation}"
+        def add_node_in_subgraph(qualified_name: str, parent_id: str, sg_lines: list):
+            """Recursively add a node and its descendants inside a subgraph block."""
+            qty = qty_map.get(qualified_name)
+            if not qty or qty.alias_target:
+                return
 
-            # Add node definition
-            lines.append(f'    {node_id}["{label}"]')
+            node_id = qualified_name.replace("::", "_").replace("-", "_")
+            label = build_label(qualified_name)
+            sg_lines.append(f'        {node_id}["{label}"]')
+            sg_lines.append(f"        {parent_id} --- {node_id}")
 
-            # Add edge from parent
-            if parent_id:
-                lines.append(f"    {parent_id} --- {node_id}")
-
-            # Process children (excluding aliases) - children are (qualified_name, qty) tuples
             children = sorted(qty_children.get(qualified_name, []), key=lambda x: x[0])
-            for child_qname, child_qty in children:
-                add_node(child_qname, node_id)
+            for child_qname, _ in children:
+                add_node_in_subgraph(child_qname, node_id, sg_lines)
+
+        def add_node(qualified_name: str, parent_id: str = None):
+            qty = qty_map.get(qualified_name)
+            if not qty:
+                return
+
+            # Skip if this is an alias (will be included in target's box)
+            if qty.alias_target:
+                return
+
+            node_id = qualified_name.replace("::", "_").replace("-", "_")
+            label = build_label(qualified_name)
+            is_root = parent_id is None
+
+            if qty.is_kind and not is_root:
+                # Dotted edge from parent; node definition goes inside the subgraph
+                main_lines.append(f"    {parent_id} -.- {node_id}")
+                # Build subgraph block for this is_kind subtree
+                subgraph_id = f"kind_{node_id}"
+                sg_lines = [f'    subgraph {subgraph_id}[" "]']
+                sg_lines.append(f'        {node_id}["{label}"]')
+                children = sorted(
+                    qty_children.get(qualified_name, []), key=lambda x: x[0]
+                )
+                for child_qname, _ in children:
+                    add_node_in_subgraph(child_qname, node_id, sg_lines)
+                sg_lines.append("    end")
+                subgraph_lines.extend(sg_lines)
+            else:
+                # Regular node
+                main_lines.append(f'    {node_id}["{label}"]')
+                if parent_id:
+                    main_lines.append(f"    {parent_id} --- {node_id}")
+                children = sorted(
+                    qty_children.get(qualified_name, []), key=lambda x: x[0]
+                )
+                for child_qname, child_qty in children:
+                    add_node(child_qname, node_id)
 
         # Start with the root (which should be the qualified root name, or just 'dimensionless')
         if root_name == "dimensionless":
@@ -3891,21 +3912,17 @@ class DocumentationGenerator:
                     add_node(qname)
                     break
 
-        lines.append("```")
-
-        # Add legend if there are any non-root kinds
+        lines = ["```mermaid", "flowchart LR"] + main_lines + subgraph_lines + ["```"]
         result = "\n".join(lines)
-        if has_non_root_kinds:
+        # Add legend if any is_kind subgraphs are present (i.e., any dotted -.- edge)
+        if any("-.-" in l for l in main_lines):
             result += "\n\n**Legend:**\n\n"
             result += (
-                "- 🔒 indicates a root of a sub-kind - quantities that "
-                "cannot be added or compared to other quantities outside "
-                "their hierarchy subtree\n"
+                "- Subgraphs with a dotted line from the parent indicate a distinct quantity kind (created with `is_kind`). "
+                "These subtrees are type-isolated: quantities inside cannot be added or compared to those outside their subgraph without explicit conversion.\n"
             )
         elif not result.endswith("\n"):
-            # Ensure result always ends with exactly one newline
             result += "\n"
-
         return result
 
 

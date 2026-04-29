@@ -20,16 +20,12 @@ flowchart LR
     hep_length --- hep_height
     hep_impact_parameter["<b><a href="../../systems/hep/#impact_parameter" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::impact_parameter</a></b>"]
     hep_length --- hep_impact_parameter
-    hep_interaction_length["<b><a href="../../systems/hep/#interaction_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::interaction_length</a> 🔒</b>"]
-    hep_length --- hep_interaction_length
-    hep_nuclear_interaction_length["<b><a href="../../systems/hep/#nuclear_interaction_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::nuclear_interaction_length</a></b>"]
-    hep_interaction_length --- hep_nuclear_interaction_length
+    hep_length -.- hep_interaction_length
     hep_mean_free_path["<b><a href="../../systems/hep/#mean_free_path" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::mean_free_path</a></b>"]
     hep_length --- hep_mean_free_path
     hep_path_length["<b><a href="../../systems/hep/#path_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::path_length</a></b>"]
     hep_length --- hep_path_length
-    hep_radiation_length["<b><a href="../../systems/hep/#radiation_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::radiation_length</a> 🔒</b>"]
-    hep_length --- hep_radiation_length
+    hep_length -.- hep_radiation_length
     hep_radius["<b><a href="../../systems/hep/#radius" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::radius</a></b>"]
     hep_length --- hep_radius
     hep_range["<b><a href="../../systems/hep/#range" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::range</a></b>"]
@@ -40,8 +36,16 @@ flowchart LR
     hep_length --- hep_wavelength
     hep_width["<b><a href="../../systems/hep/#width" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::width</a></b>"]
     hep_length --- hep_width
+    subgraph kind_hep_interaction_length[" "]
+        hep_interaction_length["<b><a href="../../systems/hep/#interaction_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::interaction_length</a></b>"]
+        hep_nuclear_interaction_length["<b><a href="../../systems/hep/#nuclear_interaction_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::nuclear_interaction_length</a></b>"]
+        hep_interaction_length --- hep_nuclear_interaction_length
+    end
+    subgraph kind_hep_radiation_length[" "]
+        hep_radiation_length["<b><a href="../../systems/hep/#radiation_length" style="color: var(--md-mermaid-label-fg-color); text-decoration: none;">hep::radiation_length</a></b>"]
+    end
 ```
 
 **Legend:**
 
-- 🔒 indicates a root of a sub-kind - quantities that cannot be added or compared to other quantities outside their hierarchy subtree
+- Subgraphs with a dotted line from the parent indicate a distinct quantity kind (created with `is_kind`). These subtrees are type-isolated: quantities inside cannot be added or compared to those outside their subgraph without explicit conversion.
