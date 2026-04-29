@@ -34,15 +34,15 @@ using namespace mp_units::natural::unit_symbols;
 constexpr quantity test_mass = natural::mass(1. * GeV);
 static_assert(QuantityOf<decltype(test_mass), natural::energy>);
 
-// Test inverse_energy hierarchy - time and length are both inverse_energy
-constexpr quantity test_time = natural::time(1. / GeV);
-static_assert(QuantityOf<decltype(test_time), natural::inverse_energy>);
+// Test inverse_energy hierarchy - duration and length are both inverse_energy
+constexpr quantity test_duration = natural::duration(1. / GeV);
+static_assert(QuantityOf<decltype(test_duration), natural::inverse_energy>);
 constexpr quantity test_length = natural::length(1. / GeV);
 static_assert(QuantityOf<decltype(test_length), natural::inverse_energy>);
 
 // Dimensional relationships still hold at the unit level
-static_assert(1. / GeV / (1. / GeV) == 1. * one);                 // length/time = speed
-static_assert(1. / GeV / ((1. / GeV) * (1. / GeV)) == 1. * GeV);  // length/time² = acceleration
+static_assert(1. / GeV / (1. / GeV) == 1. * one);                 // length/duration = speed
+static_assert(1. / GeV / ((1. / GeV) * (1. / GeV)) == 1. * GeV);  // length/duration² = acceleration
 
 // All energy-dimension quantities are compatible
 static_assert(1. * GeV * (1. * one) == 1. * GeV);               // mass * velocity = momentum (dimensionally)
@@ -53,18 +53,18 @@ static_assert(1. * GeV * (1. * GeV) * (1. / GeV) == 1. * GeV);  // force * lengt
 using namespace mp_units::detail;
 using enum specs_convertible_result;
 
-// speed = length / time  (v = l/t; the l = v·t relation is derived from this equation)
-static_assert(convertible(natural::speed * natural::time, natural::length) == yes);
-static_assert(convertible(natural::length, natural::speed* natural::time) == yes);
-static_assert(convertible(natural::length / natural::time, natural::speed) == yes);
+// speed = length / duration  (v = l/t; the l = v·t relation is derived from this equation)
+static_assert(convertible(natural::speed * natural::duration, natural::length) == yes);
+static_assert(convertible(natural::length, natural::speed* natural::duration) == yes);
+static_assert(convertible(natural::length / natural::duration, natural::speed) == yes);
 
 // momentum = mass * velocity  (p = mv)
 static_assert(convertible(natural::mass * natural::velocity, natural::momentum) == yes);
 static_assert(convertible(natural::momentum, natural::mass* natural::velocity) == yes);
 
-// acceleration = velocity / time  (a = dv/dt)
-static_assert(convertible(natural::velocity / natural::time, natural::acceleration) == yes);
-static_assert(convertible(natural::acceleration, natural::velocity / natural::time) == yes);
+// acceleration = velocity / duration  (a = dv/dt)
+static_assert(convertible(natural::velocity / natural::duration, natural::acceleration) == yes);
+static_assert(convertible(natural::acceleration, natural::velocity / natural::duration) == yes);
 
 // force = mass * acceleration  (F = ma)
 static_assert(convertible(natural::mass * natural::acceleration, natural::force) == yes);
@@ -82,10 +82,10 @@ static_assert(convertible(natural::acceleration, natural::energy) == yes);
 static_assert(convertible(natural::length, natural::inverse_energy) == yes);
 static_assert(convertible(natural::force, natural::energy_squared) == yes);
 
-static_assert(convertible(natural::time, natural::inverse_energy) == yes);
-static_assert(convertible(natural::inverse_energy, natural::time) == explicit_conversion);
+static_assert(convertible(natural::duration, natural::inverse_energy) == yes);
+static_assert(convertible(natural::inverse_energy, natural::duration) == explicit_conversion);
 static_assert(convertible(natural::inverse_energy, natural::length) == explicit_conversion);
-static_assert(convertible(natural::time, natural::length) == cast);
+static_assert(convertible(natural::duration, natural::length) == cast);
 
 // Dimensionless quantity tests
 static_assert(convertible(natural::velocity, natural::speed) == yes);
