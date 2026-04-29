@@ -908,6 +908,11 @@ template<typename... ProcessedFrom, typename From, typename... RemainingFrom, ty
       // We do not need to analyze the rest of the lists as the quantities are not convertible when at least one element
       // is not convertible.
       return std::optional(extract_common_base_result{specs_convertible_result::no});
+    else if constexpr (res == specs_convertible_result::cast &&
+                       (detail::get_complexity(from_factor) > 0 || detail::get_complexity(to_factor) > 0))
+      // One or both factors have a defining equation. Defer to complexity-based explosion so that the equation
+      // is tried before accepting a cast-level match between siblings.
+      return std::optional<extract_common_base_result<>>(std::nullopt);
     else {
       // We might deal with different powers of quantities. Let's find the biggest common exponent and extract it.
       // The rest of the quantities must be reinserted into the list.
