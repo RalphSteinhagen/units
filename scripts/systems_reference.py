@@ -3915,11 +3915,13 @@ class DocumentationGenerator:
         lines = ["```mermaid", "flowchart LR"] + main_lines + subgraph_lines + ["```"]
         result = "\n".join(lines)
         # Add legend if any is_kind subgraphs are present (i.e., any dotted -.- edge)
-        if any("-.-" in l for l in main_lines):
+        if any("-.-" in line for line in main_lines):
             result += "\n\n**Legend:**\n\n"
             result += (
-                "- Subgraphs with a dotted line from the parent indicate a distinct quantity kind (created with `is_kind`). "
-                "These subtrees are type-isolated: quantities inside cannot be added or compared to those outside their subgraph without explicit conversion.\n"
+                "- Subgraphs with a dotted line from the parent indicate a distinct quantity kind "
+                "(created with `is_kind`). "
+                "These subtrees are type-isolated: quantities inside cannot be added or compared to those "
+                "outside their subgraph without explicit conversion.\n"
             )
         elif not result.endswith("\n"):
             result += "\n"
