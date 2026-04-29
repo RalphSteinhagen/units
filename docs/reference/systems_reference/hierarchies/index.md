@@ -16,7 +16,7 @@ This section contains all quantity hierarchy trees across all systems, grouped b
 ## Dimension: E
 
 - [`hep::energy`](energy_hep.md) (13 quantities)
-- [`natural::energy`](energy_natural.md) (5 quantities)
+- [`natural::energy`](energy_natural.md) (4 quantities)
 
 ## Dimension: I
 

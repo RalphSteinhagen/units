@@ -111,6 +111,7 @@
 | Name | Symbol | unit_symbol | Definition |
 |------|:------:|:------------:|------------|
 | <span id="magnetic_constant"></span><code>magnetic_<wbr>constant</code> | μ₀ (u_0) | — | <code>mag<4> * <wbr>mag_power<10, -7> * <wbr>[π](core.md#π) * <wbr>[henry](#henry) / <wbr>[metre](#metre)</code> |
+| <span id="reduced_planck_constant"></span><code>reduced_<wbr>planck_<wbr>constant</code> | \u210f (hbar) | — | <code>[si2019::planck_<wbr>constant](#si2019-planck_constant) / <wbr>(mag<2> * <wbr>[π](core.md#π))</code> |
 | <span id="si2019-avogadro_constant"></span><code>si2019::avogadro_<wbr>constant</code> | N_A | — | <code>mag_ratio<602'214'076, 100'000'000> * <wbr>mag_power<10, 23> / <wbr>[mole](#mole)</code> |
 | <span id="si2019-boltzmann_constant"></span><code>si2019::boltzmann_<wbr>constant</code> | k | — | <code>mag_ratio<1'380'649, 1'000'000> * <wbr>mag_power<10, -23> * <wbr>[joule](#joule) / <wbr>[kelvin](#kelvin)</code> |
 | <span id="si2019-elementary_charge"></span><code>si2019::elementary_<wbr>charge</code> | e | — | <code>mag_ratio<1'602'176'634, 1'000'000'000> * <wbr>mag_power<10, -19> * <wbr>[coulomb](#coulomb)</code> |

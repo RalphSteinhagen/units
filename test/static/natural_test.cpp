@@ -49,14 +49,38 @@ static_assert(1. * GeV * (1. * one) == 1. * GeV);               // mass * veloci
 static_assert(1. * GeV * (1. * GeV) == 1. * GeV2);              // mass * acceleration = force
 static_assert(1. * GeV * (1. * GeV) * (1. / GeV) == 1. * GeV);  // force * length = energy
 
-// Quantity hierarchy tests
+// Quantity equation tests — verify that the quantity equation is convertible to (and from) the quantity
 using namespace mp_units::detail;
 using enum specs_convertible_result;
+
+// speed = length / time  (v = l/t; the l = v·t relation is derived from this equation)
+static_assert(convertible(natural::speed * natural::time, natural::length) == yes);
+static_assert(convertible(natural::length, natural::speed* natural::time) == yes);
+static_assert(convertible(natural::length / natural::time, natural::speed) == yes);
+
+// momentum = mass * velocity  (p = mv)
+static_assert(convertible(natural::mass * natural::velocity, natural::momentum) == yes);
+static_assert(convertible(natural::momentum, natural::mass* natural::velocity) == yes);
+
+// acceleration = velocity / time  (a = dv/dt)
+static_assert(convertible(natural::velocity / natural::time, natural::acceleration) == yes);
+static_assert(convertible(natural::acceleration, natural::velocity / natural::time) == yes);
+
+// force = mass * acceleration  (F = ma)
+static_assert(convertible(natural::mass * natural::acceleration, natural::force) == yes);
+static_assert(convertible(natural::force, natural::mass* natural::acceleration) == yes);
+
+// Quantity hierarchy tests
 
 static_assert(convertible(natural::mass, natural::energy) == yes);
 static_assert(convertible(natural::energy, natural::mass) == explicit_conversion);
 static_assert(convertible(natural::energy, natural::momentum) == explicit_conversion);
 static_assert(convertible(natural::mass, natural::momentum) == cast);
+
+static_assert(convertible(natural::momentum, natural::energy) == yes);
+static_assert(convertible(natural::acceleration, natural::energy) == yes);
+static_assert(convertible(natural::length, natural::inverse_energy) == yes);
+static_assert(convertible(natural::force, natural::energy_squared) == yes);
 
 static_assert(convertible(natural::time, natural::inverse_energy) == yes);
 static_assert(convertible(natural::inverse_energy, natural::time) == explicit_conversion);
@@ -66,9 +90,11 @@ static_assert(convertible(natural::time, natural::length) == cast);
 // Dimensionless quantity tests
 static_assert(convertible(natural::velocity, natural::speed) == yes);
 static_assert(convertible(natural::speed, natural::velocity) == explicit_conversion);
-static_assert(convertible(natural::speed, dimensionless) == yes);
-static_assert(convertible(natural::angular_measure, dimensionless) == yes);
-static_assert(convertible(natural::speed, natural::angular_measure) == cast);
+// speed and angular_measure are separate kinds — explicit conversion needed to cross kind boundary
+static_assert(convertible(natural::speed, dimensionless) == explicit_conversion_beyond_kind);
+static_assert(convertible(natural::angular_measure, dimensionless) == explicit_conversion_beyond_kind);
+// different dimensionless kinds cannot even be cast to each other
+static_assert(convertible(natural::speed, natural::angular_measure) == no);
 
 // Acceleration tests (acceleration has dimension energy in natural units)
 static_assert(convertible(natural::acceleration, natural::energy) == yes);

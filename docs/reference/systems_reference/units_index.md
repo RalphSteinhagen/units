@@ -203,7 +203,6 @@ Alphabetical list of all units.
 - [`siemens` (si)](systems/si.md#siemens)
 - [`sievert` (si)](systems/si.md#sievert)
 - [`solar_mass` (iau::codata2018)](systems/iau.md#codata2018-solar_mass)
-- [`speed_of_light` (natural)](systems/natural.md#speed_of_light)
 - [`steradian` (angular)](systems/angular.md#steradian)
 - [`steradian` (hep)](systems/hep.md#steradian)
 - [`steradian` (si)](systems/si.md#steradian)
@@ -235,4 +234,4 @@ Alphabetical list of all units.
 - [`weber` (si)](systems/si.md#weber)
 - [`yard` (yard_pound)](systems/yard_pound.md#yard)
 
-**Total units:** 229
+**Total units:** 228

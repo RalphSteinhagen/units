@@ -64,7 +64,10 @@ Alphabetical list of all constants.
 - [`proton_mass` (hep::codata2014)](systems/hep.md#codata2014-proton_mass)
 - [`proton_mass` (hep::codata2018)](systems/hep.md#codata2018-proton_mass)
 - [`proton_mass` (hep::codata2022)](systems/hep.md#codata2022-proton_mass)
+- [`reduced_planck_constant` (natural)](systems/natural.md#reduced_planck_constant)
+- [`reduced_planck_constant` (si)](systems/si.md#reduced_planck_constant)
 - [`speed_of_light_in_vacuum` (hep)](systems/hep.md#speed_of_light_in_vacuum)
+- [`speed_of_light_in_vacuum` (natural)](systems/natural.md#speed_of_light_in_vacuum)
 - [`speed_of_light_in_vacuum` (si::si2019)](systems/si.md#si2019-speed_of_light_in_vacuum)
 - [`standard_gravity` (si)](systems/si.md#standard_gravity)
 - [`standard_pressure` (hep)](systems/hep.md#standard_pressure)
@@ -72,4 +75,4 @@ Alphabetical list of all constants.
 - [`universe_mean_density` (hep)](systems/hep.md#universe_mean_density)
 - [`π` (mp_units)](systems/core.md#π)
 
-**Total constants:** 66
+**Total constants:** 69

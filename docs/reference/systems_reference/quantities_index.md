@@ -127,6 +127,7 @@ Alphabetical list of all quantities.
 - [`drag_force` (isq)](systems/isq.md#drag_force)
 - [`duration` (hep)](systems/hep.md#duration)
 - [`duration` (isq)](systems/isq.md#duration)
+- [`duration` (natural)](systems/natural.md#duration)
 - [`dynamic_friction_factor` (isq)](systems/isq.md#dynamic_friction_factor)
 - [`dynamic_friction_force` (isq)](systems/isq.md#dynamic_friction_force)
 - [`dynamic_viscosity` (isq)](systems/isq.md#dynamic_viscosity)
@@ -446,7 +447,6 @@ Alphabetical list of all quantities.
 - [`surface_tension` (isq)](systems/isq.md#surface_tension)
 - [`susceptance` (isq)](systems/isq.md#susceptance)
 - [`temperature` (hep)](systems/hep.md#temperature)
-- [`temperature` (natural)](systems/natural.md#temperature)
 - [`thermal_conductance` (isq)](systems/isq.md#thermal_conductance)
 - [`thermal_conductivity` (isq)](systems/isq.md#thermal_conductivity)
 - [`thermal_diffusivity` (isq)](systems/isq.md#thermal_diffusivity)
@@ -458,7 +458,6 @@ Alphabetical list of all quantities.
 - [`thickness` (isq)](systems/isq.md#thickness)
 - [`threshold_energy` (hep)](systems/hep.md#threshold_energy)
 - [`time` (isq)](systems/isq.md#time)
-- [`time` (natural)](systems/natural.md#time)
 - [`time_constant` (isq)](systems/isq.md#time_constant)
 - [`time_of_flight` (hep)](systems/hep.md#time_of_flight)
 - [`torque` (isq)](systems/isq.md#torque)
@@ -502,4 +501,4 @@ Alphabetical list of all quantities.
 - [`width` (isq)](systems/isq.md#width)
 - [`work` (isq)](systems/isq.md#work)
 
-**Total quantities:** 496
+**Total quantities:** 495
