@@ -56,3 +56,6 @@ docs/reference/api_reference/gen
 
 # Generated website files
 site/
+
+# AI coding assistant context files (local, not shared)
+CLAUDE.md
