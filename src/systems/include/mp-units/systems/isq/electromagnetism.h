@@ -112,14 +112,14 @@ QUANTITY_SPEC(magnetic_tension, electric_current, magnetic_field_strength* posit
               quantity_character::real_scalar);
 QUANTITY_SPEC(magnetomotive_force, electric_current, magnetic_field_strength* position_vector,
               quantity_character::real_scalar);
-QUANTITY_SPEC(number_of_turns_in_a_winding, dimensionless);
+QUANTITY_SPEC(number_of_turns_in_a_winding, dimensionless, non_negative);
 QUANTITY_SPEC(reluctance, magnetic_tension / magnetic_flux);
 QUANTITY_SPEC(permeance, inverse(reluctance));
 QUANTITY_SPEC(inductance, protoflux / electric_current);
 inline constexpr auto self_inductance = inductance;
 QUANTITY_SPEC(mutual_inductance, protoflux / electric_current);
-QUANTITY_SPEC(coupling_factor, dimensionless, mutual_inductance / pow<1, 2>(pow<2>(self_inductance)));
-QUANTITY_SPEC(leakage_factor, dimensionless, pow<2>(coupling_factor));
+QUANTITY_SPEC(coupling_factor, dimensionless, mutual_inductance / pow<1, 2>(pow<2>(self_inductance)), non_negative);
+QUANTITY_SPEC(leakage_factor, dimensionless, pow<2>(coupling_factor), non_negative);
 QUANTITY_SPEC(conductivity, electric_current_density / electric_field_strength, quantity_character::real_scalar);
 QUANTITY_SPEC(resistivity, inverse(conductivity));
 QUANTITY_SPEC(electromagnetism_power, power, voltage* electric_current);  // different name than in ISQ

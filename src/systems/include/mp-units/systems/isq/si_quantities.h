@@ -43,7 +43,7 @@ QUANTITY_SPEC(path_length, length);
 inline constexpr auto arc_length = path_length;
 QUANTITY_SPEC(area, pow<2>(length));
 QUANTITY_SPEC(angular_measure, dimensionless, arc_length / radius, is_kind);
-QUANTITY_SPEC(solid_angular_measure, dimensionless, area / pow<2>(radius), is_kind);
+QUANTITY_SPEC(solid_angular_measure, dimensionless, area / pow<2>(radius), is_kind, non_negative);
 QUANTITY_SPEC(period_duration, duration);
 inline constexpr auto period = period_duration;
 QUANTITY_SPEC(frequency, inverse(period_duration));
@@ -54,7 +54,7 @@ QUANTITY_SPEC(energy, mass* pow<2>(length) / pow<2>(time));  // differs from ISO
 // atomic_and_nuclear_physics
 QUANTITY_SPEC(activity, inverse(duration));
 QUANTITY_SPEC(absorbed_dose, energy / mass);
-QUANTITY_SPEC(ionizing_radiation_quality_factor, dimensionless);
+QUANTITY_SPEC(ionizing_radiation_quality_factor, dimensionless, non_negative);
 QUANTITY_SPEC(dose_equivalent, absorbed_dose* ionizing_radiation_quality_factor);
 
 }  // namespace mp_units::isq

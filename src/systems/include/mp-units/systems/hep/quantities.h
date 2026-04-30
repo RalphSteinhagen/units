@@ -152,8 +152,9 @@ QUANTITY_SPEC(proper_velocity, displacement / proper_time,
               quantity_character::vector);  // four-velocity spatial part
 // Note: lorentz_factor and relativistic_beta are dimensionless but have specific physical meaning
 // They are distinct "kinds" to prevent accidental mixing with generic dimensionless values
-QUANTITY_SPEC(lorentz_factor, dimensionless, is_kind);     // γ = E/E₀ (relativistic time dilation factor)
-QUANTITY_SPEC(relativistic_beta, dimensionless, is_kind);  // β = v/c (velocity as fraction of light speed)
+QUANTITY_SPEC(lorentz_factor, dimensionless, is_kind, non_negative);  // γ = E/E₀ (relativistic time dilation factor)
+QUANTITY_SPEC(relativistic_beta, dimensionless, is_kind,
+              non_negative);  // β = v/c (velocity as fraction of light speed)
 
 // interaction and collisions
 QUANTITY_SPEC(cross_section, area);              // interaction probability measure (σ)

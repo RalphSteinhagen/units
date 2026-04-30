@@ -68,7 +68,7 @@ QUANTITY_SPEC(specific_heat_capacity_at_constant_volume, specific_heat_capacity)
 QUANTITY_SPEC(specific_heat_capacity_at_saturated_vapour_pressure, specific_heat_capacity);
 QUANTITY_SPEC(thermal_diffusivity, thermal_conductivity / (mass_density * specific_heat_capacity_at_constant_pressure));
 QUANTITY_SPEC(ratio_of_specific_heat_capacities, dimensionless,
-              specific_heat_capacity_at_constant_pressure / specific_heat_capacity_at_constant_volume);
+              specific_heat_capacity_at_constant_pressure / specific_heat_capacity_at_constant_volume, non_negative);
 QUANTITY_SPEC(isentropic_exponent,
               volume / pressure * (pressure / volume));  // TODO how to handle "negative" part
 inline constexpr auto isentropic_expansion_factor = isentropic_exponent;

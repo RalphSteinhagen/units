@@ -83,14 +83,15 @@ QUANTITY_SPEC(second_axial_moment_of_area, pow<2>(radial_distance) * area);
 QUANTITY_SPEC(second_polar_moment_of_area, pow<2>(radial_distance) * area);
 QUANTITY_SPEC(section_modulus, second_axial_moment_of_area / radial_distance);
 QUANTITY_SPEC(static_friction_coefficient, dimensionless, static_friction_force / force,
-              quantity_character::real_scalar);
+              quantity_character::real_scalar, non_negative);
 inline constexpr auto static_friction_factor = static_friction_coefficient;
 inline constexpr auto coefficient_of_static_friction = static_friction_coefficient;
-QUANTITY_SPEC(kinetic_friction_factor, dimensionless, kinetic_friction_force / force, quantity_character::real_scalar);
+QUANTITY_SPEC(kinetic_friction_factor, dimensionless, kinetic_friction_force / force, quantity_character::real_scalar,
+              non_negative);
 inline constexpr auto dynamic_friction_factor = kinetic_friction_factor;
 QUANTITY_SPEC(rolling_resistance_factor, force / force, quantity_character::real_scalar);
 QUANTITY_SPEC(drag_coefficient, dimensionless, drag_force / (mass_density * pow<2>(speed) * area),
-              quantity_character::real_scalar);
+              quantity_character::real_scalar, non_negative);
 inline constexpr auto drag_factor = drag_coefficient;
 QUANTITY_SPEC(dynamic_viscosity, shear_stress* length / velocity, quantity_character::real_scalar);
 QUANTITY_SPEC(kinematic_viscosity, dynamic_viscosity / mass_density);
