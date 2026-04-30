@@ -5,7 +5,7 @@ Learn when and how to extract raw numbers from quantities.
 **Goal**: Get numeric values in specific units for output or legacy APIs  
 **Time**: ~20 minutes
 
-## Why Extract Values?
+## Why Extract Values
 
 Sometimes you need just the number:
 
@@ -206,7 +206,7 @@ code type-safe while providing flexible formatting.
 2. **Plotting**: Create 5 time values (0-100 s) and 5 distance values, extract for plotting
 3. **User input**: Read a number as mph, create quantity, extract as km/h for display
 
-## What You Learned?
+## What You Learned
 
 ✅ Use `.numerical_value_in(unit)` to extract raw numbers (removes all type safety)  
 ✅ Use format specifiers (`%N`, `%U`) for output instead of extracting values  

@@ -109,7 +109,7 @@ Enhance the calculator:
     you'll learn how to pass different units (like `m` and `s`) to functions expecting
     `km` and `min`, and how the library handles conversions safely!
 
-## What You Learned?
+## What You Learned
 
 ✅ Building complete applications with quantities  
 ✅ Creating functions with specific unit requirements  

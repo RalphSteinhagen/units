@@ -260,7 +260,7 @@ using audited_double = constrained<double, audit_terminate_policy>;
 
 ## Best Practices
 
-### When to Use Each Error Policy?
+### When to Use Each Error Policy
 
 | Scenario                    | Recommended Policy                         |
 |-----------------------------|--------------------------------------------|

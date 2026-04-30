@@ -698,7 +698,7 @@ Traditional approaches to creating strong numeric types each face different trad
 analysis that generic strong-type libraries cannot provide.
 
 
-### Why dimensionless instead of custom dimensions?
+### Why Dimensionless Instead of Custom Dimensions
 
 Dimensionless quantities with `is_kind` automatically work with unit `one` and its scaled
 versions, support explicit conversions to/from raw types, and participate in ISQ for

@@ -106,7 +106,7 @@ to points (yielding a new point), but points cannot be added together.
 - Point: 3:00 PM on Jan 15, 2024
 - Delta: 2 hours, 30 minutes
 
-## Why This Matters?
+## Why This Matters
 
 Without affine space distinctions:
 
@@ -144,7 +144,7 @@ quantity_point avg_point = temp1 + diff / 2;  // 20 °C + 5 °C = 25 °C ✓
 4. **Try both syntaxes**: Recreate one time point using both `point<h>(...)` and
   `quantity_point{... * h}`
 
-## What You Learned?
+## What You Learned
 
 ✅ Points represent absolute positions  
 ✅ Deltas represent relative differences  

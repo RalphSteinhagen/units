@@ -133,7 +133,7 @@ Try modifying the code above:
 3. **Add more quantities**: Create `quantity power = 1500 * W;` (watts)
 4. **Try derived units**: Create `quantity speed = 100.5 * m / s;` (meters per second)
 
-## What You Learned?
+## What You Learned
 
 ✅ How to include **mp-units** headers  
 ✅ Quantities combine values with units  

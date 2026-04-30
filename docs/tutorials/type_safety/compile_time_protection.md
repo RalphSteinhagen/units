@@ -149,7 +149,7 @@ it!
    passing _speeds_ in mi/h using the `yard_pound` system. The compiler verifies the
    dimensions match and automatically converts between units!
 
-## What You Learned?
+## What You Learned
 
 ✅ mp-units catches unit mismatches at compile time  
 ✅ You cannot add, subtract, or compare incompatible units  

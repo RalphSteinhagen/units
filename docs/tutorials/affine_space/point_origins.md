@@ -149,7 +149,7 @@ All origins branching from the same absolute origin share the same affine space,
    (both based on the same absolute origin). Subtract them to prove they can interoperate,
    and use `.quantity_from_unit_zero()` to show they reference the same absolute origin.
 
-## What You Learned?
+## What You Learned
 
 ✅ Point origins define the "zero point" of measurements  
 ✅ Absolute origins create incompatible types (prevents mixing)  

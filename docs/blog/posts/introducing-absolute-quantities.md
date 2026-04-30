@@ -898,7 +898,7 @@ quantity carnot_eff_2 = (temp_hot - temp_cold) / temp_hot.quantity_from_unit_zer
 It worked, but was far from being physically pure and pretty.
 
 
-### Why Obvious Workarounds Fall Short?
+### Why Obvious Workarounds Fall Short
 
 Two workaround approaches exist, each with its own caveat.
 

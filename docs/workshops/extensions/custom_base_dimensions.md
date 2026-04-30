@@ -29,7 +29,7 @@ shares × (currency/share) = currency    // ✅ Portfolio valuation
 currency / shares = (currency/share)    // ✅ Average share price
 ```
 
-### Why not use dimensionless or existing ISQ dimensions?
+### Why Not Use Dimensionless or Existing ISQ Dimensions
 
 **Option 1: Dimensionless quantities** ([Workshop: Strongly-Typed Counts](../advanced/strongly_typed_counts.md)
 approach)

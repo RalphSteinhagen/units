@@ -69,7 +69,7 @@ providing complementary protection that works alongside the other safety levels.
 **All major C++ units libraries provide dimension safety**—this is the foundational feature
 that enables dimensional analysis.
 
-### What It Prevents?
+### What It Prevents
 
 Without dimension safety:
 
@@ -117,7 +117,7 @@ quantity<si::kilo<si::metre>> distance = speed * time;      // ✅ OK
 interface boundaries only with compatible units. It covers function arguments, return
 types, and component integration.
 
-### What It Prevents?
+### What It Prevents
 
 Even when the dimension is correct, using the wrong unit silently produces wrong values:
 
@@ -260,7 +260,7 @@ auto value = distance.numerical_value_in(km);  // Must specify unit explicitly
 **Representation safety** protects against numerical issues: overflow, underflow, and
 precision loss during conversions and arithmetic.
 
-### What It Prevents?
+### What It Prevents
 
 Many libraries carry unit types but do not validate the representation type on conversion.
 Truncation and overflow happen silently:
@@ -551,7 +551,7 @@ and [Ensure Ultimate Safety](../../how_to_guides/advanced_usage/ultimate_safety.
 **Quantity kind safety** distinguishes between quantities that share the same dimension but
 represent different physical concepts—different "kinds" of quantities.
 
-### What It Prevents?
+### What It Prevents
 
 Many physical quantities share dimensions but are conceptually distinct:
 
@@ -562,7 +562,7 @@ Many physical quantities share dimensions but are conceptually distinct:
 - **Fluid head (m)** and **Water head (m)**: Both `length` (dimension L)
 - Various counts and ratios: All `dimensionless` (dimension 1)
 
-### Why This Is Challenging?
+### Why This Is Challenging
 
 Quantity kind safety requires going beyond the seven base dimensions and recognizing that
 quantities sharing the same dimension can represent conceptually distinct physical concepts.
@@ -1154,7 +1154,7 @@ auto complex1 = std::complex{P.value(), Q.value()} * bu::si::watts;  // OK
 auto complex2 = std::complex{Q.value(), P.value()} * bu::si::watts;  // Oops! Reversed — silently accepted
 ```
 
-!!! quote "Production Feedback: Why This Matters?"
+!!! quote "Production Feedback: Why This Matters"
 
     At CppCon, an engineer from the power systems domain emphasized: **similar errors mixing
     _active_, _reactive_, and _apparent power_ are prevalent in their field**. He stated that any
@@ -1209,7 +1209,7 @@ mathematical properties:
    physical zero (e.g., _mass_ in kg, _temperature_ in K, _length_ as a size); distinct
    from both point and deltas
 
-### What It Prevents?
+### What It Prevents
 
 ??? danger "Historical Mishap: Hochrheinbrücke (2003–2004)"
 
@@ -1323,7 +1323,7 @@ mp-units provides optional runtime bounds checking for mathematical space conver
   The precondition check fails at runtime if the value is negative, providing an additional
   safety layer beyond compile-time type distinctions.
 
-### Why This Matters?
+### Why This Matters
 
 **Mathematical space safety prevents an entire class of conceptual errors** that dimension
 safety alone cannot catch. Consider these examples:

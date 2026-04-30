@@ -178,7 +178,7 @@ the **unit's zero**, which for Celsius is 0 °C (273.15 K), not absolute zero!
 2. **Daily temp range**: Morning 15°C, afternoon 25°C. What's the change? (relative)
 3. **Temperature conversion**: Create 98.6°F, convert to Celsius and Kelvin
 
-## What You Learned?
+## What You Learned
 
 ✅ Relative temperature = difference (quantity)  
 ✅ Absolute temperature = specific point (quantity_point)  

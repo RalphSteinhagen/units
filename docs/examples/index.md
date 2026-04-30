@@ -23,7 +23,7 @@ These examples:
 Beginner examples include detailed explanations; intermediate and advanced examples assume
 fundamental knowledge.
 
-## How to Use This Section?
+## How to Use This Section
 
 ### Learning Path
 
@@ -47,7 +47,7 @@ Browse the [tag index](tags.md) to filter examples by:
 - **Feature** - Conversions, affine space, custom units, generic programming, and more
 - **Domain** - Physics, electronics, aerospace, embedded systems, and more
 
-## When to Use Examples?
+## When to Use Examples
 
 Use Examples when you:
 

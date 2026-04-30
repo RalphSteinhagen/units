@@ -170,7 +170,7 @@ _enforces_ the expected unit, and the library safely converts when needed!
 4. **Tire pressure**: Create 32 psi (pounds per square inch), convert to Pa and kPa
 5. **Battery capacity**: Create 500 Wh (watt-hours), convert to kWh and megajoules (MJ)
 
-## What You Learned?
+## What You Learned
 
 ✅ Use `.in(unit)` to convert quantities explicitly  
 ✅ Original quantity remains unchanged after conversion  

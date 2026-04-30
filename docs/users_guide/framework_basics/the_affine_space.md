@@ -527,7 +527,7 @@ void example()
     you on the opposite side of the globe).
 
 
-### How It Works?
+### How It Works
 
 Bounds are enforced at these points:
 

@@ -481,7 +481,7 @@ allows creating distinct quantity types that cannot be mixed even though they sh
 dimension and quantity hierarchy tree.
 
 
-### When to use `is_kind`?
+### When to Use `is_kind`
 
 Use `is_kind` to create **distinct subkinds within an existing quantity hierarchy** when:
 

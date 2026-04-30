@@ -55,7 +55,7 @@ Core concepts that form the foundation of **mp-units**:
 Detailed documentation of available unit systems (SI, CGS, Imperial, astronomical units,
 natural units, etc.) with guidance on choosing the right one for your application domain.
 
-## How to Use This Guide?
+## How to Use This Guide
 
 **Sequential Reading**: Start with [Terms and Definitions](terms_and_definitions.md) and
 progress through the Framework Basics chapters to build a complete mental model of the
@@ -67,7 +67,7 @@ particular concept in depth.
 **Domain-Focused**: After covering Framework Basics, explore the [Systems](systems/index.md)
 chapter most relevant to your application domain.
 
-## When to Use the User's Guide?
+## When to Use the User's Guide
 
 Read the User's Guide when you:
 

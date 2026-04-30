@@ -60,7 +60,7 @@ No installation required. No setup overhead. Just start typing and learning.
     automatically below the code.
 
 
-## Why Interactive Learning Matters?
+## Why Interactive Learning Matters
 
 Traditional documentation tells you *what* the library does. Interactive learning shows
 you *how* to use it effectively.

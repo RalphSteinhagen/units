@@ -52,7 +52,7 @@ Master sophisticated patterns:
 - [Faster-than-Lightspeed Constants](advanced/faster_than_lightspeed_constants.md)
 - [Incremental Migration from Legacy Code](advanced/incremental_migration.md)
 
-## When to Use Workshops?
+## When to Use Workshops
 
 Use Workshops when you:
 

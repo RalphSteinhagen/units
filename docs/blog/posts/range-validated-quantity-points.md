@@ -526,7 +526,7 @@ misleading (there is no "smallest" longitude on a wrapped circle; they're all
 equivalent modulo 360°). The current implementation does return `min` and `max`
 for all policy types that expose these members.
 
-### Why the checking policy is not part of the `quantity_point` type?
+### Why the Checking Policy Is Not Part of the `quantity_point` Type
 
 One might ask: why not make the checking policy a template parameter of
 `quantity_point` itself, so that the same origin can be used with different

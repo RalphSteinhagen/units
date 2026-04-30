@@ -211,7 +211,7 @@ Always use an explicit quantity reference when you need the auto-protection guar
    `clamp_to_range{-50 * m, 4'000 * m}` to `airport_elev`. Verify that 4100 m above
    the airport clamps to 4000 m.
 
-## What You Learned?
+## What You Learned
 
 ✅ Passing a bounds policy as a template parameter to a point origin attaches validation
     once  

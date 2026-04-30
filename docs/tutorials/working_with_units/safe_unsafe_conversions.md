@@ -123,7 +123,7 @@ int main()
 2. **Safe with doubles**: Create 1234 m as `double`, convert to km (should get 1.234 km implicitly)
 3. **Mixed representations**: Add 5.5 km (double) + 2000 m (int), what's the result type?
 
-## What You Learned?
+## What You Learned
 
 ✅ Implicit conversions only work when safe (no truncation)  
 ✅ Floating-point types are considered value-preserving  

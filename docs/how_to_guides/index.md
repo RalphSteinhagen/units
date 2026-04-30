@@ -31,7 +31,7 @@ Guides for integrating **mp-units** with existing codebases, custom types, third
 libraries, and various compiler environments.
 
 
-## When to Use How-to Guides?
+## When to Use How-to Guides
 
 Use How-to Guides when you:
 

@@ -98,7 +98,7 @@ Try these in the editor above:
   error message! (We'll explore this compile-time safety in depth in
   [Compile-Time Protection](../type_safety/compile_time_protection.md))
 
-## What You Learned?
+## What You Learned
 
 ✅ Addition/subtraction only work with compatible units  
 ✅ Adding different units (km + m) produces a common unit result  

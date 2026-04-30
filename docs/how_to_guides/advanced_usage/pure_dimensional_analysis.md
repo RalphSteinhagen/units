@@ -22,7 +22,7 @@ your own custom arithmetic types. By propagating arithmetic operations to these 
 types through overloaded operators, the library automatically performs full dimensional
 analysis and type checking—all at compile-time, with zero runtime overhead.
 
-## When to Use Pure Dimensional Analysis?
+## When to Use Pure Dimensional Analysis
 
 Pure dimensional analysis is particularly useful when:
 

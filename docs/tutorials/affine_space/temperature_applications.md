@@ -113,7 +113,7 @@ directly in formulas like $PV = nRT$.
    $\Delta T$, which can be directly multiplied—no `quantity_from_unit_zero()` needed
    for differences)
 
-## What You Learned?
+## What You Learned
 
 ✅ `midpoint()` finds the exact middle between two temperature points  
 ✅ `lerp()` performs linear interpolation and extrapolation  

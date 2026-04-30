@@ -61,7 +61,7 @@ Definitions of metrology terms and concepts used throughout the library.
 
 References to standards, papers, and resources that inform the library's design.
 
-## How to Use the Reference?
+## How to Use the Reference
 
 **Quick Lookup**: Use the [Cheat Sheet](cheat_sheet.md) for common operations and syntax.
 
@@ -74,7 +74,7 @@ and class interfaces.
 **Terminology**: Consult the [Glossary](glossary.md) when you encounter unfamiliar metrology
 terms.
 
-## When to Use the Reference?
+## When to Use the Reference
 
 Use the Reference when you:
 

@@ -12,7 +12,7 @@ quantity calculations.
 - [Working With Nondimensionalized Physics](nondimensionalization.md) - Use mp-units alongside natural units and dimensionless quantities, covering the complete scale-in/scale-out workflow and tradeoffs
 <!-- markdownlint-enable MD013 -->
 
-## When to Use These Guides?
+## When to Use These Guides
 
 Use these advanced techniques when you:
 

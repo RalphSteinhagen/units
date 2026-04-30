@@ -624,7 +624,7 @@ extreme values or mixed-unit operations that overflow after scaling — use `saf
 
 ---
 
-## How Au Addresses the Problem?
+## How Au Addresses the Problem
 
 Before examining **mp-units**' approach, it's worth highlighting
 [Au](https://aurora-opensource.github.io/au/main/) — one of the very few units libraries

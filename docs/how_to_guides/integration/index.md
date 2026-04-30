@@ -12,7 +12,7 @@ libraries, and various compiler environments.
 - [Wide Compatibility](wide_compatibility.md) - Maximize portability across different compilers and environments
 <!-- markdownlint-enable MD013 -->
 
-## When to Use These Guides?
+## When to Use These Guides
 
 Use these integration guides when you:
 

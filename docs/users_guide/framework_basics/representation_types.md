@@ -141,7 +141,7 @@ The following table summarizes the requirements for different representation cha
     commonly used in finite element analysis, structural engineering, and materials science.
 
 
-## How Scaling Works?
+## How Scaling Works
 
 Every representation type must be **unit-conversion scalable** — the library must be able
 to apply a unit magnitude ratio to it internally. This is captured by the `MagnitudeScalable`

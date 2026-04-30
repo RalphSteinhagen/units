@@ -33,7 +33,7 @@ directly from the source code and generate comprehensive, accurate, and always u
 reference documentation.
 
 
-## Why Not Doxygen?
+## Why Not Doxygen
 
 You might wonder: "Why not just use Doxygen or a similar tool?" While Doxygen excels at
 extracting API documentation from comments and generating reference pages for classes and
@@ -219,7 +219,7 @@ the Systems Reference provides exhaustive technical details automatically extrac
 the source code.
 
 
-## How It Works?
+## How It Works
 
 The documentation generation is seamlessly integrated into the MkDocs build process:
 

@@ -125,7 +125,7 @@ release-with-debug-info.
     automatically to natural origins of non-negative ISQ quantity specs. For a fully custom
     one-sided or asymmetric policy, see [Custom Policies](../../users_guide/framework_basics/the_affine_space.md#custom-policies-one-sided-bounds).
 
-## How It Works?
+## How It Works
 
 ```mermaid
 flowchart TB

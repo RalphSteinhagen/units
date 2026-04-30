@@ -46,7 +46,7 @@ The multiplication check uses widened intermediate arithmetic (e.g., `int32_t` p
 `int64_t` for the product), so there is no dependency on undefined behavior.
 
 
-## Where overflow is caught?
+## Where Overflow Is Caught
 
 Because `safe_int` hooks into the fundamental C++ arithmetic operators, every operation
 is checked — regardless of context:

@@ -181,7 +181,7 @@ is correct regardless of intermediate unit representations.
   _height_ 5 m, using `si::standard_gravity`. What unit? (Hint: Joule)
 3. **_Work_**: _Force_ 10 N over _distance_ 5 m. What unit? (Hint: Joule again)
 
-## What You Learned?
+## What You Learned
 
 ✅ Derived units are computed automatically from operations  
 ✅ Multiplication and division create new dimensions  

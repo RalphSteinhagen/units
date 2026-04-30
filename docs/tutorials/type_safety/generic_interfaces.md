@@ -5,7 +5,7 @@ Learn how to write flexible, high-performance generic functions using `QuantityO
 **Goal**: Master generic quantity interfaces for better performance  
 **Time**: ~15 minutes
 
-## Why Generic Interfaces?
+## Why Generic Interfaces
 
 When writing functions that work with quantities, you have several options. Consider a simple
 average function:
@@ -194,7 +194,7 @@ Try these examples:
    and `quantity<isq::time[s]>` parameters and convert the result to desired units.
    How many conversions happen at the boundaries?
 
-## What You Learned?
+## What You Learned
 
 ✅ `QuantityOf<QS>` accepts any quantity that implicitly converts to `QS`  
 ✅ No conversions happen at function boundaries with `QuantityOf`  

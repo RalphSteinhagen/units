@@ -19,7 +19,7 @@ section. Here you'll find essential information to get up and running:
 **Once you're set up and familiar with the basics,** explore the sections below to continue
 your learning journey.
 
-## How Our Documentation is Organized?
+## How Our Documentation Is Organized
 
 The **mp-units** documentation is designed to support different ways of learning and working.
 Choose the section that matches what you need right now:

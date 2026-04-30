@@ -221,7 +221,7 @@ Try these examples:
 3. **See the error**: Try passing wrong quantity types to the functions above
 4. **Explore the hierarchy**: Look at _diameter_ + _radius_ to understand common parent results
 
-## What You Learned?
+## What You Learned
 
 ✅ Quantity specifications distinguish between _length_, _width_, _height_, _radius_
   (all quantities of kind _length_)  

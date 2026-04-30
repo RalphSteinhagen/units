@@ -112,7 +112,7 @@ in order to form a quantity.
     to use as a reference point.
 
 
-## Why a dimensionless quantity is not just a fundamental arithmetic type?
+## Why a Dimensionless Quantity Is Not Just a Fundamental Arithmetic Type
 
 In the initial design of this library, the resulting type of division of two quantities was
 their common representation type:
@@ -146,7 +146,7 @@ with the rest of the library.
     [the Dimensionless Quantities chapter](../users_guide/framework_basics/dimensionless_quantities.md).
 
 
-## Why derived units order is not preserved from the multiplication?
+## Why Derived Units Order Is Not Preserved from the Multiplication
 
 It might be surprising, but the order of multiplication of quantities and units does not impact
 the order of components in the derived unit. Let's try the following example:
@@ -237,7 +237,7 @@ identifiers to a `standard_case`, even if it results in harder-to-understand cod
     please let us know in the associated [GitHub Issue](https://github.com/mpusz/mp-units/issues/93).
 
 
-## Why UTF-8 quantity symbols are used by default instead of portable characters?
+## Why UTF-8 Quantity Symbols Are Used by Default Instead of Portable Characters
 
 Both C++ and [ISO 80000](../reference/bibliography.md#ISO80000) are standardized by the ISO.
 [ISO 80000](../reference/bibliography.md#ISO80000) and the [SI](../reference/bibliography.md#SIBrochure)
