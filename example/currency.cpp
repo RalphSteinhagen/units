@@ -39,7 +39,7 @@ import std;
 #ifdef MP_UNITS_MODULES
 import mp_units.core;
 #else
-#include <mp-units/framework.h>
+#include <mp-units/core.h>
 #endif
 
 using namespace mp_units;
@@ -70,9 +70,10 @@ template<Unit auto From, Unit auto To>
 [[nodiscard]] double exchange_rate(std::chrono::sys_seconds timestamp)
 {
   (void)timestamp;  // get conversion ratios for this timestamp
+  // Paired rates are not exact inverses — the asymmetry encodes the bid/ask spread
   static const std::map<std::pair<std::string_view, std::string_view>, double> rates = {
-    {{"USD", "EUR"}, 0.9215},
-    {{"EUR", "USD"}, 1.0848},
+    {{"USD", "EUR"}, 0.9215}, {{"EUR", "USD"}, 1.0848}, {{"USD", "GBP"}, 0.7897},
+    {{"GBP", "USD"}, 1.2650}, {{"USD", "JPY"}, 142.88}, {{"JPY", "USD"}, 0.00693},
     // ...
   };
 
@@ -82,16 +83,14 @@ template<Unit auto From, Unit auto To>
 template<UnitOf<currency> auto To, QuantityOf<currency> From>
 QuantityOf<currency> auto exchange_to(From q, std::chrono::sys_seconds timestamp)
 {
-  const auto rate = static_cast<From::rep>(exchange_rate<From::unit, To>(timestamp) * q.numerical_value_in(q.unit));
+  const double rate = exchange_rate<From::unit, To>(timestamp) * q.numerical_value_in(q.unit);
   return rate * From::quantity_spec[To];
 }
 
 template<UnitOf<currency> auto To, QuantityPointOf<currency> From>
 QuantityPointOf<currency> auto exchange_to(From qp, std::chrono::sys_seconds timestamp)
 {
-  const auto rate = static_cast<From::rep>(exchange_rate<From::unit, To>(timestamp) *
-                                           qp.quantity_from_unit_zero().numerical_value_in(qp.unit));
-  return quantity_point{rate * From::quantity_spec[To], From::point_origin};
+  return quantity_point{exchange_to<To>(qp.quantity_from_unit_zero(), timestamp), From::point_origin};
 }
 
 int main()
@@ -100,10 +99,34 @@ int main()
   using namespace std::chrono;
 
   const auto timestamp = time_point_cast<seconds>(system_clock::now() - hours{24});
-  const quantity_point price_usd{100 * USD};
-  const quantity_point price_euro = exchange_to<euro>(price_usd, timestamp);
 
-  std::cout << price_usd.quantity_from_unit_zero() << " -> " << price_euro.quantity_from_unit_zero() << "\n";
-  // std::cout << price_usd.quantity_from_unit_zero() + price_euro.quantity_from_unit_zero() << "\n";  // does not
-  // compile
+  // FX conversion of a single price (quantity_point: $0 is a meaningful absolute reference)
+  const quantity_point price_usd{100 * USD};
+  const quantity_point price_eur = exchange_to<euro>(price_usd, timestamp);
+  std::cout << price_usd.quantity_from_unit_zero() << " -> " << price_eur.quantity_from_unit_zero() << "\n";
+
+  // the below don't compile
+  // std::cout << (price_usd + price_usd).quantity_from_unit_zero() << "\n";
+  // std::cout << price_usd.quantity_from_unit_zero() + price_eur.quantity_from_unit_zero() << "\n";
+
+  // Multi-currency portfolio: positions held in native currencies (quantities, not prices)
+  const quantity pos_usd = 14'230 * USD;
+  const quantity pos_eur = 4'902 * EUR;
+  const quantity pos_gbp = 1'464 * GBP;
+  const quantity pos_jpy = 890'000 * JPY;
+
+  // Cross-currency arithmetic does not compile — must go through explicit FX conversion:
+  // const quantity bad = pos_usd + pos_eur;  // does not compile
+
+  const quantity pos_eur_usd = round<USD>(exchange_to<us_dollar>(pos_eur, timestamp)).force_in<int>();
+  const quantity pos_gbp_usd = round<USD>(exchange_to<us_dollar>(pos_gbp, timestamp)).force_in<int>();
+  const quantity pos_jpy_usd = round<USD>(exchange_to<us_dollar>(pos_jpy, timestamp)).force_in<int>();
+  const quantity total_usd = pos_usd + pos_eur_usd + pos_gbp_usd + pos_jpy_usd;
+
+  std::cout << "Portfolio positions:\n";
+  std::cout << "  " << pos_usd << "\n";
+  std::cout << "  " << pos_eur << "  =>  " << pos_eur_usd << "\n";
+  std::cout << "  " << pos_gbp << "  =>  " << pos_gbp_usd << "\n";
+  std::cout << "  " << pos_jpy << "  =>  " << pos_jpy_usd << "\n";
+  std::cout << "Portfolio total (USD): " << total_usd << "\n";
 }
