@@ -1009,15 +1009,19 @@ static_assert(convertible(solid_angular_measure / time, dimensionless_rate) == e
 
 static_assert(convertible(kind_of<dimensionless / time>, dimensionless_rate) == yes);
 static_assert(convertible(kind_of<angular_measure / time>, dimensionless_rate) == explicit_conversion_beyond_kind);
-static_assert(convertible(kind_of<solid_angular_measure / time>, dimensionless_rate) == explicit_conversion_beyond_kind);
+static_assert(convertible(kind_of<solid_angular_measure / time>, dimensionless_rate) ==
+              explicit_conversion_beyond_kind);
 
 static_assert(convertible(dimensionless / time, kind_of<dimensionless_rate>) == yes);
 static_assert(convertible(angular_measure / time, kind_of<dimensionless_rate>) == explicit_conversion_beyond_kind);
-static_assert(convertible(solid_angular_measure / time, kind_of<dimensionless_rate>) == explicit_conversion_beyond_kind);
+static_assert(convertible(solid_angular_measure / time, kind_of<dimensionless_rate>) ==
+              explicit_conversion_beyond_kind);
 
 static_assert(convertible(kind_of<dimensionless / time>, kind_of<dimensionless_rate>) == yes);
-static_assert(convertible(kind_of<angular_measure / time>, kind_of<dimensionless_rate>) == explicit_conversion_beyond_kind);
-static_assert(convertible(kind_of<solid_angular_measure / time>, kind_of<dimensionless_rate>) == explicit_conversion_beyond_kind);
+static_assert(convertible(kind_of<angular_measure / time>, kind_of<dimensionless_rate>) ==
+              explicit_conversion_beyond_kind);
+static_assert(convertible(kind_of<solid_angular_measure / time>, kind_of<dimensionless_rate>) ==
+              explicit_conversion_beyond_kind);
 
 static_assert(convertible(angular_measure / time, solid_angular_measure_rate) == no);
 static_assert(convertible(angular_measure / time, kind_of<solid_angular_measure_rate>) == no);
