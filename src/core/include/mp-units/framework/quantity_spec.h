@@ -318,34 +318,6 @@ concept QSProperty = (!QuantitySpec<T>);
 
 }  // namespace detail
 
-namespace detail {
-
-// True iff a single factor (bare type or power<>) contributes only non-negative values.
-//  - Bare type:          non-negative iff the base type has _is_non_negative_.
-//  - power<Q, N, Den...>: non-negative iff:
-//      (a) Q::_is_non_negative_  — any positive power of a non-negative quantity is non-negative, or
-//      (b) Q has real-scalar character AND the exponent N/D is an even positive integer
-//          — x^{2k} ≥ 0 for any real x, regardless of sign.
-template<typename Factor>
-inline constexpr bool factor_is_non_negative = expr_type<Factor>::_is_non_negative_;
-
-template<typename Q, int N, int... Den>
-inline constexpr bool factor_is_non_negative<power<Q, N, Den...>> =
-  Q::_is_non_negative_ || (Q::character == quantity_character::real_scalar &&
-                           power<Q, N, Den...>::_exponent_.den == 1 && power<Q, N, Den...>::_exponent_.num % 2 == 0);
-
-// True iff Num and Den together have at least one factor AND every factor is non-negative.
-// sizeof... handles the "both lists empty ⇒ dimensionless ⇒ false" case without needing type_list_size.
-template<typename Num, typename Den>
-inline constexpr bool factors_are_non_negative = false;
-
-template<typename... NumQs, typename... DenQs>
-inline constexpr bool factors_are_non_negative<type_list<NumQs...>, type_list<DenQs...>> =
-  (sizeof...(NumQs) + sizeof...(DenQs) > 0) && (factor_is_non_negative<NumQs> && ...) &&
-  (factor_is_non_negative<DenQs> && ...);
-
-}  // namespace detail
-
 MP_UNITS_EXPORT_BEGIN
 
 inline constexpr struct is_kind {
@@ -472,10 +444,7 @@ struct quantity_spec<Self, Eq, Args...> : detail::quantity_spec_interface<Self> 
   static constexpr quantity_character character = detail::quantity_character_init<Args...>(Eq.character);
   static_assert(!mp_units::contains<struct non_negative, Args...>() || character == quantity_character::real_scalar,
                 "non_negative can only be applied to real scalar quantities");
-  static constexpr bool _is_non_negative_ =
-    mp_units::contains<struct non_negative, Args...>() ||
-    detail::factors_are_non_negative<typename MP_UNITS_NONCONST_TYPE(Eq)::_num_,
-                                     typename MP_UNITS_NONCONST_TYPE(Eq)::_den_>;
+  static constexpr bool _is_non_negative_ = mp_units::contains<struct non_negative, Args...>();
 };
 
 namespace detail {
@@ -610,7 +579,7 @@ struct derived_quantity_spec_impl :
     detail::expr_map<to_dimension, derived_dimension, struct dimension_one>(_base_{});
   static constexpr quantity_character character =
     detail::derived_quantity_character(typename _base_::_num_{}, typename _base_::_den_{});
-  static constexpr bool _is_non_negative_ = factors_are_non_negative<typename _base_::_num_, typename _base_::_den_>;
+  static constexpr bool _is_non_negative_ = false;
 };
 
 }  // namespace detail

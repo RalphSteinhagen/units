@@ -495,12 +495,15 @@ inline constexpr struct mass final : quantity_spec<dim_length, non_negative> {} 
 With that, we will be able to mark any quantity as non-negative and this property will be
 inherited by the subquantities in the quantity hierarchy tree of the same kind.
 
-We could also derive non-negativity for derived quantities based on their equations.
-A non-negative flag could be set only if all of the components in the equations are
-marked as non-negative. However, we will not be able to account for a negative scalar
-possibly used in an equation. This is why it is probably better to assume that ad-hoc
-derived quantities do not inherit this property. If this result is assigned to a
-typed/named quantity, then the non-negativity will be checked then (if set).
+Deriving non-negativity automatically from equation factors is explicitly not done.
+A defining equation captures only dimensional relationships, not the full sign domain
+of a physical quantity. Many physically signed quantities have equations where every
+factor is non-negative (e.g., thermal expansion coefficient, reactive power, Massieu
+function), so inferring sign from the equation would silently misclassify them.
+Instead, every non-negative root derived quantity carries an explicit `non_negative`
+tag at its definition. Named children inherit the tag from their parent; ad-hoc
+anonymous composed specs (e.g., `isq::length / isq::time`) are never non-negative
+unless they resolve to a named quantity that carries the tag.
 
 
 ### Interesting Quantity Types

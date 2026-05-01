@@ -41,20 +41,20 @@ inline constexpr auto breadth = width;
 QUANTITY_SPEC(radius, width);  // differs from ISO 80000
 QUANTITY_SPEC(path_length, length);
 inline constexpr auto arc_length = path_length;
-QUANTITY_SPEC(area, pow<2>(length));
+QUANTITY_SPEC(area, pow<2>(length), non_negative);
 QUANTITY_SPEC(angular_measure, dimensionless, arc_length / radius, is_kind);
 QUANTITY_SPEC(solid_angular_measure, dimensionless, area / pow<2>(radius), is_kind, non_negative);
 QUANTITY_SPEC(period_duration, duration);
 inline constexpr auto period = period_duration;
-QUANTITY_SPEC(frequency, inverse(period_duration));
+QUANTITY_SPEC(frequency, inverse(period_duration), non_negative);
 
 // mechanics
-QUANTITY_SPEC(energy, mass* pow<2>(length) / pow<2>(time));  // differs from ISO 80000 (defined in thermodynamics)
+QUANTITY_SPEC(energy, mass* pow<2>(length) / pow<2>(time), non_negative);  // differs from ISO 80000
 
 // atomic_and_nuclear_physics
-QUANTITY_SPEC(activity, inverse(duration));
-QUANTITY_SPEC(absorbed_dose, energy / mass);
+QUANTITY_SPEC(activity, inverse(duration), non_negative);
+QUANTITY_SPEC(absorbed_dose, energy / mass, non_negative);
 QUANTITY_SPEC(ionizing_radiation_quality_factor, dimensionless, non_negative);
-QUANTITY_SPEC(dose_equivalent, absorbed_dose* ionizing_radiation_quality_factor);
+QUANTITY_SPEC(dose_equivalent, absorbed_dose* ionizing_radiation_quality_factor, non_negative);
 
 }  // namespace mp_units::isq

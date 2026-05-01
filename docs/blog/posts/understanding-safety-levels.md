@@ -474,16 +474,26 @@ static_assert(is_non_negative(isq::duration));
 static_assert(!is_non_negative(isq::electric_current));  // can be negative
 ```
 
-This property **propagates through derived equations** and is automatically inherited by
-named real-scalar children — if all factors in a multiplication or division are
-non-negative, the result is too, and any named specialization that does not change the
-quantity character carries the constraint forward:
+This property is **explicitly declared** at each non-negative root derived quantity in the
+ISQ hierarchy, and is automatically inherited by named real-scalar children:
 
 ```cpp
-static_assert(is_non_negative(isq::speed));      // length / duration — both non-negative
-static_assert(is_non_negative(isq::area));       // length * length — both non-negative
+static_assert(is_non_negative(isq::speed));      // explicit non_negative tag in definition
+static_assert(is_non_negative(isq::area));       // explicit non_negative tag in definition
 static_assert(is_non_negative(isq::distance));   // named real-scalar child of length
 static_assert(!is_non_negative(isq::velocity));  // vector character — excluded from inheritance
+```
+
+The tag is **never inferred from equation factors** — even when all factors are
+non-negative, the defining equation captures only dimensional relationships, not the
+full sign domain of the physical quantity. For example, _reactive power_ is defined via
+$Q = U \cdot I \cdot \sin\varphi$, and the _Massieu function_ as $J = -A/T$ — both have
+all-non-negative dimensional factors yet can take negative values in practice:
+
+```cpp
+// All dimensional factors are non-negative, yet the quantities are NOT non_negative:
+static_assert(!is_non_negative(isq::reactive_power));   // signed: Q = U·I·sin(φ)
+static_assert(!is_non_negative(isq::Massieu_function)); // signed: J = −A/T
 ```
 
 !!! note

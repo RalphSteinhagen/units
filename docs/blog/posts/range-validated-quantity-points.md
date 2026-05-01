@@ -480,15 +480,27 @@ _duration_, or _electric charge magnitude_. Non-negativity is the canonical
 constraint for all of them, and **mp-units** now implements it at the
 quantity-specification level.
 
-The `non_negative` flag can be applied to any real-scalar base or named child
-quantity spec, and the library propagates the flag transitively: a quantity
-derived from two non-negative specs is itself non-negative.
+The `non_negative` flag can be applied to any real-scalar base or named quantity spec.
+Each non-negative root must declare the tag explicitly, and named real-scalar children
+inherit it transitively from their parent:
 
 ```cpp
-static_assert(is_non_negative(isq::length));     // ✅ tagged in ISQ system definition
-static_assert(is_non_negative(isq::mass));       // ✅ tagged in ISQ system definition
-static_assert(is_non_negative(isq::speed));      // ✅ derived: length / duration
+static_assert(is_non_negative(isq::length));     // ✅ explicit tag in ISQ definition
+static_assert(is_non_negative(isq::mass));       // ✅ explicit tag in ISQ definition
+static_assert(is_non_negative(isq::speed));      // ✅ explicit tag in ISQ definition
 static_assert(!is_non_negative(isq::velocity));  // ❌ vector character — excluded
+```
+
+The flag is **never inferred automatically** from equation factors — even when all
+factors are non-negative, the defining equation captures only dimensional relationships,
+not the full sign domain of the physical quantity. For example, _reactive power_ is
+defined via $Q = U \cdot I \cdot \sin\varphi$, and the _Massieu function_ as $J = -A/T$
+— both have all-non-negative dimensional factors yet can take negative values in practice:
+
+```cpp
+// All dimensional factors are non-negative, yet the quantities are NOT non_negative:
+static_assert(!is_non_negative(isq::reactive_power));   // signed: Q = U·I·sin(φ)
+static_assert(!is_non_negative(isq::Massieu_function)); // signed: J = −A/T
 ```
 
 !!! note

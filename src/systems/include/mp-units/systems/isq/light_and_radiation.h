@@ -40,23 +40,25 @@ namespace mp_units::isq {
 QUANTITY_SPEC(speed_of_light_in_a_medium, speed);
 QUANTITY_SPEC(refractive_index, dimensionless, speed_of_light_in_vacuum / speed_of_light_in_a_medium);
 QUANTITY_SPEC(radiant_energy, energy);
-QUANTITY_SPEC(spectral_radiant_energy, radiant_energy / wavelength);
-QUANTITY_SPEC(radiant_energy_density, radiant_energy / volume);
-QUANTITY_SPEC(spectral_radiant_energy_density_in_terms_of_wavelength, radiant_energy_density / wavelength);
-QUANTITY_SPEC(spectral_radiant_energy_density_in_terms_of_wavenumber, radiant_energy_density / wavenumber);
+QUANTITY_SPEC(spectral_radiant_energy, radiant_energy / wavelength, non_negative);
+QUANTITY_SPEC(radiant_energy_density, radiant_energy / volume, non_negative);
+QUANTITY_SPEC(spectral_radiant_energy_density_in_terms_of_wavelength, radiant_energy_density / wavelength,
+              non_negative);
+QUANTITY_SPEC(spectral_radiant_energy_density_in_terms_of_wavenumber, radiant_energy_density / wavenumber,
+              non_negative);
 QUANTITY_SPEC(radiant_flux, power, radiant_energy / time);
 inline constexpr auto radiant_power = radiant_flux;
-QUANTITY_SPEC(spectral_radiant_flux, radiant_flux / wavelength);
+QUANTITY_SPEC(spectral_radiant_flux, radiant_flux / wavelength, non_negative);
 inline constexpr auto spectral_radiant_power = spectral_radiant_flux;
-QUANTITY_SPEC(radiant_intensity, radiant_flux / solid_angular_measure);
-QUANTITY_SPEC(spectral_radiant_intensity, radiant_intensity / wavelength);
-QUANTITY_SPEC(radiance, radiant_intensity / area);
-QUANTITY_SPEC(spectral_radiance, radiance / wavelength);
-QUANTITY_SPEC(irradiance, radiant_flux / area);
-QUANTITY_SPEC(spectral_irradiance, irradiance / wavelength);
-QUANTITY_SPEC(radiant_exitance, radiant_flux / area);
-QUANTITY_SPEC(spectral_radiant_exitance, radiant_exitance / wavelength);
-QUANTITY_SPEC(radiant_exposure, radiant_energy / area);
-QUANTITY_SPEC(spectral_radiant_exposure, radiant_exposure / wavelength);
+QUANTITY_SPEC(radiant_intensity, radiant_flux / solid_angular_measure, non_negative);
+QUANTITY_SPEC(spectral_radiant_intensity, radiant_intensity / wavelength, non_negative);
+QUANTITY_SPEC(radiance, radiant_intensity / area, non_negative);
+QUANTITY_SPEC(spectral_radiance, radiance / wavelength, non_negative);
+QUANTITY_SPEC(irradiance, radiant_flux / area, non_negative);
+QUANTITY_SPEC(spectral_irradiance, irradiance / wavelength, non_negative);
+QUANTITY_SPEC(radiant_exitance, radiant_flux / area, non_negative);
+QUANTITY_SPEC(spectral_radiant_exitance, radiant_exitance / wavelength, non_negative);
+QUANTITY_SPEC(radiant_exposure, radiant_energy / area, non_negative);
+QUANTITY_SPEC(spectral_radiant_exposure, radiant_exposure / wavelength, non_negative);
 
 }  // namespace mp_units::isq

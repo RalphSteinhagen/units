@@ -36,14 +36,14 @@
 MP_UNITS_EXPORT
 namespace mp_units::isq {
 
-QUANTITY_SPEC(mass_density, mass / volume);
+QUANTITY_SPEC(mass_density, mass / volume, non_negative);
 inline constexpr auto density = mass_density;
-QUANTITY_SPEC(specific_volume, inverse(mass_density));
-QUANTITY_SPEC(relative_mass_density, mass_density / mass_density);
+QUANTITY_SPEC(specific_volume, inverse(mass_density), non_negative);
+QUANTITY_SPEC(relative_mass_density, mass_density / mass_density, non_negative);
 inline constexpr auto relative_density = relative_mass_density;
-QUANTITY_SPEC(surface_mass_density, mass / area);
+QUANTITY_SPEC(surface_mass_density, mass / area, non_negative);
 inline constexpr auto surface_density = surface_mass_density;
-QUANTITY_SPEC(linear_mass_density, mass / length);
+QUANTITY_SPEC(linear_mass_density, mass / length, non_negative);
 inline constexpr auto linear_density = linear_mass_density;
 QUANTITY_SPEC(momentum, mass* velocity);                        // vector
 QUANTITY_SPEC(force, mass* acceleration);                       // vector  // TODO what is a correct equation here?
@@ -79,9 +79,9 @@ inline constexpr auto shear_modulus = modulus_of_rigidity;
 QUANTITY_SPEC(modulus_of_compression, pressure / relative_volume_strain);
 inline constexpr auto bulk_modulus = modulus_of_compression;
 QUANTITY_SPEC(compressibility, inverse(volume) * (volume / pressure));
-QUANTITY_SPEC(second_axial_moment_of_area, pow<2>(radial_distance) * area);
-QUANTITY_SPEC(second_polar_moment_of_area, pow<2>(radial_distance) * area);
-QUANTITY_SPEC(section_modulus, second_axial_moment_of_area / radial_distance);
+QUANTITY_SPEC(second_axial_moment_of_area, pow<2>(radial_distance) * area, non_negative);
+QUANTITY_SPEC(second_polar_moment_of_area, pow<2>(radial_distance) * area, non_negative);
+QUANTITY_SPEC(section_modulus, second_axial_moment_of_area / radial_distance, non_negative);
 QUANTITY_SPEC(static_friction_coefficient, dimensionless, static_friction_force / force,
               quantity_character::real_scalar, non_negative);
 inline constexpr auto static_friction_factor = static_friction_coefficient;
@@ -96,19 +96,19 @@ inline constexpr auto drag_factor = drag_coefficient;
 QUANTITY_SPEC(dynamic_viscosity, shear_stress* length / velocity, quantity_character::real_scalar);
 QUANTITY_SPEC(kinematic_viscosity, dynamic_viscosity / mass_density);
 QUANTITY_SPEC(surface_tension, force / length,
-              quantity_character::real_scalar);             // TODO what is a correct equation here?
-QUANTITY_SPEC(power, mass* pow<2>(length) / pow<3>(time));  // not in ISO 80000
+              quantity_character::real_scalar);                           // TODO what is a correct equation here?
+QUANTITY_SPEC(power, mass* pow<2>(length) / pow<3>(time), non_negative);  // not in ISO 80000
 QUANTITY_SPEC(mechanical_power, power, force* velocity, quantity_character::real_scalar);
 QUANTITY_SPEC(mechanical_work, energy, force* displacement, quantity_character::real_scalar);
 inline constexpr auto work = mechanical_work;
 QUANTITY_SPEC(mechanical_energy, mechanical_work, mass* pow<2>(length) / pow<2>(time));  // differs from ISO 80000
 QUANTITY_SPEC(potential_energy, mechanical_energy);                                      // differs from ISO 80000
 QUANTITY_SPEC(kinetic_energy, mechanical_energy, mass* pow<2>(speed));                   // differs from ISO 80000
-QUANTITY_SPEC(mechanical_efficiency, mechanical_power / mechanical_power);
+QUANTITY_SPEC(mechanical_efficiency, mechanical_power / mechanical_power, non_negative);
 QUANTITY_SPEC(mass_flow, mass_density* velocity);  // vector
 QUANTITY_SPEC(mass_flow_rate, mass_flow* area, quantity_character::real_scalar);
-QUANTITY_SPEC(mass_change_rate, mass / time);
+QUANTITY_SPEC(mass_change_rate, mass / time, non_negative);
 QUANTITY_SPEC(volume_flow_rate, velocity* area, quantity_character::real_scalar);
-QUANTITY_SPEC(action, energy* time);
+QUANTITY_SPEC(action, energy* time, non_negative);
 
 }  // namespace mp_units::isq

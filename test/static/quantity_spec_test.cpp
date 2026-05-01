@@ -1102,7 +1102,8 @@ QUANTITY_SPEC_(nn_time, dim_time, non_negative);
 // Base quantity without non_negative
 QUANTITY_SPEC_(signed_current, dim_electric_current);
 
-// Derived: all factors non_negative → non_negative
+// Derived without explicit non_negative: spec-2 quantities never infer non_negative from equation factors;
+// an explicit non_negative tag is required at every root that should be non-negative.
 QUANTITY_SPEC_(nn_area, pow<2>(nn_length));
 QUANTITY_SPEC_(nn_speed, nn_length / nn_time);
 QUANTITY_SPEC_(nn_density, nn_mass / pow<3>(nn_length));
@@ -1110,7 +1111,7 @@ QUANTITY_SPEC_(nn_density, nn_mass / pow<3>(nn_length));
 // Derived: some factors not non_negative → not non_negative
 QUANTITY_SPEC_(mixed_quantity, nn_mass* signed_current);
 
-// Named child with equation: inherits from parent (nn_speed is non_negative, character real_scalar)
+// Named child with equation: inherits from parent only; nn_speed has no explicit tag, so not non_negative
 QUANTITY_SPEC_(nn_velocity, nn_speed, nn_length / nn_time);
 
 // Named child without equation: inherits non_negative from parent (nn_length is non_negative)
@@ -1131,14 +1132,14 @@ static_assert(is_non_negative(nn_mass));
 static_assert(is_non_negative(nn_time));
 static_assert(!is_non_negative(signed_current));
 
-// Propagation through derived equations
-static_assert(is_non_negative(nn_area));
-static_assert(is_non_negative(nn_speed));
-static_assert(is_non_negative(nn_density));
+// Spec-2 quantities without explicit non_negative are NOT non_negative, regardless of factor signs
+static_assert(!is_non_negative(nn_area));
+static_assert(!is_non_negative(nn_speed));
+static_assert(!is_non_negative(nn_density));
 static_assert(!is_non_negative(mixed_quantity));
 
-// Named child with equation inherits from parent
-static_assert(is_non_negative(nn_velocity));
+// Named child with equation inherits from parent; parent (nn_speed) has no explicit tag → not non_negative
+static_assert(!is_non_negative(nn_velocity));
 
 // Named child without equation inherits non_negative from parent
 static_assert(is_non_negative(nn_child_no_tag));
@@ -1154,19 +1155,11 @@ static_assert(!is_non_negative(nn_displacement));
 static_assert(!is_non_negative(kind_of<nn_length>));
 static_assert(!is_non_negative(kind_of<nn_mass>));
 
-// Library base quantities now have non_negative tags
-static_assert(is_non_negative(length));
-static_assert(is_non_negative(mass));
-static_assert(is_non_negative(time));
-// area = pow<2>(length): even positive integer power of a real scalar is always non-negative.
-static_assert(is_non_negative(area));
-// Derived quantities without explicit tag: speed has equation length/time, but since both are non_negative, speed is
-// too
-static_assert(is_non_negative(speed));
-// energy = mass * pow<2>(length) / pow<2>(time): all three are non_negative, so energy is inferred as non_negative
-// This is correct for absolute energy (kinetic, rest mass, etc.). Negative energy (relative to reference point)
-// should be modeled using point<energy, custom_origin>.
-static_assert(is_non_negative(energy));
+// Spec-2 root WITH explicit non_negative tag: IS non_negative
+QUANTITY_SPEC_(tagged_speed, nn_length / nn_time, non_negative);
+QUANTITY_SPEC_(tagged_volume, pow<3>(nn_length), non_negative);
+static_assert(is_non_negative(tagged_speed));
+static_assert(is_non_negative(tagged_volume));
 
 // ISQ base quantities tagged non_negative
 static_assert(is_non_negative(length));
@@ -1186,10 +1179,9 @@ static_assert(is_non_negative(path_length));  // inherits from length
 static_assert(!is_non_negative(altitude));  // overload returns false despite inheriting from length
 static_assert(!is_non_negative(depth));     // overload returns false despite inheriting from length
 
-// Derived non-negative quantities
-static_assert(is_non_negative(speed));   // length / duration
-static_assert(is_non_negative(area));    // pow<2>(length)
-static_assert(is_non_negative(volume));  // pow<3>(length)
+// Derived quantities with explicit non_negative tag are non-negative
+static_assert(is_non_negative(tagged_speed));   // nn_length / nn_time, non_negative
+static_assert(is_non_negative(tagged_volume));  // pow<3>(nn_length), non_negative
 
 // Vector quantities are not non-negative (character != real_scalar)
 static_assert(!is_non_negative(displacement));
