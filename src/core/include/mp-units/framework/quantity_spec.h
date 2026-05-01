@@ -1059,14 +1059,35 @@ template<QuantitySpec From, QuantitySpec To>
     if constexpr (To{} == dimensionless)
       return detail::are_ingredients_convertible(typename From::_num_{}, typename From::_den_{}, type_list<>{},
                                                  type_list<>{});
-    else
+    // If `To` defines its own equation, try matching the derived `From` against that equation directly.
+    // This ensures that a derived expression equivalent to the named quantity's defining equation is
+    // convertible to it at the correct level, rather than being prematurely matched via a parent-child
+    // common base (which would yield only `explicit_conversion`).
+    else if constexpr (requires { To::_equation_; }) {
+      if constexpr (detail::defines_equation(To{})) {
+        constexpr specs_convertible_result eq_res = detail::convertible(From{}, To::_equation_);
+        if constexpr (eq_res != specs_convertible_result::no)
+          return eq_res;
+      }
+      return detail::are_ingredients_convertible(typename From::_num_{}, typename From::_den_{}, type_list<To>{},
+                                                 type_list<>{});
+    } else
       return detail::are_ingredients_convertible(typename From::_num_{}, typename From::_den_{}, type_list<To>{},
                                                  type_list<>{});
   } else {
     if constexpr (From{} == dimensionless)
       return detail::are_ingredients_convertible(type_list<>{}, type_list<>{}, typename To::_num_{},
                                                  typename To::_den_{});
-    else
+    // Symmetric case: if `From` defines its own equation, try matching that equation against `To` directly.
+    else if constexpr (requires { From::_equation_; }) {
+      if constexpr (detail::defines_equation(From{})) {
+        constexpr specs_convertible_result eq_res = detail::convertible(From::_equation_, To{});
+        if constexpr (eq_res != specs_convertible_result::no)
+          return eq_res;
+      }
+      return detail::are_ingredients_convertible(type_list<From>{}, type_list<>{}, typename To::_num_{},
+                                                 typename To::_den_{});
+    } else
       return detail::are_ingredients_convertible(type_list<From>{}, type_list<>{}, typename To::_num_{},
                                                  typename To::_den_{});
   }
