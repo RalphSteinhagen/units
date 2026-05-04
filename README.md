@@ -24,8 +24,8 @@
 **`mp-units`** is the only Modern C++ (C++20 and later) library providing the full
 spectrum of compile‑time safety for domain-specific quantities and units — from
 dimensional analysis to quantity kind safety — built on the ISO 80000 International
-System of Quantities (ISQ). It is the leading candidate for C++29 standardization —
-your chance to shape the future of C++.
+System of Quantities (ISQ). It is the leading candidate for C++29 standardization
+[P3045](https://wg21.link/p3045) — your chance to shape the future of C++.
 
 ```cpp
 #include <mp-units/systems/isq.h>
