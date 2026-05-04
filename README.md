@@ -25,7 +25,7 @@
 spectrum of compile‑time safety for domain-specific quantities and units — from
 dimensional analysis to quantity kind safety — built on the ISO 80000 International
 System of Quantities (ISQ). It is the leading candidate for C++29 standardization
-[P3045](https://wg21.link/p3045) — your chance to shape the future of C++.
+([P3045](https://wg21.link/p3045)) — your chance to shape the future of C++.
 
 ```cpp
 #include <mp-units/systems/isq.h>
