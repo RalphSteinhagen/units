@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Library Directories Structure &mdash; mp-units 0.8.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="quantity" href="quantity.html" />
+    <link rel="prev" title="Design Deep Dive" href="../design.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> mp-units
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../framework.html">Framework Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../use_cases.html">Use Cases</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../design.html">Design Deep Dive</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Library Directories Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity.html">quantity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_kind.html">quantity_kind</a></li>
+<li class="toctree-l2"><a class="reference internal" href="downcasting.html">The Downcasting Facility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mp-units</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../design.html">Design Deep Dive</a> &raquo;</li>
+        
+      <li>Library Directories Structure</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/design/directories.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="library-directories-structure">
+<h1>Library Directories Structure<a class="headerlink" href="#library-directories-structure" title="Permalink to this heading">¶</a></h1>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>units
+├── bits
+│   └── external
+├── generic
+└── isq
+    ├── dimensions
+    ├── iec80000
+    ├── natural
+    └── si
+        ├── cgs
+        ├── fps
+        ├── iau
+        ├── imperial
+        ├── international
+        ├── typographic
+        └── us
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><em>./units</em></p>
+<ul>
+<li><p>The main directory of the library.</p></li>
+<li><p>Contains headers files that define a public interface of the library framework.</p></li>
+</ul>
+</li>
+<li><p><em>./units/bits</em></p>
+<ul>
+<li><p>Contains header files with implementation details for the library. Interface of
+the tools provided here should not be standardized.</p></li>
+</ul>
+</li>
+<li><p><em>./units/bits/external</em></p>
+<ul>
+<li><p>Contains header files of general purpose utilities that are not necessary
+<strong>mp-units</strong> library specific. They are either implementation details of the
+library or should be (or already are) the subject of separate standardization
+proposals not related to a Physical Units library proposal.</p></li>
+</ul>
+</li>
+<li><p><em>./units/generic</em></p>
+<ul>
+<li><p>Provides quantity types not related to any <a class="reference internal" href="../glossary.html#term-system-of-quantities"><span class="xref std std-term">system of quantities</span></a>
+(e.g. <a class="reference internal" href="../reference/systems/generic/dimensionless.html#_CPPv4I_6UnitOfI7dim_oneE_14RepresentationEN5units13dimensionlessE" title="units::dimensionless"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">dimensionless</span></code></a>, <a class="reference internal" href="../reference/systems/generic/angle.html#_CPPv4I_6UnitOfI9dim_angleIEE_14RepresentationEN5units5angleE" title="units::angle"><code class="xref cpp cpp-any docutils literal notranslate"><span class="pre">angle</span></code></a>).</p></li>
+</ul>
+</li>
+<li><p><em>./units/isq</em></p>
+<ul>
+<li><p>Contains the definition of quantity dimensions of International System of Quantities
+(<a class="reference internal" href="../glossary.html#term-ISQ"><span class="xref std std-term">ISQ</span></a>).</p></li>
+<li><p>Its subfolders provide the definitions of various
+<a class="reference internal" href="../glossary.html#term-system-of-units"><span class="xref std std-term">systems of units</span></a> with International System of Units (<a class="reference internal" href="../glossary.html#term-SI"><span class="xref std std-term">SI</span></a>)
+being the most popular one.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>More information on provided <a class="reference internal" href="../glossary.html#term-system-of-units"><span class="xref std std-term">systems of units</span></a> can be
+found in <a class="reference internal" href="../reference/systems.html#systems"><span class="std std-ref">Systems</span></a> chapter.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>While working with predefined systems please always include a header file with all
+the definitions for the current system to limit the possibility of an ODR violation
+(e.g. <em>units/isq/si/si.h</em>).</p>
+</div>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="quantity.html" class="btn btn-neutral float-right" title="quantity" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../design.html" class="btn btn-neutral float-left" title="Design Deep Dive" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
