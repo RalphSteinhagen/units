@@ -52,6 +52,7 @@ intended.
 - **[AndreyG](https://github.com/AndreyG)**
 - **[aostrowski](https://github.com/aostrowski)**
 - **[badbadc0ffee](https://github.com/badbadc0ffee)**
+- **[bhargavikvmpl-2001](https://github.com/bhargavikvmpl-2001)**
 - **[bourumir-wyngs](https://github.com/bourumir-wyngs)**
 - **[burnpanck](https://github.com/burnpanck)**
 - **[Cazadorro](https://github.com/Cazadorro)**
@@ -91,7 +92,7 @@ intended.
 - **[uilianries](https://github.com/uilianries)**
 - **[yasamoka](https://github.com/yasamoka)**
 
-_44 people, last updated 2026-09-14._
+_45 people, last updated 2026-09-14._
 
 <!-- CONTRIBUTORS_END -->
 
