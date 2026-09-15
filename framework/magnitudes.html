@@ -1,0 +1,367 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Magnitudes &mdash; mp-units 0.8.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Units" href="units.html" />
+    <link rel="prev" title="Dimensions" href="dimensions.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> mp-units
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../framework.html">Framework Basics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="basic_concepts.html">Basic Concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_like.html">Quantity-like Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantities.html">Quantities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_points.html">Quantity Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quantity_kinds.html">Quantity Kinds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dimensions.html">Dimensions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Magnitudes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#one-type-per-magnitude-one-value-per-type">One type per Magnitude, one value per type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#traits-integers-and-rational-magnitudes">Traits: integers and rational Magnitudes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-values-out">Getting values out</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-use-magnitudes">How to use Magnitudes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="units.html">Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arithmetics.html">Arithmetics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constants.html">Quantity Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversions_and_casting.html">Conversions and Casting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="angular_units.html">Angular Units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="text_output.html">Text Output</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../use_cases.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Design Deep Dive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Installation And Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/core.html">Core Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/systems.html">Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/random.html">Random</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mp-units</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../framework.html">Framework Basics</a> &raquo;</li>
+        
+      <li>Magnitudes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/framework/magnitudes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="magnitudes">
+<h1>Magnitudes<a class="headerlink" href="#magnitudes" title="Permalink to this heading">¶</a></h1>
+<p>The ratio of two Units of the same Dimension—say, <code class="docutils literal notranslate"><span class="pre">inches</span></code> and <code class="docutils literal notranslate"><span class="pre">centimeters</span></code>—is some
+constant number, which is known at compile time.  It’s a positive real number—a <em>Magnitude</em>.</p>
+<p>We also use Magnitudes for <em>Dimensionless</em> Units.  <code class="docutils literal notranslate"><span class="pre">percent</span></code> has a Magnitude of <span class="math notranslate nohighlight">\(1/100\)</span>, and
+<code class="docutils literal notranslate"><span class="pre">dozen</span></code> would have a Magnitude of <span class="math notranslate nohighlight">\(12\)</span>.</p>
+<p>Interestingly, it turns out that the usual numeric types are not up to this task.  We need a
+Magnitude representation that can do everything Units can do.  This means, among other things:</p>
+<ol class="arabic simple">
+<li><p>We need <em>exact</em> symbolic computation of the core operations of Quantity Calculus (i.e., products
+and rational powers).</p></li>
+<li><p>We must support <em>irrational</em> Magnitudes, because they frequently occur in practice (e.g.,
+consider the ratio between <code class="docutils literal notranslate"><span class="pre">degrees</span></code> and <code class="docutils literal notranslate"><span class="pre">radians</span></code>).</p></li>
+<li><p>We should <em>avoid overflow</em> wherever possible (note that <code class="docutils literal notranslate"><span class="pre">std::intmax_t</span></code> can’t even handle
+certain simple SI prefixes, such as <code class="docutils literal notranslate"><span class="pre">yotta</span></code>, representing <span class="math notranslate nohighlight">\(10^{24}\)</span>).</p></li>
+</ol>
+<p>Integers’ inadequacies are clear enough, but even floating point falls short.  Imagine if we
+implemented all angular units in terms of <code class="docutils literal notranslate"><span class="pre">radians</span></code>: then both <code class="docutils literal notranslate"><span class="pre">degrees</span></code> and <code class="docutils literal notranslate"><span class="pre">revolutions</span></code>
+pick up a factor of <span class="math notranslate nohighlight">\(\pi\)</span>.  The arithmetic with <em>its floating point representation</em> is
+unlikely to cancel <em>exactly</em>.</p>
+<p>Another common alternative choice is <code class="docutils literal notranslate"><span class="pre">std::ratio</span></code>, but this fails the first requirement: rational
+numbers are (<a class="reference external" href="https://hsm.stackexchange.com/a/7">rather infamously</a>!) <em>not</em> closed under rational
+powers.</p>
+<p>The only viable solution we have yet encountered is the <em>vector space representation</em>.  The
+implementation is fascinating—but, for purposes of this present page, it’s also a distraction.
+<em>Here,</em> we’re more focused on how to <em>use</em> these Magnitudes.</p>
+<section id="one-type-per-magnitude-one-value-per-type">
+<h2>One type per Magnitude, one value per type<a class="headerlink" href="#one-type-per-magnitude-one-value-per-type" title="Permalink to this heading">¶</a></h2>
+<p>Each typical numeric type (<code class="docutils literal notranslate"><span class="pre">double</span></code>, <code class="docutils literal notranslate"><span class="pre">int64_t</span></code>, …) can represent a wide variety of values: the
+more, the better.  However, Magnitudes are <strong>not</strong> like that.  Instead, they comprise a <em>variety</em> of
+types, and each type can hold only <em>one</em> value.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A given Magnitude represents the <em>same</em> number, whether you use it as a <em>type</em>, or as a <em>value</em>
+(i.e., an <em>instance</em> of that type).</p>
+<p>Use whichever is more convenient.  (In practice, this is usually the <em>value</em>: especially for end
+users rather than library developers.)</p>
+</div>
+<p>If these types can only represent one value each, why would we bother to instantiate them?  Because
+<em>values are easier to use</em>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mag&lt;N&gt;()</span></code> gives the Magnitude value corresponding to any integer <code class="docutils literal notranslate"><span class="pre">N</span></code>. - You can combine
+values in the usual way using <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">==</span></code>, and <code class="docutils literal notranslate"><span class="pre">!=</span></code>, as well as <code class="docutils literal notranslate"><span class="pre">pow&lt;N&gt;(m)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">root&lt;N&gt;(m)</span></code> for any Magnitude value <code class="docutils literal notranslate"><span class="pre">m</span></code>.</p></li>
+</ul>
+</section>
+<section id="traits-integers-and-rational-magnitudes">
+<h2>Traits: integers and rational Magnitudes<a class="headerlink" href="#traits-integers-and-rational-magnitudes" title="Permalink to this heading">¶</a></h2>
+<p>If you have a Magnitude instance <code class="docutils literal notranslate"><span class="pre">m</span></code>, we provide traits to help you reason about integers and
+rational numbers, or manipulate integer or rational parts.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">is_integral(m)</span></code>: indicates whether <code class="docutils literal notranslate"><span class="pre">m</span></code> represents an <em>integral</em> Magnitude.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_rational(m)</span></code>: indicates whether <code class="docutils literal notranslate"><span class="pre">m</span></code> represents a <em>rational</em> Magnitude.</p></li>
+</ul>
+<p>The above traits indicate what kind of Magnitude we already have.  The next traits <em>manipulate</em> a
+Magnitude, letting us break it apart into <em>constituent</em> Magnitudes which may be more meaningful.
+(For example, imagine going from <code class="docutils literal notranslate"><span class="pre">inches</span></code> to <code class="docutils literal notranslate"><span class="pre">feet</span></code>.  Naively, we might multiply by the floating
+point representation of <code class="docutils literal notranslate"><span class="pre">1.0</span> <span class="pre">/</span> <span class="pre">12.0</span></code>.  However, if we broke this apart into separate numerator and
+denominator, it would let us simply <em>divide by 12</em>, yielding <strong>exact</strong> results for inputs that
+happen to be multiples of 12.)</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numerator(m)</span></code> (value): a Magnitude representing the “numerator”, i.e., the largest integer
+which divides <code class="docutils literal notranslate"><span class="pre">m</span></code>, without turning any of its base powers’ exponents negative (or making any
+previously-negative exponents <em>more</em> negative). - <code class="docutils literal notranslate"><span class="pre">denominator(m)</span></code> (value): the “numerator” of
+the <em>inverse</em> of <code class="docutils literal notranslate"><span class="pre">m</span></code>.</p></li>
+</ul>
+<p>These traits interact as one would hope.  For example, <code class="docutils literal notranslate"><span class="pre">is_rational(m)</span></code> is exactly equivalent to
+<code class="docutils literal notranslate"><span class="pre">m</span> <span class="pre">==</span> <span class="pre">numerator(m)</span> <span class="pre">/</span> <span class="pre">denominator(m)</span></code>.</p>
+<p>Why these particular definitions?  Because they are equivalent to the numerator and denominator when
+we have a rational number, and they are compatible with how humans write numbers when we don’t.
+Example:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(m1 = \frac{27 \pi^2}{25}\)</span>.  Then <code class="docutils literal notranslate"><span class="pre">numerator(m1)</span> <span class="pre">==</span> <span class="pre">mag&lt;27&gt;()</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">denominator(m1)</span> <span class="pre">==</span> <span class="pre">mag&lt;25&gt;()</span></code>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(m2 = \sqrt{m1}\)</span>.  Then <code class="docutils literal notranslate"><span class="pre">numerator(m2)</span> <span class="pre">==</span> <span class="pre">mag&lt;3&gt;()</span></code>, and <code class="docutils literal notranslate"><span class="pre">denominator(m2)</span> <span class="pre">==</span> <span class="pre">mag&lt;5&gt;()</span></code>.
+Note that this is consistent with how humans would typically write <code class="docutils literal notranslate"><span class="pre">m2</span></code>, as
+<span class="math notranslate nohighlight">\(\frac{3\sqrt{3} \pi}{5}\)</span>.</p></li>
+</ul>
+</section>
+<section id="getting-values-out">
+<h2>Getting values out<a class="headerlink" href="#getting-values-out" title="Permalink to this heading">¶</a></h2>
+<p>Magnitude types represent numbers in non-numeric types.  They’ve got some amazing strengths (exact
+rational powers!), and some significant weaknesses (no support for basic addition!).  So what if you
+just want to turn a Magnitude <code class="docutils literal notranslate"><span class="pre">m</span></code> into a traditional numeric type <code class="docutils literal notranslate"><span class="pre">T</span></code>?</p>
+<p>You call <code class="docutils literal notranslate"><span class="pre">get_value&lt;T&gt;(m)</span></code>.</p>
+<p>This does what it looks like it does, and it does it at compile time.  Any intermediate computations
+take place in the “widest type in category”—<code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code> for floating point, and
+<code class="docutils literal notranslate"><span class="pre">std::intmax_t</span></code> or <code class="docutils literal notranslate"><span class="pre">std::uintmax_t</span></code> for signed or unsigned integers—before ultimately being
+cast back to the target type.  For <code class="docutils literal notranslate"><span class="pre">T</span> <span class="pre">=</span> <span class="pre">float</span></code>, say, this means we get all the precision we’d have
+with something like <code class="docutils literal notranslate"><span class="pre">long</span> <span class="pre">double</span></code>, but without any speed penalty at runtime!</p>
+<p><code class="docutils literal notranslate"><span class="pre">get_value&lt;T&gt;(m)</span></code> also has the protections you would hope: for example, if <code class="docutils literal notranslate"><span class="pre">T</span></code> is an integral
+type, we require <code class="docutils literal notranslate"><span class="pre">is_integral(m)</span></code>.</p>
+</section>
+<section id="how-to-use-magnitudes">
+<h2>How to use Magnitudes<a class="headerlink" href="#how-to-use-magnitudes" title="Permalink to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>First, start with your basic inputs: this will typically be <code class="docutils literal notranslate"><span class="pre">mag&lt;N&gt;()</span></code> for any integer <code class="docutils literal notranslate"><span class="pre">N</span></code>, or
+the built-in Magnitude constant <code class="docutils literal notranslate"><span class="pre">mag_pi</span></code>.  (Again, these are all <em>values</em>, not types.)</p></li>
+<li><p>Next, combine and manipulate these using the various “Magnitude math” operations, all of which are
+<strong>exact</strong>: <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">pow&lt;N&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">root&lt;N&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">numerator()</span></code>, <code class="docutils literal notranslate"><span class="pre">denominator()</span></code>.</p></li>
+<li><p>If you need to translate a Magnitude <code class="docutils literal notranslate"><span class="pre">m</span></code> to a “real” numeric type <code class="docutils literal notranslate"><span class="pre">T</span></code>, call
+<code class="docutils literal notranslate"><span class="pre">get_value&lt;T&gt;(m)</span></code>.</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="units.html" class="btn btn-neutral float-right" title="Units" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dimensions.html" class="btn btn-neutral float-left" title="Dimensions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
