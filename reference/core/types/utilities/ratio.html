@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ratio &mdash; mp-units 0.8.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="basic_symbol_text" href="basic_symbol_text.html" />
+    <link rel="prev" title="Utilities" href="../utilities.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> mp-units
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../framework.html">Framework Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../use_cases.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../design.html">Design Deep Dive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Installation And Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../faq.html">FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../core.html">Core Library</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../concepts.html">Concepts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../../types.html">Types</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../quantity.html">Quantity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quantity_point.html">Quantity Point</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kinds.html">Kinds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quantity_kind.html">Quantity Kind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quantity_point_kind.html">Quantity Point Kind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dimensions.html">Dimensions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../units.html">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../prefixes.html">Prefixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reference.html">Quantity Reference</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../utilities.html">Utilities</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ratio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="basic_symbol_text.html">basic_symbol_text</a></li>
+<li class="toctree-l4"><a class="reference internal" href="basic_fixed_string.html">basic_fixed_string</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../metafunctions.html">Metafunctions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../customization_points.html">Customization Points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../downcasting.html">The Downcasting Facility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../systems.html">Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../random.html">Random</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CHANGELOG.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../references.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">mp-units</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../core.html">Core Library</a> &raquo;</li>
+        
+          <li><a href="../../types.html">Types</a> &raquo;</li>
+        
+          <li><a href="../utilities.html">Utilities</a> &raquo;</li>
+        
+      <li>ratio</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../../../../_sources/reference/core/types/utilities/ratio.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="ratio">
+<h1>ratio<a class="headerlink" href="#ratio" title="Permalink to this heading">¶</a></h1>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratioE">
+<span id="_CPPv3N5units5ratioE"></span><span id="_CPPv2N5units5ratioE"></span><span id="units::ratio"></span><span class="target" id="structunits_1_1ratio"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ratio</span></span></span><a class="headerlink" href="#_CPPv4N5units5ratioE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Provides compile-time rational arithmetic support. </p>
+<p>This class is really similar to <code class="docutils literal notranslate"><span class="pre">std::ratio</span></code>. An important difference is the fact that the objects of that class are used as class NTTPs rather then a type template parameter kind. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="structunits_1_1ratio_1a3858ccd41651be3b9960ddb805bd1895"></span><span class="sig-name descname"><span class="pre">inline</span> <span class="pre">constexpr</span> <span class="pre">explicit</span> <span class="pre">(false)</span> <span class="pre">ratio(std</span></span></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratio3numE">
+<span id="_CPPv3N5units5ratio3numE"></span><span id="_CPPv2N5units5ratio3numE"></span><span id="units::ratio::num__std::intmax_t"></span><span class="target" id="structunits_1_1ratio_1afdf1fef6cf2e4fc7a765af550401f3f9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">intmax_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">num</span></span></span><a class="headerlink" href="#_CPPv4N5units5ratio3numE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratio3denE">
+<span id="_CPPv3N5units5ratio3denE"></span><span id="_CPPv2N5units5ratio3denE"></span><span id="units::ratio::den__std::intmax_t"></span><span class="target" id="structunits_1_1ratio_1a7324f88dbfc26cdf8136ed9ef306f3be"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">intmax_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">den</span></span></span><a class="headerlink" href="#_CPPv4N5units5ratio3denE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-friends">Friends</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratioeqERK5ratioRK5ratio">
+<span id="_CPPv3N5units5ratioeqERK5ratioRK5ratio"></span><span id="_CPPv2N5units5ratioeqERK5ratioRK5ratio"></span><span id="units::ratio::eq-operator__ratioCR.ratioCRCE"></span><span class="target" id="structunits_1_1ratio_1a94040128f0acdcca52967304d43c761c"></span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="p"><span class="pre">&amp;</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N5units5ratioeqERK5ratioRK5ratio" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratiossERK5ratioRK5ratio">
+<span id="_CPPv3N5units5ratiossERK5ratioRK5ratio"></span><span id="_CPPv2N5units5ratiossERK5ratioRK5ratio"></span><span class="target" id="structunits_1_1ratio_1a02946ac9e9893e4ebfd7c2cd0cb723cb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;=&gt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lhs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units5ratiossERK5ratioRK5ratio" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratiomiERK5ratio">
+<span id="_CPPv3N5units5ratiomiERK5ratio"></span><span id="_CPPv2N5units5ratiomiERK5ratio"></span><span id="units::ratio::sub-operator__ratioCRCE"></span><span class="target" id="structunits_1_1ratio_1a53b6395c9b7af28e90c78f01f9676dcb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">r</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units5ratiomiERK5ratio" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratioplE5ratio5ratio">
+<span id="_CPPv3N5units5ratioplE5ratio5ratio"></span><span id="_CPPv2N5units5ratioplE5ratio5ratio"></span><span id="units::ratio::add-operator__ratio.ratioCE"></span><span class="target" id="structunits_1_1ratio_1ab5ce9271d1a620560a9ca3ca1bd66d41"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">+</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">lhs</span></span>, <a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units5ratioplE5ratio5ratio" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratiomiERK5ratioRK5ratio">
+<span id="_CPPv3N5units5ratiomiERK5ratioRK5ratio"></span><span id="_CPPv2N5units5ratiomiERK5ratioRK5ratio"></span><span id="units::ratio::sub-operator__ratioCR.ratioCRCE"></span><span class="target" id="structunits_1_1ratio_1a0a77e7a1e7e438783a5c4ece1bc26784"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">-</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lhs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units5ratiomiERK5ratioRK5ratio" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratiomlERK5ratioRK5ratio">
+<span id="_CPPv3N5units5ratiomlERK5ratioRK5ratio"></span><span id="_CPPv2N5units5ratiomlERK5ratioRK5ratio"></span><span id="units::ratio::mul-operator__ratioCR.ratioCRCE"></span><span class="target" id="structunits_1_1ratio_1a68ab03bcd935b272059c932f2df78ae5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">*</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lhs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units5ratiomlERK5ratioRK5ratio" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N5units5ratiodvERK5ratioRK5ratio">
+<span id="_CPPv3N5units5ratiodvERK5ratioRK5ratio"></span><span id="_CPPv2N5units5ratiodvERK5ratioRK5ratio"></span><span id="units::ratio::div-operator__ratioCR.ratioCRCE"></span><span class="target" id="structunits_1_1ratio_1ad4a15ca23086ce14bbefb51d0477c2e8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">friend</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">/</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">lhs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N5units5ratioE" title="units::ratio"><span class="n"><span class="pre">ratio</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">rhs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N5units5ratiodvERK5ratioRK5ratio" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="basic_symbol_text.html" class="btn btn-neutral float-right" title="basic_symbol_text" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../utilities.html" class="btn btn-neutral float-left" title="Utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
