@@ -1,0 +1,476 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Release notes &mdash; mp-units 0.8.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="Index" href="genindex.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> mp-units
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quick_start.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="framework.html">Framework Basics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_cases.html">Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="design.html">Design Deep Dive</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Installation And Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/core.html">Core Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/systems.html">Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/random.html">Random</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Appendix:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mp-units</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Release notes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/CHANGELOG.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="release-notes">
+<h1>Release notes<a class="headerlink" href="#release-notes" title="Permalink to this heading">¶</a></h1>
+<ul>
+<li><p><strong>0.8.0 WIP</strong></p>
+<ul class="simple">
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">common_quantity</span></code>, <code class="docutils literal notranslate"><span class="pre">common_quantity_for</span></code>, <code class="docutils literal notranslate"><span class="pre">common_quantity_point</span></code>, <code class="docutils literal notranslate"><span class="pre">common_quantity_kind</span></code>, and <code class="docutils literal notranslate"><span class="pre">common_quantity_point_kind</span></code> removed</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">named_derived_unit</span></code> removed as it was not used</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">derived_unit</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">derived_scaled_unit</span></code></p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">unit</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">derived_unit</span></code></p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">U::is_named</span></code> removed from the unit types and replaced with <code class="docutils literal notranslate"><span class="pre">NamedUnit</span></code> concept</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">PrefixFamily</span></code> support removed</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">mi(naut)</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">nmi</span></code></p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">knot</span></code> unit helper renamed to <code class="docutils literal notranslate"><span class="pre">kn</span></code> in FPS</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">knot</span></code> text symbol changed from <code class="docutils literal notranslate"><span class="pre">&quot;knot&quot;</span></code> to <code class="docutils literal notranslate"><span class="pre">&quot;kn&quot;</span></code></p></li>
+<li><p>refactor: <code class="docutils literal notranslate"><span class="pre">quantity</span></code> <code class="docutils literal notranslate"><span class="pre">op+()</span></code> and <code class="docutils literal notranslate"><span class="pre">op-()</span></code> reimplemented in terms of <code class="docutils literal notranslate"><span class="pre">reference</span></code> rather then <code class="docutils literal notranslate"><span class="pre">quantity</span></code> types</p></li>
+<li><p>refactor(example): <code class="docutils literal notranslate"><span class="pre">glide_computer</span></code> now use dimensionless quantities with <code class="docutils literal notranslate"><span class="pre">ranged_representation</span></code> as <code class="docutils literal notranslate"><span class="pre">rep</span></code></p></li>
+<li><p>feat: HEP system support added (thanks <a class="reference external" href="https://github.com/RalphSteinhagen">&#64;RalphSteinhagen</a>)</p></li>
+<li><p>feat: <code class="docutils literal notranslate"><span class="pre">floor()</span></code>, <code class="docutils literal notranslate"><span class="pre">ceil()</span></code>, and <code class="docutils literal notranslate"><span class="pre">round()</span></code> support added (thanks <a class="reference external" href="https://github.com/hofbi">&#64;hofbi</a>)</p></li>
+<li><p>feat: <code class="docutils literal notranslate"><span class="pre">std::format</span></code> support for compliant compilers added</p></li>
+<li><p>feat: conversion helpers from <code class="docutils literal notranslate"><span class="pre">mp-units</span></code> to <code class="docutils literal notranslate"><span class="pre">std::chrono</span></code> types added</p></li>
+<li><p>feat: math functions can now be safely used with user-defined types</p></li>
+<li><p>feat: conversion from <code class="docutils literal notranslate"><span class="pre">quantity_point</span></code> to <code class="docutils literal notranslate"><span class="pre">std::chrono::time_point</span></code> added</p></li>
+<li><p>feat: <code class="docutils literal notranslate"><span class="pre">nautical_mile_per_hour</span></code> and <code class="docutils literal notranslate"><span class="pre">knot</span></code> added to <code class="docutils literal notranslate"><span class="pre">si::international</span></code> system</p></li>
+<li><p>(!) fix: add <code class="docutils literal notranslate"><span class="pre">quantity_point::origin</span></code>, like <code class="docutils literal notranslate"><span class="pre">std::chrono::time_point::clock</span></code></p></li>
+<li><p>fix: enable any prefixes for most of the named units (beside those that use prefixes already)</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">hectare</span></code> definition fixed to be a prefixed version of <code class="docutils literal notranslate"><span class="pre">are</span></code> + other units</p></li>
+<li><p>fix: account for different dimensions in <code class="docutils literal notranslate"><span class="pre">quantity_point_cast</span></code>’s constraint</p></li>
+<li><p>fix: output stream operator now properly handles state</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">fmt</span></code> algorithms were overconstrained with <code class="docutils literal notranslate"><span class="pre">forward_iterator</span></code></p></li>
+<li><p>fix: CTAD for aliases fixed</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">derived_ratio</span></code> calculation</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">fill_t</span></code> assignment operator fixed</p></li>
+<li><p>fix: improve downcast mode off</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">radioactivity</span></code> header compilation fixed</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">si::hep::dim_momentum</span></code> duplicated definition fixed</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">fps</span></code> can now coexist with <code class="docutils literal notranslate"><span class="pre">international</span></code> system</p></li>
+<li><p>fix: public headers fixed to be standalone</p></li>
+<li><p>test: standalone public headers tests added</p></li>
+<li><p>(!) build: CMake generator in Conan is no longer obtained from an environment variable</p></li>
+<li><p>(!) build: Required Conan version bumped to 1.48</p></li>
+<li><p>(!) build: Conan 1.48 does not set <code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code> in the <code class="docutils literal notranslate"><span class="pre">conan_toolchain.cmake</span></code> anymore</p></li>
+<li><p>build: AppleClang 13 support added (thanks <a class="reference external" href="https://github.com/fdischner">&#64;fdischner</a>)</p></li>
+<li><p>build: most of the <code class="docutils literal notranslate"><span class="pre">conanfile.py</span></code> refactored to be Conan 2.0 ready</p></li>
+<li><p>build: <code class="docutils literal notranslate"><span class="pre">validate()</span></code> replaced with <code class="docutils literal notranslate"><span class="pre">configure()</span></code> to raise errors during <code class="docutils literal notranslate"><span class="pre">conan</span> <span class="pre">install</span></code> in Conan 1.X</p></li>
+<li><p>build: minimum Conan version changed to 1.40</p></li>
+<li><p>build: <code class="docutils literal notranslate"><span class="pre">linear-algebra</span></code> Conan repo is no needed anymore</p></li>
+<li><p>build: Gitpod support added</p></li>
+<li><p>build: clang-format-15 support added</p></li>
+<li><p>build: export config to local build (#322)</p></li>
+<li><p>build: fix export name of <code class="docutils literal notranslate"><span class="pre">mp-units-system</span></code></p></li>
+<li><p>build: fmt updated to 8.0.1</p></li>
+<li><p>build: gsl-lite updated to 0.40.0</p></li>
+<li><p>build: catch2 updated to 2.13.9</p></li>
+<li><p>build: doxygen updated to 1.9.4</p></li>
+<li><p>build: linear_algebra/0.7.0 switched to wg21-linear_algebra/0.7.2</p></li>
+<li><p>ci: VS2022, gcc-11, clang-13, clang-14, and AppleClang 13 support added</p></li>
+<li><p>ci: pre-commit support added (thanks <a class="reference external" href="https://github.com/hofbi">&#64;hofbi</a>)</p></li>
+<li><p>docs: Project documentation updated</p></li>
+<li><p>docs: <code class="docutils literal notranslate"><span class="pre">CITATION.cff</span></code> file added</p></li>
+<li><p>docs: <code class="docutils literal notranslate"><span class="pre">CONTRIBUTING.md</span></code> updated</p></li>
+</ul>
+</li>
+<li><p><strong>0.7.0 May 11, 2021</strong></p>
+<ul class="simple">
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">ScalableNumber</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">Representation</span></code></p></li>
+<li><p>(!) refactor: output stream operators moved to the <code class="docutils literal notranslate"><span class="pre">units/quantity_io.h</span></code> header file</p></li>
+<li><p>(!) refactor: Refactored the library file tree</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">quantity::count()</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">quantity::number()</span></code></p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">data</span></code> system renamed to <code class="docutils literal notranslate"><span class="pre">isq::iec80000</span></code> (quantity names renamed too)</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">*deduced_unit</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">*derived_unit</span></code></p></li>
+<li><p>(!) refactor: got rid of a <code class="docutils literal notranslate"><span class="pre">noble_derived_unit</span></code></p></li>
+<li><p>refactor: quantity (kind) point updated to reflect latest changes to <code class="docutils literal notranslate"><span class="pre">quantity</span></code></p></li>
+<li><p>refactor: basic concepts, <code class="docutils literal notranslate"><span class="pre">quantity</span></code> and <code class="docutils literal notranslate"><span class="pre">quantity_cast</span></code> refactored</p></li>
+<li><p>refactor: <code class="docutils literal notranslate"><span class="pre">abs()</span></code> definition refactored to be more explicit about the return type</p></li>
+<li><p>feat: quantity (point) kind support added (thanks <a class="reference external" href="https://github.com/johelegp">&#64;johelegp</a>)</p></li>
+<li><p>feat: quantity references support added (thanks <a class="reference external" href="https://github.com/johelegp">&#64;johelegp</a>)</p></li>
+<li><p>feat: quantity aliases support addded</p></li>
+<li><p>feat: interoperability with <code class="docutils literal notranslate"><span class="pre">std::chrono::duration</span></code> and other units libraries</p></li>
+<li><p>feat: CTAD for dimensionless quantity added</p></li>
+<li><p>feat: <code class="docutils literal notranslate"><span class="pre">modulation_rate</span></code> support added (thanks <a class="reference external" href="https://github.com/go2sh">&#64;go2sh</a>)</p></li>
+<li><p>feat: SI prefixes for <code class="docutils literal notranslate"><span class="pre">isq::iec80000</span></code> support added (thanks <a class="reference external" href="https://github.com/go2sh">&#64;go2sh</a>)</p></li>
+<li><p>feat: a possibility to disable quantity UDLs support with <code class="docutils literal notranslate"><span class="pre">UNITS_NO_LITERALS</span></code> preprocessor define</p></li>
+<li><p>feat: a support to define ISQ derived dimensions in terms of different number or order of components</p></li>
+<li><p>perf: preconditions check do not influence the runtime performance of a Release build</p></li>
+<li><p>perf: <code class="docutils literal notranslate"><span class="pre">quantity_cast()</span></code> generates less assembly instructions</p></li>
+<li><p>perf: temporary string creation removed from <code class="docutils literal notranslate"><span class="pre">quantity::op&lt;&lt;()</span></code></p></li>
+<li><p>perf: value initialization for quantity value removed (left with a default initialization)</p></li>
+<li><p>perf: limited the <code class="docutils literal notranslate"><span class="pre">equivalent</span></code> trait usage</p></li>
+<li><p>perf: limited the C++ Standard Library headers usage</p></li>
+<li><p>perf: rvalue references support added for constructors and getters</p></li>
+<li><p>(!) fix: <code class="docutils literal notranslate"><span class="pre">exp()</span></code> has sense only for dimensionless quantities</p></li>
+<li><p>(!) fix: <code class="docutils literal notranslate"><span class="pre">dim_torque</span></code> now properly divides by an angle (instead of multiply) + default unit name change</p></li>
+<li><p>fix: quantity’s operators fixed to behave like the underlying types do</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">quantity_cast()</span></code> fixed to work correctly with representation types not convertible from <code class="docutils literal notranslate"><span class="pre">std::intmax_t</span></code></p></li>
+<li><p>fix: ambiguous case for empty type list resolved</p></li>
+<li><p>fix: downcasting facility for non-default-constructible types</p></li>
+<li><p>fix: restore user-warnings within the library implementation</p></li>
+<li><p>fix: the text symbol of <code class="docutils literal notranslate"><span class="pre">foot_pound_force</span></code> and <code class="docutils literal notranslate"><span class="pre">foot_pound_force_per_second</span></code></p></li>
+<li><p>fix: quantity modulo arithmetics fixed</p></li>
+<li><p>(!) build: Conan testing version is now hosted on <a class="reference external" href="https://mpusz.jfrog.io/ui/packages/conan:%2F%2Fmp-units">Artifactory</a></p></li>
+<li><p>(!) build: Linear Algebra is now hosted on its <a class="reference external" href="https://twonington.jfrog.io/artifactory/api/conan/conan-oss">Artifactory</a></p></li>
+<li><p>(!) build: <code class="docutils literal notranslate"><span class="pre">BUILD_DOCS</span></code> CMake option renamed to <code class="docutils literal notranslate"><span class="pre">UNITS_BUILD_DOCS</span></code></p></li>
+<li><p>build: doxygen updated to 1.8.20</p></li>
+<li><p>build: catch2 updated to 2.13.4</p></li>
+<li><p>build: fmt updated to 7.1.3</p></li>
+<li><p>build: ms-gsl replaced with gsl-lite/0.38.0</p></li>
+<li><p>build: Conan generator switched to <code class="docutils literal notranslate"><span class="pre">cmake_find_package_multi</span></code></p></li>
+<li><p>build: Conan CMakeToolchain support added</p></li>
+<li><p>build: CMake scripts cleanup</p></li>
+<li><p>build: ccache support added</p></li>
+<li><p>ci: CI switched from Travis CI to GitHub Actions</p></li>
+</ul>
+</li>
+<li><p><strong>0.6.0 September 13, 2020</strong></p>
+<ul class="simple">
+<li><p>feat: <code class="docutils literal notranslate"><span class="pre">quantity_point</span></code> support added (thanks <a class="reference external" href="https://github.com/johelegp">&#64;johelegp</a>)</p></li>
+<li><p>feat: Added angle as SI base dimension (thanks <a class="reference external" href="https://github.com/kwikius">&#64;kwikius</a>)</p></li>
+<li><p>feat: <code class="docutils literal notranslate"><span class="pre">si::angular_velocity</span></code> support added (thanks <a class="reference external" href="https://github.com/mikeford3">&#64;mikeford3</a>)</p></li>
+<li><p>feat: FPS system added (thanks <a class="reference external" href="https://github.com/mikeford3">&#64;mikeford3</a>)</p></li>
+<li><p>feat: Added support for mathematical function <code class="docutils literal notranslate"><span class="pre">exp(quantity)</span></code></p></li>
+<li><p>feat: Localization support for text output added (thanks <a class="reference external" href="https://github.com/rbrugo">&#64;rbrugo</a>)</p></li>
+<li><p>feat: Added STL random number distribution wrappers (thanks <a class="reference external" href="https://github.com/yasamoka">&#64;yasamoka</a>)</p></li>
+<li><p>(!) refactor: Refactored and cleaned up the library file tree</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">q_*</span></code> UDL renamed to <code class="docutils literal notranslate"><span class="pre">_q_*</span></code></p></li>
+<li><p>(!) refactor: UDLs with “per” in name renamed from <code class="docutils literal notranslate"><span class="pre">*p*</span></code> to <code class="docutils literal notranslate"><span class="pre">*_per_*</span></code></p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">ratio</span></code> changed to the NTTP kind</p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">exp</span></code> and <code class="docutils literal notranslate"><span class="pre">Exp</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">exponent</span></code> and <code class="docutils literal notranslate"><span class="pre">Exponent</span></code></p></li>
+<li><p>(!) refactor: <code class="docutils literal notranslate"><span class="pre">Scalar</span></code> concept renamed to <code class="docutils literal notranslate"><span class="pre">ScalableNumber</span></code></p></li>
+<li><p>(!) refactor: Dimensionless quantities redesigned to be of a <code class="docutils literal notranslate"><span class="pre">quantity</span></code> type</p></li>
+<li><p>refactor: <code class="docutils literal notranslate"><span class="pre">math.h</span></code> function signatures refactored to use a <code class="docutils literal notranslate"><span class="pre">Quantity</span></code> concept (thanks <a class="reference external" href="https://github.com/kwikius">&#64;kwikius</a>)</p></li>
+<li><p>refactor: <code class="docutils literal notranslate"><span class="pre">[[nodiscard]]</span></code> added to many functions</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">si::day</span></code> unit symbol fixed to <code class="docutils literal notranslate"><span class="pre">d</span></code> (thanks <a class="reference external" href="https://github.com/komputerwiz">&#64;komputerwiz</a>)</p></li>
+<li><p>fix: <code class="docutils literal notranslate"><span class="pre">si::mole</span></code> unit symbol fixed to <code class="docutils literal notranslate"><span class="pre">mol</span></code> (thanks <a class="reference external" href="https://github.com/mikeford3">&#64;mikeford3</a>)</p></li>
+<li><p>(!) build: gcc-9 is no longer supported (at least gcc-10 is required)</p></li>
+<li><p>build: Visual Studio 16.7 support added</p></li>
+<li><p>build: linear_algebra updated to 0.7.0/stable</p></li>
+<li><p>build: fmt updated to 7.0.3</p></li>
+<li><p>build: range-v3 updated to 0.11.0</p></li>
+<li><p>build: catch2 updated to 2.13.0</p></li>
+<li><p>build: doxygen updated to 1.8.18</p></li>
+<li><p>build: ms-gsl 3.1.0 dependency added</p></li>
+<li><p>build: Removed the dependency on a git submodule with common CMake scripts</p></li>
+</ul>
+</li>
+<li><p><strong>0.5.0 May 17, 2020</strong></p>
+<ul class="simple">
+<li><p>Major refactoring and rewrite of the library</p></li>
+<li><p>Units are now independent from dimensions</p></li>
+<li><p>Dimensions now depend on units (base or coherent units are provided in a class template)</p></li>
+<li><p>Quantity gets a Dimension template parameter again (as unit does not provide information about
+its dimension anymore)</p></li>
+<li><p>Spaceship operator support added</p></li>
+<li><p>Added official CGS system support</p></li>
+<li><p>Added official data information system support</p></li>
+<li><p>Repository file tree cleanup</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ratio</span></code> refactored to contain <code class="docutils literal notranslate"><span class="pre">Exp</span></code> template parameter (thanks a lot <a class="reference external" href="https://github.com/oschonrock">&#64;oschonrock</a>!)</p></li>
+<li><p>SI fundamental constants added</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">q_</span></code> prefix applied to all the UDLs (thanks <a class="reference external" href="https://github.com/kwikius">&#64;kwikius</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unknown_unit</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">unknown_coherent_unit</span></code></p></li>
+<li><p>Project documentation greatly extended and switched to Sphinx</p></li>
+<li><p>A few more usage examples added</p></li>
+<li><p>ASCII-only output support added (thanks <a class="reference external" href="https://github.com/yasamoka">&#64;yasamoka</a>)</p></li>
+<li><p>Representation values formatting extended (thanks <a class="reference external" href="https://github.com/rbrugo">&#64;rbrugo</a>)</p></li>
+<li><p>Output streams formatting support added</p></li>
+<li><p>Linear algebra from <code class="docutils literal notranslate"><span class="pre">std::experimental::math</span></code> support added</p></li>
+<li><p>Named SI units and their dimensions added (thanks <a class="reference external" href="https://github.com/rbrugo">&#64;rbrugo</a></p></li>
+<li><p>libfmt updated to 6.2.0</p></li>
+<li><p>Added absolute functions and epsilon to math.h (thanks <a class="reference external" href="https://github.com/mikeford3">&#64;mikeford3</a>)</p></li>
+<li><p>Added a lot of prefixes to named units and introduced <code class="docutils literal notranslate"><span class="pre">alias_unit</span></code> (thanks <a class="reference external" href="https://github.com/yasamoka">&#64;yasamoka</a>)</p></li>
+<li><p>Linking with Conan targets only when they exists (<a class="reference external" href="https://github.com/mpusz/units/issues/98">#98</a>)</p></li>
+<li><p>All physical dimensions and units put into <code class="docutils literal notranslate"><span class="pre">physical</span></code> namespace</p></li>
+<li><p>CMake improvements</p></li>
+<li><p>Velocity renamed to speed</p></li>
+</ul>
+<p>Many thanks to GitHub users <a class="reference external" href="https://github.com/oschonrock">&#64;oschonrock</a>,
+<a class="reference external" href="https://github.com/kwikius">&#64;kwikius</a>, and <a class="reference external" href="https://github.com/i-ky">&#64;i-ky</a> for their support
+in drafting a new library design.</p>
+</li>
+<li><p><strong>0.4.0 Nov 17, 2019</strong></p>
+<ul class="simple">
+<li><p>Support for derived dimensions in <code class="docutils literal notranslate"><span class="pre">exp</span></code> added</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">pow()</span></code> and <code class="docutils literal notranslate"><span class="pre">sqrt()</span></code> operations on quantities</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">units</span></code> removed from a <code class="docutils literal notranslate"><span class="pre">std::experimental</span></code> namespace</p></li>
+<li><p>Downcasting facility refactored so the user does not have to write the boilerplate code anymore</p></li>
+<li><p>From now on base dimensions should inherit from <code class="docutils literal notranslate"><span class="pre">base_dimension</span></code> class template</p></li>
+<li><p>Added unit symbols definitions to <code class="docutils literal notranslate"><span class="pre">base_dimension</span></code> and derived units</p></li>
+<li><p>Added support for <code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;</span></code> on <code class="docutils literal notranslate"><span class="pre">quantity</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fmt</span></code> support added</p></li>
+<li><p>Derived unit factory helpers refactored</p></li>
+<li><p>Refactored the way prefixed units are defined</p></li>
+</ul>
+</li>
+<li><p><strong>0.3.1 Sep 18, 2019</strong></p>
+<ul class="simple">
+<li><p>cmcstl2 dependency changed to range-v3 0.9.1</p></li>
+</ul>
+</li>
+<li><p><strong>0.3.0 Sep 16, 2019 (CppCon 2019 design)</strong></p>
+<ul class="simple">
+<li><p>The design as described on CppCon 2019 talk (<a class="reference external" href="https://youtu.be/0YW6yxkdhlU">https://youtu.be/0YW6yxkdhlU</a>)</p></li>
+<li><p>Applied the feedback from the Cologne evening session</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">upcasting_traits</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">downcasting_traits</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Dimension</span></code> template parameter removed from quantity</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">units</span></code> moved to a <code class="docutils literal notranslate"><span class="pre">std::experimental</span></code> namespace</p></li>
+<li><p>Leading underscore prefix removed from UDLs</p></li>
+<li><p>Added a few more derived dimensions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">meter</span></code> renamed to <code class="docutils literal notranslate"><span class="pre">metre</span></code></p></li>
+<li><p>Missing <code class="docutils literal notranslate"><span class="pre">operator*</span></code> added</p></li>
+<li><p>Predefined dimensions moved to a dedicated directory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dimension_</span></code> prefix removed from names of derived dimensions</p></li>
+<li><p>cmcstl2 library updated to 2019.09.19</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base_dimension</span></code> is a value provided as <code class="docutils literal notranslate"><span class="pre">const&amp;</span></code> to the <code class="docutils literal notranslate"><span class="pre">exp</span></code> type</p></li>
+<li><p>integrated with Compiler Explorer</p></li>
+<li><p>gsl-lite dependency removed</p></li>
+<li><p>Fractional dimension exponents support added</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QuantityOf</span></code> concept introduced</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quantity_cast&lt;U,</span> <span class="pre">Rep&gt;()</span></code> support added</p></li>
+</ul>
+</li>
+<li><p><strong>0.2.0 July 18, 2019 (C++Now 2019 design)</strong></p>
+<ul class="simple">
+<li><p>The design as described on C++Now 2019 talk (<a class="reference external" href="https://youtu.be/wKchCktZPHU">https://youtu.be/wKchCktZPHU</a>)</p></li>
+<li><p>Added C++20 features supported by gcc-9.1 (<code class="docutils literal notranslate"><span class="pre">std::remove_cvref_t</span></code>, down with typename, <code class="docutils literal notranslate"><span class="pre">std::type_identity</span></code>)</p></li>
+<li><p>Compile-time performance optimizations (<code class="docutils literal notranslate"><span class="pre">type_list</span></code>, <code class="docutils literal notranslate"><span class="pre">common_ratio</span></code>, <code class="docutils literal notranslate"><span class="pre">ratio</span></code>, <code class="docutils literal notranslate"><span class="pre">conditional_t</span></code>)</p></li>
+</ul>
+</li>
+<li><p><strong>0.1.0 May 18, 2019</strong></p>
+<ul class="simple">
+<li><p>Initial library release</p></li>
+<li><p>Begin semantic versioning</p></li>
+<li><p>The last version to work with gcc-8</p></li>
+</ul>
+</li>
+</ul>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="genindex.html" class="btn btn-neutral float-left" title="Index" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2018-present, Mateusz Pusz.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
